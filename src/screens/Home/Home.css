@@ -1,0 +1,112 @@
+#Homescreen {
+  margin-left: 55px;
+}
+
+.NotificationHomeScreen {
+  position: absolute;
+  font-size: 25px;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.HeaderHomeDeashBoard {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ButtonHeaderDeashBoard {
+  display: flex;
+  flex-direction: column;
+}
+
+.ButtonHeaderDeashBoard > button {
+  padding: 5px;
+  font-size: 15px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  height: 50px;
+  width: 180px;
+}
+
+.LoyautCardMétricasBox {
+  width: 630px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.cardMétricasBox {
+  width: 48%;
+  height: 140px;
+  margin-bottom: 5px;
+  border-radius: 10px;
+}
+
+.linha {
+  height: 1px;
+  width: 90%;
+  background-color: black;
+  margin: auto;
+}
+
+.displayFlex {
+  display: flex;
+  justify-content: space-around;
+}
+
+.green {
+  background-color: #31c331;
+}
+
+.red {
+  background-color: #de2727;
+}
+
+.orange {
+  background-color: #ffb11f;
+}
+
+.cardMétricasBox > h1 {
+  font-size: 33px;
+}
+
+.cardMétricasBox > h2 ,.cardMétricasBox > h1 {
+  text-align: center;
+}
+
+
+
+.MainHomeDeashBoard {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+}
+
+.NotficationHome {
+  background-color: black;
+  color: white;
+  width: 47px;
+  height: 47px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.MainHomeDeashBoard > article {
+  background-color: #eee;
+  width: 45%;
+  text-align: center;
+  border: 1px solid black;
+  padding: 15px;
+  font-size: 20px;
+  border-radius: 20px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
