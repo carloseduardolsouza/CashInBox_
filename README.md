@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+```markdown
+# 💰 CashInBox - Sistema de Ponto de Venda (PDV)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+O **CashInBox** é um sistema de ponto de venda (PDV) desenvolvido para atender lojas com produtos de ticket mais alto, como móveis, eletroeletrônicos e informática. Ele oferece controle de estoque, vendas, emissão de notas fiscais, cadastro de clientes e muito mais.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Funcionalidades Principais
 
-### `npm start`
+- ✅ Emissão de notas fiscais (NFC-e)
+- ✅ Cadastro e gerenciamento de produtos
+- ✅ Controle de estoque em tempo real
+- ✅ Cadastro de clientes e histórico de compras
+- ✅ Vendas com múltiplas formas de pagamento
+- ✅ Geração de relatórios de vendas e estoque
+- ✅ Interface simples e intuitiva
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Tecnologias Utilizadas
 
-### `npm test`
+**Backend:**
+- Node.js
+- Express
+- PostgreSQL ou MongoDB (especificar qual está usando)
+- Sequelize ou Mongoose
+- JWT (para autenticação)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Frontend:**
+- React.js
+- TailwindCSS ou Bootstrap
+- Axios
+- React Router
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📦 Instalação
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 🔧 Requisitos
+- Node.js v18+
+- Banco de dados (PostgreSQL ou MongoDB)
+- Git
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### ⚙️ Clonar o projeto
+```bash
+git clone https://github.com/seuusuario/cashinbox.git
+cd cashinbox
+```
 
-### `npm run eject`
+### 📁 Backend
+```bash
+cd backend
+npm install
+npm run dev
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 💻 Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🔐 Login Padrão (para testes)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```txt
+Usuário: admin@cashinbox.com
+Senha: admin123
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📊 Prints da Aplicação
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> (adicione aqui imagens da interface da aplicação em funcionamento, se quiser que eu gere algumas imagens ilustrativas, posso fazer isso também)
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🧑‍💻 Autor
 
-### Analyzing the Bundle Size
+**Carlos Eduardo**  
+[Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 📃 Licença
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Este projeto está licenciado sob a **MIT License**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Se quiser incluir um passo-a-passo de como configurar o banco, ou adicionar informações sobre o deploy (ex: usar Vercel, Heroku, Railway), posso complementar isso também. Quer que eu adicione?

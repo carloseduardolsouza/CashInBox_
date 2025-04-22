@@ -39,6 +39,7 @@ import  "./menu.css"
 import { BrowserRouter as Router, Link ,Route , Routes } from 'react-router-dom';
 
 function App() {
+    //Status do menu
   const [home , setHome] = useState(true)
   const [vendas , setVendas] = useState(false)
   const [clientes , setClientes] = useState(false)
@@ -48,6 +49,7 @@ function App() {
   const [caixa , setCaixa] = useState(false)
   const [configs , setConfigs] = useState(false)
 
+  //Define o tamanho e se o texto ira aparecer
   const [windowWidth , setWindowWidth] = useState('45px')
   const [windowDisplay , setWindowDisplay] = useState('none')
 
@@ -55,6 +57,7 @@ function App() {
     display: windowDisplay
   }
 
+  //controla de forma geral como o menu deve se comportar
   const menuOpen = (params) => {
     if(params == false) {
       setWindowDisplay('none')
@@ -70,6 +73,7 @@ function App() {
     }
   }
 
+  //verifica se o menu esta aberto ou fechado
   const VerificarStatusMenu = () => {
     if (windowWidth == '45px') {
       menuOpen(true)
