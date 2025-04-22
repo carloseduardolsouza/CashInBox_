@@ -3,6 +3,7 @@ import { useState } from "react";
 
 //Telas
 import Home from "./screens/Home/Home";
+import Vendas from "./screens/Vendas/vendas";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -247,6 +248,7 @@ function App() {
         </div>
         <Routes>
           <Route path="/" Component={Home} />
+          <Route path="/vendas" Component={Vendas} />
         </Routes>
       </Router>
     </div>
