@@ -1,0 +1,40 @@
+.MenuLateralBoxArea {
+    background-color: #eeeeee;
+    width: 160px;
+    height: 100vh;
+    position: fixed;
+    z-index: 5;
+}
+
+.MenuLateralBox {
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.MenuLateralBox > p {
+    margin-left: 5px;
+    text-align: left;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+.iconsMenuLateral {
+    font-size: 20px;
+    color: black;
+}
+
+.Outline {
+    border-bottom: 2px solid black;
+}
+
+.Preferencias {
+    position: absolute;
+    bottom: 10px;
+}
