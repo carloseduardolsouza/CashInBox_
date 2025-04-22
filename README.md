@@ -22,14 +22,10 @@ O **CashInBox** é um sistema de ponto de venda (PDV) desenvolvido para atender 
 **Backend:**
 - Node.js
 - Express
-- PostgreSQL ou MongoDB (especificar qual está usando)
-- Sequelize ou Mongoose
-- JWT (para autenticação)
+- MySql
 
 **Frontend:**
 - React.js
-- TailwindCSS ou Bootstrap
-- Axios
 - React Router
 
 ---
@@ -38,13 +34,14 @@ O **CashInBox** é um sistema de ponto de venda (PDV) desenvolvido para atender 
 
 ### 🔧 Requisitos
 - Node.js v18+
-- Banco de dados (PostgreSQL ou MongoDB)
+- JavaScript
+- Banco de dados (MySql)
 - Git
 
 ### ⚙️ Clonar o projeto
 ```bash
 git clone https://github.com/seuusuario/cashinbox.git
-cd cashinbox
+npm start
 ```
 
 ### 📁 Backend
@@ -78,9 +75,15 @@ Senha: admin123
 
 ---
 
-## 🧑‍💻 Autor
+## 🧑‍💻 Autores
 
-**Carlos Eduardo**  
+**Carlos Eduardo Lourenço de Souza**  
+[Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
+
+**Andrey Gonçalves de Andrade**  
+[Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
+
+**Jonalcy Rodrigues Leal Dos Santos**  
 [Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
 
 ---
