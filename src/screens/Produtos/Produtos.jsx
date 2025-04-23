@@ -44,7 +44,7 @@ function Produtos() {
         <p>{log}</p>
       </header>
       <article className="ArticleProduto">
-        <form onSubmit={(e) => /*renderClientes(e)*/``}>
+        <form onSubmit={(e) => /*renderClientes(e)*/ ``}>
           <input
             type="text"
             className="InputProduto"

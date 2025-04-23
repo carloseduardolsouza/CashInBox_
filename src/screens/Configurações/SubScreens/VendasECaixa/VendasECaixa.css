@@ -4,15 +4,15 @@
   border-radius: 10px;
 }
 
-.labelVendasECaixa  {
-    display: flex;
-    font-size: 18px;
+.labelVendasECaixa {
+  display: flex;
+  font-size: 18px;
 }
 
 .labelVendasECaixa > input {
-    width: 20px;
+  width: 20px;
 }
 
 .labelVendasECaixa p {
-    width: 650px;
+  width: 650px;
 }

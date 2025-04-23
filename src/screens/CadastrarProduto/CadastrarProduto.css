@@ -1,29 +1,29 @@
 #cadastrarProduto {
-    margin-left: 55px;
+  margin-left: 55px;
 }
 
 .bttRenderNovoProduto {
-    margin-right: 15px;
-    cursor: pointer;
-    font-size: 18px;
-    margin-bottom: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 
 #cadastrarProduto h2 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #CadastroProdutos {
-    margin-top: 30px;
-    display: flex;
-    margin: auto;
-    max-width: 1200px;  
+  margin-top: 30px;
+  display: flex;
+  margin: auto;
+  max-width: 1200px;
 }
 
 #inputImageProduto {
-    border: none;
-    margin-top: 10px;
-    cursor: pointer;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 input:disabled {
@@ -41,175 +41,175 @@ input:disabled {
 }
 
 .zindex {
-    z-index: 3;
+  z-index: 3;
 }
 
 .AreaInputsNovoProduto la {
-    display: flex;
+  display: flex;
 }
 
 .AreaInputsNovoProduto p {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .AreaInputsNovoProduto input {
-    font-size: 20px;
-    margin-left: 10px;
-    border: 1px solid #424242;
-    margin-bottom: 10px;
+  font-size: 20px;
+  margin-left: 10px;
+  border: 1px solid #424242;
+  margin-bottom: 10px;
 }
 
 .LinhaDivisão {
-    height: 1px;
-    width: 100%;
-    background-color: #424242;
-    margin: 15px 0px 15px 1px;
+  height: 1px;
+  width: 100%;
+  background-color: #424242;
+  margin: 15px 0px 15px 1px;
 }
 
 .GiMoneyStack {
-    font-size: 50px;
+  font-size: 50px;
 }
 
 .nomeNovoProduto {
-    width: 90%;
+  width: 90%;
 }
 
 textarea {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 .bttCadastrarNovoProduto {
-    width: 200px;
-    padding: 10px;
-    border-radius: 30px;
-    font-size: 16px;
-    cursor: pointer;
-    border: 1px solid #25b811;
-    color: #25b811;
-    background-color: #00000000;
+  width: 200px;
+  padding: 10px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #25b811;
+  color: #25b811;
+  background-color: #00000000;
 }
 
 button.disabled {
   width: 200px;
-    padding: 10px;
-    border-radius: 30px;
-    font-size: 16px;
-    cursor: no-drop;
-    border: 1px solid #204f1a;
-    color: #204f1a;
-    background-color: #00000000;
+  padding: 10px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: no-drop;
+  border: 1px solid #204f1a;
+  color: #204f1a;
+  background-color: #00000000;
 }
 
 .bttCadastrarNovoProduto:hover {
   background-color: #25b811;
   color: white;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .imageProdutoOpen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
 }
 
 .imageProdutoOpen > div {
-    width: 250px;
-    height: 250px;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-    cursor: pointer;
+  width: 250px;
+  height: 250px;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  cursor: pointer;
 }
 
 .imageProduto {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
 }
 
 .imageProduto > div {
-    background-color: #a2a2a2;
-    width: 250px;
-    height: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-    cursor: pointer;
+  background-color: #a2a2a2;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  cursor: pointer;
 }
 
 /* Estilo para o carrossel */
 .slick-slider {
-    position: relative;
-    display: block;
-    border: 1px solid black;
-    box-sizing: border-box;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    touch-action: pan-y;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  /* Estilo para os slides do carrossel */
-  .slick-slide {
-    float: left;
-    min-height: 1px;
-    display: none;
-  }
-  
-  /* Estilo para os dots do carrossel (se estiverem habilitados) */
-  .slick-dots {
-    position: absolute;
-    bottom: -10px;
-    list-style: none;
-    display: block;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-  }
-  
-  /* Estilo para cada dot */
-  .slick-dots li {
-    position: relative;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin: 0 5px;
-    padding: 0;
-    cursor: pointer;
-  }
-  
-  /* Estilo para os dots ativos */
-  .slick-dots li.slick-active button {
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border: 1px solid #000;
-    border-radius: 50%;
-  }
-  
-  /* Estilo para os dots inativos */
-  .slick-dots li button {
-    font-size: 0;
-    line-height: 0;
-    display: block;
-    width: 20px;
-    height: 20px;
-    padding: 5px;
-    cursor: pointer;
-    color: transparent;
-    border: 1px solid #000;
-    border-radius: 50%;
-    outline: none;
-    background: transparent;
-  }
+  position: relative;
+  display: block;
+  border: 1px solid black;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  .slick-prev,
+/* Estilo para os slides do carrossel */
+.slick-slide {
+  float: left;
+  min-height: 1px;
+  display: none;
+}
+
+/* Estilo para os dots do carrossel (se estiverem habilitados) */
+.slick-dots {
+  position: absolute;
+  bottom: -10px;
+  list-style: none;
+  display: block;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+/* Estilo para cada dot */
+.slick-dots li {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Estilo para os dots ativos */
+.slick-dots li.slick-active button {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 50%;
+}
+
+/* Estilo para os dots inativos */
+.slick-dots li button {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  cursor: pointer;
+  color: transparent;
+  border: 1px solid #000;
+  border-radius: 50%;
+  outline: none;
+  background: transparent;
+}
+
+.slick-prev,
 .slick-next {
   position: absolute;
   top: 50%;
@@ -229,13 +229,12 @@ button.disabled {
 
 /* Estilo para a seta esquerda */
 .slick-prev {
-    background-color: black;
-    left: -30px;
-  }
-  
-  /* Estilo para a seta direita */
-  .slick-next {
-    background-color: black;
-    right: -30px;
-  }
-  
+  background-color: black;
+  left: -30px;
+}
+
+/* Estilo para a seta direita */
+.slick-next {
+  background-color: black;
+  right: -30px;
+}

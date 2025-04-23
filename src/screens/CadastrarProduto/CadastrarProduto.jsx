@@ -1,13 +1,13 @@
 import "./CadastrarProduto.css";
-import { useState , useRef  } from "react";
+import { useState, useRef } from "react";
 
 //Icones
 import { FaCamera } from "react-icons/fa";
 
 //Biblioteca
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 //Componentes
 //import Concluindo from "../../components/Concluindo/Concluindo"

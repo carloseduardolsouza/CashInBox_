@@ -258,21 +258,21 @@ function PontoDeVenda() {
       <main className="MainNovaVenda">
         <div>
           <div>
-            {alert && (``
+            {
+              alert && ``
               /*<Alerta
                 parametro={"Verifique as informações"}
                 functio={setAlert}
               />*/
-            )}
-            {(loading && /*<AçãoRealizada />*/``) || (
+            }
+            {(loading && /*<AçãoRealizada />*/ ``) ||
               /*<Select
                 className="SelectNovaVenda"
                 placeholder="Cliente"
                 options={optionsClientes}
                 onChange={(e) => renderInfoClient(e)}
                 isDisabled={desable}
-              />*/``
-            )}
+              />*/ ``}
             <label className="NovaVendaLabel">
               <p className="NovanVendaStrong">
                 <strong>Nome:</strong>
@@ -283,18 +283,19 @@ function PontoDeVenda() {
               <p className="NovanVendaStrong">
                 <strong>Numero:</strong>
               </p>
-              <p>{``/*services.formatarNumeroCelular(telefoneInfoClient)*/}</p>
+              <p>{`` /*services.formatarNumeroCelular(telefoneInfoClient)*/}</p>
             </label>
           </div>
           <Select
             className="SelectNovaVenda"
             placeholder="Produto"
             options={optionsProdutos}
-            onChange={(e) => ``/*renderInfoProduto(e)*/}
+            onChange={(e) => `` /*renderInfoProduto(e)*/}
             isDisabled={desable}
           />
           <div className="DivisãoNovaVenda">
-            {faturado && (``
+            {
+              faturado && ``
               /*<Faturado
                 functio={setFaturado}
                 data={venda}
@@ -302,9 +303,9 @@ function PontoDeVenda() {
                 concluind={setConcluindo}
                 desabilitar={setDesable}
               />*/
-            )}
+            }
             <div>
-              {concluindo && ``/*<Concluindo />*/}
+              {concluindo && `` /*<Concluindo />*/}
               <label className="NovaVendaLabel">
                 <p className="NovanVendaStrong">
                   <strong>Produto</strong>
@@ -315,7 +316,7 @@ function PontoDeVenda() {
                 <p className="NovanVendaStrong">
                   <strong>Preço</strong>
                 </p>
-                <p>{``/*services.formatarCurrency(precovenda)*/}</p>
+                <p>{`` /*services.formatarCurrency(precovenda)*/}</p>
               </label>
               <label className="NovaVendaLabel">
                 <p className="NovanVendaStrong">
@@ -381,7 +382,7 @@ function PontoDeVenda() {
 
           <button
             className="calcularNovaVenda"
-            onClick={() => ``/*calcularPrice()*/}
+            onClick={() => `` /*calcularPrice()*/}
             disabled={desable}
           >
             Calcular
@@ -390,7 +391,7 @@ function PontoDeVenda() {
             className="SelectNovaVenda"
             placeholder="Vendedor"
             options={optionsVendedores}
-            onChange={(e) => ``/*renderInfoVendedores(e)*/}
+            onChange={(e) => `` /*renderInfoVendedores(e)*/}
             isDisabled={desable}
           />
           <label className="NovaVendaLabel">
@@ -423,13 +424,13 @@ function PontoDeVenda() {
           </div>
         </div>
         <div className="ProdutosNovaVenda">
-          {venda.map((venda, index) => (
-            ``/*<ProdutosNovaVenda
+          {venda.map(
+            (venda, index) => `` /*<ProdutosNovaVenda
               data={venda}
               index={index}
               deleter={deleteItem}
             />*/
-          ))}
+          )}
           <button
             className="FaturarNovaVenda"
             onClick={() => Feature()}

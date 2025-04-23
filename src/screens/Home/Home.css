@@ -72,11 +72,10 @@
   font-size: 33px;
 }
 
-.cardMétricasBox > h2 ,.cardMétricasBox > h1 {
+.cardMétricasBox > h2,
+.cardMétricasBox > h1 {
   text-align: center;
 }
-
-
 
 .MainHomeDeashBoard {
   display: flex;

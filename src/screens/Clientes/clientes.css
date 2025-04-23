@@ -1,73 +1,73 @@
 #CLIENTE {
-    margin-left: 55px;
+  margin-left: 55px;
 }
 
 #HeaderClientes {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .AddCliente {
-    background-color: #0295ff;
-    border: none;
-    width: 35px;
-    height: 35px;
-    font-size: 20px;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
+  background-color: #0295ff;
+  border: none;
+  width: 35px;
+  height: 35px;
+  font-size: 20px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
 }
 
 .ArticleClientes {
-    margin-bottom: 25px;
-    margin-top: 20px;
+  margin-bottom: 25px;
+  margin-top: 20px;
 }
 
 .Search {
-    z-index: 1;
-    background-color: none;
-    border: none;
-    font-size: 17px;
-    position: absolute;
-    cursor: pointer;
-    width: 38px;
-    height: 36px;
-    border-radius: 6px;
-    background-color: #ffb732;
-    margin-left: 3px;
-    color: white;
+  z-index: 1;
+  background-color: none;
+  border: none;
+  font-size: 17px;
+  position: absolute;
+  cursor: pointer;
+  width: 38px;
+  height: 36px;
+  border-radius: 6px;
+  background-color: #ffb732;
+  margin-left: 3px;
+  color: white;
 }
 
 .InputClientes {
-    margin-left: 10px;
-    border-radius: 6px;
-    padding: 8px;
-    width: 260px;
-    border: 2px solid #666666ee;
-    font-size: 15px;
+  margin-left: 10px;
+  border-radius: 6px;
+  padding: 8px;
+  width: 260px;
+  border: 2px solid #666666ee;
+  font-size: 15px;
 }
 
 .HeaderClientes {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    margin: auto;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: auto;
 }
 
-.HeaderClientesP  {
-    width: 100%;
-    text-align: center;
+.HeaderClientesP {
+  width: 100%;
+  text-align: center;
 }
 
 .tableClientes {
-    border: #363636 solid 2px;
-    width: 100%;
+  border: #363636 solid 2px;
+  width: 100%;
 }
 
 .açoes {
-    width: 30%;
+  width: 30%;
 }
 
 .nome {
-    background-color: red;
+  background-color: red;
 }

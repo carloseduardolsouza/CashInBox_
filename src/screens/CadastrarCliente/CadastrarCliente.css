@@ -1,62 +1,67 @@
 #novoCliente {
-    margin-left: 55px;
-
+  margin-left: 55px;
 }
 
 #CENTRALIZAR {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ImageUser {
-    width: 270px;
-    height: 270px;
-    border: 1px solid black;
-    border-radius: 50%;
-    margin-right: 100px;
-    margin-top: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 80px;
+  width: 270px;
+  height: 270px;
+  border: 1px solid black;
+  border-radius: 50%;
+  margin-right: 100px;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
 }
 
 .MainNovoCliente {
-    display: flex;
+  display: flex;
 }
 
 .articleNovoCliente {
-    position: relative;
-    background-color: #e7e7e7;
-    padding: 15px;
-    border-radius: 10px;
-    z-index: 1;
+  position: relative;
+  background-color: #e7e7e7;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1;
 }
 
 .InputNovoCliente {
-    font-size: 15px;
-    padding: 3px;
-    width: 550px;
+  font-size: 15px;
+  padding: 3px;
+  width: 550px;
 }
 
 .CadastrarNovoCliente {
-    padding: 4px;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    border-radius: 4px;
-    background-color: #49db49;
-    cursor: pointer;
-    width: 200px;
-    border-radius: 20px;
-    font-weight: 600;
+  padding: 10px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  border-radius: 4px;
+  background-color: #49db49;
+  cursor: pointer;
+  width: 200px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.CadastrarNovoCliente:hover {
+  transition: .3s;
+  background-color: #2abb2a;
 }
 
 .SelectNovoCliente {
-    font-size: 16px;
+  font-size: 16px;
+  padding: 10px;
 }
 .DataNovoCliente {
-    font-size: 16px;
+  font-size: 16px;
 }

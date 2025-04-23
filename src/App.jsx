@@ -12,7 +12,7 @@ import Produtos from "./screens/Produtos/Produtos";
 import CadastrarProduto from "./screens/CadastrarProduto/CadastrarProduto";
 import Estoque from "./screens/Estoque/Estoque";
 import Configurações from "./screens/Configurações/Configurações";
-import FluxoDeCaixa from "./screens/FluxoDeCaixa/FluxoDeCaixa"
+import FluxoDeCaixa from "./screens/FluxoDeCaixa/FluxoDeCaixa";
 
 //Home
 import { GoHome } from "react-icons/go";

@@ -1,4 +1,4 @@
-import './HistoricoVendas.css'
+import "./HistoricoVendas.css";
 
 import { FaFilter } from "react-icons/fa";
 

@@ -8,7 +8,7 @@ function ConfiguraçõesGerais() {
     <div id="ConfiguraçõesGerais">
       <main id="mainConfiguraçõesGerais">
         <div id="LogoDaEmpresaConfiguraçõesGerais">
-          <MdAddPhotoAlternate id="MdAddPhotoAlternate"/>
+          <MdAddPhotoAlternate id="MdAddPhotoAlternate" />
         </div>
 
         <div>

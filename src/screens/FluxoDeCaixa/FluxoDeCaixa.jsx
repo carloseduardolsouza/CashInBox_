@@ -1,12 +1,12 @@
-import "./FluxoDeCaixa.css"
+import "./FluxoDeCaixa.css";
 import { useState } from "react";
 
 //SubTelas
 import CaixaAtual from "./SubScreens/CaixaAtual/CaixaAtual";
-import CaixasAnteriores from "./SubScreens/CaixasAnteriores/CaixasAnteriores"
+import CaixasAnteriores from "./SubScreens/CaixasAnteriores/CaixasAnteriores";
 
 function FluxoDeCaixa() {
-    const [caixaAtual , setCaixaAtual] = useState(true)
+  const [caixaAtual, setCaixaAtual] = useState(true);
 
   return (
     <div id="caixa">

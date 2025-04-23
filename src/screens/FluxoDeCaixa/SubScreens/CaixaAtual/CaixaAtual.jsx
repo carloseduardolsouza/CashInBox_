@@ -1,4 +1,4 @@
-import "./CaixaAtual.css"
+import "./CaixaAtual.css";
 
 function CaixaAtual() {
   return (
@@ -19,9 +19,7 @@ function CaixaAtual() {
 
       <div className="InfoCaixaAtual">
         <h3>Movimentações</h3>
-        <div id="sectionrolavel">
-
-        </div>
+        <div id="sectionrolavel"></div>
 
         <div className="FooterCaixaAtual">
           <strong>Saldo Final</strong>

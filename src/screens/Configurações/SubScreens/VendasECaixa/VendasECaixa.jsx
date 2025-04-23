@@ -25,7 +25,7 @@ function VendasECaixa() {
           <input type="checkbox" />
         </label>
       </div>
-      <h3 style={{marginTop: '15px'}}>💸 Formas de Pagamento</h3>
+      <h3 style={{ marginTop: "15px" }}>💸 Formas de Pagamento</h3>
       <div>
         <label className="labelVendasECaixa">
           <p>Formas de pagamento aceitas:</p>

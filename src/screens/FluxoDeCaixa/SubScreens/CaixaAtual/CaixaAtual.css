@@ -1,46 +1,46 @@
 #CaixaAtual {
-    display: flex;
-    height: 89vh;
-    width: 100%;
-    margin-top: 5px;
+  display: flex;
+  height: 89vh;
+  width: 100%;
+  margin-top: 5px;
 }
 
 .InfoDetalhasdasCaixaAtual {
-    width: 70%;
+  width: 70%;
 }
 
 .InfoCaixaAtual {
-    width: 30%;
-    border-left: 1px solid #5e5e5e;
-    padding: 5px;
+  width: 30%;
+  border-left: 1px solid #5e5e5e;
+  padding: 5px;
 }
 
 .FooterCaixaAtual {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 385px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 385px;
 }
 
 #ButtonCaixa {
-    width: 100%;
-    padding: 5px;
-    background-color: #0295ff;
-    color: white;
-    font-size: 18px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+  width: 100%;
+  padding: 5px;
+  background-color: #0295ff;
+  color: white;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .Resumodecaixa {
-    border: 1px solid black;
-    padding: 5px;
-    border-radius: 10px;
-    width: 400px;
+  border: 1px solid black;
+  padding: 5px;
+  border-radius: 10px;
+  width: 400px;
 }
 
 #sectionrolavel {
-    overflow: auto;
-    height: 72%;
+  overflow: auto;
+  height: 72%;
 }

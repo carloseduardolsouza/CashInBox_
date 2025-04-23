@@ -1,4 +1,4 @@
-import "./PedidosEmAberto.css"
+import "./PedidosEmAberto.css";
 
 function PedidosEmAberto() {
   return (
