@@ -1,0 +1,34 @@
+.FilterDateVendas {
+  font-size: 15px;
+  height: 30px;
+  margin-bottom: 20px;
+}
+
+.FilterICONDateVendas {
+  padding: 5px;
+  height: 30px;
+  border-radius: 5px;
+  margin-left: 10px;
+  background-color: #00000000;
+  cursor: pointer;
+}
+
+.TableVendas {
+  border: #363636 solid 2px;
+  width: 100%;
+}
+
+.TableHeader {
+  display: flex;
+  justify-content: space-around;
+  margin: auto;
+}
+
+.itemTabelTitle {
+  width: 100%;
+  text-align: center;
+}
+
+.TableHeader > p {
+  font-weight: 600;
+}

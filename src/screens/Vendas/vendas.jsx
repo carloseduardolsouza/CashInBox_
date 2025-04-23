@@ -1,11 +1,14 @@
 import "./vendas.css";
 import { useState, useEffect } from "react";
 
+//SubTelas
+import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
+import PedidosEmAberto from "./SubScreens/PedidosEmAberto/PedidosEmAberto";
+import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber"
+
+//Componentes
 //import ItensTable from "../../components/itensTableVendas/itensTableVendas"
 //import ItensTablePendentes from "../../components/itensTableVendasPendentes/itensTableVendasOpen"
-
-//icones usados
-import { FaFilter } from "react-icons/fa";
 
 //import fetchapi from "../../api/fetchapi";
 //import Loading from "../../components/AçãoRealizada/AçãoRealizada"
@@ -20,7 +23,9 @@ function Vendas() {
   const [vendasReceber, setVendasReceber] = useState(false);
 
   const [resultadosVendas, setResultadosVendas] = useState([]);
-  const [resultadosVendasPendentes, setResultadosVendasPendentes] = useState([]);
+  const [resultadosVendasPendentes, setResultadosVendasPendentes] = useState(
+    []
+  );
   const [loadingVendas, setloadingVendas] = useState(true);
 
   /*useEffect(() => {
@@ -43,10 +48,7 @@ function Vendas() {
         <p>{log}</p>
       </header>
       <article className="ArticleVendas">
-        <a href="/novaVenda" className="NovaVenda">
-          {" "}
-          Nova Venda
-        </a>
+        <a href="/novaVenda" className="NovaVenda">Nova Venda</a>
       </article>
       <main>
         <div className="AreaVendasButtons">
@@ -78,62 +80,7 @@ function Vendas() {
             Vendas Receber
           </button>
         </div>
-        {(históricoAberto && (
-          <div>
-            <form>
-              <input type="date" className="FilterDateVendas" />
-              <button className="FilterICONDateVendas">
-                <FaFilter />
-              </button>
-            </form>
-            <table className="TableVendas">
-              <div className="TableHeader">
-                <p className="itemTabelTitle">Produto</p>
-                <p className="itemTabelTitle PreçoVendasScreenTable">Preço</p>
-                <p className="itemTabelTitle QuantidadeVendasScreenTable">
-                  Quantidade
-                </p>
-                <p className="itemTabelTitle DescontoVendasScreenTable">
-                  Desconto
-                </p>
-                <p className="itemTabelTitle TotalVendasScreenTable">Total</p>
-                <p className="itemTabelTitle Data">Data</p>
-              </div>
-              {/*(loadingVendas && <Loading />) ||
-                resultVendas.map((vendas) => <ItensTable data={vendas} />)*/}
-            </table>
-          </div>
-        )) ||
-          (vendasReceber && (
-            <div>
-              <h1>EM BREVE</h1>
-            </div>
-          )) || (
-            <table className="TableVendas">
-              <div className="TableHeader">
-                <p className="itemTabelTitle">Produto</p>
-                <p className="itemTabelTitle PreçoVendasScreenTable">Preço</p>
-                <p className="itemTabelTitle QuantidadeVendasScreenTable">
-                  Quantidade
-                </p>
-                <p className="itemTabelTitle DescontoVendasScreenTable">
-                  Desconto
-                </p>
-                <p className="itemTabelTitle TotalVendasScreenTable">Total</p>
-                <p className="itemTabelTitle PagamentoVendasScreenTables">
-                  Pagamento
-                </p>
-                <p className="itemTabelTitle AçõesVendasScreenTables">Ações</p>
-              </div>
-              {/*(loadingVendas && <Loading />) ||
-                resultVendasPendentes.map((venda) => (
-                  <ItensTablePendentes
-                    venda={venda}
-                    arrayVendas={setResultVendasPendentes}
-                  />
-                ))*/}
-            </table>
-          )}
+        {(históricoAberto && <HistoricoVendas />) || (vendasReceber && <VendasAReceber/>) || <PedidosEmAberto />}
       </main>
     </div>
   );
