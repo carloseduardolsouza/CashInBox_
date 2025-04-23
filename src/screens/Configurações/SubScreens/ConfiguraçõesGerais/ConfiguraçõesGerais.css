@@ -1,0 +1,48 @@
+#ConfiguraçõesGerais {
+  background-color: #eeeeee;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#LogoDaEmpresaConfiguraçõesGerais {
+  width: 290px;
+  height: 290px;
+  background-color: white;
+  border-radius: 50%;
+  border: solid black 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 40px;
+}
+
+#mainConfiguraçõesGerais {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#formConfiguraçõesGerais {
+  width: 400px;
+}
+
+#formConfiguraçõesGerais input {
+  font-size: 20px;
+  padding: 5px;
+  width: 100%;
+  margin-bottom: 15px;
+  border: solid black 1px;
+  border-radius: 10px;
+}
+
+#formConfiguraçõesGerais button {
+  margin-top: 20px;
+  background-color: #0295ff;
+  color: white;
+  width: 100%;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}

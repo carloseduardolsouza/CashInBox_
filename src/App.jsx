@@ -11,6 +11,7 @@ import PontoDeVenda from "./screens/PontoDeVenda/PontoDeVenda";
 import Produtos from "./screens/Produtos/Produtos";
 import CadastrarProduto from "./screens/CadastrarProduto/CadastrarProduto";
 import Estoque from "./screens/Estoque/Estoque";
+import Configurações from "./screens/Configurações/Configurações";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -261,6 +262,8 @@ function App() {
           <Route path="/produtos" Component={Produtos} />
           <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/estoque" Component={Estoque} />
+
+          <Route path="/configurações" Component={Configurações} />
         </Routes>
       </Router>
     </div>

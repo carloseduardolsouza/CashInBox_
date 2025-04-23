@@ -10,6 +10,9 @@ import { useState } from "react"
 //Componentes
 //import Concluindo from "../../components/Concluindo/Concluindo"
 
+//icones
+import { FaUserAlt } from "react-icons/fa";
+
 function CadastrarCliente() {
     const [nome ,setNome] = useState('')
     const [numero ,setNumero] = useState('')
@@ -102,7 +105,7 @@ function CadastrarCliente() {
         <div id="CENTRALIZAR">
 
         <main className="MainNovoCliente">
-        <img src={/*ImageUser*/``} alt="Imagem User" className="ImageUser" />
+        <div alt="Imagem User" className="ImageUser"><FaUserAlt /></div>
         <form className="articleNovoCliente" onSubmit={(e) => CadastrarCliente(e)}>
             <p><strong>Nome: </strong></p>
             <input type="text" className="InputNovoCliente" onChange={(event) => escreverDados("nome" , event)} value={nome} placeholder="Nome" required/>

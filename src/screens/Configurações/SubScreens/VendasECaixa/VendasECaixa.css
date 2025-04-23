@@ -1,0 +1,18 @@
+#VendasECaixa {
+  background-color: #eeeeee;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.labelVendasECaixa  {
+    display: flex;
+    font-size: 18px;
+}
+
+.labelVendasECaixa > input {
+    width: 20px;
+}
+
+.labelVendasECaixa p {
+    width: 650px;
+}
