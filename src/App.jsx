@@ -1,10 +1,13 @@
 import "./App.css";
+import "./menu.css";
 import { useState } from "react";
 
 //Telas
 import Home from "./screens/Home/Home";
 import Vendas from "./screens/Vendas/vendas";
 import Clientes from "./screens/Clientes/clientes";
+import PontoDeVenda from "./screens/PontoDeVenda/PontoDeVenda";
+import NovoCliente from "./screens/NovoCliente/NovoCliente";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -40,7 +43,6 @@ import { FaRegMoneyBillAlt } from "react-icons/fa";
 //Caixa
 import { FaCashRegister } from "react-icons/fa6";
 
-import "./menu.css";
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -251,6 +253,9 @@ function App() {
           <Route path="/" Component={Home} />
           <Route path="/vendas" Component={Vendas} />
           <Route path="/clientes" Component={Clientes} />
+          <Route path="/novoCliente" Component={NovoCliente} />
+          <Route path="/pontoDeVenda" Component={PontoDeVenda} />
+
         </Routes>
       </Router>
     </div>

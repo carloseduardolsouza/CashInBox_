@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 //SubTelas
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
 import PedidosEmAberto from "./SubScreens/PedidosEmAberto/PedidosEmAberto";
-import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber"
+import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber";
 
 //Componentes
 //import ItensTable from "../../components/itensTableVendas/itensTableVendas"
@@ -48,7 +48,9 @@ function Vendas() {
         <p>{log}</p>
       </header>
       <article className="ArticleVendas">
-        <a href="/novaVenda" className="NovaVenda">Nova Venda</a>
+        <a href="/pontoDeVenda" className="NovaVenda">
+          Nova Venda
+        </a>
       </article>
       <main>
         <div className="AreaVendasButtons">
@@ -80,7 +82,8 @@ function Vendas() {
             Vendas Receber
           </button>
         </div>
-        {(históricoAberto && <HistoricoVendas />) || (vendasReceber && <VendasAReceber/>) || <PedidosEmAberto />}
+        {(históricoAberto && <HistoricoVendas />) ||
+          (vendasReceber && <VendasAReceber />) || <PedidosEmAberto />}
       </main>
     </div>
   );

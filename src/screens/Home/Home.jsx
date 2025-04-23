@@ -76,7 +76,7 @@ function Home() {
           <button onClick={() => (window.location.href = "/")}>
             <MdAttachMoney /> Fluxo de Caixa
           </button>
-          <button onClick={() => (window.location.href = "/")}>
+          <button onClick={() => (window.location.href = "/pontoDeVenda")}>
             <FaComputer /> PDV
           </button>
         </div>

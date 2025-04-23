@@ -1,0 +1,133 @@
+#NOVAVENDA {
+    margin-left: 55px;
+}
+
+#NOVAVENDA:focus {
+    outline: none;
+}
+
+.statusVenda {
+    position: absolute;
+    bottom: 10px;
+    left: 450px;
+    background-color: #eee;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 20px;
+}
+
+.SelectStatusVenda {
+    font-size: 20px;
+}
+
+.SelectNovaVenda {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 530px;
+    margin-left: 30px;
+}
+
+.NovaVendaLabel {
+    display: flex;
+}
+
+.NovaVendaLabel input {
+    font-size: 20px;
+    width: 200px;
+}
+
+.NovaVendaLabel > label {
+    display: flex;
+}
+
+.NovaVendaLabel > label > p {
+    font-size: 20px;
+}
+
+#checkBoxNovaVenda {
+    width: 20px;
+}
+
+.NovanVendaStrong {
+    font-size: 19px;
+    margin-right: 8px;
+}
+
+.DivisãoNovaVenda {
+    display: flex;
+    justify-content: space-around;
+    width: 700px;
+}
+
+.calcularNovaVenda {
+    width: 100%;
+    padding: 7px;
+    cursor: pointer;
+    border: none;
+    font-size: 20px;
+    background-color: #fff9a7;
+    border-radius: 7px;
+    margin-top: 15px;
+}
+
+.calcularNovaVenda:hover {
+    background-color: #fff458;
+    transition: .5s;
+}
+
+.PreçoNovaVenda {
+    position: absolute;
+    bottom: 10px;
+    width: 330px;
+}
+
+.lançarPreçoNovaVenda {
+    border-radius: 7px;
+    width: 100%;
+    padding: 5px;
+    cursor: pointer;
+    border: none;
+    background-color: #d1ffa7;
+    font-size: 20px;
+}
+
+.lançarPreçoNovaVenda:hover {
+    background-color: #9cff3f;
+    transition: .5s;
+}
+
+.MainNovaVenda {
+    display: flex;
+}
+
+.ProdutosNovaVenda {
+    background-color: #eeee;
+    height: 100vh;
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+    margin-left: 15px;
+    overflow-y: scroll; /* Adicionando barra de rolagem vertical */ 
+}
+
+.FaturarNovaVenda {
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    top: 10px;
+    width: 300px;
+    height: 30px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: -5px 5px 3px #0000006a;
+    padding: 5px;
+    background-color: #0295ff;
+}
+
+.FaturarNovaVenda:hover {
+    box-shadow: 0px 0px 0px #00000000;
+    transition: .5s;
+}
