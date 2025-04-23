@@ -12,6 +12,7 @@ import Produtos from "./screens/Produtos/Produtos";
 import CadastrarProduto from "./screens/CadastrarProduto/CadastrarProduto";
 import Estoque from "./screens/Estoque/Estoque";
 import Configurações from "./screens/Configurações/Configurações";
+import FluxoDeCaixa from "./screens/FluxoDeCaixa/FluxoDeCaixa"
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -213,7 +214,7 @@ function App() {
             <p style={style}>Contas a pagar</p>
           </Link>
           <Link
-            to="/caixa"
+            to="/fluxoDeCaixa"
             className="MenuLateralBox"
             onClick={() => {
               setVendas(false);
@@ -262,6 +263,7 @@ function App() {
           <Route path="/produtos" Component={Produtos} />
           <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/estoque" Component={Estoque} />
+          <Route path="/fluxoDeCaixa" Component={FluxoDeCaixa} />
 
           <Route path="/configurações" Component={Configurações} />
         </Routes>

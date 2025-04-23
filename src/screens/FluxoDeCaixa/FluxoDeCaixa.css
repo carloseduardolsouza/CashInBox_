@@ -1,0 +1,12 @@
+#caixa {
+    margin-left: 55px;
+}
+
+.MenuCaixa {
+    display: flex;
+}
+
+.MenuCaixa p {
+    cursor: pointer;
+    margin-right: 15px;
+}
