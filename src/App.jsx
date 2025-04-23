@@ -8,6 +8,8 @@ import Vendas from "./screens/Vendas/vendas";
 import Clientes from "./screens/Clientes/clientes";
 import PontoDeVenda from "./screens/PontoDeVenda/PontoDeVenda";
 import NovoCliente from "./screens/NovoCliente/NovoCliente";
+import Produtos from "./screens/Produtos/Produtos";
+import Estoque from "./screens/Estoque/Estoque";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -255,7 +257,8 @@ function App() {
           <Route path="/clientes" Component={Clientes} />
           <Route path="/novoCliente" Component={NovoCliente} />
           <Route path="/pontoDeVenda" Component={PontoDeVenda} />
-
+          <Route path="/produtos" Component={Produtos} />
+          <Route path="/estoque" Component={Estoque} />
         </Routes>
       </Router>
     </div>
