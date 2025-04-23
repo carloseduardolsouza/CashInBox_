@@ -50,7 +50,7 @@ function Clientes() {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = "/novoCliente";
+              window.location.href = "/cadastrarCliente";
             }}
           >
             +

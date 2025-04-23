@@ -1,4 +1,4 @@
-import "./NovoCliente.css"
+import "./CadastrarCliente.css"
 import { useState } from "react"
 
 //Assets
@@ -10,7 +10,7 @@ import { useState } from "react"
 //Componentes
 //import Concluindo from "../../components/Concluindo/Concluindo"
 
-function NovoCliente() {
+function CadastrarCliente() {
     const [nome ,setNome] = useState('')
     const [numero ,setNumero] = useState('')
     const [endereço ,setEndereço] = useState('')
@@ -131,4 +131,4 @@ function NovoCliente() {
     );
 }
 
-export default NovoCliente;
+export default CadastrarCliente;

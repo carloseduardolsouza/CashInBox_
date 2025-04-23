@@ -6,9 +6,10 @@ import { useState } from "react";
 import Home from "./screens/Home/Home";
 import Vendas from "./screens/Vendas/vendas";
 import Clientes from "./screens/Clientes/clientes";
+import CadastrarCliente from "./screens/CadastrarCliente/CadastrarCliente";
 import PontoDeVenda from "./screens/PontoDeVenda/PontoDeVenda";
-import NovoCliente from "./screens/NovoCliente/NovoCliente";
 import Produtos from "./screens/Produtos/Produtos";
+import CadastrarProduto from "./screens/CadastrarProduto/CadastrarProduto";
 import Estoque from "./screens/Estoque/Estoque";
 
 //Home
@@ -255,9 +256,10 @@ function App() {
           <Route path="/" Component={Home} />
           <Route path="/vendas" Component={Vendas} />
           <Route path="/clientes" Component={Clientes} />
-          <Route path="/novoCliente" Component={NovoCliente} />
+          <Route path="/cadastrarCliente" Component={CadastrarCliente} />
           <Route path="/pontoDeVenda" Component={PontoDeVenda} />
           <Route path="/produtos" Component={Produtos} />
+          <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/estoque" Component={Estoque} />
         </Routes>
       </Router>
