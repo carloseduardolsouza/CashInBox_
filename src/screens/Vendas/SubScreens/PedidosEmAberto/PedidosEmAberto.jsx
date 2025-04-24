@@ -2,23 +2,37 @@ import "./PedidosEmAberto.css";
 
 function PedidosEmAberto() {
   return (
-    <table className="TableVendas">
-      <div className="TableHeader">
-        <p className="itemTabelTitle">Produto</p>
-        <p className="itemTabelTitle PreçoVendasScreenTable">Preço</p>
-        <p className="itemTabelTitle QuantidadeVendasScreenTable">Quantidade</p>
-        <p className="itemTabelTitle DescontoVendasScreenTable">Desconto</p>
-        <p className="itemTabelTitle TotalVendasScreenTable">Total</p>
-        <p className="itemTabelTitle PagamentoVendasScreenTables">Pagamento</p>
-        <p className="itemTabelTitle AçõesVendasScreenTables">Ações</p>
-      </div>
-      {/*(loadingVendas && <Loading />) ||
-                resultVendasPendentes.map((venda) => (
-                  <ItensTablePendentes
-                    venda={venda}
-                    arrayVendas={setResultVendasPendentes}
-                  />
-                ))*/}
+    <table className="Table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Preço</th>
+          <th>Quantidade</th>
+          <th>Desconto</th>
+          <th>Total</th>
+          <th>Pagamento</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {/*(loadingVendas && <Loading />) ||
+          resultVendasPendentes.map((venda) => {
+            return (
+              <tr>
+                <td>Comoda Capri</td>
+                <td>R$ 100,00</td>
+                <td>1</td>
+                <td>5%</td>
+                <td>R$ 95,00</td>
+                <td>Pix</td>
+                <td>
+                  <button id="AçãoButãoPedidosEmAberto">Ação</button>
+                </td>
+              </tr>
+            );
+          })*/}
+      </tbody>
     </table>
   );
 }

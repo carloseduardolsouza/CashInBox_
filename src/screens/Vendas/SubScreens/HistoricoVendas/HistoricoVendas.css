@@ -13,22 +13,13 @@
   cursor: pointer;
 }
 
-.TableVendas {
+.Table {
   border: #363636 solid 2px;
   width: 100%;
-}
-
-.TableHeader {
-  display: flex;
-  justify-content: space-around;
-  margin: auto;
-}
-
-.itemTabelTitle {
-  width: 100%;
   text-align: center;
+  margin-top: 10px;
 }
 
-.TableHeader > p {
-  font-weight: 600;
+.Table thead {
+  background-color: #c0c0c0;
 }

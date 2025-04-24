@@ -163,6 +163,25 @@ function CadastrarProduto() {
             />
           </la>
 
+          <div id="DivisãoPreçoCadastroProduto">
+            <la>
+              <p>Preço de Compra: </p>
+              <input type="number" placeholder="somente numeros"/>
+            </la>
+
+           <la>
+            <p>Margem:</p>
+            <input type="number" placeholder="somente numeros"/>
+           </la>
+
+           <la>
+            <p>Preço De Venda:</p>
+            <input type="number" value={""} placeholder="somente numeros" />
+           </la>
+          </div>
+
+
+
           <la>
             <p>Descrição: </p>
             <textarea

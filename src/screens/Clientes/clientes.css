@@ -47,27 +47,27 @@
   font-size: 15px;
 }
 
-.HeaderClientes {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  margin: auto;
-}
-
-.HeaderClientesP {
-  width: 100%;
-  text-align: center;
-}
-
-.tableClientes {
+.table {
   border: #363636 solid 2px;
   width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.table thead {
+  background-color: #c0c0c0;
 }
 
 .açoes {
   width: 30%;
 }
 
-.nome {
-  background-color: red;
+#AçãoButãoClientes {
+  background-color: #0295ff;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  padding: 5px;
 }

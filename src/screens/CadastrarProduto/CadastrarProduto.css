@@ -238,3 +238,10 @@ button.disabled {
   background-color: black;
   right: -30px;
 }
+
+#DivisãoPreçoCadastroProduto {
+  background-color: #dfdfdf;
+  padding: 10px;
+  border-radius: 10px;
+  
+}

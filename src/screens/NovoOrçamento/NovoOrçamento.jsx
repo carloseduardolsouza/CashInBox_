@@ -361,23 +361,6 @@ function NovoOrçamento() {
                   <p>%</p>
                 </label>
               </label>
-              <label className="NovaVendaLabel">
-                <p className="NovanVendaStrong">
-                  <strong>Meio de Pagamento</strong>
-                </p>
-                <select
-                  onChange={(e) => setPagamento(e.target.value)}
-                  value={pagamento}
-                  disabled={desable}
-                  required
-                >
-                  <option value="MEIO DE PAGAMENTO">MEIO DE PAGAMENTO</option>
-                  <option value="PIX">PIX</option>
-                  <option value="CARTÃO DE CRÉDITO">CARTÃO DE CRÉDITO</option>
-                  <option value="CARTÃO DE DEBITO">CARTÃO DE DEBITO</option>
-                  <option value="DINHEIRO">DINHEIRO</option>
-                </select>
-              </label>
             </form>
           </div>
 
@@ -388,30 +371,7 @@ function NovoOrçamento() {
           >
             Calcular
           </button>
-          <Select
-            className="SelectNovaVenda"
-            placeholder="Vendedor"
-            options={optionsVendedores}
-            onChange={(e) => `` /*renderInfoVendedores(e)*/}
-            isDisabled={desable}
-          />
-          <label className="NovaVendaLabel">
-            <p className="NovanVendaStrong">
-              <strong>Vendedor: </strong>
-            </p>
-            <p>{nomeVendedor}</p>
-          </label>
-          <label className="statusVenda">
-            <strong>Status: </strong>
-            <select
-              className="SelectStatusVenda"
-              onChange={(e) => setStatusVenda(e.target.value)}
-            >
-              <option value="concluida">concluida</option>
-              <option value="entregar">entregar</option>
-              <option value="pagar e entregar">pagar e entregar</option>
-            </select>
-          </label>
+
           <div className="PreçoNovaVenda">
             <h3>Desconto: {descontoFormatado}</h3>
             <h1>Preço : {/*services.formatarCurrency(preçoComDesconto)*/}</h1>

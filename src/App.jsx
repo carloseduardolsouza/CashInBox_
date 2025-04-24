@@ -17,6 +17,7 @@ import Funcionarios from "./screens/Funcionarios/Funcionarios";
 import PlanosEBoletos from "./screens/PlanosEBoletos/PlanosEBoletos"
 import Relatorios from "./screens/Relatorios/Relatorios";
 import NovoOrçamento from "./screens/NovoOrçamento/NovoOrçamento";
+import CadastrarFuncionario from "./screens/CadastrarFuncionario/CadastrarFuncionario";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -297,17 +298,18 @@ function App() {
           <Route path="/" Component={Home} />
           <Route path="/vendas" Component={Vendas} />
           <Route path="/clientes" Component={Clientes} />
-          <Route path="/cadastrarCliente" Component={CadastrarCliente} />
           <Route path="/pontoDeVenda" Component={PontoDeVenda} />
           <Route path="/produtos" Component={Produtos} />
-          <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/estoque" Component={Estoque} />
           <Route path="/fluxoDeCaixa" Component={FluxoDeCaixa} />
           <Route path="/relatorios" Component={Relatorios} />
-          <Route path="/novoOrçamento" Component={NovoOrçamento} />
 
+          <Route path="/cadastrarProduto" Component={CadastrarProduto} />
+          <Route path="/cadastrarCliente" Component={CadastrarCliente} />
+          <Route path="/novoOrçamento" Component={NovoOrçamento} />
           <Route path="/funcionarios" Component={Funcionarios} />
           <Route path="/planosEBoletos" Component={PlanosEBoletos} />
+          <Route path="/cadastrarFuncionario" Component={CadastrarFuncionario} />
           
           <Route path="/configurações" Component={Configurações} />
         </Routes>

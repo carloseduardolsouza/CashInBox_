@@ -61,17 +61,31 @@ function Estoque() {
           </button>
         </form>
       </div>
-      <table className="TableEstoque">
-        <div className="TableHeader">
-          <p className="itemTabelTitle">Produto</p>
-          <p className="itemTabelTitle">Preço de compra</p>
-          <p className="itemTabelTitle">Margem</p>
-          <p className="itemTabelTitle">Em estoque</p>
-          <p className="itemTabelTitle">Codigo</p>
-        </div>
-        {/*loadingEstoque && <Loading/> || (
-                    resultEstoque.map((estoque) => <IntensEstoque data={estoque}/>)
-                )*/}
+      <table className="Table">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Preço de Compra</th>
+            <th>Mergem</th>
+            <th>Em Estoque</th>
+            <th>Codigo</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {/*(loadingEstoque && <Loading />) ||
+            resultEstoque.map((estoque) => {
+              return (
+                <tr>
+                  <td>Comoda Capri</td>
+                  <td>R$ 50,00</td>
+                  <td>100%</td>
+                  <td>10</td>
+                  <td>0001</td>
+                </tr>
+              );
+            })*/}
+        </tbody>
       </table>
     </div>
   );

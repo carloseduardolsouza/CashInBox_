@@ -66,26 +66,33 @@ function Clientes() {
           </button>
         </form>
       </article>
-      <table className="tableClientes">
-        <div className="HeaderClientes">
-          <p className="itemTabelTitle">
-            <strong>Nome</strong>
-          </p>
-          <p className="itemTabelTitle">
-            <strong>Numero</strong>
-          </p>
-          <p className="itemTabelTitle endress">
-            <strong>Endereço</strong>
-          </p>
-          <p className="itemTabelTitle">
-            <strong>Credito</strong>
-          </p>
-          <p className="itemTabelTitle açoes">
-            <strong>Ações</strong>
-          </p>
-        </div>
-        {/*(loadingClientes && <Loading />) ||
-          resultClientes.map((clientes) => <ItensClientes data={clientes} />)*/}
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Numero</th>
+            <th>Endereço</th>
+            <th>Credito</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {/*(loadingClientes && <Loading />) ||
+            resultClientes.map((clientes) => {
+              return (
+                <tr>
+                  <td>Carlos Eduardo</td>
+                  <td>(62) 9 9336-2090</td>
+                  <td>R.2 , Qd.2 , Lt.13 , Jd Petropolis</td>
+                  <td>R$ 2.000</td>
+                  <td>
+                    <button id="AçãoButãoClientes">Ações</button>
+                  </td>
+                </tr>
+              );
+            })*/}
+        </tbody>
       </table>
     </div>
   );

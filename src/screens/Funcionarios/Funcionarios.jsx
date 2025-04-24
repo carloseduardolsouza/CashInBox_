@@ -28,14 +28,28 @@ function Funcionarios() {
             <FaSearch />
           </button>
         </form>
-        <table className="TableEstoque">
-        <div className="TableHeader">
-          <p className="itemTabelTitle">Nome</p>
-          <p className="itemTabelTitle">Numero</p>
-          <p className="itemTabelTitle">Comição D/Mês</p>
-          <p className="itemTabelTitle">Status</p>
-          <p className="itemTabelTitle">Ação</p>
-        </div>
+        <table className="Table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Numero</th>
+              <th>Comição D/Mês</th>
+              <th>Status</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Carlos Eduardo Lourenço de Souza</td>
+              <td>(62) 9 9336-2090</td>
+              <td>R$ 400,00</td>
+              <td>Ativo</td>
+              <td>
+                <button id="AçãoButãoFuncionarios">Ação</button>
+              </td>
+            </tr>
+          </tbody>
         {/*loadingEstoque && <Loading/> || (
                     resultEstoque.map((estoque) => <IntensEstoque data={estoque}/>)
                 )*/}
