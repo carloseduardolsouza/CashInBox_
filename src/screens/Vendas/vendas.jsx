@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
 import PedidosEmAberto from "./SubScreens/PedidosEmAberto/PedidosEmAberto";
 import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber";
+import Orçamentos from "./SubScreens/Orçamentos/Orçamentos";
+import PedidosOnline from "./SubScreens/PedidosOnline/PedidosOnline";
 
 //Componentes
 //import ItensTable from "../../components/itensTableVendas/itensTableVendas"
@@ -21,6 +23,9 @@ function Vendas() {
 
   const [históricoAberto, setHistóricoAberto] = useState(true);
   const [vendasReceber, setVendasReceber] = useState(false);
+  const [pedidosEmAberto, setPedidosEmAberto] = useState(false);
+  const [orçamentos, setOrçamentos] = useState(false);
+  const [pedidosOnline, setPedidosOnline] = useState(false);
 
   const [resultadosVendas, setResultadosVendas] = useState([]);
   const [resultadosVendasPendentes, setResultadosVendasPendentes] = useState(
@@ -51,6 +56,10 @@ function Vendas() {
         <a href="/pontoDeVenda" className="NovaVenda">
           Nova Venda
         </a>
+
+        <a href="/novoOrçamento" className="NovoOrçamento">
+          Novo Orçamento
+        </a>
       </article>
       <main>
         <div className="AreaVendasButtons">
@@ -58,6 +67,9 @@ function Vendas() {
             style={{ textDecoration: "underline #0295ff 3px" }}
             onClick={() => {
               setHistóricoAberto(true);
+              setPedidosEmAberto(false);
+              setOrçamentos(false);
+              setPedidosOnline(false);
               setVendasReceber(false);
             }}
           >
@@ -67,6 +79,9 @@ function Vendas() {
             style={{ textDecoration: "underline #0295ff 3px" }}
             onClick={() => {
               setHistóricoAberto(false);
+              setPedidosEmAberto(true);
+              setOrçamentos(false);
+              setPedidosOnline(false);
               setVendasReceber(false);
             }}
           >
@@ -76,14 +91,45 @@ function Vendas() {
             style={{ textDecoration: "underline #0295ff 3px" }}
             onClick={() => {
               setHistóricoAberto(false);
+              setPedidosEmAberto(false);
+              setOrçamentos(false);
+              setPedidosOnline(false);
               setVendasReceber(true);
             }}
           >
             Vendas Receber
           </button>
+          <button
+            style={{ textDecoration: "underline #0295ff 3px" }}
+            onClick={() => {
+              setHistóricoAberto(false);
+              setPedidosEmAberto(false);
+              setOrçamentos(true);
+              setPedidosOnline(false);
+              setVendasReceber(false);
+            }}
+          >
+            Orçamentos
+          </button>
+
+          <button
+            style={{ textDecoration: "underline #0295ff 3px" }}
+            onClick={() => {
+              setHistóricoAberto(false);
+              setPedidosEmAberto(false);
+              setOrçamentos(false);
+              setPedidosOnline(true);
+              setVendasReceber(false);
+            }}
+          >
+            Pedidos Online
+          </button>
         </div>
         {(históricoAberto && <HistoricoVendas />) ||
-          (vendasReceber && <VendasAReceber />) || <PedidosEmAberto />}
+          (vendasReceber && <VendasAReceber />) ||
+          (pedidosEmAberto && <PedidosEmAberto />) ||
+          (pedidosOnline && <PedidosOnline />) ||
+          (orçamentos && <Orçamentos />)}
       </main>
     </div>
   );

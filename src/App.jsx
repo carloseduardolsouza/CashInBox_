@@ -13,6 +13,10 @@ import CadastrarProduto from "./screens/CadastrarProduto/CadastrarProduto";
 import Estoque from "./screens/Estoque/Estoque";
 import Configurações from "./screens/Configurações/Configurações";
 import FluxoDeCaixa from "./screens/FluxoDeCaixa/FluxoDeCaixa";
+import Funcionarios from "./screens/Funcionarios/Funcionarios";
+import PlanosEBoletos from "./screens/PlanosEBoletos/PlanosEBoletos"
+import Relatorios from "./screens/Relatorios/Relatorios";
+import NovoOrçamento from "./screens/NovoOrçamento/NovoOrçamento";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -46,7 +50,12 @@ import { FaMoneyBill1 } from "react-icons/fa6";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 //Caixa
-import { FaCashRegister } from "react-icons/fa6";
+import { PiCashRegisterFill } from "react-icons/pi";
+import { PiCashRegisterLight } from "react-icons/pi";
+
+//Relatorios
+import { MdInsertChartOutlined } from "react-icons/md";
+import { MdInsertChart } from "react-icons/md";
 
 import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
@@ -60,6 +69,7 @@ function App() {
   const [contasPagar, setContasPagar] = useState(false);
   const [caixa, setCaixa] = useState(false);
   const [configs, setConfigs] = useState(false);
+  const [relatorios, setRelatorios] = useState(false);
 
   //Define o tamanho e se o texto ira aparecer
   const [windowWidth, setWindowWidth] = useState("45px");
@@ -110,6 +120,7 @@ function App() {
               setEstoque(false);
               setContasPagar(false);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
@@ -129,6 +140,7 @@ function App() {
               setEstoque(false);
               setContasPagar(false);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
@@ -148,6 +160,7 @@ function App() {
               setHome(false);
               setContasPagar(false);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
@@ -167,6 +180,7 @@ function App() {
               setHome(false);
               setContasPagar(false);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
@@ -186,6 +200,7 @@ function App() {
               setContasPagar(false);
               setHome(false);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
@@ -205,6 +220,7 @@ function App() {
               setEstoque(false);
               setContasPagar(true);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
@@ -224,13 +240,35 @@ function App() {
               setContasPagar(false);
               setHome(false);
               setCaixa(true);
+              setRelatorios(false);
               setConfigs(false);
             }}
           >
-            {(caixa && <FaCashRegister className="iconsMenuLateral" />) || (
-              <FaCashRegister className="iconsMenuLateral" />
+            {(caixa && <PiCashRegisterFill className="iconsMenuLateral" />) || (
+              <PiCashRegisterLight className="iconsMenuLateral" />
             )}
             <p style={style}>Caixa</p>
+          </Link>
+
+          <Link
+            to="/relatorios"
+            className="MenuLateralBox"
+            onClick={() => {
+              setVendas(false);
+              setClientes(false);
+              setProdutos(false);
+              setEstoque(false);
+              setContasPagar(false);
+              setHome(false);
+              setCaixa(false);
+              setRelatorios(true);
+              setConfigs(false);
+            }}
+          >
+            {(relatorios && (
+              <MdInsertChart className="iconsMenuLateral" />
+            )) || <MdInsertChartOutlined className="iconsMenuLateral" />}
+            <p style={style}>Relatorios</p>
           </Link>
 
           <Link
@@ -244,6 +282,7 @@ function App() {
               setHome(false);
               setContasPagar(false);
               setCaixa(false);
+              setRelatorios(false);
               setConfigs(true);
             }}
           >
@@ -264,7 +303,12 @@ function App() {
           <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/estoque" Component={Estoque} />
           <Route path="/fluxoDeCaixa" Component={FluxoDeCaixa} />
+          <Route path="/relatorios" Component={Relatorios} />
+          <Route path="/novoOrçamento" Component={NovoOrçamento} />
 
+          <Route path="/funcionarios" Component={Funcionarios} />
+          <Route path="/planosEBoletos" Component={PlanosEBoletos} />
+          
           <Route path="/configurações" Component={Configurações} />
         </Routes>
       </Router>

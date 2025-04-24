@@ -6,6 +6,12 @@
   margin-bottom: 20px;
 }
 
+.NovoOrçamento {
+  background-color: #ffffff00;
+  border: solid black 1px;
+  color: black;
+}
+
 .HeaderVendas {
   display: flex;
   justify-content: space-between;

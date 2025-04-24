@@ -13,7 +13,7 @@ import {
 } from "recharts";
 
 //Icones Usados
-import { FaTruck } from "react-icons/fa";
+import { FaTools } from "react-icons/fa";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { MdAttachMoney } from "react-icons/md";
 import { FaComputer } from "react-icons/fa6";
@@ -67,13 +67,13 @@ function Home() {
         </LineChart>
 
         <div className="ButtonHeaderDeashBoard">
-          <button onClick={() => (window.location.href = "/")}>
+          <button onClick={() => (window.location.href = "/funcionarios")}>
             <GiTakeMyMoney /> Funcionários
           </button>
-          <button onClick={() => (window.location.href = "/")}>
-            <FaTruck /> Fornecedores
+          <button onClick={() => (window.location.href = "/planosEBoletos")}>
+            <FaTools /> Planos e Boletos
           </button>
-          <button onClick={() => (window.location.href = "/")}>
+          <button onClick={() => (window.location.href = "/fluxoDeCaixa")}>
             <MdAttachMoney /> Fluxo de Caixa
           </button>
           <button onClick={() => (window.location.href = "/pontoDeVenda")}>
