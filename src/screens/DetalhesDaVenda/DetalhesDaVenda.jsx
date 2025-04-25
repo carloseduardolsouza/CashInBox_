@@ -28,28 +28,26 @@ function DetalhesDaVenda() {
           </div>
 
           <div>
-            <div className="ItemDetalhesDaVenda">
-              <div>
-                <p>
-                  <strong>Produto: </strong>Comoda Capri
-                </p>
-                <p>
-                  <strong>Quantidade: </strong>1
-                </p>
-              </div>
-
-              <div>
-                <p>
-                  <strong>Valor: </strong>R$ 200,00
-                </p>
-                <p>
-                  <strong>Desconto: </strong>5% / R$ 10,00
-                </p>
-                <p>
-                  <strong>Total: </strong>R$ 190,00
-                </p>
-              </div>
-            </div>
+            <table className="Table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Valor</th>
+                  <th>Desconto</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Comoda Capri</td>
+                  <td>1</td>
+                  <td>R$ 100,00</td>
+                  <td>5% / R$ 5,00</td>
+                  <td>R$ 95,00</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 

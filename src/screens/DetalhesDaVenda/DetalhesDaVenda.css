@@ -21,6 +21,11 @@
   justify-content: space-between;
 }
 
+#DetalhesDaVendaDisplay2Pt2 > p {
+  margin: 5px;
+  font-size: 18px;
+}
+
 #DetalhesDaVendaDisplay2Pt1 {
   border-bottom: dashed black 1px;
   margin-bottom: 20px;
@@ -75,21 +80,4 @@
   border: solid black 1px;
   border-radius: 50%;
   display: flex;
-}
-
-.ItemDetalhesDaVenda {
-  background-color: #eeee;
-  border-radius: 20px;
-  margin: 10px;
-  padding: 10px;
-  display: flex;
-  justify-content: space-around;
-}
-
-.ImgProdutoDetalhesDaVenda {
-  border: solid black 1px;
-  border-radius: 10px;
-  background-color: white;
-  width: 200px;
-  height: 130px;
 }

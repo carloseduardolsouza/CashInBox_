@@ -95,5 +95,3 @@ Este projeto está licenciado sob a **MIT License**. Veja o arquivo [LICENSE](LI
 ---
 
 ```
-
-Se quiser incluir um passo-a-passo de como configurar o banco, ou adicionar informações sobre o deploy (ex: usar Vercel, Heroku, Railway), posso complementar isso também. Quer que eu adicione?
