@@ -1,0 +1,95 @@
+#DetalhesDaVenda {
+  margin-left: 55px;
+}
+
+#DetalhesDaVendaDisplay {
+  display: flex;
+  justify-content: space-between;
+}
+
+#DetalhesDaVendaDisplay1 {
+  width: 65%;
+}
+
+#DetalhesDaVendaDisplay2 {
+  border-left: solid black 1px;
+  padding: 10px;
+  width: 30%;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#DetalhesDaVendaDisplay2Pt1 {
+  border-bottom: dashed black 1px;
+  margin-bottom: 20px;
+}
+
+#DetalhesDaVendaDisplay2Pt3 {
+  border-top: dashed black 1px;
+  margin-bottom: 20px;
+}
+
+.ButãoDetalhesDaVenda {
+  width: 45%;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  margin: 5px;
+}
+
+.ButãoEditarDetalhesDaVenda {
+  background-color: orange;
+}
+
+.ButãoNotasDetalhesDaVenda {
+  background-color: #0295ff;
+}
+
+#CancelarVendaDetalhesDaVenda {
+  color: red;
+  text-decoration: underline red 1px;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 14px;
+}
+
+#DivisãoClienteDetalhesDaVenda {
+  background-color: #eeee;
+  border-radius: 20px;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#ImgClienteDetalhesDaVenda {
+  background-color: white;
+  width: 120px;
+  height: 120px;
+  border: solid black 1px;
+  border-radius: 50%;
+  display: flex;
+}
+
+.ItemDetalhesDaVenda {
+  background-color: #eeee;
+  border-radius: 20px;
+  margin: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.ImgProdutoDetalhesDaVenda {
+  border: solid black 1px;
+  border-radius: 10px;
+  background-color: white;
+  width: 200px;
+  height: 130px;
+}

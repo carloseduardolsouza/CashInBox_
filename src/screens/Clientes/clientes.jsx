@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
+import { IoInformationCircleSharp } from "react-icons/io5";
 
 //Componentes
 //import ItensClientes from "../../components/ItensClientes/ItensClientes"
@@ -72,12 +73,17 @@ function Clientes() {
             <th>Nome</th>
             <th>Numero</th>
             <th>Endereço</th>
-            <th>Credito</th>
-            <th>Ações</th>
+            <th>Total de compras em R$</th>
           </tr>
         </thead>
 
         <tbody>
+          <tr>
+            <td><a href="/detalhesDoCLiente/1" className="aTdClientes">Carlos Eduardo Lourenço de Souza</a></td>
+            <td>(62) 9 9336-2090</td>
+            <td>R.2 , Qd.2 , Lt.13 , Jd Petropolis</td>
+            <td>R$ 2.000</td>
+          </tr>
           {/*(loadingClientes && <Loading />) ||
             resultClientes.map((clientes) => {
               return (

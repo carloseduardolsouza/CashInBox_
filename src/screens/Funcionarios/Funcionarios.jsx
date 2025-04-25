@@ -2,6 +2,7 @@ import "./Funcionarios.css";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
+import { IoInformationCircleSharp } from "react-icons/io5";
 
 function Funcionarios() {
   return (
@@ -34,6 +35,7 @@ function Funcionarios() {
               <th>Nome</th>
               <th>Numero</th>
               <th>Comição D/Mês</th>
+              <th>Regime de Contrato</th>
               <th>Status</th>
               <th>Ação</th>
             </tr>
@@ -44,9 +46,10 @@ function Funcionarios() {
               <td>Carlos Eduardo Lourenço de Souza</td>
               <td>(62) 9 9336-2090</td>
               <td>R$ 400,00</td>
+              <td>CLT</td>
               <td>Ativo</td>
               <td>
-                <button id="AçãoButãoFuncionarios">Ação</button>
+                <button id="AçãoButãoFuncionarios"><IoInformationCircleSharp /> Detalhes</button>
               </td>
             </tr>
           </tbody>

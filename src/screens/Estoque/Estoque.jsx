@@ -38,6 +38,9 @@ function Estoque() {
   return (
     <div id="ESTOQUE">
       <h2>Estoque</h2>
+      <div id="AreaFunçõesEstoque">
+        <a href="/">Nota de Entrada</a>
+      </div>
       <div>
         <form onSubmit={(e) => /*renderEstoque(e)*/ ``}>
           <button
@@ -67,12 +70,21 @@ function Estoque() {
             <th>Produto</th>
             <th>Preço de Compra</th>
             <th>Mergem</th>
+            <th>Preço de Venda</th>
             <th>Em Estoque</th>
             <th>Codigo</th>
           </tr>
         </thead>
 
         <tbody>
+          <tr>
+            <td><a href="/" id="aTDEstoque">Comoda Capri</a></td>
+            <td>R$ 50,00</td>
+            <td>100%</td>
+            <td>R$ 100,00</td>
+            <td>10</td>
+            <td>0001</td>
+          </tr>
           {/*(loadingEstoque && <Loading />) ||
             resultEstoque.map((estoque) => {
               return (

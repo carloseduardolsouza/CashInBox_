@@ -17,6 +17,8 @@ import Funcionarios from "./screens/Funcionarios/Funcionarios";
 import PlanosEBoletos from "./screens/PlanosEBoletos/PlanosEBoletos"
 import Relatorios from "./screens/Relatorios/Relatorios";
 import NovoOrçamento from "./screens/NovoOrçamento/NovoOrçamento";
+import DetalhesDoCliente from "./screens/DetalhesDoCliente/DetalhesDoCliente";
+import DetalhesDaVenda from "./screens/DetalhesDaVenda/DetalhesDaVenda";
 import CadastrarFuncionario from "./screens/CadastrarFuncionario/CadastrarFuncionario";
 
 //Home
@@ -310,6 +312,8 @@ function App() {
           <Route path="/funcionarios" Component={Funcionarios} />
           <Route path="/planosEBoletos" Component={PlanosEBoletos} />
           <Route path="/cadastrarFuncionario" Component={CadastrarFuncionario} />
+          <Route path="/detalhesDoCliente/:id" Component={DetalhesDoCliente} />
+          <Route path="/detalhesDaVenda/:id" Component={DetalhesDaVenda} />
           
           <Route path="/configurações" Component={Configurações} />
         </Routes>

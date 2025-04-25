@@ -30,6 +30,7 @@
   position: relative;
   background-color: #e7e7e7;
   padding: 15px;
+  width: 550px;
   border-radius: 10px;
   z-index: 1;
 }
@@ -37,7 +38,7 @@
 .InputNovoCliente {
   font-size: 15px;
   padding: 3px;
-  width: 550px;
+  width: 100%;
 }
 
 .CadastrarNovoCliente {

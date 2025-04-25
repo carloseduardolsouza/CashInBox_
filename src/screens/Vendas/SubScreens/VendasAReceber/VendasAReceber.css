@@ -1,0 +1,9 @@
+.ButãoRecebidoVendas {
+    width: 100%;
+    background-color: green;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 10px;
+}

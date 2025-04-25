@@ -62,6 +62,10 @@
   width: 30%;
 }
 
+.aTdClientes {
+  color: black;
+}
+
 #AçãoButãoClientes {
   background-color: #0295ff;
   width: 100%;

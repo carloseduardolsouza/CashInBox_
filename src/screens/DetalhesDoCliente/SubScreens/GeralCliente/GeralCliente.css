@@ -1,0 +1,112 @@
+#DetalhesClienteINFORMAÇÃO {
+    display: flex;
+    margin-top: 60px;
+}
+
+.DivisãoDetalhesCliente {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.alinhar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.DetalhesClientesP {
+    margin: 5px;
+    font-size: 17px;
+}
+
+#DetalhesClienteINFORMAÇÃO input {
+    margin: 5px;
+    font-size: 17px;
+    width: 100%;
+}
+
+.alinhar label {
+    display: flex;
+    width: 500px;
+}
+
+#DetalhesClienteINFORMAÇÃO select {
+    margin: 5px;
+    font-size: 17px;
+    width: 100%;
+}
+
+.ImageUserDetalhesCliente {
+    width: 200px;
+    border-radius: 50%;
+    border: 1px solid #7b7b7b;
+    margin-bottom: 10px;
+}
+
+.bttContaCliente {
+    margin-top: 5px;
+    font-size: 17px;
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid #7b7b7b;
+    cursor: pointer;
+    width: 200px;
+    background-color: #00000000;
+}
+
+.bttContaCliente:hover {
+    border: 1px solid #000000;
+    transition: .5s;
+}
+
+.bttDeleteClienteInfo {
+    position: absolute;
+    bottom: 100px;
+    right: 50px;
+    font-size: 17px;
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid #ff5b5b;
+    color: #ff5b5b;
+    cursor: pointer;
+    width: 200px;
+    background-color: #00000000;
+}
+
+.bttDeleteClienteInfo:hover {
+    border: 1px solid white;
+    color: white;
+    background-color: #ff0000;
+    transition: .5s;
+}
+
+#divIconeGeralCliente {
+    border: solid black 1.5px;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    font-size: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.bttEditarClienteInfo {
+    font-size: 17px;
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid #000000;
+    cursor: pointer;
+    width: 200px;
+    background-color: #00000000; 
+    margin-top: 20px;
+}
+
+.bttEditarClienteInfo:hover {
+    border: 1px solid white;
+    background-color: #000000; 
+    color: white;
+    transition: .5s;
+}

@@ -1,4 +1,18 @@
 #divSelectNovoFuncionario {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
+}
+
+.SelectNovoFuncionario {
+  font-size: 16px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.articleNovoFuncionario {
+  position: relative;
+  background-color: #e7e7e7;
+  padding: 15px;
+  border-radius: 10px;
+  z-index: 1;
 }

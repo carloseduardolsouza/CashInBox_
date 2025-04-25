@@ -1,0 +1,14 @@
+#DetalhesDoCliente {
+    margin-left: 55px;
+}
+
+.HeaderClientesInfo {
+    margin-top: 15px;
+    display: flex;
+}
+
+.bttRenderInfoClientes {
+    margin-right: 15px;
+    cursor: pointer;
+    font-size: 18px;
+}
