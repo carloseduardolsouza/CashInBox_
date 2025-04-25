@@ -1,3 +1,4 @@
-#CadastrarFuncionario {
-    margin-left: 55px;
+#divSelectNovoFuncionario {
+    display: flex;
+    justify-content: space-around;
 }
