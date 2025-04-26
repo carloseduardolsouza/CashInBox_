@@ -1,19 +1,12 @@
 import "./vendas.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-//SubTelas
+// Subtelas
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
 import PedidosEmAberto from "./SubScreens/PedidosEmAberto/PedidosEmAberto";
 import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber";
 import Orçamentos from "./SubScreens/Orçamentos/Orçamentos";
 import PedidosOnline from "./SubScreens/PedidosOnline/PedidosOnline";
-
-//Componentes
-//import ItensTable from "../../components/itensTableVendas/itensTableVendas"
-//import ItensTablePendentes from "../../components/itensTableVendasPendentes/itensTableVendasOpen"
-
-//import fetchapi from "../../api/fetchapi";
-//import Loading from "../../components/AçãoRealizada/AçãoRealizada"
 
 function Vendas() {
   const Data = new Date();
@@ -21,30 +14,25 @@ function Vendas() {
     Data.getUTCMonth() + 1
   }/${Data.getUTCFullYear()}`;
 
-  const [históricoAberto, setHistóricoAberto] = useState(true);
-  const [vendasReceber, setVendasReceber] = useState(false);
-  const [pedidosEmAberto, setPedidosEmAberto] = useState(false);
-  const [orçamentos, setOrçamentos] = useState(false);
-  const [pedidosOnline, setPedidosOnline] = useState(false);
+  const [abaAtiva, setAbaAtiva] = useState("historico");
 
-  const [resultadosVendas, setResultadosVendas] = useState([]);
-  const [resultadosVendasPendentes, setResultadosVendasPendentes] = useState(
-    []
-  );
-  const [loadingVendas, setloadingVendas] = useState(true);
-
-  /*useEffect(() => {
-    fetchapi.ProcurarVendas().then((response) => {
-      setResultVendas(response);
-      setloadingVendas(false);
-    });
-  }, []);*/
-
-  /*useEffect(() => {
-    fetchapi.procurarVendaPendente().then((response) => {
-      setResultVendasPendentes(response);
-    });
-  }, []);*/
+  // Função para renderizar a tela correspondente
+  const renderConteudo = () => {
+    switch (abaAtiva) {
+      case "historico":
+        return <HistoricoVendas />;
+      case "pedidosEmAberto":
+        return <PedidosEmAberto />;
+      case "vendasReceber":
+        return <VendasAReceber />;
+      case "orcamentos":
+        return <Orçamentos />;
+      case "pedidosOnline":
+        return <PedidosOnline />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div id="VENDAS">
@@ -52,84 +40,61 @@ function Vendas() {
         <h2 id="TitleVendas">Vendas</h2>
         <p>{log}</p>
       </header>
+
       <article className="ArticleVendas">
         <a href="/pontoDeVenda" className="NovaVenda">
           Nova Venda
         </a>
-
         <a href="/novoOrçamento" className="NovoOrçamento">
           Novo Orçamento
         </a>
       </article>
+
       <main>
         <div className="AreaVendasButtons">
           <button
-            style={{ textDecoration: "underline #0295ff 3px" }}
-            onClick={() => {
-              setHistóricoAberto(true);
-              setPedidosEmAberto(false);
-              setOrçamentos(false);
-              setPedidosOnline(false);
-              setVendasReceber(false);
-            }}
+            className={`ButãoVendasAbas ${
+              abaAtiva === "historico" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("historico")}
           >
             Histórico
           </button>
           <button
-            style={{ textDecoration: "underline #0295ff 3px" }}
-            onClick={() => {
-              setHistóricoAberto(false);
-              setPedidosEmAberto(true);
-              setOrçamentos(false);
-              setPedidosOnline(false);
-              setVendasReceber(false);
-            }}
+            className={`ButãoVendasAbas ${
+              abaAtiva === "pedidosEmAberto" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("pedidosEmAberto")}
           >
-            Pedidos em aberto
+            Pedidos em Aberto
           </button>
           <button
-            style={{ textDecoration: "underline #0295ff 3px" }}
-            onClick={() => {
-              setHistóricoAberto(false);
-              setPedidosEmAberto(false);
-              setOrçamentos(false);
-              setPedidosOnline(false);
-              setVendasReceber(true);
-            }}
+            className={`ButãoVendasAbas ${
+              abaAtiva === "vendasReceber" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("vendasReceber")}
           >
-            Vendas Receber
+            Vendas a Receber
           </button>
           <button
-            style={{ textDecoration: "underline #0295ff 3px" }}
-            onClick={() => {
-              setHistóricoAberto(false);
-              setPedidosEmAberto(false);
-              setOrçamentos(true);
-              setPedidosOnline(false);
-              setVendasReceber(false);
-            }}
+            className={`ButãoVendasAbas ${
+              abaAtiva === "orcamentos" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("orcamentos")}
           >
             Orçamentos
           </button>
-
           <button
-            style={{ textDecoration: "underline #0295ff 3px" }}
-            onClick={() => {
-              setHistóricoAberto(false);
-              setPedidosEmAberto(false);
-              setOrçamentos(false);
-              setPedidosOnline(true);
-              setVendasReceber(false);
-            }}
+            className={`ButãoVendasAbas ${
+              abaAtiva === "pedidosOnline" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("pedidosOnline")}
           >
             Pedidos Online
           </button>
         </div>
-        {(históricoAberto && <HistoricoVendas />) ||
-          (vendasReceber && <VendasAReceber />) ||
-          (pedidosEmAberto && <PedidosEmAberto />) ||
-          (pedidosOnline && <PedidosOnline />) ||
-          (orçamentos && <Orçamentos />)}
+
+        {renderConteudo()}
       </main>
     </div>
   );

@@ -3,11 +3,46 @@
 }
 
 #HeaderDetahesDoFuncionario {
-  display: flex; 
+  display: flex;
+  position: relative;
 }
 
 #HeaderDetahesDoFuncionario p {
   cursor: pointer;
   margin: 5px 20px 0px 0px;
-  text-decoration: underline solid 2px #0295ff;
+  padding-bottom: 10px;
+  font-weight: 500;
+  transition: color 0.3s, font-weight 0.3s;
+}
+
+#HeaderDetahesDoFuncionario p:hover {
+  color: #0295ff;
+  font-weight: 600;
+}
+
+.UnderlineAnimada {
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  background-color: #0295ff;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.AreaAbas {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.AreaAbas p {
+  position: relative;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.AreaAbas .ativo {
+  font-weight: 700;
+  color: #0295ff;
 }

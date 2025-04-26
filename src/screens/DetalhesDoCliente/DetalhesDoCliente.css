@@ -1,14 +1,54 @@
 #DetalhesDoCliente {
     margin-left: 55px;
-}
-
-.HeaderClientesInfo {
+  }
+  
+  .HeaderClientesInfo {
     margin-top: 15px;
     display: flex;
-}
-
-.bttRenderInfoClientes {
+    position: relative;
+    flex-direction: column;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: space-between; /* Para as abas ficarem lado a lado */
+    width: 100%;
+  }
+  
+  .bttRenderInfoClientes {
     margin-right: 15px;
     cursor: pointer;
     font-size: 18px;
-}
+    position: relative;
+    padding-bottom: 10px;
+    transition: color 0.3s, font-weight 0.3s;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .bttRenderInfoClientes:hover {
+    color: #0295ff;
+    font-weight: 600;
+  }
+  
+  .bttRenderInfoClientes.ativo {
+    font-weight: 700;
+    color: #0295ff;
+  }
+  
+  .UnderlineAnimada {
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    background-color: #0295ff;
+    border-radius: 4px;
+    transition: left 0.3s ease, width 0.3s ease;
+    width: 50%; /* Largura da linha (metade da largura das abas) */
+  }
+  
+  .HeaderClientesInfo p {
+    display: inline-block; /* Para as abas ficarem lado a lado */
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
