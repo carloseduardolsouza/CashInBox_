@@ -78,7 +78,7 @@ function Estoque() {
 
         <tbody>
           <tr>
-            <td><a href="/" id="aTDEstoque">Comoda Capri</a></td>
+            <td><a href="/detalhesDoProduto/1" id="aTDEstoque">Comoda Capri</a></td>
             <td>R$ 50,00</td>
             <td>100%</td>
             <td>R$ 100,00</td>

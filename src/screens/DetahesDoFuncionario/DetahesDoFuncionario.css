@@ -1,0 +1,13 @@
+#DetahesDoFuncionario {
+  margin-left: 55px;
+}
+
+#HeaderDetahesDoFuncionario {
+  display: flex; 
+}
+
+#HeaderDetahesDoFuncionario p {
+  cursor: pointer;
+  margin: 5px 20px 0px 0px;
+  text-decoration: underline solid 2px #0295ff;
+}

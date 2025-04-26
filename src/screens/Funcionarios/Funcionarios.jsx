@@ -37,26 +37,28 @@ function Funcionarios() {
               <th>Comição D/Mês</th>
               <th>Regime de Contrato</th>
               <th>Status</th>
-              <th>Ação</th>
+              <th>Cargo</th>
             </tr>
           </thead>
 
           <tbody>
             <tr>
-              <td>Carlos Eduardo Lourenço de Souza</td>
+              <td>
+                <a href="/detalhesDoFuncionario/1" className="aTdFuncionarios">
+                  Carlos Eduardo Lourenço de Souza
+                </a>
+              </td>
               <td>(62) 9 9336-2090</td>
               <td>R$ 400,00</td>
               <td>CLT</td>
               <td>Ativo</td>
-              <td>
-                <button id="AçãoButãoFuncionarios"><IoInformationCircleSharp /> Detalhes</button>
-              </td>
+              <td>Vendedor</td>
             </tr>
           </tbody>
-        {/*loadingEstoque && <Loading/> || (
+          {/*loadingEstoque && <Loading/> || (
                     resultEstoque.map((estoque) => <IntensEstoque data={estoque}/>)
                 )*/}
-      </table>
+        </table>
       </div>
     </div>
   );

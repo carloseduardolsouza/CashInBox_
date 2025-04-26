@@ -4,6 +4,7 @@ import { useState } from "react";
 
 //Telas
 import Home from "./screens/Home/Home";
+import Error from "./screens/Error/Error";
 import Vendas from "./screens/Vendas/vendas";
 import Clientes from "./screens/Clientes/clientes";
 import CadastrarCliente from "./screens/CadastrarCliente/CadastrarCliente";
@@ -19,7 +20,9 @@ import Relatorios from "./screens/Relatorios/Relatorios";
 import NovoOrçamento from "./screens/NovoOrçamento/NovoOrçamento";
 import DetalhesDoCliente from "./screens/DetalhesDoCliente/DetalhesDoCliente";
 import DetalhesDaVenda from "./screens/DetalhesDaVenda/DetalhesDaVenda";
+import DetalhesDoFuncionario from "./screens/DetahesDoFuncionario/DetahesDoFuncionario"
 import CadastrarFuncionario from "./screens/CadastrarFuncionario/CadastrarFuncionario";
+import DetalhesDoProduto from "./screens/DetalhesDoProduto/DetalhesDoProduto";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -314,7 +317,10 @@ function App() {
           <Route path="/cadastrarFuncionario" Component={CadastrarFuncionario} />
           <Route path="/detalhesDoCliente/:id" Component={DetalhesDoCliente} />
           <Route path="/detalhesDaVenda/:id" Component={DetalhesDaVenda} />
+          <Route path="/detalhesDoFuncionario/:id" Component={DetalhesDoFuncionario} />
+          <Route path="/detalhesDoProduto/:id" Component={DetalhesDoProduto} />
           
+          <Route path="*" Component={Error} />
           <Route path="/configurações" Component={Configurações} />
         </Routes>
       </Router>

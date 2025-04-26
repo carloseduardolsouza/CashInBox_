@@ -54,7 +54,7 @@ function DetalhesDaVenda() {
         <div id="DetalhesDaVendaDisplay2">
           <div id="DetalhesDaVendaDisplay2Pt1">
             <h2>R$ 1.250,00</h2>
-            <a>Venda #0001 - 25 Abr 2024</a>
+            <a>Venda #0001 - 25 Abr 2024 - 15:45</a>
           </div>
 
           <div id="DetalhesDaVendaDisplay2Pt2">
