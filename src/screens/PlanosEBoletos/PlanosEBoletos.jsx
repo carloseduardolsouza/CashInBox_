@@ -75,7 +75,7 @@ function PlanosEBoletos() {
             <p><FaCheckCircle /></p>
             <p><FaCheckCircle /></p>
           </div>
-          <button className="AssineAgoraPlanos button">Assine Agora</button>
+          <button className="AssineAgoraPlanos button2">Assine Agora</button>
         </div>
 
         <div className="CardPlanos Premium card">

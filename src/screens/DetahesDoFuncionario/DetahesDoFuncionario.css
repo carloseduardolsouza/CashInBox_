@@ -7,42 +7,60 @@
   position: relative;
 }
 
-#HeaderDetahesDoFuncionario p {
+.AreaAbas {
+  display: flex;
+  margin: 10px;
+  position: relative;
+  align-items: center;
+}
+
+.bttDetalhesDoFuncionario {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
-  margin: 5px 20px 0px 0px;
-  padding-bottom: 10px;
-  font-weight: 500;
-  transition: color 0.3s, font-weight 0.3s;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s ease;
+  font-weight: 300;
+  color: black;
+  position: relative;
 }
 
-#HeaderDetahesDoFuncionario p:hover {
-  color: #0295ff;
+.bttDetalhesDoFuncionario:hover {
   font-weight: 600;
+  color: black;
 }
 
-.UnderlineAnimada {
+.bttDetalhesDoFuncionario.ativo {
+  font-weight: bold;
+}
+
+.bttDetalhesDoFuncionario.ativo::after {
+  content: "";
   position: absolute;
   bottom: 0;
+  left: 20%; /* Começo da linha */
+  width: 60%; /* Largura da linha */
   height: 3px;
   background-color: #0295ff;
-  border-radius: 4px;
   transition: all 0.3s ease;
+  border-radius: 5px;
 }
 
-.AreaAbas {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-top: 20px;
+.bttDetalhesDoFuncionario:hover::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 3px;
+  background-color: #0295ff;
+  transition: all 0.3s ease;
+  border-radius: 5px;
 }
 
-.AreaAbas p {
-  position: relative;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.AreaAbas .ativo {
-  font-weight: 700;
-  color: #0295ff;
+/* Linha se for ativo + hover */
+.bttDetalhesDoFuncionario.ativo:hover::after {
+  background-color: #0295ff; /* mantém preto se for ativo */
 }

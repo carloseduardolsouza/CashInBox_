@@ -38,17 +38,6 @@
   align-items: center;
 }
 
-.AreaVendasButtons > button {
-  margin-right: 20px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  border: none;
-  font-size: 15px;
-  font-weight: 300;
-  background-color: white;
-  position: relative;
-}
-
 /* Botões das abas */
 .ButãoVendasAbas {
   background: none;
@@ -65,15 +54,13 @@
 
 /* Hover sobre qualquer botão */
 .ButãoVendasAbas:hover {
-  text-decoration: underline solid 3px #0295ff;
   font-weight: 600;
-  color: #0295ff;
+  color: black;
 }
 
 /* Botão ativo */
 .ButãoVendasAbas.ativo {
   font-weight: bold;
-  color: black;
 }
 
 /* Linha animada do botão ativo */
@@ -84,7 +71,7 @@
   left: 20%; /* Começo da linha */
   width: 60%; /* Largura da linha */
   height: 3px;
-  background-color: black;
+  background-color: #0295ff;
   transition: all 0.3s ease;
   border-radius: 5px;
 }
@@ -100,11 +87,6 @@
   background-color: #0295ff;
   transition: all 0.3s ease;
   border-radius: 5px;
-}
-
-/* Linha se for ativo + hover */
-.ButãoVendasAbas.ativo:hover::after {
-  background-color: black; /* mantém preto se for ativo */
 }
 
 .AçoesVendasScreenTable {

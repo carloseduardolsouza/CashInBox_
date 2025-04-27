@@ -1,23 +1,22 @@
 import "./DetahesDoFuncionario.css";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 // Subtelas
 import InformaçõesGerais from "./SubScreens/InformaçõesGerais/InformaçõesGerais";
 import Vendas from "./SubScreens/Vendas/Vendas";
 
 function DetahesDoFuncionario() {
-  const [geral, setGeral] = useState(true);
-  const [linhaPosicao, setLinhaPosicao] = useState({ left: 0, width: 180 });
-  const abasRef = useRef([]);
+  const [abaAtiva, setAbaAtiva] = useState("InformaçõesGerais");
 
-  const definirAba = (aba, index) => {
-    setGeral(aba === "geral");
-    // Calcula a posição da linha com base na aba clicada
-    const abaElement = abasRef.current[index];
-    setLinhaPosicao({
-      left: abaElement.offsetLeft, // posição à esquerda da aba
-      width: abaElement.offsetWidth, // largura da aba
-    });
+  const renderConteudo = () => {
+    switch (abaAtiva) {
+      case "InformaçõesGerais":
+        return <InformaçõesGerais />;
+      case "Vendas":
+        return <Vendas />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -25,34 +24,21 @@ function DetahesDoFuncionario() {
       <h2>Detalhes Do Funcionário</h2>
       <header id="HeaderDetahesDoFuncionario">
         <div className="AreaAbas">
-          <p
-            ref={(el) => (abasRef.current[0] = el)} // Referência da aba "Informações Gerais"
-            className={geral ? "ativo" : ""}
-            onClick={() => definirAba("geral", 0)}
+          <button
+            className={`bttDetalhesDoFuncionario ${abaAtiva === 'InformaçõesGerais' ? 'ativo' : ''}`}
+            onClick={() => setAbaAtiva("InformaçõesGerais")}
           >
             Informações Gerais
-          </p>
-          <p
-            ref={(el) => (abasRef.current[1] = el)} // Referência da aba "Vendas"
-            className={!geral ? "ativo" : ""}
-            onClick={() => definirAba("vendas", 1)}
+          </button>
+          <button
+            className={`bttDetalhesDoFuncionario ${abaAtiva === 'Vendas' ? 'ativo' : ''}`}
+            onClick={() => setAbaAtiva('Vendas')}
           >
             Vendas
-          </p>
-
-          {/* Linha Animada */}
-          <div
-            className="UnderlineAnimada"
-            style={{
-              left: `${linhaPosicao.left}px`,
-              width: `${linhaPosicao.width}px`,
-            }}
-          />
+          </button>
         </div>
       </header>
-      <div>
-        {geral ? <InformaçõesGerais /> : <Vendas />}
-      </div>
+      <div>{renderConteudo()}</div>
     </div>
   );
 }

@@ -6,7 +6,19 @@ import GeralCliente from "./SubScreens/GeralCliente/GeralCliente";
 import Compras from "./SubScreens/Compras/Compras";
 
 function DetalhesDoCliente() {
-  const [compras, setCompras] = useState(false);
+  const [abaAtiva, setAbaAtiva] = useState("GeralCliente");
+
+  // Função para renderizar a tela correspondente
+  const renderConteudo = () => {
+    switch (abaAtiva) {
+      case "GeralCliente":
+        return <GeralCliente />;
+      case "Compras":
+        return <Compras />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div id="DetalhesDoCliente">
@@ -14,27 +26,21 @@ function DetalhesDoCliente() {
       <header id="HeaderClientesInfo">
         <div className="tabs">
           <p 
-            className={`bttRenderInfoClientes ${!compras ? "ativo" : ""}`} 
-            onClick={() => setCompras(false)}
+            className={`bttRenderInfoClientes ${abaAtiva === "GeralCliente" ? "ativo" : ""}`} 
+            onClick={() => setAbaAtiva('GeralCliente')}
           >
             Detalhes
           </p>
           <p 
-            className={`bttRenderInfoClientes ${compras ? "ativo" : ""}`} 
-            onClick={() => setCompras(true)}
+            className={`bttRenderInfoClientes ${abaAtiva === "Compras" ? "ativo" : ""}`} 
+            onClick={() => setAbaAtiva('Compras')}
           >
             Compras
           </p>
         </div>
-        <div
-          className="UnderlineAnimada"
-          style={{
-            left: compras ? '50%' : '0%', // Movendo a linha para a aba ativa
-          }}
-        ></div>
       </header>
       <main>
-        {compras ? <Compras /> : <GeralCliente />}
+        {renderConteudo()}
       </main>
     </div>
   );
