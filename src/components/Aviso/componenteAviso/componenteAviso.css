@@ -43,7 +43,7 @@
 
 @keyframes entrada {
   0% {
-    transform: translateX(100px);
+    transform: translateX(20px);
     opacity: 0;
   }
 

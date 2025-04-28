@@ -70,15 +70,7 @@ import { BrowserRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 function App() {
   //Status do menu
-  const [home, setHome] = useState(true);
-  const [vendas, setVendas] = useState(false);
-  const [clientes, setClientes] = useState(false);
-  const [produtos, setProdutos] = useState(false);
-  const [estoque, setEstoque] = useState(false);
-  const [contasPagar, setContasPagar] = useState(false);
-  const [caixa, setCaixa] = useState(false);
-  const [configs, setConfigs] = useState(false);
-  const [relatorios, setRelatorios] = useState(false);
+  const [statusMenu ,setStatusMenu] = useState('home')
 
   //Define o tamanho e se o texto ira aparecer
   const [windowWidth, setWindowWidth] = useState("45px");
@@ -114,7 +106,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Aviso/>
+       {/* <Aviso/>*/}
         <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>
           <div className="MenuLateralBox Outline" onClick={VerificarStatusMenu}>
             <RiMenu2Fill className="iconsMenuLateral" />
@@ -122,19 +114,9 @@ function App() {
           <Link
             to="/"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setHome(true);
-              setClientes(false);
-              setProdutos(false);
-              setEstoque(false);
-              setContasPagar(false);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('home')}
           >
-            {(home && <GoHomeFill className="iconsMenuLateral" />) || (
+            {(statusMenu === 'home' && <GoHomeFill className="iconsMenuLateral" />) || (
               <GoHome className="iconsMenuLateral" />
             )}
             <p style={style}>Home</p>
@@ -142,19 +124,9 @@ function App() {
           <Link
             to="/vendas"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(true);
-              setClientes(false);
-              setHome(false);
-              setProdutos(false);
-              setEstoque(false);
-              setContasPagar(false);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('vendas')}
           >
-            {(vendas && (
+            {(statusMenu === 'vendas' && (
               <RiMoneyDollarCircleFill className="iconsMenuLateral" />
             )) || <RiMoneyDollarCircleLine className="iconsMenuLateral" />}
             <p style={style}>Vendas</p>
@@ -162,19 +134,9 @@ function App() {
           <Link
             to="/clientes"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setClientes(true);
-              setProdutos(false);
-              setEstoque(false);
-              setHome(false);
-              setContasPagar(false);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('clientes')}
           >
-            {(clientes && <FaUser className="iconsMenuLateral" />) || (
+            {(statusMenu === 'clientes' && <FaUser className="iconsMenuLateral" />) || (
               <FaRegUser className="iconsMenuLateral" />
             )}
             <p style={style}>clientes</p>
@@ -182,19 +144,9 @@ function App() {
           <Link
             to="/produtos"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setClientes(false);
-              setProdutos(true);
-              setEstoque(false);
-              setHome(false);
-              setContasPagar(false);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('produtos')}
           >
-            {(produtos && <MdSell className="iconsMenuLateral" />) || (
+            {(statusMenu === 'produtos' && <MdSell className="iconsMenuLateral" />) || (
               <MdOutlineSell className="iconsMenuLateral" />
             )}
             <p style={style}>produtos</p>
@@ -202,19 +154,9 @@ function App() {
           <Link
             to="/estoque"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setClientes(false);
-              setProdutos(false);
-              setEstoque(true);
-              setContasPagar(false);
-              setHome(false);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('estoque')}
           >
-            {(estoque && <BsBox2Fill className="iconsMenuLateral" />) || (
+            {(statusMenu === 'estoque' && <BsBox2Fill className="iconsMenuLateral" />) || (
               <BsBox2 className="iconsMenuLateral" />
             )}
             <p style={style}>Estoque</p>
@@ -222,19 +164,9 @@ function App() {
           <Link
             to="/contasPagar"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setClientes(false);
-              setProdutos(false);
-              setHome(false);
-              setEstoque(false);
-              setContasPagar(true);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('contasPagar')}
           >
-            {(contasPagar && <FaMoneyBill1 className="iconsMenuLateral" />) || (
+            {(statusMenu === 'contasPagar' && <FaMoneyBill1 className="iconsMenuLateral" />) || (
               <FaRegMoneyBillAlt className="iconsMenuLateral" />
             )}
             <p style={style}>Contas a pagar</p>
@@ -242,19 +174,9 @@ function App() {
           <Link
             to="/fluxoDeCaixa"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setClientes(false);
-              setProdutos(false);
-              setEstoque(false);
-              setContasPagar(false);
-              setHome(false);
-              setCaixa(true);
-              setRelatorios(false);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('fluxoDeCaixa')}
           >
-            {(caixa && <PiCashRegisterFill className="iconsMenuLateral" />) || (
+            {(statusMenu === 'fluxoDeCaixa' && <PiCashRegisterFill className="iconsMenuLateral" />) || (
               <PiCashRegisterLight className="iconsMenuLateral" />
             )}
             <p style={style}>Caixa</p>
@@ -263,19 +185,9 @@ function App() {
           <Link
             to="/relatorios"
             className="MenuLateralBox"
-            onClick={() => {
-              setVendas(false);
-              setClientes(false);
-              setProdutos(false);
-              setEstoque(false);
-              setContasPagar(false);
-              setHome(false);
-              setCaixa(false);
-              setRelatorios(true);
-              setConfigs(false);
-            }}
+            onClick={() => setStatusMenu('relatorios')}
           >
-            {(relatorios && (
+            {(statusMenu === 'relatorios' && (
               <MdInsertChart className="iconsMenuLateral" />
             )) || <MdInsertChartOutlined className="iconsMenuLateral" />}
             <p style={style}>Relatorios</p>
@@ -284,19 +196,9 @@ function App() {
           <Link
             to="/configurações"
             className="MenuLateralBox Preferencias"
-            onClick={() => {
-              setVendas(false);
-              setClientes(false);
-              setProdutos(false);
-              setEstoque(false);
-              setHome(false);
-              setContasPagar(false);
-              setCaixa(false);
-              setRelatorios(false);
-              setConfigs(true);
-            }}
+            onClick={() => setStatusMenu('configurações')}
           >
-            {(configs && <BsGearFill className="iconsMenuLateral" />) || (
+            {(statusMenu === 'configurações' && <BsGearFill className="iconsMenuLateral" />) || (
               <BsGear className="iconsMenuLateral" />
             )}
             <p style={style}>Preferencias</p>
