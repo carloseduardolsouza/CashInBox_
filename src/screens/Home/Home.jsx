@@ -17,7 +17,6 @@ import { FaTools } from "react-icons/fa";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { MdAttachMoney } from "react-icons/md";
 import { FaComputer } from "react-icons/fa6";
-import { IoNotifications } from "react-icons/io5";
 import { IoMdArrowDropup } from "react-icons/io";
 
 //componente que faz ligação com a Api
@@ -88,7 +87,7 @@ function Home() {
         <div className="LoyautCardMétricasBox">
           <article className="cardMétricasBox green">
             <h2>Receitas</h2>
-            <h1>{}</h1>
+            <h1>{"R$ 00,00"}</h1>
             <div className="linha" />
             <div className="displayFlex">
               <div>
@@ -123,25 +122,7 @@ function Home() {
           </article>
 
           <article className="cardMétricasBox orange">
-            <h2>Vendas Online</h2>
-            <h1>{"R$ 00,00"}</h1>
-            <div className="linha" />
-            <div className="displayFlex">
-              <div>
-                <p>Ultimo més</p>
-                <strong>{"R$ 00,00"}</strong>
-              </div>
-              <div>
-                <p>
-                  <IoMdArrowDropup />
-                </p>
-                <strong>{"0%"}</strong>
-              </div>
-            </div>
-          </article>
-
-          <article className="cardMétricasBox orange">
-            <h2>Vendas Presencial</h2>
+            <h2>Faturamento Mês</h2>
             <h1>{"R$ 00,00"}</h1>
             <div className="linha" />
             <div className="displayFlex">

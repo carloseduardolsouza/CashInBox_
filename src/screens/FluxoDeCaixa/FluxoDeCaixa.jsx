@@ -6,16 +6,41 @@ import CaixaAtual from "./SubScreens/CaixaAtual/CaixaAtual";
 import CaixasAnteriores from "./SubScreens/CaixasAnteriores/CaixasAnteriores";
 
 function FluxoDeCaixa() {
-  const [caixaAtual, setCaixaAtual] = useState(true);
+  const [abaAtiva, setAbaAtiva] = useState("caixaAtual");
+
+  const renderAba = () => {
+    switch (abaAtiva) {
+      case "caixaAtual":
+        return <CaixaAtual />;
+      case "caixaAnteriores":
+        return <CaixasAnteriores />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div id="caixa">
       <h2>Caixa</h2>
       <nav className="MenuCaixa">
-        <p onClick={() => setCaixaAtual(true)}>Caixa Atual</p>
-        <p onClick={() => setCaixaAtual(false)}>Caixas Anteriores</p>
+        <p
+          onClick={() => setAbaAtiva("caixaAtual")}
+          className={`ButãoCaixaAbas ${
+            abaAtiva === "caixaAtual" ? "ativo" : ""
+          }`}
+        >
+          Caixa Atual
+        </p>
+        <p
+          onClick={() => setAbaAtiva("caixaAnteriores")}
+          className={`ButãoCaixaAbas ${
+            abaAtiva === "caixaAnteriores" ? "ativo" : ""
+          }`}
+        >
+          Caixas Anteriores
+        </p>
       </nav>
-      <main>{(caixaAtual && <CaixaAtual />) || <CaixasAnteriores />}</main>
+      <main>{renderAba()}</main>
     </div>
   );
 }

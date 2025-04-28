@@ -3,7 +3,7 @@ import "./CaixasAnteriores.css";
 function CaixasAnteriores() {
   return (
     <div id="CaixasAnteriores">
-      <table>
+      <table className="Table">
         <thead>
           <tr>
             <th>Caixa</th>
@@ -17,7 +17,7 @@ function CaixasAnteriores() {
             <td>10/10/2005</td>
             <td>R$ 200,00</td>
             <td>R$ 400,00</td>
-            <button>Ação</button>
+            <button>Detalhes</button>
           </tr>
         </tbody>
       </table>

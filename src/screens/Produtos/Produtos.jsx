@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Form } from "react-router-dom";
 
 //componentes
-//import ItensTableProdutos from "../../components/ItensTableProdutos/ItensTableProdutos";
+import ItemProduto from "../../components/ItemProduto/ItemProduto";
 //import Loading from "../../components/AçãoRealizada/AçãoRealizada";
 
 //Controlador da api
@@ -57,10 +57,13 @@ function Produtos() {
         </form>
       </article>
       <table className="tableProdutos">
-        {/*(loadingProdutos && <Loading />) ||
-          resultProdutos.map((produtos) => (
-            <ItensTableProdutos data={produtos} />
-          ))*/}
+        <ItemProduto />
+        <ItemProduto />
+        <ItemProduto />
+        <ItemProduto />
+        <ItemProduto />
+        <ItemProduto />
+        <ItemProduto />
       </table>
     </div>
   );

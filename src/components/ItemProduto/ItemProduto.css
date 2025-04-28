@@ -1,0 +1,84 @@
+#ItensTableProdutos {
+  width: 600px;
+  background-color: #e7e7e7;
+  padding: 5px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  display: flex;
+  position: relative;
+}
+
+.ImageProduto {
+  min-width: 200px;
+  min-height: 200px;
+  background-size: cover;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.DetalhesProdutos {
+  padding: 4px;
+  background-color: green;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  width: 200px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.openDetalhes {
+  width: 490px;
+  height: 205px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 3px;
+  animation: EntradaDetalhesProdutos 0.2s linear;
+
+  background: rgba(255, 255, 255, 0.3); /* Cor com transparência */
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+}
+
+@keyframes EntradaDetalhesProdutos {
+  0% {
+    width: 1px;
+  }
+  100% {
+    width: 500px;
+  }
+}
+
+.ExitDetalhesProduto {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  padding: 5px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  font-weight: 600;
+  font-size: 10px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #00000000;
+  border: 1px solid red;
+  color: red;
+}
+
+.ExitDetalhesProduto:hover {
+  background-color: red;
+  color: white;
+  border: white;
+  transition: 0.3s;
+}

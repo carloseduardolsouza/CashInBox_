@@ -1,18 +1,10 @@
-#CaixasAnteriores table {
-  width: 100%;
-  text-align: center;
-  border: 1px solid black;
-}
-
-#CaixasAnteriores thead {
-  background-color: #eee;
-}
-
 #CaixasAnteriores button {
   width: 100%;
   color: white;
   background-color: #0295ff;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: 600;
+  padding: 5px;
   border: none;
 }

@@ -1,6 +1,8 @@
 import "./VendasAReceber.css";
+import {useState} from "react";
 
 function VendasAReceber() {
+  const [pageRecebido , setPageRecebido] = useState(false)
   return (
     <div>
       <table className="Table">
@@ -17,11 +19,11 @@ function VendasAReceber() {
         <tbody>
           <tr>
             <td>Carlos Eduardo Lourenço de Souza</td>
-            <td>Comoda Capri</td>
+            <td><a href="/">Comoda Capri</a></td>
             <td>R$ 400,00</td>
             <td>Receber</td>
             <td>
-              <button className="ButãoRecebidoVendas">Recebido</button>
+              <button className="ButãoRecebidoVendas" onClick={() => setPageRecebido(true)}>Recebido</button>
             </td>
           </tr>
         </tbody>
