@@ -2,6 +2,9 @@ import "./App.css";
 import "./menu.css";
 import { useState } from "react";
 
+//Componentes
+import Aviso from "./components/Aviso/Aviso";
+
 //Telas
 import Home from "./screens/Home/Home";
 import Error from "./screens/Error/Error";
@@ -111,6 +114,7 @@ function App() {
   return (
     <div className="App">
       <Router>
+        <Aviso/>
         <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>
           <div className="MenuLateralBox Outline" onClick={VerificarStatusMenu}>
             <RiMenu2Fill className="iconsMenuLateral" />
