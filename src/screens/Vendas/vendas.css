@@ -19,16 +19,17 @@
 }
 
 .ArticleVendas > a {
-  padding: 7px;
-  border-radius: 30px;
+  padding: 10px;
+  border-radius: 20px;
   margin: 15px;
   text-decoration: none;
+  font-weight: bold;
   font-size: 15px;
 }
 
 .NovaVenda {
   background-color: #0295ff;
-  color: white;
+  color: white; 
 }
 
 .AreaVendasButtons {
