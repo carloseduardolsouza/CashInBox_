@@ -1,3 +1,14 @@
 #Error {
-    margin-left: 55px
+  margin-left: 55px;
+}
+
+#mainError {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}
+
+#mainError > div {
+    text-align: center;
 }
