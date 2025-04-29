@@ -60,22 +60,6 @@
   width: 700px;
 }
 
-.calcularNovaVenda {
-  width: 100%;
-  padding: 7px;
-  cursor: pointer;
-  border: none;
-  font-size: 20px;
-  background-color: #fff9a7;
-  border-radius: 7px;
-  margin-top: 15px;
-}
-
-.calcularNovaVenda:hover {
-  background-color: #fff458;
-  transition: 0.5s;
-}
-
 .PreçoNovaVenda {
   position: absolute;
   bottom: 10px;
@@ -103,7 +87,8 @@
 
 .ProdutosNovaVenda {
   background-color: #eeee;
-  height: 100vh;
+  height: 85vh;
+  border: solid black 1px;
   width: 100%;
   padding: 5px;
   border-radius: 10px;
@@ -116,18 +101,17 @@
   cursor: pointer;
   right: 10px;
   top: 10px;
-  width: 300px;
+  width: 200px;
   height: 30px;
   font-weight: 600;
   color: white;
   border: none;
   border-radius: 10px;
-  box-shadow: -5px 5px 3px #0000006a;
   padding: 5px;
   background-color: #0295ff;
 }
 
 .FaturarNovaVenda:hover {
-  box-shadow: 0px 0px 0px #00000000;
-  transition: 0.5s;
+  background-color: #0071c2;
+  transition: .5s;
 }

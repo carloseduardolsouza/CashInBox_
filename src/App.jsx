@@ -20,7 +20,6 @@ import FluxoDeCaixa from "./screens/FluxoDeCaixa/FluxoDeCaixa";
 import Funcionarios from "./screens/Funcionarios/Funcionarios";
 import PlanosEBoletos from "./screens/PlanosEBoletos/PlanosEBoletos"
 import Relatorios from "./screens/Relatorios/Relatorios";
-import NovoOrçamento from "./screens/NovoOrçamento/NovoOrçamento";
 import DetalhesDoCliente from "./screens/DetalhesDoCliente/DetalhesDoCliente";
 import DetalhesDaVenda from "./screens/DetalhesDaVenda/DetalhesDaVenda";
 import DetalhesDoFuncionario from "./screens/DetahesDoFuncionario/DetahesDoFuncionario"
@@ -217,7 +216,6 @@ function App() {
 
           <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/cadastrarCliente" Component={CadastrarCliente} />
-          <Route path="/novoOrçamento" Component={NovoOrçamento} />
           <Route path="/funcionarios" Component={Funcionarios} />
           <Route path="/planosEBoletos" Component={PlanosEBoletos} />
           <Route path="/cadastrarFuncionario" Component={CadastrarFuncionario} />

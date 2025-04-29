@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 //import services from "../../services/services.js"
 
 //Componentes
+import FaturarVenda from "./components/FaturarVenda/FaturarVenda";
 //import Alerta from "../../components/Alerta/Alerta.jsx"
 //import Faturado from "../../components/Faturado/Faturado.jsx";
 //import Concluindo from "../../components/Concluindo/Concluindo.jsx"
@@ -251,6 +252,7 @@ function PontoDeVenda() {
 
   return (
     <div id="NOVAVENDA" tabIndex={0} onKeyDown={handleKeyDown}>
+      {faturado && <FaturarVenda fechar={setFaturado}/>}
       <header>
         <h2>Nova Venda</h2>
         <p>{log}</p>
@@ -258,21 +260,13 @@ function PontoDeVenda() {
       <main className="MainNovaVenda">
         <div>
           <div>
-            {
-              alert && ``
-              /*<Alerta
-                parametro={"Verifique as informações"}
-                functio={setAlert}
-              />*/
-            }
-            {(loading && /*<AçãoRealizada />*/ ``) ||
-              /*<Select
-                className="SelectNovaVenda"
-                placeholder="Cliente"
-                options={optionsClientes}
-                onChange={(e) => renderInfoClient(e)}
-                isDisabled={desable}
-              />*/ ``}
+            <Select
+              className="SelectNovaVenda"
+              placeholder="Cliente"
+              options={optionsProdutos}
+              onChange={(e) => `` /*renderInfoProduto(e)*/}
+              isDisabled={desable}
+            />
             <label className="NovaVendaLabel">
               <p className="NovanVendaStrong">
                 <strong>Nome:</strong>
@@ -294,18 +288,7 @@ function PontoDeVenda() {
             isDisabled={desable}
           />
           <div className="DivisãoNovaVenda">
-            {
-              faturado && ``
-              /*<Faturado
-                functio={setFaturado}
-                data={venda}
-                cliente={INFOclient}
-                concluind={setConcluindo}
-                desabilitar={setDesable}
-              />*/
-            }
             <div>
-              {concluindo && `` /*<Concluindo />*/}
               <label className="NovaVendaLabel">
                 <p className="NovanVendaStrong">
                   <strong>Produto</strong>
@@ -318,14 +301,14 @@ function PontoDeVenda() {
                 </p>
                 <p>{`` /*services.formatarCurrency(precovenda)*/}</p>
               </label>
+            </div>
+            <form>
               <label className="NovaVendaLabel">
                 <p className="NovanVendaStrong">
                   <strong>Em Estoque</strong>
                 </p>
                 <p>{emestoque}</p>
               </label>
-            </div>
-            <form>
               <label className="NovaVendaLabel">
                 <p className="NovanVendaStrong">
                   <strong>Quantidade</strong>
@@ -337,56 +320,8 @@ function PontoDeVenda() {
                   disabled={desable}
                 />
               </label>
-              <label className="NovaVendaLabel">
-                <p className="NovanVendaStrong">
-                  <strong>Desconto</strong>
-                </p>
-                <input
-                  type="number"
-                  onChange={(e) => {
-                    setDesconto(e.target.value);
-                  }}
-                  value={desconto}
-                  disabled={desable}
-                />
-                <label>
-                  <input
-                    id="checkBoxNovaVenda"
-                    type="checkbox"
-                    checked={percem}
-                    onChange={() => setPercem(!percem)}
-                    disabled={desable}
-                  />
-                  <p>%</p>
-                </label>
-              </label>
-              <label className="NovaVendaLabel">
-                <p className="NovanVendaStrong">
-                  <strong>Meio de Pagamento</strong>
-                </p>
-                <select
-                  onChange={(e) => setPagamento(e.target.value)}
-                  value={pagamento}
-                  disabled={desable}
-                  required
-                >
-                  <option value="MEIO DE PAGAMENTO">MEIO DE PAGAMENTO</option>
-                  <option value="PIX">PIX</option>
-                  <option value="CARTÃO DE CRÉDITO">CARTÃO DE CRÉDITO</option>
-                  <option value="CARTÃO DE DEBITO">CARTÃO DE DEBITO</option>
-                  <option value="DINHEIRO">DINHEIRO</option>
-                </select>
-              </label>
             </form>
           </div>
-
-          <button
-            className="calcularNovaVenda"
-            onClick={() => `` /*calcularPrice()*/}
-            disabled={desable}
-          >
-            Calcular
-          </button>
           <Select
             className="SelectNovaVenda"
             placeholder="Vendedor"
@@ -412,15 +347,7 @@ function PontoDeVenda() {
             </select>
           </label>
           <div className="PreçoNovaVenda">
-            <h3>Desconto: {descontoFormatado}</h3>
-            <h1>Preço : {/*services.formatarCurrency(preçoComDesconto)*/}</h1>
-            <button
-              className="lançarPreçoNovaVenda"
-              onClick={() => LançarAVenda()}
-              disabled={desable}
-            >
-              Lançar
-            </button>
+            <h1>Total : {/*services.formatarCurrency(preçoComDesconto)*/}</h1>
           </div>
         </div>
         <div className="ProdutosNovaVenda">
@@ -433,7 +360,7 @@ function PontoDeVenda() {
           )}
           <button
             className="FaturarNovaVenda"
-            onClick={() => Feature()}
+            onClick={() => setFaturado(true)}
             disabled={desable}
           >
             (F2) - Faturar

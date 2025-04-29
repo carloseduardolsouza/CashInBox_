@@ -45,9 +45,6 @@ function Vendas() {
         <a href="/pontoDeVenda" className="NovaVenda">
           Nova Venda
         </a>
-        <a href="/novoOrçamento" className="NovoOrçamento">
-          Novo Orçamento
-        </a>
       </article>
 
       <main>
