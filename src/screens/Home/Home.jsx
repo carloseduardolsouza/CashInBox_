@@ -1,5 +1,6 @@
 import "./Home.css";
 import { useState, useEffect } from "react";
+import {Link} from "react-router-dom"
 
 //Biblioteca de Gráficos
 import {
@@ -70,18 +71,18 @@ function Home() {
         </LineChart>
 
         <div className="ButtonHeaderDeashBoard">
-          <button onClick={() => (window.location.href = "/funcionarios")}>
+          <Link to={"/funcionarios"} className="bttButtonHeaderDeashBoard">
             <GiTakeMyMoney /> Funcionários
-          </button>
-          <button onClick={() => (window.location.href = "/planosEBoletos")}>
+          </Link>
+          <Link to={"/planosEBoletos"} className="bttButtonHeaderDeashBoard">
             <FaTools /> Planos e Boletos
-          </button>
-          <button onClick={() => (window.location.href = "/fluxoDeCaixa")}>
+          </Link>
+          <Link to={"/fluxoDeCaixa"} className="bttButtonHeaderDeashBoard">
             <MdAttachMoney /> Fluxo de Caixa
-          </button>
-          <button onClick={() => (window.location.href = "/pontoDeVenda")}>
+          </Link>
+          <Link to={"/pontoDeVenda"} className="bttButtonHeaderDeashBoard">
             <FaComputer /> PDV
-          </button>
+          </Link>
         </div>
 
         <div className="LoyautCardMétricasBox">

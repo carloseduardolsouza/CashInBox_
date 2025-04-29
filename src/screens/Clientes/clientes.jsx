@@ -1,16 +1,9 @@
 import "./clientes.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
-import { IoInformationCircleSharp } from "react-icons/io5";
-
-//Componentes
-//import ItensClientes from "../../components/ItensClientes/ItensClientes"
-//import Loading from "../../Components"
-
-//Controlador da Api
-//import ProcurarClientesApi from "../../api/fetchapi"
 
 function Clientes() {
   const Data = new Date();
@@ -22,21 +15,6 @@ function Clientes() {
   const [resultClientes, setResultClientes] = useState([]);
   const [loadingClientes, setloadingClientes] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
-
-  /*useEffect(() => {
-        ProcurarClientesApi.ProcurarCliente(pesquisar).then((response) => {
-            setResultClientes(response)
-            setloadingClientes(false)
-        })
-    }, [])*/
-
-  /*const renderClientes = async (e) => {
-        e.preventDefault()
-        setloadingClientes(true)
-        const client = await ProcurarClientesApi.ProcurarCliente(pesquisar)
-        setloadingClientes(false)
-        setResultClientes(client)
-    }*/
 
   return (
     <div id="CLIENTE">
@@ -79,25 +57,11 @@ function Clientes() {
 
         <tbody>
           <tr>
-            <td><a href="/detalhesDoCLiente/1" className="aTdClientes">Carlos Eduardo Lourenço de Souza</a></td>
+            <td><Link to={"/detalhesDoCLiente/1"} className="aTdClientes">Carlos Eduardo Lourenço de Souza</Link></td>
             <td>(62) 9 9336-2090</td>
             <td>R.2 , Qd.2 , Lt.13 , Jd Petropolis</td>
             <td>R$ 2.000</td>
           </tr>
-          {/*(loadingClientes && <Loading />) ||
-            resultClientes.map((clientes) => {
-              return (
-                <tr>
-                  <td>Carlos Eduardo</td>
-                  <td>(62) 9 9336-2090</td>
-                  <td>R.2 , Qd.2 , Lt.13 , Jd Petropolis</td>
-                  <td>R$ 2.000</td>
-                  <td>
-                    <button id="AçãoButãoClientes">Ações</button>
-                  </td>
-                </tr>
-              );
-            })*/}
         </tbody>
       </table>
     </div>

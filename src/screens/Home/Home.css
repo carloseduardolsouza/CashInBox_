@@ -20,17 +20,13 @@
   flex-direction: column;
 }
 
-.ButtonHeaderDeashBoard > button {
-  padding: 5px;
+.bttButtonHeaderDeashBoard {
   font-size: 15px;
   border-radius: 20px;
   margin-bottom: 10px;
   cursor: pointer;
   height: 50px;
   width: 180px;
-}
-
-.ButtonHeaderDeashBoard > button {
   border: unset;
   border-radius: 15px;
   color: #212121;
@@ -40,9 +36,13 @@
   font-weight: 1000;
   transition: all 250ms;
   overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.ButtonHeaderDeashBoard > button::before {
+.bttButtonHeaderDeashBoard::before {
   content: "";
   position: absolute;
   top: 0;
@@ -57,11 +57,11 @@
   transition: all 250ms;
 }
 
-.ButtonHeaderDeashBoard > button:hover {
+.bttButtonHeaderDeashBoard:hover {
   color: #e8e8e8;
 }
 
-.ButtonHeaderDeashBoard > button:hover::before {
+.bttButtonHeaderDeashBoard:hover::before {
   width: 100%;
 }
 

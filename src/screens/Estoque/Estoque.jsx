@@ -1,39 +1,18 @@
 import "./Estoque.css";
-import { useEffect, useState } from "react";
-
-//Componentes
-//import IntensEstoque from "../../components/IntensEstoque/IntensEstoque";
-//import Loading from "../../components/AçãoRealizada/AçãoRealizada"
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
-
-//Controlador de Api
-//import fetchapi from "../../api/fetchapi";
 
 function Estoque() {
   const [pesquisar, setPesquisar] = useState("all");
   const [resultEstoque, setResultEstoque] = useState([]);
   const [loadingEstoque, setloadingEstoque] = useState(true);
 
-  /*useEffect(() => {
-        fetchapi.ProcurarProdutos(pesquisar).then((response) => {
-            setResultEstoque(response)
-            setloadingEstoque(false)
-        })
-    }, [])*/
-
   const changePesquisa = (e) => {
     setPesquisar(e.target.value);
   };
-
-  /*const renderEstoque = async (e) => {
-        e.preventDefault()
-        setloadingEstoque(true)
-        const client = await fetchapi.ProcurarProdutos(pesquisar)
-        setloadingEstoque(false)
-        setResultEstoque(client)
-    }*/
 
   return (
     <div id="ESTOQUE">
@@ -78,25 +57,13 @@ function Estoque() {
 
         <tbody>
           <tr>
-            <td><a href="/detalhesDoProduto/1" id="aTDEstoque">Comoda Capri</a></td>
+            <td><Link to={"/detalhesDoProduto/1"} id="aTDEstoque">Comoda Capri</Link></td>
             <td>R$ 50,00</td>
             <td>100%</td>
             <td>R$ 100,00</td>
             <td>10</td>
             <td>0001</td>
           </tr>
-          {/*(loadingEstoque && <Loading />) ||
-            resultEstoque.map((estoque) => {
-              return (
-                <tr>
-                  <td>Comoda Capri</td>
-                  <td>R$ 50,00</td>
-                  <td>100%</td>
-                  <td>10</td>
-                  <td>0001</td>
-                </tr>
-              );
-            })*/}
         </tbody>
       </table>
     </div>

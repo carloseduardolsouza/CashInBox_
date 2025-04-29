@@ -1,5 +1,6 @@
 import "./vendas.css";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 // Subtelas
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
@@ -42,9 +43,9 @@ function Vendas() {
       </header>
 
       <article className="ArticleVendas">
-        <a href="/pontoDeVenda" className="NovaVenda">
+        <Link to={"/pontoDeVenda"} className="NovaVenda">
           Nova Venda
-        </a>
+        </Link>
       </article>
 
       <main>

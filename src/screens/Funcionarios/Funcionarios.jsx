@@ -1,15 +1,15 @@
 import "./Funcionarios.css";
+import { Link } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
-import { IoInformationCircleSharp } from "react-icons/io5";
 
 function Funcionarios() {
   return (
     <div id="Funcionarios">
       <h2>Funcionarios</h2>
       <div>
-        <form onSubmit={(e) => /*renderEstoque(e)*/ ``}>
+        <form>
           <button
             className="AddProduto"
             onClick={(e) => {
@@ -44,9 +44,9 @@ function Funcionarios() {
           <tbody>
             <tr>
               <td>
-                <a href="/detalhesDoFuncionario/1" className="aTdFuncionarios">
+                <Link to={"/detalhesDoFuncionario/1"} className="aTdFuncionarios">
                   Carlos Eduardo Lourenço de Souza
-                </a>
+                </Link>
               </td>
               <td>(62) 9 9336-2090</td>
               <td>R$ 400,00</td>
@@ -55,9 +55,6 @@ function Funcionarios() {
               <td>Vendedor</td>
             </tr>
           </tbody>
-          {/*loadingEstoque && <Loading/> || (
-                    resultEstoque.map((estoque) => <IntensEstoque data={estoque}/>)
-                )*/}
         </table>
       </div>
     </div>

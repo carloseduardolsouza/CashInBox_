@@ -9,12 +9,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-//Componentes
-//import Concluindo from "../../components/Concluindo/Concluindo"
-
-//Controlador da api
-//import fetchapi from "../../api/fetchapi"
-
 function CadastrarProduto() {
   const fileInputRef = useRef(null);
 
@@ -60,53 +54,6 @@ function CadastrarProduto() {
     setOpenImagens(true);
   };
 
-  /*const CadastrarProduto = async (e) => {
-    e.preventDefault();
-    console.log(imageReq);
-    if (descrição == "" || descrição == undefined || descrição == null) {
-      setDescrição("***");
-    }
-
-    if (marca == "" || marca == undefined || marca == null) {
-      setMarca("***");
-    }
-
-    const dados = {
-      produto: produto,
-      preçocompra: "00",
-      referencia: referencia,
-      margem: "00",
-      preçovenda: "00",
-      emestoque: "0",
-      descrição: descrição,
-      imagem: "",
-      marca: marca,
-      comição: "0",
-      defal: "0",
-      ipi: "0",
-    };
-    setConcluindo(true);
-    fetchapi.NovoProduto(dados, imageReq);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Limpa a seleção do arquivo
-    }
-
-    setProduto("");
-    setDescrição("");
-    setMarca("");
-    setImageReq([]);
-    setImages([]);
-    setOpenImagens(false);
-    setIsDisabled(true);
-    setReferencia("");
-    setRef(true);
-
-    setTimeout(() => {
-      setConcluindo(false);
-    }, 1500);
-  };*/
-
   const settings = {
     dots: true,
     infinite: true,
@@ -123,7 +70,6 @@ function CadastrarProduto() {
           className="AreaInputsNovoProduto"
           onSubmit={(e) => CadastrarProduto(e)}
         >
-          {/*concluido && <Concluindo />*/}
           <la>
             <p>Nome: </p>
             <input

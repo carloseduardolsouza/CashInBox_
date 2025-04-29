@@ -107,7 +107,6 @@ function CadastrarFuncionario() {
             <button className="CadastrarNovoCliente" type="submit">
               Cadastrar
             </button>
-            {/*concluido && <Concluindo/>*/}
           </form>
         </main>
       </div>

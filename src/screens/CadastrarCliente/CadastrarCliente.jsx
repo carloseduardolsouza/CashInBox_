@@ -1,15 +1,6 @@
 import "./CadastrarCliente.css";
 import { useState } from "react";
 
-//Assets
-//import ImageUser from "../../assets/user.jpg"
-
-//Controlador de api
-//import NovoClienteApi from "../../api/fetchapi"
-
-//Componentes
-//import Concluindo from "../../components/Concluindo/Concluindo"
-
 //icones
 import { FaUserAlt } from "react-icons/fa";
 
@@ -28,47 +19,6 @@ function CadastrarCliente() {
   const log = `${Data.getUTCDate()}/${
     Data.getUTCMonth() + 1
   }/${Data.getUTCFullYear()}`;
-
-  const CadastrarCliente = (e) => {
-    e.preventDefault();
-    if (nascimento == "" || nascimento == undefined || nascimento == null) {
-      setNascimento("desconhecido");
-    }
-    if (endereço == "" || endereço == undefined || endereço == null) {
-      setEndereço("Desconhecido");
-    }
-    if (cpf == "" || cpf == undefined || cpf == null) {
-      setCpf("desconhecido");
-    }
-    if (email == "" || email == undefined || email == null) {
-      setEmail("desconhecido");
-    }
-
-    const dados = {
-      nome: nome,
-      date_nascimento: nascimento,
-      genero: genero,
-      telefone: numero,
-      cpf: cpf,
-      endereço: endereço,
-      email: email,
-      observação: "***",
-    };
-    setConcluindo(true);
-    //NovoClienteApi.NovoCliente(dados)
-
-    setCpf("");
-    setEmail("");
-    setEndereço("");
-    setGenero("");
-    setNascimento("");
-    setNome("");
-    setNumero("");
-
-    setTimeout(() => {
-      setConcluindo(false);
-    }, 1500);
-  };
 
   const escreverDados = (param, e) => {
     if (param == "nome") {
@@ -187,7 +137,6 @@ function CadastrarCliente() {
             <button className="CadastrarNovoCliente" type="submit">
               Cadastrar
             </button>
-            {/*concluido && <Concluindo/>*/}
           </form>
         </main>
       </div>
