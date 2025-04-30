@@ -69,6 +69,7 @@ function FaturarVenda({ fechar }) {
                 <option value="Cartão de debito">Cartão de debito</option>
               </select>
               <input type="number" />
+              <button>ok</button>
             </div>
           </div>
           <div>

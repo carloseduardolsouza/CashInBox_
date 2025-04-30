@@ -1,4 +1,5 @@
 import "./HistoricoVendas.css";
+import { Link } from "react-router-dom";
 
 import { FaFilter } from "react-icons/fa";
 
@@ -26,7 +27,7 @@ function HistoricoVendas() {
 
         <tbody>
           <tr>
-            <td><a href="/detalhesDaVenda/1" className="aTdTabelaHistoricoVendas">Comoda Capri</a></td>
+            <td><Link to={"/detalhesDaVenda/1"} className="aTdTabelaHistoricoVendas">Comoda Capri</Link></td>
             <td>Carlos Eduardo Lourenço de Souza</td>
             <td>R$ 100,00</td>
             <td>1</td>

@@ -6,7 +6,7 @@
   height: 500px;
   z-index: 2;
   transform: translate(50%, -50%);
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(118, 113, 113, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -144,4 +144,13 @@
   border-radius: 10px;
   cursor: pointer;
   border: solid black 1px;
+}
+
+#FaturarVendaFormaDePagamento button {
+  padding: 5px;
+  background-color: green;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
 }
