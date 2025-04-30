@@ -11,8 +11,32 @@
 
 .ButãoFaturarOrçamento {
     background-color: green;
+    margin-right: 5px;
     color: white;
 }
+
+.ButãoEnviarOrçamento {
+    background-color: #0295ff;
+    color: white;
+}
+
+.ButãoFaturarOrçamento:hover {
+    background-color: #004a00;
+    margin-right: 5px;
+    color: white;
+    transition: .5s;
+}
+
+.ButãoEnviarOrçamento:hover {
+    background-color: #00518b;
+    color: white;
+    transition: .5s;
+}
+
+.tdAçãoOrçamento {
+    display: flex;
+    justify-content: space-between;
+  }
 
 .aTdOrçamento {
     color: black;

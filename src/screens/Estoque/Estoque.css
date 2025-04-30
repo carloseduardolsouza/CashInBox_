@@ -24,6 +24,13 @@
   margin: 20px;
 }
 
+.inputPreçoDeVendaEstoque {
+  width: 90px;
+  text-align: center;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 #AreaFunçõesEstoque > a {
   color: black;
   font-weight: 600;

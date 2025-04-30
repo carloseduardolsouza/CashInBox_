@@ -1,18 +1,12 @@
 import "./Estoque.css";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState} from "react";
+import { Link , useNavigate } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
 
 function Estoque() {
-  const [pesquisar, setPesquisar] = useState("all");
-  const [resultEstoque, setResultEstoque] = useState([]);
-  const [loadingEstoque, setloadingEstoque] = useState(true);
-
-  const changePesquisa = (e) => {
-    setPesquisar(e.target.value);
-  };
+  const navigate = useNavigate();
 
   return (
     <div id="ESTOQUE">
@@ -26,7 +20,7 @@ function Estoque() {
             className="AddProduto"
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = "/cadastrarProduto";
+              navigate("/cadastrarProduto");
             }}
             type="button"
           >
@@ -36,7 +30,6 @@ function Estoque() {
             type="text"
             className="InputClientes"
             placeholder="Procurar no Estoque..."
-            onChange={(e) => changePesquisa(e)}
           />
           <button className="Search" type="submit">
             <FaSearch />
@@ -57,7 +50,11 @@ function Estoque() {
 
         <tbody>
           <tr>
-            <td><Link to={"/detalhesDoProduto/1"} id="aTDEstoque">Comoda Capri</Link></td>
+            <td>
+              <Link to={"/detalhesDoProduto/1"} id="aTDEstoque">
+                Comoda Capri
+              </Link>
+            </td>
             <td>R$ 50,00</td>
             <td>100%</td>
             <td>R$ 100,00</td>

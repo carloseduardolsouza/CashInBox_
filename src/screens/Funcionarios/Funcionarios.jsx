@@ -1,10 +1,11 @@
 import "./Funcionarios.css";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
 
 function Funcionarios() {
+  const navigate = useNavigate()
   return (
     <div id="Funcionarios">
       <h2>Funcionarios</h2>
@@ -14,7 +15,7 @@ function Funcionarios() {
             className="AddProduto"
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = "/cadastrarFuncionario";
+              navigate("/cadastrarFuncionario")
             }}
             type="button"
           >

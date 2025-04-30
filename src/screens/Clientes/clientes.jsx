@@ -1,6 +1,6 @@
 import "./clientes.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
@@ -10,6 +10,8 @@ function Clientes() {
   const log = `${Data.getUTCDate()}/${
     Data.getUTCMonth() + 1
   }/${Data.getUTCFullYear()}`;
+
+  const navigate = useNavigate()
 
   //Controlador de Estados
   const [resultClientes, setResultClientes] = useState([]);
@@ -29,7 +31,7 @@ function Clientes() {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              window.location.href = "/cadastrarCliente";
+              navigate("/cadastrarProduto");
             }}
           >
             +

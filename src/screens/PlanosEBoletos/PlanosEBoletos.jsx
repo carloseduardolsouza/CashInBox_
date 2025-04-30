@@ -42,11 +42,11 @@ function PlanosEBoletos() {
           </div>
           <div>
             <strong>O que está incluso ?</strong>
-            <p><FaCheckCircle /> </p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
+            <p><FaCheckCircle /> Gerenciamento de vendas</p>
+            <p><FaCheckCircle /> Gerenciamento de clientes</p>
+            <p><FaCheckCircle /> Gerenciamento de estoque</p>
+            <p><FaCheckCircle /> Contas para pagar</p>
+            <p><FaCheckCircle /> Fluxo de caixa</p>
           </div>
           <button className="AssineAgoraPlanos button1">Assine Agora</button>
         </div>
@@ -69,11 +69,11 @@ function PlanosEBoletos() {
           </div>
           <div>
             <strong>O que está incluso ?</strong>
-            <p><FaCheckCircle /> </p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
+            <p><FaCheckCircle /> Tudo do plano Básico</p>
+            <p><FaCheckCircle /> Emição de notas fiscais</p>
+            <p><FaCheckCircle /> Catalago de produtos</p>
+            <p><FaCheckCircle /> Relatorios</p>
+            <p><FaCheckCircle /> Gerenciamento de Funcionarios</p>
           </div>
           <button className="AssineAgoraPlanos button2">Assine Agora</button>
         </div>
@@ -95,11 +95,10 @@ function PlanosEBoletos() {
           </div>
           <div>
             <strong>O que está incluso ?</strong>
-            <p><FaCheckCircle /> </p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
-            <p><FaCheckCircle /></p>
+            <p><FaCheckCircle /> Tudo do plano essencial</p>
+            <p><FaCheckCircle /> Pos venda automatico</p>
+            <p><FaCheckCircle /> Gerenciamento de promoções</p>
+            <p><FaCheckCircle /> Automação de WhatsApp</p>
           </div>
           <button className="AssineAgoraPlanos button1">Assine Agora</button>
         </div>
