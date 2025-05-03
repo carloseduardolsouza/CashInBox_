@@ -1,25 +1,60 @@
 #CaixaAtual {
   display: flex;
-  height: 89vh;
+  height: 85vh;
   width: 100%;
   margin-top: 5px;
 }
 
+#dataAberturaCaixa {
+  color: #0000008f;
+  font-size: 12px;
+}
+
+#DetalhesResumoCaixa {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  max-height: 150px; /* ou qualquer altura que faça sentido no seu layout */
+  overflow-y: auto;
+  padding-right: 8px; /* evita que o conteúdo fique colado à barra */
+  border-left: 2px solid #eee; /* opcional: só para estilo */
+}
+
+.buttonRetiarAddSaldo {
+  width: 45%;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 10px;
+  border: solid black 1px;
+  cursor: pointer;  
+}
+
+#areaButtonResumoCaixa {
+  display: flex;
+  justify-content: space-between;
+}
+
 .InfoDetalhasdasCaixaAtual {
   width: 70%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .InfoCaixaAtual {
-  width: 30%;
+  width: 31%;
   border-left: 1px solid #5e5e5e;
-  padding: 5px;
+  max-height: 80vh;
+  padding: 10px;
 }
 
-.FooterCaixaAtual {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  width: 385px;
+.formasDePagamentoCaixa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  font-size: 17px;
+  border-bottom: solid 1px #0000008f;
+  margin: 10px
 }
 
 #ButtonCaixa {
@@ -34,13 +69,21 @@
 }
 
 .Resumodecaixa {
-  border: 1px solid black;
-  padding: 5px;
+  border: 1px solid #0000008f;
+  padding: 10px;
   border-radius: 10px;
   width: 400px;
 }
 
 #sectionrolavel {
   overflow: auto;
-  height: 72%;
+  height: 68%;
+}
+
+#meiosDePagamentoDiv {
+  border: solid #0000008f 1px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 400px;
+
 }

@@ -2,56 +2,48 @@
   margin-left: 55px;
 }
 
-#tituloH3Relatorios {
-  background-color: #eeee;
-  padding: 10px;
-  border-radius: 10px;
+#menuRelatorios {
+  max-height: 90vh; /* ou qualquer altura que faça sentido no seu layout */
+  overflow-y: auto;
+  width: 250px;
+  padding-right: 8px; /* evita que o conteúdo fique colado à barra */
+  border-left: 2px solid #eee; /* opcional: só para estilo */
 }
 
-#divOlaEmpresa {
-  width: 700px;
-  padding: 10px;
-}
-
-#primeiraDivRelatorios {
-  display: flex;
-  justify-content: space-around;
-}
-
-#divDeMetasRelatorios {
-  display: flex;
-  justify-content: space-around;
-}
-
-.metasRelatorios {
-  margin: 5px;
-  background-color: #eee;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-#graficoDeDespesasPizza {
-  height: 150px;
-  border-radius: 10px;
-  padding: 10px;
-  background-color: #eee;
-}
-
-.divVendedorComição {
-  background-color: #eee;
-  padding: 10px;
-  border-radius: 10px;
+.divMenuRelatorios {
   margin-bottom: 10px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 300px;
 }
 
-.imageVendedorComição {
-  width: 50px;
-  height: 50px;
-  background-color: black;
-  border-radius: 50%;
+.divMenuRelatorios p {
+  cursor: pointer;
+}
+
+.divMenuRelatorios p:hover {
+  color: #0295ff;
+  transition: 0.2s;
+}
+
+.ativoRelatorios {
+  color: #0295ff;
+}
+
+#menuRelatorios::-webkit-scrollbar {
+  width: 10px;               /* Largura da barra de rolagem */
+}
+
+#menuRelatorios::-webkit-scrollbar-track {
+  background: #f1f1f1;      /* Cor do fundo da barra */
+  border-radius: 8px;
+}
+
+#menuRelatorios::-webkit-scrollbar-thumb {
+  background-color: #007bff; /* Cor da parte que desliza */
+  border-radius: 10px;         /* Borda arredondada */
+  border: 2px solid #f1f1f1;  /* Espaço interno para suavizar */
+  cursor: pointer;
+}
+
+#menuRelatorios::-webkit-scrollbar-thumb:hover {
+  background-color: #00458f; /* Cor ao passar o mouse */
+  transition: .5s;
 }
