@@ -1,0 +1,18 @@
+#ContasAPagar {
+    margin-left: 55px;
+}
+
+.ButtonEditContasAPagar {
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 70%;
+    border: solid black 1px;
+}
+
+.ButtonEditContasAPagar:hover {
+    color: #0295ff;
+    border: solid #0295ff 1px;
+    transition: .3s;
+}

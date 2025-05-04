@@ -1,0 +1,48 @@
+#divButoãoGerarGrafico {
+    display: flex;
+    justify-content: space-around;
+    width: 80vw;
+    margin-top: 20px;
+}
+
+.buttonGerarGráfico {
+    border: solid 2px #00000039;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+    color: #00000039;
+    cursor: pointer;
+}
+
+#inptDateVisãoGeral {
+    padding: 10px;
+    border-radius: 10px;
+    border: solid #00000083 2px;
+    color: #00000083;
+}
+
+.buttonGerarGráfico:hover {
+    border: solid 2px #00000083;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+    color: #00000083;
+    cursor: pointer;
+}
+
+.butoãoGerarGraficoAtivo {
+    border: solid 2px #0295ff;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+    color: #0295ff;
+    cursor: pointer;
+}
+
+.buttonGerarGráfico strong {
+    font-size: 19px;
+}
+
+.butoãoGerarGraficoAtivo strong {
+    font-size: 19px;
+}
