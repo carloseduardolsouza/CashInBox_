@@ -1,4 +1,5 @@
 import "./CaixaAtual.css";
+import { useState } from "react";
 
 //icones
 import { FaMoneyBill1 } from "react-icons/fa6";
@@ -8,9 +9,27 @@ import { FaPix } from "react-icons/fa6";
 import { FaMoneyCheckAlt } from "react-icons/fa";
 import { BsFillCreditCard2FrontFill } from "react-icons/bs";
 
+//componentes
+import AdicionarSaldo from "./components/AdicionarSaldo/AdicionarSaldo";
+import RetirarSaldo from "./components/RetirarSaldo/RetirarSaldo";
+
 function CaixaAtual() {
+  const [abaSobreposta, setAbaSobreposta] = useState(null);
+
+  const renderAbaSobreposta = () => {
+    switch (abaSobreposta) {
+      case "RetirarSaldo":
+        return <RetirarSaldo fecharAba={setAbaSobreposta} />;
+      case "AdicionarSaldo":
+        return <AdicionarSaldo fecharAba={setAbaSobreposta} />;
+      case null:
+        return null;
+    }
+  };
+
   return (
     <div id="CaixaAtual">
+      {renderAbaSobreposta()}
       <div className="InfoDetalhasdasCaixaAtual">
         <div>
           <div className="Resumodecaixa">
@@ -33,8 +52,18 @@ function CaixaAtual() {
             </div>
 
             <div id="areaButtonResumoCaixa">
-              <button className="buttonRetiarAddSaldo">Adicionar Saldo</button>
-              <button className="buttonRetiarAddSaldo">Retirar Saldo</button>
+              <button
+                className="buttonRetiarAddSaldo"
+                onClick={() => setAbaSobreposta("AdicionarSaldo")}
+              >
+                Adicionar Saldo
+              </button>
+              <button
+                className="buttonRetiarAddSaldo"
+                onClick={() => setAbaSobreposta("RetirarSaldo")}
+              >
+                Retirar Saldo
+              </button>
             </div>
           </div>
         </div>
@@ -46,27 +75,27 @@ function CaixaAtual() {
             <p>{"R$ 200,00"}</p>
           </div>
           <div className="formasDePagamentoCaixa">
-            <FaCcMastercard/>
+            <FaCcMastercard />
             <strong>Cartão de credito</strong>
             <p>{"R$ 200,00"}</p>
           </div>
           <div className="formasDePagamentoCaixa">
-            <FaCreditCard/>
+            <FaCreditCard />
             <strong>Cartão de debito</strong>
             <p>{"R$ 200,00"}</p>
           </div>
           <div className="formasDePagamentoCaixa">
-            <FaMoneyCheckAlt/>
+            <FaMoneyCheckAlt />
             <strong>Cheque</strong>
             <p>{"R$ 200,00"}</p>
           </div>
           <div className="formasDePagamentoCaixa">
-            <FaPix/>
+            <FaPix />
             <strong>Pix</strong>
             <p>{"R$ 200,00"}</p>
           </div>
           <div className="formasDePagamentoCaixa">
-            <BsFillCreditCard2FrontFill/>
+            <BsFillCreditCard2FrontFill />
             <strong>Crediario</strong>
             <p>{"R$ 200,00"}</p>
           </div>

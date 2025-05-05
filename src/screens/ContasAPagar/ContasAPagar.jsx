@@ -4,9 +4,13 @@ import "./ContasAPagar.css";
 import { FaSearch } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 
+//componentes
+import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel";
+
 function ContasAPagar() {
   return (
     <div id="ContasAPagar">
+      {<FunçãoNãoDisponivel/>}
       <h2>Contas a pagar</h2>
       <article className="ArticleClientes">
         <form onSubmit={"" /*(e) => renderClientes(e)*/}>

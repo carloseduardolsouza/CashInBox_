@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+//import { format } from "date-fns";
 
 function formatarCurrency(numero) {
   // Converter para número, se possível
@@ -34,11 +34,32 @@ function formatarDataNascimento(data) {
   return dataFormatada;
 }
 
-function formatarData(data, formato = "dd/MM/yyyy") {
+/*function formatarData(data, formato = "dd/MM/yyyy") {
   const dataObj = new Date(data);
   const dataFormatada = format(dataObj, formato);
 
   return <span>{dataFormatada}</span>;
+}*/
+
+function mascaraDeDinheroInput(e) {
+  let inputValue = e.target.value;
+
+  // Remove tudo que não for número
+  inputValue = inputValue.replace(/\D/g, "");
+
+  // Adiciona a máscara de moeda
+  inputValue = inputValue.replace(/(\d)(\d{2})$/, "$1,$2");
+  inputValue = inputValue.replace(/(\d)(\d{3})(\d{3})$/, "$1.$2.$3"); // Adiciona pontos nas centenas de milhar
+
+  if (inputValue.length > 6) {
+    inputValue = "R$ " + inputValue;
+  } else if (inputValue.length === 0) {
+    inputValue = "";
+  } else {
+    inputValue = "R$ " + inputValue;
+  }
+  console.log(inputValue)
+  return inputValue;
 }
 
 export default {
@@ -46,5 +67,5 @@ export default {
   formatarDataNascimento,
   formatarCPF,
   formatarNumeroCelular,
-  formatarData,
+  mascaraDeDinheroInput
 };

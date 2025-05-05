@@ -1,0 +1,33 @@
+#ServiçoBloqueado {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 5;
+  backdrop-filter: blur(2px);
+  top: 0;
+  left: 0;
+  background-color: #0000002d;
+}
+
+#divCentralServiçoBloqueado {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  text-align: center;
+  background-color: #ffffffac;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#ButtonServiçoBloqueado {
+  padding: 5px;
+  border-radius: 10px;
+  width: 250px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: #0295ff;
+  color: white;
+}

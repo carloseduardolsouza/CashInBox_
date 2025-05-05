@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Form } from "react-router-dom";
 
 //componentes
-import ItemProduto from "../../components/ItemProduto/ItemProduto";
+import ItemProduto from "./components/ItemProduto/ItemProduto";
 //import Loading from "../../components/AçãoRealizada/AçãoRealizada";
 
 //Controlador da api

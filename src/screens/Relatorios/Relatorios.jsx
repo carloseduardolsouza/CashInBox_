@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./Relatorios.css";
 
+//componentes
+import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel"
+
 //SubTelas
 import ResumoVisãoGeral from "./SubScreens/ResumoVisãoGeral/ResumoVisãoGeral";
 
@@ -31,6 +34,7 @@ function Relatorios() {
 
   return (
     <div id="Relatorios">
+      {<FunçãoNãoDisponivel/>}
       <h2>Relatórios</h2>
       <div id="divLadoladoRelatorios">
         <nav id="menuRelatorios">

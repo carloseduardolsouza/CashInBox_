@@ -87,3 +87,14 @@
   width: 400px;
 
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+  z-index: 1000; /* Coloca o overlay acima dos outros elementos */
+  pointer-events: all; /* Habilita a interação com o overlay */
+}

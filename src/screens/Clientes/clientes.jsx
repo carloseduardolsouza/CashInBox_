@@ -31,7 +31,7 @@ function Clientes() {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/cadastrarProduto");
+              navigate("/cadastrarCliente");
             }}
           >
             +

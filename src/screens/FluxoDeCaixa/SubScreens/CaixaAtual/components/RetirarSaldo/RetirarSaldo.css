@@ -1,0 +1,52 @@
+#RetirarSaldo {
+  position: absolute;
+  transform: translate(50%, -50%);
+  top: 50%;
+  right: 50%;
+  padding: 10px;
+  height: 400px;
+
+  background: rgba(255, 255, 255, 0.3); /* Cor com transparência */
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+}
+
+#FecharAba {
+    border: solid red 2px;
+    color: red;
+    cursor: pointer;
+    font-weight: 800;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+}
+
+#FecharAba:hover {
+    color: white;
+    background-color: red;
+    transition: .3s;
+}
+
+#valorRetirada {
+    padding: 5px;
+    border-radius: 5px;
+    width: 90px;
+    border: solid black 1px;
+}
+
+#ButtonSalvarRetirarSaldo {
+    width: 100%;
+    color: white;
+    background-color: #0295ff;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    padding: 10px;
+    cursor: pointer;
+}

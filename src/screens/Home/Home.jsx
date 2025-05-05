@@ -1,5 +1,5 @@
 import "./Home.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {Link} from "react-router-dom"
 
 //Biblioteca de Gráficos
@@ -20,9 +20,6 @@ import { MdAttachMoney } from "react-icons/md";
 import { FaComputer } from "react-icons/fa6";
 import { IoMdArrowDropup } from "react-icons/io";
 
-//componente que faz ligação com a Api
-//import fetchapi from "../../api/fetchapi";
-
 function Home() {
   const [notificaçãp, setNotificação] = useState(false);
   const [receitas, setReceitas] = useState();
@@ -37,10 +34,6 @@ function Home() {
     { name: "Jun", Despesas: 2390, Receitas: 3800 },
     { name: "Jul", Despesas: 3490, Receitas: 4300 },
   ];
-
-  /*useEffect(() => {
-    fetchapi.métricas().then((response) => setReceitas(response.receita))
-  }, [])*/
 
   return (
     <div id="Homescreen">
