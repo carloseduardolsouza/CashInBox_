@@ -1,9 +1,6 @@
 import "./FluxoDeCaixa.css";
 import { useState } from "react";
 
-//componentes
-import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel"
-
 //SubTelas
 import CaixaAtual from "./SubScreens/CaixaAtual/CaixaAtual";
 import CaixasAnteriores from "./SubScreens/CaixasAnteriores/CaixasAnteriores";
@@ -24,7 +21,6 @@ function FluxoDeCaixa() {
 
   return (
     <div id="caixa">
-      {<FunçãoNãoDisponivel/>}
       <h2>Caixa</h2>
       <nav className="MenuCaixa">
         <p

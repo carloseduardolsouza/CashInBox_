@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Relatorios.css";
 
 //componentes
-import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel"
+import EmBreve from "../../components/EmBreve/EmBreve"
 
 //SubTelas
 import ResumoVisãoGeral from "./SubScreens/ResumoVisãoGeral/ResumoVisãoGeral";
@@ -34,7 +34,7 @@ function Relatorios() {
 
   return (
     <div id="Relatorios">
-      {<FunçãoNãoDisponivel/>}
+      {<EmBreve/>}
       <h2>Relatórios</h2>
       <div id="divLadoladoRelatorios">
         <nav id="menuRelatorios">

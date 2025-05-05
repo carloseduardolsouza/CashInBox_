@@ -15,7 +15,7 @@ function ContasAPagar() {
   const renderAbaSobrePosta = () => {
     switch (abaSobreposta) {
       case "NovaConta":
-        return <NovaConta />;
+        return <NovaConta fecharAba={setAbaSopreposta}/>;
       case null:
         return null;
     }

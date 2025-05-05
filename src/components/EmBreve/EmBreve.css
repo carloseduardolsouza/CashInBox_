@@ -1,0 +1,21 @@
+#EmBreve {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 4;
+  backdrop-filter: blur(2px);
+  top: 0;
+  left: 0;
+  background-color: #0000002d;
+}
+
+#divCentralEmBreve {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  text-align: center;
+  background-color: #ffffffac;
+  padding: 10px;
+  border-radius: 10px;
+}

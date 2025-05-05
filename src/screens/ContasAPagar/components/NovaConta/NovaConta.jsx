@@ -1,7 +1,7 @@
 import "./NovaConta.css";
 import { useState } from "react";
 
-function NovaConta() {
+function NovaConta({fecharAba}) {
   const [boleto, setBoleto] = useState(false);
 
   const changeSelect = (event) => {
@@ -32,7 +32,8 @@ function NovaConta() {
 
           <div id="divButoesNovaConta">
             <button className="ButtonNovaConta SalvarNovaConta">Salvar</button>
-            <button className="ButtonNovaConta CancelarNovaConta">
+            <button className="ButtonNovaConta CancelarNovaConta"
+            onClick={() => fecharAba(null)}>
               Cancelar
             </button>
           </div>
@@ -106,7 +107,8 @@ function NovaConta() {
 
           <div id="divButoesNovaConta">
             <button className="ButtonNovaConta SalvarNovaConta">Salvar</button>
-            <button className="ButtonNovaConta CancelarNovaConta">
+            <button className="ButtonNovaConta CancelarNovaConta"
+            onClick={() => fecharAba(null)}>
               Cancelar
             </button>
           </div>
