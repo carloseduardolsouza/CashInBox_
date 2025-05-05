@@ -29,6 +29,16 @@
   cursor: pointer;  
 }
 
+.buttonRetiarAddSaldo:disabled {
+  width: 45%;
+  font-size: 15px;
+  padding: 5px;
+  border-radius: 10px;
+  border: solid #00000053 1px;
+  color: #00000053;
+  cursor: not-allowed;
+}
+
 #areaButtonResumoCaixa {
   display: flex;
   justify-content: space-between;
@@ -73,6 +83,15 @@
   padding: 10px;
   border-radius: 10px;
   width: 400px;
+  height: 230px;
+}
+
+#divFantasmaResumo {
+  margin-top: 150px;
+}
+
+#divFantasmaTotalCaixa {
+  margin-top: 72px;
 }
 
 #sectionrolavel {

@@ -60,7 +60,7 @@ function Configurações() {
             abaAtiva === "Integrações" ? "ativo" : ""
           }`}
         >
-          🌐Integrações
+          🤖Automação
         </button>
       </div>
 
