@@ -1,23 +1,33 @@
 import "./ContasAPagar.css";
+import { useState } from "react";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 
 //componentes
+import NovaConta from "./components/NovaConta/NovaConta";
 import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel";
 
 function ContasAPagar() {
+  const [abaSobreposta, setAbaSopreposta] = useState(null);
+
+  const renderAbaSobrePosta = () => {
+    switch (abaSobreposta) {
+      case "NovaConta":
+        return <NovaConta />;
+      case null:
+        return null;
+    }
+  };
   return (
     <div id="ContasAPagar">
-      {<FunçãoNãoDisponivel/>}
+      {renderAbaSobrePosta()}
       <h2>Contas a pagar</h2>
       <article className="ArticleClientes">
         <form onSubmit={"" /*(e) => renderClientes(e)*/}>
-          <button
-            className="AddCliente"
-            type="button"
-          >
+          <button className="AddCliente" type="button"
+          onClick={() => setAbaSopreposta("NovaConta")}>
             +
           </button>
           <input
@@ -46,7 +56,9 @@ function ContasAPagar() {
         <tbody>
           <tr>
             <td>
-              <button className="ButtonEditContasAPagar"><FaEdit /> Editar</button>
+              <button className="ButtonEditContasAPagar">
+                <FaEdit /> Editar
+              </button>
             </td>
             <td>Paga</td>
             <td>10/10</td>

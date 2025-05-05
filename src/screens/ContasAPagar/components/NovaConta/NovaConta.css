@@ -1,0 +1,141 @@
+#NovaConta {
+  position: absolute;
+  transform: translate(50%, -50%);
+  top: 50%;
+  right: 50%;
+  padding: 10px;
+  width: 500px;
+
+  background: rgba(255, 255, 255, 0.3); /* Cor com transparência */
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+}
+
+#selectTipoDeConta {
+  padding: 5px;
+  border: solid black 1px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.divValorNDocumento {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.divValorNDocumento input {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.divValorNDocumento label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.divVencimentoPago {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.divVencimentoPago input {
+  padding: 5px;
+  border-radius: 5px;
+  width: 160px;
+}
+
+.divVencimentoPago label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.DivOsDemais {
+    width: 85%;
+    margin: auto;
+}
+
+.DivOsDemais input {
+  padding: 5px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.DivOsDemais label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.TableNovaConta {
+    text-align: center;
+    font-size: 13px;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 10px auto;
+    width: 100%;
+}
+
+.TableNovaConta th {
+    color: #0000005d;
+}
+
+#divRepetirPagamento {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+#divRepetirPagamento input[type="number"] {
+    width: 40px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.ButtonNovaConta {
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 17px;
+    width: 45%;
+}
+
+.SalvarNovaConta {
+    background-color: #0295ff;
+    color: white;
+    font-weight: bold;
+}
+
+.CancelarNovaConta {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
+
+#divButoesNovaConta {
+    display: flex;
+    justify-content: space-around;
+}
+
+#divBoletoTrue {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+#divBoletoTrue input {
+    font-size: 17px;
+    padding: 10px;
+    border-radius: 10px;
+    
+}
