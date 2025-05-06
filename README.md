@@ -78,13 +78,7 @@ Senha: admin123
 ## 🧑‍💻 Autores
 
 **Carlos Eduardo Lourenço de Souza**  
-[Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
-
-**Andrey Gonçalves de Andrade**  
-[Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
-
-**Jonalcy Rodrigues Leal Dos Santos**  
-[Instagram](https://instagram.com/) | [LinkedIn](https://linkedin.com/) | [Site Portfólio](https://)
+[Instagram](https://www.instagram.com/carlossouza.dev__/) | [LinkedIn](https://www.linkedin.com/in/carlos-eduardo-souza-619422252/)
 
 ---
 
