@@ -1,19 +1,30 @@
 import "./Estoque.css";
-import { useState} from "react";
-import { Link , useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
 
+//componetes
+import NotaEntrada from "./components/NotaEntrada/NotaEntrada";
+
 function Estoque() {
   const navigate = useNavigate();
+  const [modalEstoque, setModalEstoque] = useState(null);
 
+  const renderModal = () => {
+    switch (modalEstoque) {
+      case "NotaEntrada":
+        return <NotaEntrada fechar={setModalEstoque}/>;
+      case null:
+        return null;
+    }
+  };
   return (
     <div id="ESTOQUE">
+      {renderModal()}
       <h2>Estoque</h2>
-      <div id="AreaFunçõesEstoque">
-        <a href="/">Nota de Entrada</a>
-      </div>
+      <button id="NotaEntradaButton" onClick={() => setModalEstoque("NotaEntrada")}>Nota de Entrada</button>
       <div>
         <form onSubmit={(e) => /*renderEstoque(e)*/ ``}>
           <button

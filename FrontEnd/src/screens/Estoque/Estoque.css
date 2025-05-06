@@ -52,3 +52,15 @@
 #aTDEstoque {
   color: black;
 }
+
+#NotaEntradaButton {
+  margin-left: 20px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 50px;
+  background-color: #0295ff;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
