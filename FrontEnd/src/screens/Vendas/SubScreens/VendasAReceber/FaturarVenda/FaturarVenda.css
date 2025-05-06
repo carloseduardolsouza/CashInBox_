@@ -1,0 +1,156 @@
+#FaturarVenda {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 1000px;
+  height: 500px;
+  z-index: 2;
+  transform: translate(50%, -50%);
+  background: rgba(118, 113, 113, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.porcentagemDesconto {
+  width: 45px;
+}
+
+.realDesconto {
+  width: 150px;
+}
+
+#ButtonFecharAbaFaturarVenda {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(0, 0, 0, 0);
+  border: solid red 1px;
+  cursor: pointer;
+  color: red;
+}
+
+#ButtonFecharAbaFaturarVenda:hover {
+  background-color: red;
+  color: white;
+  transition: 0.5s;
+}
+
+#FaturarVendaPart1 {
+  display: flex;
+  margin-top: 10px;
+}
+
+#FaturarVendaPreços {
+  width: 40%;
+  padding: 10px;
+}
+
+#FaturarVendaPreços div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+#FaturarVendaPreços p {
+  font-size: 15px;
+}
+
+#FaturarVendaPreços input {
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+#FaturarVendaDetalhesCliente {
+  width: 60%;
+  padding: 10px;
+}
+
+.ItenSearch {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.ItenSearch input {
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.ItenSearch button {
+  padding: 10px;
+  background-color: orange;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  border-radius: 10px;
+}
+
+#FaturarVendaFormaDePagamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#FaturarVendaFormaDePagamento select {
+  padding: 5px;
+  border-radius: 10px;
+  border: solid black 1px;
+}
+
+#FaturarVendaFormaDePagamento input {
+  padding: 5px;
+  border-radius: 10px;
+  border: solid black 1px;
+}
+
+#FaturarVendaFaltaPagar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+#FaturarVendaFaltaPagar label {
+  display: flex;
+  align-items: center;
+}
+
+#FaturarVendaFaltaPagar input {
+  padding: 5px;
+  border-radius: 10px;
+  border: solid black 1px;
+  margin-left: 10px;
+}
+
+#areaButtons div {
+  margin: auto;
+  width: 700px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+#areaButtons button {
+  padding: 15px;
+  width: 200px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: solid black 1px;
+}
+
+#FaturarVendaFormaDePagamento button {
+  padding: 5px;
+  background-color: green;
+  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}

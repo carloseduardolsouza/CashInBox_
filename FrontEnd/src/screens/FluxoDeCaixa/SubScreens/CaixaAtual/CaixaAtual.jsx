@@ -67,14 +67,14 @@ function CaixaAtual() {
               <button
                 className="buttonRetiarAddSaldo"
                 onClick={() => setAbaSobreposta("AdicionarSaldo")}
-                disabled={true}
+                disabled={statusCaixa === "Aberto" ? false : true}
               >
                 Adicionar Saldo
               </button>
               <button
                 className="buttonRetiarAddSaldo"
                 onClick={() => setAbaSobreposta("RetirarSaldo")}
-                disabled={true}
+                disabled={statusCaixa === "Aberto" ? false : true}
               >
                 Retirar Saldo
               </button>

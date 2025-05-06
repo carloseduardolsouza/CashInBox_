@@ -14,3 +14,14 @@ a {
 input {
   border: solid black 1px;
 }
+
+.blurModal {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 5;
+  backdrop-filter: blur(2px);
+  top: 0;
+  left: 0;
+  background-color: #00000000;
+}

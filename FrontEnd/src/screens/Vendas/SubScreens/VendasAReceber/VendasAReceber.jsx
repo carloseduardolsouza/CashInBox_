@@ -1,10 +1,15 @@
 import "./VendasAReceber.css";
 import {useState} from "react";
 
+//componentes
+import FaturarVenda from "./FaturarVenda/FaturarVenda"
+
 function VendasAReceber() {
   const [pageRecebido , setPageRecebido] = useState(false)
+
   return (
     <div>
+      {pageRecebido && <FaturarVenda fechar={setPageRecebido}/>}
       <table className="Table">
         <thead>
           <tr>
