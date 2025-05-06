@@ -71,7 +71,7 @@ Senha: admin123
 
 ## 📊 Prints da Aplicação
 
-> (adicione aqui imagens da interface da aplicação em funcionamento, se quiser que eu gere algumas imagens ilustrativas, posso fazer isso também)
+> 
 
 ---
 
