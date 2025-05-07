@@ -4,13 +4,18 @@ import { useState, useRef } from "react";
 //Icones
 import { FaCamera } from "react-icons/fa";
 
+//componentes
+import CriarCategoria from "./Components/CriarCategoria/CriarCategoria";
+
 //Biblioteca
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Select from "react-select";
 
 function CadastrarProduto() {
   const fileInputRef = useRef(null);
+  const [modal, setModal] = useState(null);
 
   const [images, setImages] = useState([]);
   const [openImagens, setOpenImagens] = useState(false);
@@ -27,6 +32,19 @@ function CadastrarProduto() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [referencia, setReferencia] = useState("");
 
+  const customStyles = {
+    control: (base, state) => ({
+      ...base,
+      border: state.isFocused ? "2px solid black" : "2px solid #ccc",
+      boxShadow: state.isFocused ? "0 0 0 2px rgba(0, 123, 255, 0.2)" : "none",
+      "&:hover": {
+        borderColor: state.isFocused ? "black" : "#888",
+      },
+      borderRadius: "8px",
+      padding: "0px",
+    }),
+  };
+
   const escrever = (p, e) => {
     if (p == "produto") {
       setProduto(e.target.value);
@@ -38,6 +56,15 @@ function CadastrarProduto() {
 
     if (p == "descrição") {
       setDescrição(e.target.value);
+    }
+  };
+
+  const renderModal = () => {
+    switch (modal) {
+      case "criarCategoria":
+        return <CriarCategoria fechar={setModal}/>;
+      case null:
+        return null;
     }
   };
 
@@ -64,6 +91,7 @@ function CadastrarProduto() {
 
   return (
     <div id="cadastrarProduto">
+      {renderModal()}
       <h2>Cadastro de Produtos</h2>
       <div id="CadastroProdutos">
         <form
@@ -83,13 +111,16 @@ function CadastrarProduto() {
           </la>
           <la>
             <p>Marca: </p>
-            <input
-              type="text"
-              onChange={(e) => escrever("marca", e)}
-              value={marca}
-              required
-              placeholder="Categoria do produto..."
+            <Select
+              id="SelectCategoriaProduto"
+              placeholder="Categoria"
+              styles={customStyles}
+              onChange={(e) => `` /*renderInfoProduto(e)*/}
             />
+            <button id="AddCategoria" onClick={(e) => {
+              e.preventDefault()
+              setModal("criarCategoria")
+            }}>+</button>
           </la>
 
           <la>
@@ -112,21 +143,19 @@ function CadastrarProduto() {
           <div id="DivisãoPreçoCadastroProduto">
             <la>
               <p>Preço de Compra: </p>
-              <input type="number" placeholder="somente numeros"/>
+              <input type="number" placeholder="somente numeros" />
             </la>
 
-           <la>
-            <p>Margem:</p>
-            <input type="number" placeholder="somente numeros"/>
-           </la>
+            <la>
+              <p>Margem:</p>
+              <input type="number" placeholder="somente numeros" />
+            </la>
 
-           <la>
-            <p>Preço De Venda:</p>
-            <input type="number" value={""} placeholder="somente numeros" />
-           </la>
+            <la>
+              <p>Preço De Venda:</p>
+              <input type="number" value={""} placeholder="somente numeros" />
+            </la>
           </div>
-
-
 
           <la>
             <p>Descrição: </p>

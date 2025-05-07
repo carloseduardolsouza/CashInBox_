@@ -18,7 +18,7 @@ function PedidosEmAberto() {
 
       <tbody>
         <tr>
-          <td><a href="/">Comoda Capri</a></td>
+          <td>Comoda Capri</td>
           <td>R$ 100,00</td>
           <td>1</td>
           <td>5%</td>

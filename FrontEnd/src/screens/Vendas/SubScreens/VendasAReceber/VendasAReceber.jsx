@@ -24,7 +24,7 @@ function VendasAReceber() {
         <tbody>
           <tr>
             <td>Carlos Eduardo Lourenço de Souza</td>
-            <td><a href="/">Comoda Capri</a></td>
+            <td>Comoda Capri</td>
             <td>R$ 400,00</td>
             <td>Receber</td>
             <td>

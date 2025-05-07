@@ -20,6 +20,24 @@
   max-width: 1200px;
 }
 
+#SelectCategoriaProduto {
+  padding: 3px;
+  width: 100%;
+}
+
+#AddCategoria {
+  background-color: #ffb732;
+  height: 35px;
+  width: 35px;
+  padding: 5px;
+  border-radius: 10px;
+  margin-left: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 #inputImageProduto {
   border: none;
   margin-top: 10px;
@@ -46,6 +64,7 @@ input:disabled {
 
 .AreaInputsNovoProduto la {
   display: flex;
+  align-items: center;
 }
 
 .AreaInputsNovoProduto p {

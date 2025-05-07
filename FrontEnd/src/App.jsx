@@ -26,6 +26,7 @@ import DetalhesDoFuncionario from "./screens/DetahesDoFuncionario/DetahesDoFunci
 import CadastrarFuncionario from "./screens/CadastrarFuncionario/CadastrarFuncionario";
 import DetalhesDoProduto from "./screens/DetalhesDoProduto/DetalhesDoProduto";
 import ContasAPagar from "./screens/ContasAPagar/ContasAPagar";
+import NotaFiscalDeEntrada from "./screens/NotaFiscalDeEntrada/NotaFiscalDeEntrada";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -254,6 +255,7 @@ function App() {
           <Route path="/detalhesDoFuncionario/:id" Component={DetalhesDoFuncionario} />
           <Route path="/detalhesDoProduto/:id" Component={DetalhesDoProduto} />
           <Route path="/contasPagar" Component={ContasAPagar} />
+          <Route path="/notaFiscalDeEntrada" Component={NotaFiscalDeEntrada} />
           
           <Route path="*" Component={Error} />
           <Route path="/configurações" Component={Configurações} />

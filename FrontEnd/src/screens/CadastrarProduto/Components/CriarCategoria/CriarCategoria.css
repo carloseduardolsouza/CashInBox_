@@ -1,0 +1,66 @@
+#formCriarCategoria {
+    position: absolute;
+    background-color: white;
+    height: 100vh;
+    right: 0px;
+    padding: 20px;
+    width: 400px;
+    box-shadow: black 0px 0px 10px;
+}
+
+#formCriarCategoria div {
+    padding: 10px;
+    border: solid #00000062 2px;
+    border-radius: 10px;
+}
+
+#formCriarCategoria label {
+    display: flex;
+    flex-direction: column;
+}
+
+#formCriarCategoria h3 {
+    margin-bottom: 10px;
+}
+
+#formCriarCategoria input {
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: solid #00000092 1px;
+}
+
+#formCriarCategoria nav {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+#formCriarCategoria button {
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    width: 170px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.bttCancelarCriarCategoria {
+    border: solid #0000009d 1px;
+}
+
+.bttriarCriarCategoria {
+    background-color: #0295ff;
+    color: white;
+}
+
+.bttCancelarCriarCategoria:hover {
+    background-color: #c9c9c9;
+    transition: .3s;
+
+}
+
+.bttriarCriarCategoria:hover {
+    background-color: #0176c9;
+    transition: .3s;
+}
