@@ -4,6 +4,9 @@ import { useState } from "react";
 //icones
 import { FaUserAlt } from "react-icons/fa";
 
+//conexão com a api
+import fetchapi from "../../api/fetchapi";
+
 function CadastrarCliente() {
   const [nome, setNome] = useState("");
   const [numero, setNumero] = useState("");
@@ -50,6 +53,20 @@ function CadastrarCliente() {
     }
   };
 
+  const cadastrarCliente = (e) => {
+    e.preventDefault()
+    let dados = {
+      nome: nome,
+      cpf_cnpj: cpf,
+      email: email,
+      telefone: numero,
+      data_nascimento: nascimento,
+      endereco: endereço,
+    };
+
+    fetchapi.NovoCliente(dados)
+  };
+
   return (
     <div id="novoCliente">
       <h2>Novo Cliente</h2>
@@ -61,7 +78,7 @@ function CadastrarCliente() {
           </div>
           <form
             className="articleNovoCliente"
-            onSubmit={(e) => CadastrarCliente(e)}
+            onSubmit={(e) => cadastrarCliente(e)}
           >
             <p>
               <strong>Nome: </strong>
@@ -134,7 +151,10 @@ function CadastrarCliente() {
               onChange={(event) => escreverDados("Nascimento", event)}
               value={nascimento}
             />
-            <button className="CadastrarNovoCliente" type="submit">
+            <button
+              className="CadastrarNovoCliente"
+              type="submit"
+            >
               Cadastrar
             </button>
           </form>

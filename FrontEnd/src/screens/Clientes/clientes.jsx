@@ -1,9 +1,12 @@
 import "./clientes.css";
-import { useState } from "react";
-import { Link , useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
+
+//Conexão com api
+import fetchapi from "../../api/fetchapi";
 
 function Clientes() {
   const Data = new Date();
@@ -11,17 +14,30 @@ function Clientes() {
     Data.getUTCMonth() + 1
   }/${Data.getUTCFullYear()}`;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   //Controlador de Estados
   const [resultClientes, setResultClientes] = useState([]);
   const [loadingClientes, setloadingClientes] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
 
+  useEffect(() => {
+    const buscarClientes = async () => {
+      try {
+        const resultado = await fetchapi.ProcurarCliente(pesquisar);
+        setResultClientes(resultado); // supondo que `setResultClientes` seja seu setState
+      } catch (err) {
+        console.error("Erro ao buscar clientes:", err);
+      }
+    };
+
+    buscarClientes();
+  }, []);
+
   return (
     <div id="CLIENTE">
       <header id="HeaderClientes">
-        <h2>Clientes ({/*resultClientes.length*/})</h2>
+        <h2>Clientes ({resultClientes.length})</h2>
         <p>{log}</p>
       </header>
       <article className="ArticleClientes">
@@ -58,12 +74,20 @@ function Clientes() {
         </thead>
 
         <tbody>
-          <tr>
-            <td><Link to={"/detalhesDoCLiente/1"} className="aTdClientes">Carlos Eduardo Lourenço de Souza</Link></td>
-            <td>(62) 9 9336-2090</td>
-            <td>R.2 , Qd.2 , Lt.13 , Jd Petropolis</td>
-            <td>R$ 2.000</td>
-          </tr>
+          {resultClientes.map((dado) => {
+            return (
+              <tr>
+                <td>
+                  <Link to={`/detalhesDoCLiente/${dado.id}`} className="aTdClientes">
+                    {dado.nome}
+                  </Link>
+                </td>
+                <td>{dado.telefone}</td>
+                <td>{dado.endereco}</td>
+                <td>{dado.total_compras}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

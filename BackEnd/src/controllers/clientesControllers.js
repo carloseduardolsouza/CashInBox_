@@ -1,7 +1,8 @@
 const clientesModels = require('../models/clientesModels')
 
 const procurarCliente = async (req, res) => {
-    const clientes = await clientesModels.listarCliente()
+    const {id} = req.params
+    const clientes = await clientesModels.listarCliente(id)
     return res.status(200).json(clientes)
 }
 
@@ -27,10 +28,6 @@ const procurarClienteId = async (req, res) => {
     const clientes = await clientesModels.procurarClienteId(id)
     return res.status(200).json(clientes)
 }
-
-
-
-
 
 module.exports = {
     novoCliente,

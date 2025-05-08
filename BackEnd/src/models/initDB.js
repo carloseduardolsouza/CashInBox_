@@ -64,4 +64,33 @@ db.serialize(() => {
       console.log('Tabela "funcionarios" criada com sucesso!');
     }
   );
+
+  db.run(
+  `
+  CREATE TABLE IF NOT EXISTS produtos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT,
+    codigo_barras TEXT UNIQUE,
+    preco_venda REAL NOT NULL,
+    preco_custo REAL DEFAULT 0,
+    estoque_atual INTEGER DEFAULT 0,
+    estoque_minimo INTEGER DEFAULT 0,
+    markup INTEGER DEFAULT 0,
+    categoria TEXT,
+    marca TEXT,
+    unidade_medida TEXT,
+    ativo INTEGER DEFAULT 1, -- 1 para ativo, 0 para inativo
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+  );
+  `,
+  (err) => {
+    if (err) {
+      return console.error("Erro ao criar tabela 'produtos':", err.message);
+    }
+    console.log('Tabela "produtos" criada com sucesso!');
+  }
+);
+
 });

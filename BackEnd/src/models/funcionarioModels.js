@@ -19,51 +19,49 @@ const listarFuncionario = async () => {
 };
 
 const novoFuncionario = async (dados) => {
-    const {
-      nome,
-      cpf,
-      telefone,
-      email,
-      data_admissao,
-      salario_base,
-      tipo_comissao,
-      valor_comissao,
-      status,
-    } = dados;
-  
-    const created_at = new Date().toISOString();
-  
-    const query = `
+  const {
+    nome,
+    cpf,
+    telefone,
+    email,
+    data_admissao,
+    salario_base,
+    tipo_comissao,
+    valor_comissao,
+    status,
+  } = dados;
+
+  const created_at = new Date().toISOString();
+
+  const query = `
       INSERT INTO funcionarios 
       (nome, cpf, telefone, email, data_admissao, salario_base, tipo_comissao, valor_comissao, status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-  
-    const values = [
-      nome,
-      cpf,
-      telefone,
-      email,
-      data_admissao,
-      salario_base,
-      tipo_comissao,
-      valor_comissao,
-      status || 'ativo',
-      created_at,
-    ];
-  
-    return new Promise((resolve, reject) => {
-      connection.run(query, values, function (err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(this.lastID);
-        }
-      });
+
+  const values = [
+    nome,
+    cpf,
+    telefone,
+    email,
+    data_admissao,
+    salario_base,
+    tipo_comissao,
+    valor_comissao,
+    status || "ativo",
+    created_at,
+  ];
+
+  return new Promise((resolve, reject) => {
+    connection.run(query, values, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(this.lastID);
+      }
     });
-  };
-  
-  
+  });
+};
 
 const deletarFuncionario = async (id) => {
   const query = `DELETE FROM funcionarios WHERE id = ${id}`;
@@ -79,34 +77,55 @@ const deletarFuncionario = async (id) => {
   });
 };
 
-//const editarFuncionario = async (id, dados) => {
-//    const { nome, cpf_cnpj, email, telefone, data_nascimento, endereco } = dados;
-//  
-//    const query = `
-//      UPDATE funcionarios
-//      SET nome = ?, cpf_cnpj = ?, email = ?, telefone = ?, data_nascimento = ?, endereco = ?, updated_at = ?
-//      WHERE id = ?
-//    `;
-//  
-//    const updatedAt = new Date().toISOString();
-//  
-//    return new Promise((resolve, reject) => {
-//      connection.run(
-//        query,
-//        [nome, cpf_cnpj, email, telefone, data_nascimento, endereco, updatedAt, id],
-//        function (err) {
-//          if (err) {
-//            reject(err);
-//          } else if (this.changes === 0) {
-//            resolve(null); // Nenhuma linha foi atualizada (ID pode não existir)
-//          } else {
-//            resolve(this.changes); // Quantidade de linhas alteradas
-//          }
-//        }
-//      );
-//    });
-//  };
-  
+const editarFuncionario = async (id, dados) => {
+  const {
+    nome,
+    cpf,
+    telefone,
+    email,
+    data_admissao,
+    salario_base,
+    tipo_comissao,
+    valor_comissao,
+    status,
+  } = dados;
+
+  const updated_at = new Date().toISOString();
+
+  const query = `
+    UPDATE funcionarios
+    SET nome = ?, cpf = ?, telefone = ?, email = ?, data_admissao = ?, salario_base = ?, 
+        tipo_comissao = ?, valor_comissao = ?, status = ?, updated_at = ?
+    WHERE id = ?
+  `;
+
+  const values = [
+    nome,
+    cpf,
+    telefone,
+    email,
+    data_admissao,
+    salario_base,
+    tipo_comissao,
+    valor_comissao,
+    status || "ativo",
+    updated_at,
+    id,
+  ];
+
+  return new Promise((resolve, reject) => {
+    connection.run(query, values, function (err) {
+      if (err) {
+        reject(err);
+      } else if (this.changes === 0) {
+        resolve(null); // Nenhuma linha foi alterada
+      } else {
+        resolve(this.changes); // Retorna o número de linhas alteradas
+      }
+    });
+  });
+};
+
 
 const procurarFuncionarioId = async (id) => {
   const query = `SELECT * FROM funcionarios WHERE id = ${id}`;
@@ -131,5 +150,5 @@ module.exports = {
   listarFuncionario,
   procurarFuncionarioId,
   deletarFuncionario,
-  //editarFuncionario,
+  editarFuncionario,
 };

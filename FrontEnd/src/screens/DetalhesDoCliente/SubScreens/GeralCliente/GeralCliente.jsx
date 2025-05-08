@@ -1,5 +1,11 @@
 import "./GeralCliente.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+//conexão com a api
+import fetchapi from "../../../../api/fetchapi";
+
+//componentes
+import Loading from "../../../../components/Loading/Loading";
 
 //Icones
 import { MdDeleteOutline } from "react-icons/md";
@@ -7,19 +13,66 @@ import { FaEdit } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 
-function GeralCliente() {
+function GeralCliente({ infoCliente }) {
+  const { id, nome, cpf_cnpj, email, endereco, data_nascimento, telefone } =
+    infoCliente || {};
+
   const [editar, setEditar] = useState(false);
+
+  const [nomeEdit, setNomeEdit] = useState(nome);
+  const [cpfEdit, setCpfEdit] = useState(cpf_cnpj);
+  const [emailEdit, setEmailEdit] = useState(email);
+  const [enderecoEdit, setenderecoEdit] = useState(endereco);
+  const [telefoneEdit, setTelefoneEdit] = useState(telefone);
+  const [data_nascimentoEdit, setData_nascimentoEdit] =
+    useState(data_nascimento);
+
+  useEffect(() => {
+    if (infoCliente) {
+      setNomeEdit(infoCliente.nome || "");
+      setCpfEdit(infoCliente.cpf_cnpj || "");
+      setEmailEdit(infoCliente.email || "");
+      setenderecoEdit(infoCliente.endereco || "");
+      setTelefoneEdit(infoCliente.telefone || "");
+      setData_nascimentoEdit(infoCliente.data_nascimento || "");
+    }
+  }, [infoCliente]);
+
+  if (!infoCliente) {
+    return <Loading/>;
+  }
+
+  const editarCliente = () => {
+    let dados = {
+      id: id,
+      nome: nomeEdit,
+      cpf_cnpj: cpfEdit,
+      email: emailEdit,
+      telefone: telefoneEdit,
+      data_nascimento: data_nascimentoEdit,
+      endereco: enderecoEdit,
+    };
+
+    fetchapi.AtualizarCliente(dados);
+    setEditar(false);
+  };
+
+  const deletarCliente = () => {
+    fetchapi.DeletarCliente(id)
+  }
 
   return (
     <div id="DetalhesClienteINFORMAÇÃO">
       <div className="DivisãoDetalhesCliente">
-        <div id="divIconeGeralCliente"><FaUserAlt/></div>
-        <h2>{"carlos Eduardo Souza"}</h2>
+        <div id="divIconeGeralCliente">
+          <FaUserAlt />
+        </div>
+        <h2>{nome}</h2>
       </div>
       {(editar && (
         <div className="alinhar">
           <p className="DetalhesClientesP">
-            <strong>Codigo: </strong>0{'1'}
+            <strong>Codigo: </strong>0{id}
           </p>
           <label>
             <p className="DetalhesClientesP">
@@ -27,6 +80,8 @@ function GeralCliente() {
             </p>
             <input
               type="text"
+              value={nomeEdit}
+              onChange={(e) => setNomeEdit(e.target.value)}
             />
           </label>
 
@@ -36,6 +91,8 @@ function GeralCliente() {
             </p>
             <input
               type="date"
+              value={data_nascimentoEdit}
+              onChange={(e) => setData_nascimentoEdit(e.target.value)}
             />
           </label>
 
@@ -55,6 +112,8 @@ function GeralCliente() {
             </p>
             <input
               type="number"
+              value={telefoneEdit}
+              onChange={(e) => setTelefoneEdit(e.target.value)}
             />
           </label>
 
@@ -64,6 +123,8 @@ function GeralCliente() {
             </p>
             <input
               type="number"
+              value={cpfEdit}
+              onChange={(e) => setCpfEdit(e.target.value)}
             />
           </label>
 
@@ -73,6 +134,8 @@ function GeralCliente() {
             </p>
             <input
               type="text"
+              value={enderecoEdit}
+              onChange={(e) => setenderecoEdit(e.target.value)}
             />
           </label>
 
@@ -82,22 +145,13 @@ function GeralCliente() {
             </p>
             <input
               type="email"
-            />
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Observação: </strong>
-            </p>
-            <textarea
-              id="texto"
-              rows="4"
-              cols="58"
+              value={emailEdit}
+              onChange={(e) => setEmailEdit(e.target.value)}
             />
           </label>
           <button
             className="bttEditarClienteInfo"
-            onClick={() => setEditar(false)}
+            onClick={() => editarCliente()}
           >
             <FaCheckCircle /> Concluir
           </button>
@@ -105,15 +159,15 @@ function GeralCliente() {
       )) || (
         <div className="alinhar">
           <p className="DetalhesClientesP">
-            <strong>Codigo: </strong>0{"1"}
+            <strong>Codigo: </strong>0{id}
           </p>
           <p className="DetalhesClientesP">
             <strong>Nome: </strong>
-            {"Carlos Eduardo L Souza"}
+            {nomeEdit}
           </p>
           <p className="DetalhesClientesP">
             <strong>Nascimento: </strong>
-            {"10/10/2005"}
+            {data_nascimentoEdit}
           </p>
           <p className="DetalhesClientesP">
             <strong>Genero: </strong>
@@ -121,28 +175,27 @@ function GeralCliente() {
           </p>
           <p className="DetalhesClientesP">
             <strong>Telefone: </strong>
-            {"(62) 9 9336-2090"}
+            {telefoneEdit}
           </p>
           <p className="DetalhesClientesP">
             <strong>CPF: </strong>
-            {"724.781.411-81"}
+            {cpfEdit}
           </p>
           <p className="DetalhesClientesP">
             <strong>Endereço: </strong>
-            {"R.2 , Qd.2 , Lt.13 , Jd Petropolis"}
+            {enderecoEdit}
           </p>
           <p className="DetalhesClientesP">
             <strong>Email: </strong>
-            {"carlosreiroyale@gmail.com"}
+            {emailEdit}
           </p>
-          <p className="DetalhesClientesP">
-            <strong>Observação: </strong>
-            {"observação"}
-          </p>
-          <button className="bttEditarClienteInfo" onClick={() => setEditar(true)}>
+          <button
+            className="bttEditarClienteInfo"
+            onClick={() => setEditar(true)}
+          >
             <FaEdit /> Editar
           </button>
-          <button className="bttDeleteClienteInfo">
+          <button className="bttDeleteClienteInfo" onClick={() => deletarCliente()}>
             <MdDeleteOutline /> Excluir Cliente
           </button>
         </div>

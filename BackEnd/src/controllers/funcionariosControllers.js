@@ -28,10 +28,6 @@ const procurarFuncionarioId = async (req, res) => {
     return res.status(200).json(funcionario)
 }
 
-
-
-
-
 module.exports = {
     novoFuncionario,
     procurarFuncionario,
