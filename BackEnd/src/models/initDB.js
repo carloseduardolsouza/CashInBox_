@@ -1,0 +1,67 @@
+// src/models/initDB.js
+const sqlite3 = require("sqlite3").verbose();
+const path = require("path");
+
+// Caminho do banco de dados (ajuste se quiser mudar o local do arquivo)
+const db = new sqlite3.Database(
+  path.resolve(__dirname, "../../database.sqlite"),
+  (err) => {
+    if (err) {
+      return console.error("Erro ao conectar ao banco:", err.message);
+    }
+    console.log("Conectado ao SQLite!");
+  }
+);
+
+db.serialize(() => {
+  db.run(
+    `
+    CREATE TABLE IF NOT EXISTS clientes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      cpf_cnpj TEXT NOT NULL,
+      email TEXT,
+      telefone TEXT,
+      data_nascimento TEXT,
+      endereco TEXT,
+      data_ultima_compra TEXT,
+      total_compras REAL DEFAULT 0,
+      pontuacao_fidelidade INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    )
+  `,
+    (err) => {
+      if (err) {
+        return console.error("Erro ao criar tabela:", err.message);
+      }
+      console.log('Tabela "clientes" criada com sucesso!');
+    }
+  );
+
+  db.run(
+    `
+    CREATE TABLE IF NOT EXISTS funcionarios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    cpf TEXT NOT NULL UNIQUE,
+    telefone TEXT,
+    email TEXT,
+    data_admissao TEXT,
+    salario_base REAL DEFAULT 0,
+    tipo_comissao TEXT CHECK (tipo_comissao IN ('fixa', 'percentual')),
+    valor_comissao REAL DEFAULT 0,
+    status TEXT CHECK (status IN ('ativo', 'inativo')) DEFAULT 'ativo',
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+);
+    )
+  `,
+    (err) => {
+      if (err) {
+        return console.error("Erro ao criar tabela:", err.message);
+      }
+      console.log('Tabela "funcionarios" criada com sucesso!');
+    }
+  );
+});
