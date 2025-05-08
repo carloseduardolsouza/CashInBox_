@@ -7,6 +7,7 @@ import { FaEdit } from "react-icons/fa";
 
 //componentes
 import NovaConta from "./components/NovaConta/NovaConta";
+import EditarConta from "./components/EditarConta/EditarConta";
 import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel";
 
 function ContasAPagar() {
@@ -16,10 +17,13 @@ function ContasAPagar() {
     switch (abaSobreposta) {
       case "NovaConta":
         return <NovaConta fecharAba={setAbaSopreposta}/>;
+      case "EditarConta":
+        return <EditarConta fecharAba={setAbaSopreposta}/>;
       case null:
         return null;
     }
   };
+
   return (
     <div id="ContasAPagar">
       {renderAbaSobrePosta()}
@@ -56,7 +60,9 @@ function ContasAPagar() {
         <tbody>
           <tr>
             <td>
-              <button className="ButtonEditContasAPagar">
+              <button className="ButtonEditContasAPagar"
+              onClick={() => setAbaSopreposta("EditarConta")}
+              >
                 <FaEdit /> Editar
               </button>
             </td>

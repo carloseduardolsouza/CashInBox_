@@ -1,0 +1,53 @@
+#EditarConta {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 600px;
+  transform: translate(50%, -50%);
+
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+#EditarConta form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+#EditarConta label {
+    margin: 10px auto;
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+#EditarConta input {
+    border-radius: 10px;
+    padding: 5px;
+    border: solid #000000d6 1px;
+    width: 200px;
+}
+
+#EditarConta div {
+    display: flex;
+    justify-content: space-around;
+}
+
+#EditarConta button {
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: solid black 1px;
+    width: 150px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
