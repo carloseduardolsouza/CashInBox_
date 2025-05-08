@@ -19,16 +19,19 @@ function formatarCurrency(numero) {
 
 // Formatar número de celular (11) 91234-5678
 function formatarNumeroCelular(numero) {
+  if (!numero) return "";
   return numero.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
 }
 
 // Formatar CPF 123.456.789-01
 function formatarCPF(cpf) {
+  if (!cpf) return '';
   return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
 }
 
 // Formatar data de nascimento 01/01/1990
 function formatarDataNascimento(data) {
+  if (!data) return "";
   var partes = data.split("-");
   var dataFormatada = partes[2] + "/" + partes[1] + "/" + partes[0];
   return dataFormatada;
@@ -58,7 +61,7 @@ function mascaraDeDinheroInput(e) {
   } else {
     inputValue = "R$ " + inputValue;
   }
-  console.log(inputValue)
+  console.log(inputValue);
   return inputValue;
 }
 
@@ -67,5 +70,5 @@ export default {
   formatarDataNascimento,
   formatarCPF,
   formatarNumeroCelular,
-  mascaraDeDinheroInput
+  mascaraDeDinheroInput,
 };

@@ -8,6 +8,9 @@ import { FaSearch } from "react-icons/fa";
 //Conexão com api
 import fetchapi from "../../api/fetchapi";
 
+//serviços
+import services from "../../services/services";
+
 function Clientes() {
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
@@ -34,6 +37,12 @@ function Clientes() {
     buscarClientes();
   }, []);
 
+  const renderClientes = async (e) => {
+    e.preventDefault();
+    const resultado = await fetchapi.ProcurarCliente(pesquisar);
+    setResultClientes(resultado);
+  };
+
   return (
     <div id="CLIENTE">
       <header id="HeaderClientes">
@@ -41,7 +50,7 @@ function Clientes() {
         <p>{log}</p>
       </header>
       <article className="ArticleClientes">
-        <form onSubmit={"" /*(e) => renderClientes(e)*/}>
+        <form onSubmit={(e) => renderClientes(e)}>
           <button
             className="AddCliente"
             type="button"
@@ -78,13 +87,16 @@ function Clientes() {
             return (
               <tr>
                 <td>
-                  <Link to={`/detalhesDoCLiente/${dado.id}`} className="aTdClientes">
+                  <Link
+                    to={`/detalhesDoCLiente/${dado.id}`}
+                    className="aTdClientes"
+                  >
                     {dado.nome}
                   </Link>
                 </td>
-                <td>{dado.telefone}</td>
+                <td>{services.formatarNumeroCelular(dado.telefone)}</td>
                 <td>{dado.endereco}</td>
-                <td>{dado.total_compras}</td>
+                <td>{services.formatarCurrency(dado.total_compras)}</td>
               </tr>
             );
           })}

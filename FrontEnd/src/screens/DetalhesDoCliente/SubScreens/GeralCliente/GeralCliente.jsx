@@ -1,8 +1,12 @@
 import "./GeralCliente.css";
 import { useState, useEffect } from "react";
+import {useNavigate } from "react-router-dom";
 
 //conexão com a api
 import fetchapi from "../../../../api/fetchapi";
+
+//serviços
+import services from "../../../../services/services";
 
 //componentes
 import Loading from "../../../../components/Loading/Loading";
@@ -16,6 +20,7 @@ import { FaUserAlt } from "react-icons/fa";
 function GeralCliente({ infoCliente }) {
   const { id, nome, cpf_cnpj, email, endereco, data_nascimento, telefone } =
     infoCliente || {};
+  const navigate = useNavigate();
 
   const [editar, setEditar] = useState(false);
 
@@ -39,7 +44,7 @@ function GeralCliente({ infoCliente }) {
   }, [infoCliente]);
 
   if (!infoCliente) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const editarCliente = () => {
@@ -58,8 +63,9 @@ function GeralCliente({ infoCliente }) {
   };
 
   const deletarCliente = () => {
-    fetchapi.DeletarCliente(id)
-  }
+    fetchapi.DeletarCliente(id);
+    navigate("/clientes");
+  };
 
   return (
     <div id="DetalhesClienteINFORMAÇÃO">
@@ -167,7 +173,7 @@ function GeralCliente({ infoCliente }) {
           </p>
           <p className="DetalhesClientesP">
             <strong>Nascimento: </strong>
-            {data_nascimentoEdit}
+            {services.formatarDataNascimento(data_nascimentoEdit)}
           </p>
           <p className="DetalhesClientesP">
             <strong>Genero: </strong>
@@ -175,11 +181,11 @@ function GeralCliente({ infoCliente }) {
           </p>
           <p className="DetalhesClientesP">
             <strong>Telefone: </strong>
-            {telefoneEdit}
+            {services.formatarNumeroCelular(telefoneEdit)}
           </p>
           <p className="DetalhesClientesP">
             <strong>CPF: </strong>
-            {cpfEdit}
+            {services.formatarCPF(cpfEdit)}
           </p>
           <p className="DetalhesClientesP">
             <strong>Endereço: </strong>
@@ -195,7 +201,10 @@ function GeralCliente({ infoCliente }) {
           >
             <FaEdit /> Editar
           </button>
-          <button className="bttDeleteClienteInfo" onClick={() => deletarCliente()}>
+          <button
+            className="bttDeleteClienteInfo"
+            onClick={() => deletarCliente()}
+          >
             <MdDeleteOutline /> Excluir Cliente
           </button>
         </div>

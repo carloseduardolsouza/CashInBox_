@@ -54,7 +54,7 @@ function CadastrarCliente() {
   };
 
   const cadastrarCliente = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let dados = {
       nome: nome,
       cpf_cnpj: cpf,
@@ -64,7 +64,22 @@ function CadastrarCliente() {
       endereco: endereço,
     };
 
-    fetchapi.NovoCliente(dados)
+    fetchapi
+      .NovoCliente(dados)
+      .then((resposta) => {
+        window.alert("Cliente criado com sucesso!", resposta);
+        setCpf('')
+        setEmail('')
+        setEndereço('')
+        setGenero('')
+        setNome('')
+        setNumero('')
+        setNascimento('')
+      })
+      .catch((erro) => {
+        window.alert("Erro ao criar cliente:", erro);
+        // aqui você pode exibir uma mensagem de erro para o usuário
+      });
   };
 
   return (
@@ -151,10 +166,7 @@ function CadastrarCliente() {
               onChange={(event) => escreverDados("Nascimento", event)}
               value={nascimento}
             />
-            <button
-              className="CadastrarNovoCliente"
-              type="submit"
-            >
+            <button className="CadastrarNovoCliente" type="submit">
               Cadastrar
             </button>
           </form>
