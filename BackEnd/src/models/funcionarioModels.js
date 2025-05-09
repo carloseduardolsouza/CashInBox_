@@ -1,11 +1,18 @@
 const connection = require("./db");
 
-const listarFuncionario = async () => {
-  const query = `SELECT * FROM funcionarios`;
+const listarFuncionario = async (p) => {
+  let query;
+  let values = [];
 
-  // Use o método `all` para retornar todos os resultados da consulta
+  if (p === "all") {
+    query = `SELECT * FROM funcionarios`;
+  } else {
+    query = `SELECT * FROM funcionarios WHERE nome LIKE ?`;
+    values.push(`%${p}%`); // Isso garante aspas e evita SQL injection
+  }
+
   const users = await new Promise((resolve, reject) => {
-    connection.all(query, (err, rows) => {
+    connection.all(query, values, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -14,7 +21,6 @@ const listarFuncionario = async () => {
     });
   });
 
-  // Retorna os usuários (ou funcionarios) invertidos
   return users.reverse();
 };
 
@@ -24,41 +30,61 @@ const novoFuncionario = async (dados) => {
     cpf,
     telefone,
     email,
-    data_admissao,
     salario_base,
+    data_nascimento,
+    genero,
+    funcao,
+    endereco,
     tipo_comissao,
     valor_comissao,
-    status,
+    regime_contrato,
+    status = "ativo",
   } = dados;
 
+  const data_admissao = new Date().toISOString(); 
   const created_at = new Date().toISOString();
 
+  // garante que o status esteja no formato correto
+  const statusFormatado =
+    status.toLowerCase() === "inativo" ? "inativo" : "ativo";
+
   const query = `
-      INSERT INTO funcionarios 
-      (nome, cpf, telefone, email, data_admissao, salario_base, tipo_comissao, valor_comissao, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    INSERT INTO funcionarios 
+    (nome, cpf, telefone, email, salario_base, data_nascimento, genero, funcao, endereco, tipo_comissao, valor_comissao, regime_contrato, status, data_admissao, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
   const values = [
     nome,
     cpf,
     telefone,
     email,
-    data_admissao,
     salario_base,
+    data_nascimento,
+    genero,
+    funcao,
+    endereco,
     tipo_comissao,
     valor_comissao,
-    status || "ativo",
+    regime_contrato,
+    statusFormatado,
+    data_admissao,
     created_at,
   ];
 
   return new Promise((resolve, reject) => {
     connection.run(query, values, function (err) {
       if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
+        if (err.code === "SQLITE_CONSTRAINT") {
+          return reject({
+            code: 400,
+            message:
+              "Erro de restrição: verifique CPF duplicado ou campos inválidos.",
+          });
+        }
+        return reject(err);
       }
+      resolve(this.lastID);
     });
   });
 };
@@ -125,7 +151,6 @@ const editarFuncionario = async (id, dados) => {
     });
   });
 };
-
 
 const procurarFuncionarioId = async (id) => {
   const query = `SELECT * FROM funcionarios WHERE id = ${id}`;

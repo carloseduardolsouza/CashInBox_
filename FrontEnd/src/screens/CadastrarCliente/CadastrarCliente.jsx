@@ -1,5 +1,6 @@
 import "./CadastrarCliente.css";
-import { useState } from "react";
+import { useState , useContext } from "react";
+import AppContext from "../../context/AppContext";
 
 //icones
 import { FaUserAlt } from "react-icons/fa";
@@ -8,6 +9,8 @@ import { FaUserAlt } from "react-icons/fa";
 import fetchapi from "../../api/fetchapi";
 
 function CadastrarCliente() {
+  const {setErroApi} = useContext(AppContext)
+
   const [nome, setNome] = useState("");
   const [numero, setNumero] = useState("");
   const [endereço, setEndereço] = useState("");
@@ -76,9 +79,8 @@ function CadastrarCliente() {
         setNumero('')
         setNascimento('')
       })
-      .catch((erro) => {
-        window.alert("Erro ao criar cliente:", erro);
-        // aqui você pode exibir uma mensagem de erro para o usuário
+      .catch(() => {
+        setErroApi(true)
       });
   };
 

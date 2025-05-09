@@ -1,17 +1,26 @@
 import "./DetahesDoFuncionario.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+//conexão api
+import fetchapi from "../../api/fetchapi";
+
+//componentes
+import Loading from "../../components/Loading/Loading";
 
 // Subtelas
 import InformaçõesGerais from "./SubScreens/InformaçõesGerais/InformaçõesGerais";
 import Vendas from "./SubScreens/Vendas/Vendas";
 
 function DetahesDoFuncionario() {
+  const { id } = useParams();
+  const [infoFuncionario, setInfoFuncionario] = useState([]);
   const [abaAtiva, setAbaAtiva] = useState("InformaçõesGerais");
 
   const renderConteudo = () => {
     switch (abaAtiva) {
       case "InformaçõesGerais":
-        return <InformaçõesGerais />;
+        return <InformaçõesGerais infoFuncionario={infoFuncionario[0]} />;
       case "Vendas":
         return <Vendas />;
       default:
@@ -19,20 +28,41 @@ function DetahesDoFuncionario() {
     }
   };
 
+  useEffect(() => {
+    const buscarFuncionario = async () => {
+      try {
+        const resultado = await fetchapi.ProcurarFuncionarioId(id);
+        setInfoFuncionario(resultado);
+      } catch (err) {
+        console.error("Erro ao buscar Funcionario:", err);
+      }
+    };
+
+    buscarFuncionario();
+  }, []);
+
+  if (!infoFuncionario) {
+    return <Loading />;
+  }
+
   return (
     <div id="DetahesDoFuncionario">
       <h2>Detalhes Do Funcionário</h2>
       <header id="HeaderDetahesDoFuncionario">
         <div className="AreaAbas">
           <button
-            className={`bttDetalhesDoFuncionario ${abaAtiva === 'InformaçõesGerais' ? 'ativo' : ''}`}
+            className={`bttDetalhesDoFuncionario ${
+              abaAtiva === "InformaçõesGerais" ? "ativo" : ""
+            }`}
             onClick={() => setAbaAtiva("InformaçõesGerais")}
           >
             Informações Gerais
           </button>
           <button
-            className={`bttDetalhesDoFuncionario ${abaAtiva === 'Vendas' ? 'ativo' : ''}`}
-            onClick={() => setAbaAtiva('Vendas')}
+            className={`bttDetalhesDoFuncionario ${
+              abaAtiva === "Vendas" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("Vendas")}
           >
             Vendas
           </button>

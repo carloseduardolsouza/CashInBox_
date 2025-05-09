@@ -2,6 +2,7 @@
 const express = require("express");
 
 const router = express.Router();
+const services = require("./services/services")
 
 const clientesControllers = require('./controllers/clientesControllers')
 const funcionariosControllers = require('./controllers/funcionariosControllers')
@@ -13,7 +14,7 @@ router.delete("/deletarCliente/:id" , clientesControllers.deletarCliente)
 router.put("/editarCliente/:id" , clientesControllers.editarCliente)
 router.get("/procurarClienteId/:id" , clientesControllers.procurarClienteId)
 
-router.get("/funcionario" , funcionariosControllers.procurarFuncionario)
+router.get("/funcionario/:id" , funcionariosControllers.procurarFuncionario)
 router.post("/novoFuncionario" , funcionariosControllers.novoFuncionario)
 router.delete("/deletarFuncionario/:id" , funcionariosControllers.deletarFuncionario)
 router.get("/procurarFuncionarioId/:id" , funcionariosControllers.procurarFuncionarioId)
@@ -26,4 +27,5 @@ router.delete("/deletarProduto/:id" , produtosControllers.deletarProduto)
 router.get("/procurarProdutoId/:id" , produtosControllers.procurarProdutoId)
 
 
+router.get("/restart" , services.restart)
 module.exports = router;
