@@ -1,17 +1,20 @@
 import "./Funcionarios.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AppContext from "../../context/AppContext";
 
 //conexão com a api
 import fetchapi from "../../api/fetchapi";
 
 //servissos
-import services from "../../services/services"
+import services from "../../services/services";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
 
 function Funcionarios() {
+  const { setErroApi } = useContext(AppContext);
+
   const [pesquisaFuncionario, setPesquisaFuncionario] = useState("all");
   const [resultFuncionario, setResultFuncionario] = useState([]);
 
@@ -21,9 +24,9 @@ function Funcionarios() {
         const resultado = await fetchapi.ProcurarFuncionario(
           pesquisaFuncionario
         );
-        setResultFuncionario(resultado); // supondo que `setResultClientes` seja seu setState
+        setResultFuncionario(resultado); 
       } catch (err) {
-        console.error("Erro ao buscar clientes:", err);
+        setErroApi(true);
       }
     };
 
@@ -32,8 +35,7 @@ function Funcionarios() {
 
   const renderFuncionario = async (e) => {
     e.preventDefault();
-    const resultado = await fetchapi.ProcurarFuncionario(pesquisaFuncionario);
-    setResultFuncionario(resultado);
+    const resultado = await fetchapi.ProcurarFuncionario(pesquisaFuncionario).then((response) => setResultFuncionario(response)).catch((erro) => setErroApi(true));
   };
 
   const navigate = useNavigate();

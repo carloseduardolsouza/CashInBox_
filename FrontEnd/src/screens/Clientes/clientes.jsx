@@ -13,7 +13,7 @@ import fetchapi from "../../api/fetchapi";
 import services from "../../services/services";
 
 function Clientes() {
-  const {setErroApi} = useContext(AppContext)
+  const { setErroApi } = useContext(AppContext);
 
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
@@ -31,9 +31,9 @@ function Clientes() {
     const buscarClientes = async () => {
       try {
         const resultado = await fetchapi.ProcurarCliente(pesquisar);
-        setResultClientes(resultado); // supondo que `setResultClientes` seja seu setState
+        setResultClientes(resultado);
       } catch (err) {
-        setErroApi(true)
+        setErroApi(true);
       }
     };
 

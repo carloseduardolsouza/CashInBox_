@@ -39,7 +39,6 @@ function CadastrarFuncionario() {
     fetchapi
       .NovoFuncionario(dados)
       .then((resposta) => {
-        window.alert("Cliente criado com sucesso!", resposta);
         setCpf("");
         setSalario("");
         setRegime_contrato("CLT");

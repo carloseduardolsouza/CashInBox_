@@ -70,7 +70,6 @@ function CadastrarCliente() {
     fetchapi
       .NovoCliente(dados)
       .then((resposta) => {
-        window.alert("Cliente criado com sucesso!", resposta);
         setCpf('')
         setEmail('')
         setEndereço('')
@@ -79,7 +78,7 @@ function CadastrarCliente() {
         setNumero('')
         setNascimento('')
       })
-      .catch(() => {
+      .catch((erro) => {
         setErroApi(true)
       });
   };
