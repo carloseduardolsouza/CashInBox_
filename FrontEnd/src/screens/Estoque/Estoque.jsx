@@ -1,13 +1,39 @@
 import "./Estoque.css";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AppContext from "../../context/AppContext";
+import services from "../../services/services";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
+import fetchapi from "../../api/fetchapi";
 
 function Estoque() {
+  const { setErroApi } = useContext(AppContext);
   const navigate = useNavigate();
   const [modalEstoque, setModalEstoque] = useState(null);
+
+  const [pesquisa, setPesquisa] = useState("all");
+  const [resultProdutos, setResultProdutos] = useState([]);
+
+  useEffect(() => {
+    const buscarProdutos = async () => {
+      try {
+        const resultado = await fetchapi.ProcurarProdutos(pesquisa);
+        setResultProdutos(resultado);
+      } catch {
+        setErroApi(true);
+      }
+    };
+
+    buscarProdutos();
+  }, []);
+
+  const renderProdutos = async (e) => {
+    e.preventDefault();
+    const resultado = await fetchapi.ProcurarProdutos(pesquisa);
+    setResultProdutos(resultado);
+  };
 
   return (
     <div id="ESTOQUE">
@@ -22,7 +48,7 @@ function Estoque() {
         Nota de Entrada
       </button>
       <div>
-        <form onSubmit={(e) => /*renderEstoque(e)*/ ``}>
+        <form onSubmit={(e) => renderProdutos(e)}>
           <button
             className="AddProduto"
             onClick={(e) => {
@@ -56,18 +82,22 @@ function Estoque() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>
-              <Link to={"/detalhesDoProduto/1"} id="aTDEstoque">
-                Comoda Capri
-              </Link>
-            </td>
-            <td>R$ 50,00</td>
-            <td>100%</td>
-            <td>R$ 100,00</td>
-            <td>10</td>
-            <td>0001</td>
-          </tr>
+          {resultProdutos.map((dado) => {
+            return (
+              <tr>
+                <td>
+                  <Link to={`/detalhesDoProduto/${dado.id}`} id="aTDEstoque">
+                    {dado.nome}
+                  </Link>
+                </td>
+                <td>{services.formatarCurrency(dado.preco_custo)}</td>
+                <td>{dado.markup}%</td>
+                <td>{services.formatarCurrency(dado.preco_venda)}</td>
+                <td>{dado.estoque_atual}</td>
+                <td>{dado.id}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

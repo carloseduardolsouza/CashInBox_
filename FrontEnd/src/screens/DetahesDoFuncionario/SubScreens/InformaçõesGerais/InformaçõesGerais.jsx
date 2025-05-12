@@ -111,18 +111,35 @@ function InformaçõesGerais({ infoFuncionario }) {
           </p>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Nome:</strong></p>
-            <input type="text" value={nomeEdit} onChange={(e) => setNomeEdit(e.target.value)} />
+            <p className="DetalhesClientesP">
+              <strong>Nome:</strong>
+            </p>
+            <input
+              type="text"
+              value={nomeEdit}
+              onChange={(e) => setNomeEdit(e.target.value)}
+            />
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Nascimento:</strong></p>
-            <input type="date" value={dataNascimentoEdit} onChange={(e) => setDataNascimentoEdit(e.target.value)} />
+            <p className="DetalhesClientesP">
+              <strong>Nascimento:</strong>
+            </p>
+            <input
+              type="date"
+              value={dataNascimentoEdit}
+              onChange={(e) => setDataNascimentoEdit(e.target.value)}
+            />
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Gênero:</strong></p>
-            <select value={generoEdit} onChange={(e) => setGeneroEdit(e.target.value)}>
+            <p className="DetalhesClientesP">
+              <strong>Gênero:</strong>
+            </p>
+            <select
+              value={generoEdit}
+              onChange={(e) => setGeneroEdit(e.target.value)}
+            >
               <option value="Masculino">Masculino</option>
               <option value="Feminino">Feminino</option>
               <option value="Outro">Outro</option>
@@ -130,8 +147,13 @@ function InformaçõesGerais({ infoFuncionario }) {
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Cargo:</strong></p>
-            <select value={funcaoEdit} onChange={(e) => setFuncaoEdit(e.target.value)}>
+            <p className="DetalhesClientesP">
+              <strong>Cargo:</strong>
+            </p>
+            <select
+              value={funcaoEdit}
+              onChange={(e) => setFuncaoEdit(e.target.value)}
+            >
               <option value="Vendedor">Vendedor</option>
               <option value="Gerente">Gerente</option>
               <option value="Entregador">Entregador</option>
@@ -140,8 +162,13 @@ function InformaçõesGerais({ infoFuncionario }) {
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Regime de Contrato:</strong></p>
-            <select value={regimeContratoEdit} onChange={(e) => setRegimeContratoEdit(e.target.value)}>
+            <p className="DetalhesClientesP">
+              <strong>Regime de Contrato:</strong>
+            </p>
+            <select
+              value={regimeContratoEdit}
+              onChange={(e) => setRegimeContratoEdit(e.target.value)}
+            >
               <option value="CLT">CLT</option>
               <option value="Contrato">Contrato</option>
               <option value="Temporário">Temporário</option>
@@ -149,23 +176,47 @@ function InformaçõesGerais({ infoFuncionario }) {
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Telefone:</strong></p>
-            <input type="text" value={telefoneEdit} onChange={(e) => setTelefoneEdit(e.target.value)} />
+            <p className="DetalhesClientesP">
+              <strong>Telefone:</strong>
+            </p>
+            <input
+              type="text"
+              value={telefoneEdit}
+              onChange={(e) => setTelefoneEdit(e.target.value)}
+            />
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>CPF:</strong></p>
-            <input type="text" value={cpfEdit} onChange={(e) => setCpfEdit(e.target.value)} />
+            <p className="DetalhesClientesP">
+              <strong>CPF:</strong>
+            </p>
+            <input
+              type="text"
+              value={cpfEdit}
+              onChange={(e) => setCpfEdit(e.target.value)}
+            />
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Endereço:</strong></p>
-            <input type="text" value={enderecoEdit} onChange={(e) => setEnderecoEdit(e.target.value)} />
+            <p className="DetalhesClientesP">
+              <strong>Endereço:</strong>
+            </p>
+            <input
+              type="text"
+              value={enderecoEdit}
+              onChange={(e) => setEnderecoEdit(e.target.value)}
+            />
           </label>
 
           <label>
-            <p className="DetalhesClientesP"><strong>Email:</strong></p>
-            <input type="email" value={emailEdit} onChange={(e) => setEmailEdit(e.target.value)} />
+            <p className="DetalhesClientesP">
+              <strong>Email:</strong>
+            </p>
+            <input
+              type="email"
+              value={emailEdit}
+              onChange={(e) => setEmailEdit(e.target.value)}
+            />
           </label>
 
           <button className="bttEditarClienteInfo" onClick={editarFuncionario}>
@@ -174,23 +225,62 @@ function InformaçõesGerais({ infoFuncionario }) {
         </div>
       ) : (
         <div className="alinhar">
-          <p className="DetalhesClientesP"><strong>Código:</strong> 0{id}</p>
-          <p className="DetalhesClientesP"><strong>Nome:</strong> {nome}</p>
-          <p className="DetalhesClientesP"><strong>Nascimento:</strong> {services.formatarDataNascimento(data_nascimento)}</p>
-          <p className="DetalhesClientesP"><strong>Gênero:</strong> {genero}</p>
-          <p className="DetalhesClientesP"><strong>Cargo:</strong> {funcao}</p>
-          <p className="DetalhesClientesP"><strong>Regime de Contrato:</strong> {regime_contrato}</p>
-          <p className="DetalhesClientesP"><strong>Telefone:</strong> {services.formatarNumeroCelular(telefone)}</p>
-          <p className="DetalhesClientesP"><strong>CPF:</strong> {services.formatarCPF(cpf)}</p>
-          <p className="DetalhesClientesP"><strong>Endereço:</strong> {endereco}</p>
-          <p className="DetalhesClientesP"><strong>Email:</strong> {email}</p>
+          <p className="DetalhesClientesP">
+            <strong>Código:</strong> 0{id}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Nome:</strong> {nome}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Nascimento:</strong>{" "}
+            {services.formatarDataNascimento(data_nascimento)}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Gênero:</strong> {genero}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Cargo:</strong> {funcao}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Regime de Contrato:</strong> {regime_contrato}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Telefone:</strong>
+            {services.formatarNumeroCelular(telefone)}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>CPF:</strong> {services.formatarCPF(cpf)}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Salario Base:</strong> {services.formatarCurrency(salario_base)}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Tipo de comissão:</strong> {tipo_comissao}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Valor da comissão:</strong> {valor_comissao}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Endereço:</strong> {endereco}
+          </p>
+          <p className="DetalhesClientesP">
+            <strong>Email:</strong> {email}
+          </p>
 
-          <button className="bttEditarClienteInfo" onClick={() => setEditar(true)}>
-            <FaEdit /> Editar
-          </button>
-          <button className="bttEditarClienteInfo" onClick={deletarFuncionario}>
-            <MdDeleteOutline /> Deletar
-          </button>
+          <div id="areaButtonInfoFuncionarios">
+            <button
+              className="bttEditarClienteInfo"
+              onClick={() => setEditar(true)}
+            >
+              <FaEdit /> Editar
+            </button>
+            <button
+              className="bttEditarClienteInfo"
+              onClick={deletarFuncionario}
+            >
+              <MdDeleteOutline /> Deletar
+            </button>
+          </div>
         </div>
       )}
     </div>

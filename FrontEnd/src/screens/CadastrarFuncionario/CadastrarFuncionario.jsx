@@ -1,6 +1,6 @@
 import "./CadastrarFuncionario.css";
-import { useState , useContext } from "react";
-import AppContext from "../../context/AppContext"
+import { useState, useContext } from "react";
+import AppContext from "../../context/AppContext";
 
 //icones
 import { FaUserAlt } from "react-icons/fa";
@@ -9,10 +9,12 @@ import { FaUserAlt } from "react-icons/fa";
 import fetchapi from "../../api/fetchapi";
 
 function CadastrarFuncionario() {
-  const {setErroApi} = useContext(AppContext)
+  const { setErroApi } = useContext(AppContext);
   const [nome, setNome] = useState("");
   const [numero, setNumero] = useState("");
   const [endereco, setEndereco] = useState("");
+  const [tipoComissao, setTipoComissao] = useState("");
+  const [valorComissao, setValorComissao] = useState("");
   const [cpf, setCpf] = useState("");
   const [email, setEmail] = useState("");
   const [salario, setSalario] = useState("");
@@ -21,6 +23,11 @@ function CadastrarFuncionario() {
   const [regime_contrato, setRegime_contrato] = useState("CLT");
   const [nascimento, setNascimento] = useState("");
 
+  const Data = new Date();
+  const log = `${Data.getUTCDate()}/${
+    Data.getUTCMonth() + 1
+  }/${Data.getUTCFullYear()}`;
+
   const cadastrarFuncionario = (e) => {
     e.preventDefault();
     let dados = {
@@ -28,20 +35,24 @@ function CadastrarFuncionario() {
       cpf: cpf,
       telefone: numero,
       email: email,
-      salario_base: salario,
+      salario_base: Number(salario),
       data_nascimento: nascimento,
       genero: genero,
       funcao: cargo,
       endereco: endereco,
+      tipo_comissao: tipoComissao,
+      valor_comissao: Number(valorComissao),
       regime_contrato: regime_contrato,
     };
 
     fetchapi
       .NovoFuncionario(dados)
-      .then((resposta) => {
+      .then(() => {
         setCpf("");
         setSalario("");
         setRegime_contrato("CLT");
+        setValorComissao("");
+        setTipoComissao("Não contabilizar comissão");
         setCargo("");
         setEmail("");
         setEndereco("");
@@ -50,15 +61,15 @@ function CadastrarFuncionario() {
         setNumero("");
         setNascimento("");
       })
-      .catch((erro) => {
-        setErroApi(true)
+      .catch(() => {
+        setErroApi(true);
       });
   };
 
   return (
     <div id="novoCliente">
       <h2>Novo Funcionario</h2>
-      <p>{"data"}</p>
+      <p>{log}</p>
       <div id="CENTRALIZAR">
         <main className="MainNovoCliente">
           <div alt="Imagem User" className="ImageUser">
@@ -131,6 +142,33 @@ function CadastrarFuncionario() {
               value={salario}
               placeholder="Salario em R$"
             />
+            <div>
+              <label>
+                <strong>Tipo de Comissão:</strong>
+                <select
+                  className="SelectNovoFuncionario"
+                  onChange={(e) => setTipoComissao(e.target.value)}
+                  value={tipoComissao}
+                >
+                  <option value="Não contabilizar comissão">
+                    Não contabilizar comissão
+                  </option>
+                  <option value="percentual">percentual</option>
+                  <option value="fixa">fixa</option>
+                </select>
+              </label>
+
+              <label>
+                <strong>Valor Comissão:</strong>
+                <input
+                  type="number"
+                  placeholder={`5`}
+                  className="InputNovoFuncionarioValorComissão"
+                  onChange={(e) => setValorComissao(e.target.value)}
+                  value={valorComissao}
+                />
+              </label>
+            </div>
             <div id="divSelectNovoFuncionario">
               <div>
                 <p>

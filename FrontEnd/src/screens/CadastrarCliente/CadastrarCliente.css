@@ -39,6 +39,8 @@
   font-size: 15px;
   padding: 3px;
   width: 100%;
+  border-radius: 5px;
+
 }
 
 .CadastrarNovoCliente {
@@ -62,6 +64,8 @@
 .SelectNovoCliente {
   font-size: 16px;
   padding: 10px;
+  border: solid black 1px;
+  border-radius: 10px;
 }
 .DataNovoCliente {
   font-size: 16px;

@@ -62,6 +62,7 @@ function CadastrarCliente() {
       nome: nome,
       cpf_cnpj: cpf,
       email: email,
+      genero: genero,
       telefone: numero,
       data_nascimento: nascimento,
       endereco: endereço,
@@ -155,8 +156,9 @@ function CadastrarCliente() {
               className="SelectNovoCliente"
               onChange={(event) => escreverDados("Gênero", event)}
               value={genero}
+              required
             >
-              <option value="Selecione o Genero">Selecione o Genero</option>
+              <option value="">Selecione o Genero</option>
               <option value="Masculino">Masculino</option>
               <option value="Feminino">Feminino</option>
             </select>
