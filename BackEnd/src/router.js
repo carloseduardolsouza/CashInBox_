@@ -43,6 +43,8 @@ router.put("/editarProduto/:id" , produtosControllers.editarProduto)
 router.delete("/deletarProduto/:id" , produtosControllers.deletarProduto)
 router.get("/procurarProdutoId/:id" , produtosControllers.procurarProdutoId)
 
+router.get("/imageProdutoId/:id" , produtosControllers.procurarVariaçãoProdutos)
+
 router.post("/novaCategoria" , categoriasControllers.novaCategoria)
 router.get("/categorias" , categoriasControllers.listarCategorias)
 router.delete("/deletarCategorias/:id" , categoriasControllers.deletarCategoria)

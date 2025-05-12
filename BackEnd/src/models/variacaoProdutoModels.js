@@ -1,14 +1,18 @@
 const connection = require("./db"); // Certifique-se de que o arquivo db.js está configurado corretamente
 
 // Criar uma nova variação para um produto
-const criarVariacao = async ({ produto_id, cor, tamanho, imagem_path }) => {
+const criarVariacao = async (dados , produto_id) => {
+  const {
+    filename,
+  } = dados 
+
   const query = `
-    INSERT INTO variacoes (produto_id, cor, tamanho, imagem_path)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO variacoes (produto_id,imagem_path)
+    VALUES (?, ?)
   `;
 
   return new Promise((resolve, reject) => {
-    connection.run(query, [produto_id, cor, tamanho, imagem_path], function (err) {
+    connection.run(query, [produto_id, filename], function (err) {
       if (err) reject(err);
       else resolve(this.lastID); // Retorna o ID da variação criada
     });

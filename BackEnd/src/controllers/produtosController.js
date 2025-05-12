@@ -6,7 +6,7 @@ const path = require("path");
 // Função para listar os produtos
 const procurarProduto = async (req, res) => {
   try {
-    const {id} = req.params
+    const { id } = req.params;
     const produtos = await produtosModels.listarProdutos(id);
     return res.status(200).json(produtos);
   } catch (err) {
@@ -27,51 +27,27 @@ const novoProduto = async (req, res) => {
       return res.status(400).json({ erro: "Não foi possível criar o produto" });
     }
 
-    // Verificação de imagens enviadas no campo req.files
-    const imagensEnviadas = req.files || [];
-
     // Inicializa listas de variações e imagens simples
+    const arquivos = req.files || [];
     const variacoes = [];
     const imagensSimples = [];
 
-    // Garante que dados.imagens exista e seja um array antes de iterar
-    if (Array.isArray(dados.imagens)) {
-      dados.imagens.forEach((imagem, index) => {
-        // Se imagem tiver 'cor' e 'tamanho', é uma variação
-        if (imagem.cor && imagem.tamanho && imagem.imagem_path) {
-          variacoes.push({
-            produtoId: produto.id,
-            variacao: `${imagem.cor} - ${imagem.tamanho}`,
-            imagem: imagem.imagem_path,
-          });
-        } else if (typeof imagem === "string") {
-          // Imagem simples (sem cor/tamanho)
-          imagensSimples.push({
-            produtoId: produto.id,
-            variacao: `Imagem simples ${index + 1}`,
-            imagem: imagem,
-          });
-        }
-      });
-    }
+    // Assumindo que os arquivos vêm na mesma ordem que dados.imagens
+    arquivos.map(async (image) => {
+      await variacaoProdutoModels.criarVariacao(image, produto);
+    });
 
-    // Salva as variações no banco
-    for (const variacao of variacoes) {
-      await variacaoProdutoModels.criarVariacao(variacao);
-    }
-
-    // Salva as imagens simples no banco
-    for (const imagemSimples of imagensSimples) {
-      await variacaoProdutoModels.criarVariacao(imagemSimples);
-    }
-
-    return res.status(201).json({ sucesso: true, produto, variacoes, imagensSimples });
+    return res.status(201).json({
+      sucesso: true,
+      produto,
+      variacoes,
+      imagensSimples,
+    });
   } catch (err) {
     console.error("Erro ao criar produto:", err);
     return res.status(500).json({ erro: "Erro ao criar produto" });
   }
 };
-
 
 // Função para editar um produto
 const editarProduto = async (req, res) => {
@@ -124,10 +100,25 @@ const procurarProdutoId = async (req, res) => {
   }
 };
 
+const procurarVariaçãoProdutos = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const produto = await variacaoProdutoModels.listarVariacoesPorProduto(id);
+    return res.status(200).json(produto);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Erro ao buscar produto" });
+  }
+};
+
+
+
 module.exports = {
   procurarProduto,
   novoProduto,
   editarProduto,
   deletarProduto,
   procurarProdutoId,
+
+  procurarVariaçãoProdutos,
 };

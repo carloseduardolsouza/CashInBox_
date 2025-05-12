@@ -9,6 +9,19 @@
   margin-bottom: 15px;
 }
 
+#AtualizarCategoria {
+  background-color: #5bff32;
+  height: 35px;
+  width: 35px;
+  padding: 5px;
+  border-radius: 10px;
+  margin-left: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 #cadastrarProduto h2 {
   margin-bottom: 20px;
 }
@@ -262,5 +275,4 @@ button.disabled {
   background-color: #dfdfdf;
   padding: 10px;
   border-radius: 10px;
-  
 }

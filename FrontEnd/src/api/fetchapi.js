@@ -267,6 +267,32 @@ const ProcurarProdutos = async (p) => {
   }
 };
 
+const ProcurarProdutoId = async (p) => {
+  const produtos = await fetch(
+    `http://localhost:3322/procurarProdutoId/${p}`
+  )
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await produtos.json();
+  return data;
+};
+
+const listarImagens = async (id) => {
+  const imagens = await fetch(`http://localhost:3322/imageProdutoId/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await imagens.json();
+  return data;
+}
+
 const restartApi = async () => {
   const response = await fetch("http://localhost:3322/restart").catch(
     (error) => {
@@ -289,10 +315,12 @@ export default {
   ProcurarFuncionarioId,
   DeletarFuncionario,
   AtualizarFuncionario,
+  listarImagens,
 
   novaCategoria,
   listarCategorias,
 
   novoProduto,
-  ProcurarProdutos
+  ProcurarProdutos,
+  ProcurarProdutoId
 };

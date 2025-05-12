@@ -1,19 +1,32 @@
 #InformaçõesGerais {
-    width: 1000px;
-    margin: auto;
-    font-size: 20px;
-    margin-top: 20px;
+  width: 1000px;
+  margin: auto;
+  font-size: 20px;
+  margin-top: 20px;
 }
 
 #mainInformaçõesGerais {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 #imageProdutoInformaçõesGerais {
-    background-color: black;
-    border-radius: 10px;
-    width: 300px;
-    height: 300px;
+  border: solid black 1px;
+  background-size: cover;
+  border-radius: 10px;
+  width: 300px;
+  height: 300px;
+}
+
+#areaDescriçãoInfoProdutos {
+  max-width: 450px;
+  white-space: pre-line;
+  word-wrap: break-word; /* Quebra a palavra longa */
+  overflow-wrap: break-word; /* Suporte adicional */
+  word-break: break-word; /* Força a quebra de palavras longas */
+}
+
+#areaDescriçãoInfoProdutos p {
+    margin-top: 10px;
 }

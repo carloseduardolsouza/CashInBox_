@@ -7,6 +7,7 @@ import fetchapi from "../../api/fetchapi";
 
 //Icones
 import { FaCamera } from "react-icons/fa";
+import { GrUpdate } from "react-icons/gr";
 
 //componentes
 import CriarCategoria from "./Components/CriarCategoria/CriarCategoria";
@@ -41,15 +42,16 @@ function CadastrarProduto() {
   const [isDisabled, setIsDisabled] = useState(true);
   const [referencia, setReferencia] = useState("");
 
+  const buscarCategorias = async () => {
+    try {
+      const resultado = await fetchapi.listarCategorias();
+      setResultCategorias(resultado);
+    } catch (err) {
+      setErroApi(true);
+    }
+  };
+
   useEffect(() => {
-    const buscarCategorias = async () => {
-      try {
-        const resultado = await fetchapi.listarCategorias();
-        setResultCategorias(resultado);
-      } catch (err) {
-        setErroApi(true);
-      }
-    };
     buscarCategorias();
   }, []);
 
@@ -172,6 +174,12 @@ function CadastrarProduto() {
               }}
             >
               +
+            </button>
+            <button
+              id="AtualizarCategoria"
+              onClick={(e) => buscarCategorias(e)}
+            >
+              <GrUpdate />
             </button>
           </la>
 
