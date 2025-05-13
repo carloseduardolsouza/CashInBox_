@@ -1,6 +1,6 @@
 const produtosModels = require("../models/produtosModels");
 const variacaoProdutoModels = require("../models/variacaoProdutoModels"); // Correção da importação
-const services = require("../services/services")
+const services = require("../services/services");
 const fs = require("fs");
 const path = require("path");
 
@@ -71,9 +71,9 @@ const deletarProduto = async (req, res) => {
 
     // Deleta as imagens do servidor
     variacoes.map((arquivo) => {
-      console.log(arquivo.imagem_path)
-      services.deletarImagem(arquivo.imagem_path)
-    })
+      console.log(arquivo.imagem_path);
+      services.deletarImagem(arquivo.imagem_path);
+    });
 
     // Deleta as variações e o produto
     await produtosModels.deletarVVariacoesDoProduto(id);
@@ -114,6 +114,14 @@ const procurarVariaçãoProdutos = async (req, res) => {
 const deletarVariacaoProdutos = async (req, res) => {
   try {
     const { id } = req.params;
+    const variacoes = await variacaoProdutoModels.listarVariacoesPorProdutoId(
+      id
+    );
+    variacoes.map((arquivo) => {
+      console.log(arquivo.imagem_path);
+      services.deletarImagem(arquivo.imagem_path);
+    });
+
     const resultado = await variacaoProdutoModels.deletarVariacao(id);
 
     if (resultado.affectedRows === 0) {

@@ -71,10 +71,22 @@ const deletarVVariacoesDoProduto = async (produto_id) => {
   });
 };
 
+const listarVariacoesPorProdutoId = async (id) => {
+  const query = `SELECT * FROM variacoes WHERE id = ?`
+
+  return new Promise((resolve, reject) => {
+    connection.all(query, [id], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    });
+  });
+}
+
 module.exports = {
   criarVariacao,
   listarVariacoesPorProduto,
   editarVariacao,
   deletarVariacao,
   deletarVVariacoesDoProduto,
+  listarVariacoesPorProdutoId
 };

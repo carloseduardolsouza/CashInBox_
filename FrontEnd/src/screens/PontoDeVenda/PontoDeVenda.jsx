@@ -2,16 +2,11 @@ import "./PontoDeVenda.css";
 import { useState, useEffect } from "react";
 
 //Servicos
-//import fetchapi from "../../api/fetchapi.js";
-//import services from "../../services/services.js"
+import fetchapi from "../../api/fetchapi.js";
+import services from "../../services/services.js";
 
 //Componentes
 import FaturarVenda from "./components/FaturarVenda/FaturarVenda";
-//import Alerta from "../../components/Alerta/Alerta.jsx"
-//import Faturado from "../../components/Faturado/Faturado.jsx";
-//import Concluindo from "../../components/Concluindo/Concluindo.jsx"
-//import AçãoRealizada from "../../components/AçãoRealizada/AçãoRealizada.jsx";
-//import ProdutosNovaVenda from "../../components/ProdutosNovaVenda/ProdutosNovaVenda.jsx"
 
 //Biblioteca
 import Select from "react-select";
@@ -58,43 +53,18 @@ function PontoDeVenda() {
   const [venda, setVenda] = useState([]);
   const [descontoFormatado, setDescontoFormatado] = useState();
 
-  /*useEffect(() => {
-        fetchapi.ProcurarCliente('all').then((response) => {
-            setResultClientes(response)
-            setloading(false)
-        })
-    }, [])*/
+  useEffect(() => {
+    fetchapi.ProcurarCliente("all").then((response) => {
+      setResultadoClientes(response);
+    });
+  }, []);
 
-  /*useEffect(() => {
-        fetchapi.ProcurarProdutos('all').then((response) => {
-            setResultProdutos(response)
-            setloading(false)
-        })
-    }, [])*/
-
-  /*useEffect(() => {
-        fetchapi.ProcurarVendores('all').then((response) => {
-            setResultVendedores(response)
-            setloading(false)
-        })
-    }, [])*/
-
-  const optionsVendedores = [];
-
-  /*resultadoVendedores.map((resultVendedores) => {
-        optionsVendedores.push({
-                value : resultVendedores.id,
-                label : resultVendedores.nome})})
-
-    const renderInfoVendedores = async (e) => {
-        setloading(true)
-        setIdVendedor(e.value)
-        const infoVendedor = await fetchapi.ProcurarVendores(e.value)
-        const {nome} = infoVendedor[0]
-        setNomeVendedor(nome)
-        setloading(false)
-
-    }*/
+  useEffect(() => {
+    fetchapi.ProcurarProdutos("all").then((response) => {
+      setResultadoProdutos(response);
+      setloading(false);
+    });
+  }, []);
 
   function gerarNumeroUnico() {
     return new Date().getTime(); // Retorna o timestamp atual
@@ -102,16 +72,7 @@ function PontoDeVenda() {
 
   const localeVenda = gerarNumeroUnico();
 
-  const optionsClientes = [];
-
-  /*resultadoClientes.map((resultClientes) => {
-    optionsClientes.push({
-      value: resultClientes.id,
-      label: resultClientes.name,
-    });
-  });*/
-
-  /*const renderInfoClient = async (e) => {
+  const renderInfoClient = async (e) => {
     setloading(true);
     setId(e.value);
     const infoClient = await fetchapi.ProcurarClienteId(e.value);
@@ -121,18 +82,18 @@ function PontoDeVenda() {
     setTelefoneInfoClient(telefone);
     setloading(false);
     setINFOclient(infoClient[0]);
-  };*/
+  };
 
   const optionsProdutos = [];
 
-  /*resultadoProdutos.map((resultProdutos) => {
+  resultadoProdutos.map((resultProdutos) => {
     optionsProdutos.push({
       value: resultProdutos.id,
-      label: resultProdutos.produto,
+      label: resultProdutos.nome,
     });
-  });*/
+  });
 
-  /*const renderInfoProduto = async (e) => {
+  const renderInfoProduto = async (e) => {
     setloading(true);
     setId(e.value);
     const infoClient = await fetchapi.ProcurarProdutosId(e.value);
@@ -142,7 +103,7 @@ function PontoDeVenda() {
     setEmestoque(emestoque);
     setloading(false);
     setIdProduto(id);
-  };*/
+  };
 
   /*const calcularPrice = () => {
     if (idProduto == "" || idProduto == undefined || idProduto == null) {
@@ -252,34 +213,13 @@ function PontoDeVenda() {
 
   return (
     <div id="NOVAVENDA" tabIndex={0} onKeyDown={handleKeyDown}>
-      {faturado && <FaturarVenda fechar={setFaturado}/>}
+      {faturado && <FaturarVenda fechar={setFaturado} />}
       <header>
         <h2>Nova Venda</h2>
         <p>{log}</p>
       </header>
       <main className="MainNovaVenda">
         <div>
-          <div>
-            <Select
-              className="SelectNovaVenda"
-              placeholder="Cliente"
-              options={optionsProdutos}
-              onChange={(e) => `` /*renderInfoProduto(e)*/}
-              isDisabled={desable}
-            />
-            <label className="NovaVendaLabel">
-              <p className="NovanVendaStrong">
-                <strong>Nome:</strong>
-              </p>
-              <p>{nomeInfoClient}</p>
-            </label>
-            <label className="NovaVendaLabel">
-              <p className="NovanVendaStrong">
-                <strong>Numero:</strong>
-              </p>
-              <p>{`` /*services.formatarNumeroCelular(telefoneInfoClient)*/}</p>
-            </label>
-          </div>
           <Select
             className="SelectNovaVenda"
             placeholder="Produto"
@@ -322,19 +262,6 @@ function PontoDeVenda() {
               </label>
             </form>
           </div>
-          <Select
-            className="SelectNovaVenda"
-            placeholder="Vendedor"
-            options={optionsVendedores}
-            onChange={(e) => `` /*renderInfoVendedores(e)*/}
-            isDisabled={desable}
-          />
-          <label className="NovaVendaLabel">
-            <p className="NovanVendaStrong">
-              <strong>Vendedor: </strong>
-            </p>
-            <p>{nomeVendedor}</p>
-          </label>
           <label className="statusVenda">
             <strong>Status: </strong>
             <select
