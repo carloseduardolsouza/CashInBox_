@@ -114,8 +114,8 @@ function CadastrarProduto() {
       estoque_atual: 0,
       estoque_minimo: 0,
       markup: markup,
-      categoria: categoria,
-      marca: marca,
+      categoria: marca,
+      categoria_id: categoria,
       unidade_medida: "",
       ativo: true,
     };

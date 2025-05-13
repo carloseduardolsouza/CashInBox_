@@ -243,6 +243,29 @@ const novoProduto = async (dados, imageReq) => {
   return response;
 };
 
+const AtualizarProduto = async (dados) => {
+  const { id } = dados;
+  const response = await fetch(
+    `http://localhost:3322/editarProduto/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dados),
+    }
+  ).catch((error) => {
+    return error;
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao tentar adicionar novo cliente");
+  }
+
+  return response;
+};
+
 const ProcurarProdutos = async (p) => {
   if (p === "") {
     const produtos = await fetch(`http://localhost:3322/produtos/all`)
@@ -361,4 +384,5 @@ export default {
   ProcurarProdutoId,
   deletarVariacaoProduto,
   DeletarProduto,
+  AtualizarProduto
 };

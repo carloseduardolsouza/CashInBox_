@@ -37,7 +37,7 @@ const novoProduto = async (dados) => {
     estoque_minimo,
     markup,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo,
     imagens, // Adicionando a propriedade de imagens
@@ -48,7 +48,7 @@ const novoProduto = async (dados) => {
 
   const query = `
     INSERT INTO produtos 
-    (nome, descricao, codigo_barras, preco_venda, preco_custo, estoque_atual, estoque_minimo, markup, categoria, marca, unidade_medida, ativo, created_at, updated_at)
+    (nome, descricao, codigo_barras, preco_venda, preco_custo, estoque_atual, estoque_minimo, markup, categoria, categoria_id, unidade_medida, ativo, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -62,7 +62,7 @@ const novoProduto = async (dados) => {
     estoque_minimo || 0,
     markup || 0,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo === false ? 0 : 1,
     created_at,
@@ -123,10 +123,9 @@ const editarProduto = async (id, dados) => {
     estoque_minimo,
     markup,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo,
-    imagens, // Imagens a serem alteradas
   } = dados;
 
   const updated_at = new Date().toISOString();
@@ -143,7 +142,7 @@ const editarProduto = async (id, dados) => {
       estoque_minimo = ?, 
       markup = ?, 
       categoria = ?, 
-      marca = ?, 
+      categoria_id = ?, 
       unidade_medida = ?, 
       ativo = ?, 
       updated_at = ?
@@ -160,7 +159,7 @@ const editarProduto = async (id, dados) => {
     estoque_minimo || 0,
     markup || 0,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo === false ? 0 : 1,
     updated_at,
@@ -172,43 +171,9 @@ const editarProduto = async (id, dados) => {
       if (err) {
         reject(err);
       } else if (this.changes === 0) {
-        resolve(null); // Nenhuma linha foi alterada
+        resolve(null); // Nenhuma linha foi atualizada (ID pode não existir)
       } else {
-        // Atualizando as imagens do produto
-        if (imagens && imagens.length > 0) {
-          const deleteImagesQuery = `DELETE FROM variacoes WHERE produto_id = ?`;
-          connection.run(deleteImagesQuery, [id], (err) => {
-            if (err) reject(err);
-
-            // Inserindo as novas imagens
-            const insertImagensQuery = `
-              INSERT INTO variacoes (produto_id, cor, tamanho, imagem_path)
-              VALUES (?, ?, ?, ?)
-            `;
-            imagens.forEach((imagem) => {
-              if (imagem.cor && imagem.tamanho) {
-                connection.run(
-                  insertImagensQuery,
-                  [id, imagem.cor, imagem.tamanho, imagem.imagem_path],
-                  (err) => {
-                    if (err) reject(err);
-                  }
-                );
-              } else {
-                // Caso não haja variação, salvamos apenas a imagem
-                connection.run(
-                  insertImagensQuery,
-                  [id, null, null, imagem.imagem_path],
-                  (err) => {
-                    if (err) reject(err);
-                  }
-                );
-              }
-            });
-          });
-        }
-
-        resolve(this.changes); // Retorna o número de linhas alteradas
+        resolve(this.changes); // Quantidade de linhas alteradas
       }
     });
   });
