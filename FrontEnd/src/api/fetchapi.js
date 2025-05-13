@@ -268,9 +268,7 @@ const ProcurarProdutos = async (p) => {
 };
 
 const ProcurarProdutoId = async (p) => {
-  const produtos = await fetch(
-    `http://localhost:3322/procurarProdutoId/${p}`
-  )
+  const produtos = await fetch(`http://localhost:3322/procurarProdutoId/${p}`)
     .then((response) => {
       return response;
     })
@@ -279,6 +277,25 @@ const ProcurarProdutoId = async (p) => {
     });
   const data = await produtos.json();
   return data;
+};
+
+const DeletarProduto = async (p) => {
+  const response = await fetch(
+    `http://localhost:3322/deletarProduto/${p}`,
+    {
+      method: "DELETE",
+    }
+  ).catch((error) => {
+    return error;
+  });
+
+  if (response.ok) {
+    // Cliente excluído com sucesso
+    console.log("produto excluído com sucesso");
+  } else {
+    // Se a resposta não estiver ok, lançar um erro
+    throw new Error("Falha ao excluir produto");
+  }
 };
 
 const listarImagens = async (id) => {
@@ -291,7 +308,26 @@ const listarImagens = async (id) => {
     });
   const data = await imagens.json();
   return data;
-}
+};
+
+const deletarVariacaoProduto = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3322/deletarVariacaoProduto/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Falha ao excluir variação");
+    }
+
+    console.log("Variação excluída com sucesso");
+  } catch (error) {
+    console.error("Erro ao excluir variação:", error.message);
+  }
+};
 
 const restartApi = async () => {
   const response = await fetch("http://localhost:3322/restart").catch(
@@ -322,5 +358,7 @@ export default {
 
   novoProduto,
   ProcurarProdutos,
-  ProcurarProdutoId
+  ProcurarProdutoId,
+  deletarVariacaoProduto,
+  DeletarProduto,
 };

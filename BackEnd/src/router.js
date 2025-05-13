@@ -44,6 +44,7 @@ router.delete("/deletarProduto/:id" , produtosControllers.deletarProduto)
 router.get("/procurarProdutoId/:id" , produtosControllers.procurarProdutoId)
 
 router.get("/imageProdutoId/:id" , produtosControllers.procurarVariaçãoProdutos)
+router.delete("/deletarVariacaoProduto/:id", produtosControllers.deletarVariacaoProdutos)
 
 router.post("/novaCategoria" , categoriasControllers.novaCategoria)
 router.get("/categorias" , categoriasControllers.listarCategorias)

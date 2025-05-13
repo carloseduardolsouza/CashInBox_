@@ -1,5 +1,6 @@
 const produtosModels = require("../models/produtosModels");
 const variacaoProdutoModels = require("../models/variacaoProdutoModels"); // Correção da importação
+const services = require("../services/services")
 const fs = require("fs");
 const path = require("path");
 
@@ -69,11 +70,10 @@ const deletarProduto = async (req, res) => {
     const variacoes = await produtosModels.getVariacoesPorProduto(id);
 
     // Deleta as imagens do servidor
-    variacoes.forEach((v) => {
-      if (v.imagem_path && fs.existsSync(v.imagem_path)) {
-        fs.unlinkSync(v.imagem_path); // Remove a imagem
-      }
-    });
+    variacoes.map((arquivo) => {
+      console.log(arquivo.imagem_path)
+      services.deletarImagem(arquivo.imagem_path)
+    })
 
     // Deleta as variações e o produto
     await produtosModels.deletarVVariacoesDoProduto(id);
@@ -111,7 +111,21 @@ const procurarVariaçãoProdutos = async (req, res) => {
   }
 };
 
+const deletarVariacaoProdutos = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resultado = await variacaoProdutoModels.deletarVariacao(id);
 
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ error: "Variação não encontrada" });
+    }
+
+    return res.status(200).json({ message: "Variação deletada com sucesso" });
+  } catch (err) {
+    console.error("Erro ao deletar variação:", err);
+    return res.status(500).json({ error: "Erro ao deletar variação" });
+  }
+};
 
 module.exports = {
   procurarProduto,
@@ -121,4 +135,5 @@ module.exports = {
   procurarProdutoId,
 
   procurarVariaçãoProdutos,
+  deletarVariacaoProdutos,
 };

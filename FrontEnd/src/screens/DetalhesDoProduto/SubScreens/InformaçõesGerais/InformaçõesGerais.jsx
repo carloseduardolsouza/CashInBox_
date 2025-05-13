@@ -1,6 +1,6 @@
 import "./InformaçõesGerais.css";
 import Select from "react-select";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 
 //icones
@@ -8,6 +8,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import fetchapi from "../../../../api/fetchapi";
 
 function InformaçõesGerais() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [imagensProdutosEdit, setImagensProdutosEdit] = useState([]);
   const [codBarrasEdit, setcodBarrasEdit] = useState("");
@@ -40,6 +41,27 @@ function InformaçõesGerais() {
     buscarProduto();
     buscarImagens();
   }, [id]);
+
+  const deletarVariacao = async (id) => {
+    try {
+      await fetchapi.deletarVariacaoProduto(id);
+
+      const dadosImage = await fetchapi.listarImagens(id);
+      setImagensProdutosEdit(dadosImage);
+    } catch (error) {
+      console.error("Erro ao deletar variação:", error);
+    }
+  };
+
+  const DeletarProduto = async (id) => {
+    try {
+      await fetchapi.DeletarProduto(id).then(() => {
+        navigate("/estoque");
+      })
+    } catch {
+
+    }
+  }
 
   return (
     <div id="InformaçõesGeraisProdutos">
@@ -126,7 +148,7 @@ function InformaçõesGerais() {
                 </p>
               </div>
 
-              <button>
+              <button onClick={() => deletarVariacao(dados.id)}>
                 <FaRegTrashAlt />
               </button>
             </div>
@@ -142,7 +164,7 @@ function InformaçõesGerais() {
           <button className="cancelar">Cancelar</button>
         </div>
 
-        <button id="buttonExcluirInfoProduto">
+        <button id="buttonExcluirInfoProduto" onClick={() => DeletarProduto(id)}>
           <FaRegTrashAlt /> Excluir Produto
         </button>
       </nav>
