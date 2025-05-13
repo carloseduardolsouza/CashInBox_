@@ -130,8 +130,22 @@ function CadastrarProduto() {
       });
   };
 
-  const calculeValor = () => {
-    return;
+  const calculeValor = (campo , valor) => {
+    valor = parseFloat(valor) || 0;
+
+    if (campo === "precoCompra") {
+      setPreçoCompra(valor);
+      const novoPrecoVenda = valor + (valor * markup) / 100;
+      setPreçoVenda(novoPrecoVenda);
+    } else if (campo === "margem") {
+      setMarkup(valor);
+      const novoPrecoVenda = preçoCompra + (preçoCompra * valor) / 100;
+      setPreçoVenda(novoPrecoVenda);
+    } else if (campo === "precoVenda") {
+      setPreçoVenda(valor);
+      const novaMargem = ((valor - preçoCompra) / preçoCompra) * 100;
+      setMarkup(novaMargem);
+    }
   };
 
   return (
@@ -206,7 +220,8 @@ function CadastrarProduto() {
               <input
                 type="number"
                 placeholder="somente numeros"
-                onChange={(e) => setPreçoCompra(e.target.value)}
+                value={preçoCompra}
+                onChange={(e) => calculeValor("precoCompra" , e.target.value)}
               />
             </la>
 
@@ -215,10 +230,8 @@ function CadastrarProduto() {
               <input
                 type="number"
                 placeholder="somente numeros"
-                onChange={(e) => {
-                  setMarkup(e.target.value);
-                  calculeValor();
-                }}
+                value={markup}
+                onChange={(e) => calculeValor("margem" , e.target.value)}
               />
             </la>
 
@@ -228,10 +241,7 @@ function CadastrarProduto() {
                 type="number"
                 value={preçoVenda}
                 placeholder="somente numeros"
-                onChange={(e) => {
-                  setPreçoVenda(e.target.value);
-                  calculeValor();
-                }}
+                onChange={(e) => calculeValor("precoVenda" , e.target.value)}
               />
             </la>
           </div>
