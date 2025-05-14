@@ -154,3 +154,8 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+.DeletarFormPagamentoFaturar {
+  color: red;
+  cursor: pointer;
+}

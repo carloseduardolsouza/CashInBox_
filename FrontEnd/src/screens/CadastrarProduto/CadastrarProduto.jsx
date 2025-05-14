@@ -1,8 +1,13 @@
 import "./CadastrarProduto.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import AppContext from "../../context/AppContext";
+
+//Conexão com a api
+import fetchapi from "../../api/fetchapi";
 
 //Icones
 import { FaCamera } from "react-icons/fa";
+import { GrUpdate } from "react-icons/gr";
 
 //componentes
 import CriarCategoria from "./Components/CriarCategoria/CriarCategoria";
@@ -14,6 +19,9 @@ import "slick-carousel/slick/slick-theme.css";
 import Select from "react-select";
 
 function CadastrarProduto() {
+  const { setErroApi } = useContext(AppContext);
+  const [resulCategoria, setResultCategorias] = useState([]);
+
   const fileInputRef = useRef(null);
   const [modal, setModal] = useState(null);
 
@@ -23,14 +31,34 @@ function CadastrarProduto() {
 
   const [imageReq, setImageReq] = useState();
 
-  const [produto, setProduto] = useState();
+  const [nomeProduto, setNomeProduto] = useState("");
   const [marca, setMarca] = useState();
   const [descrição, setDescrição] = useState();
-
-  const [concluido, setConcluindo] = useState(false);
+  const [preçoCompra, setPreçoCompra] = useState("");
+  const [preçoVenda, setPreçoVenda] = useState("");
+  const [markup, setMarkup] = useState("");
+  const [categoria, setCategoria] = useState("");
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [referencia, setReferencia] = useState("");
+
+  const buscarCategorias = async () => {
+    try {
+      const resultado = await fetchapi.listarCategorias();
+      setResultCategorias(resultado);
+    } catch (err) {
+      setErroApi(true);
+    }
+  };
+
+  useEffect(() => {
+    buscarCategorias();
+  }, []);
+
+  const categorias = resulCategoria.map((categoria) => ({
+    value: categoria.id,
+    label: categoria.nome,
+  }));
 
   const customStyles = {
     control: (base, state) => ({
@@ -45,24 +73,10 @@ function CadastrarProduto() {
     }),
   };
 
-  const escrever = (p, e) => {
-    if (p == "produto") {
-      setProduto(e.target.value);
-    }
-
-    if (p == "marca") {
-      setMarca(e.target.value);
-    }
-
-    if (p == "descrição") {
-      setDescrição(e.target.value);
-    }
-  };
-
   const renderModal = () => {
     switch (modal) {
       case "criarCategoria":
-        return <CriarCategoria fechar={setModal}/>;
+        return <CriarCategoria fechar={setModal} />;
       case null:
         return null;
     }
@@ -89,6 +103,51 @@ function CadastrarProduto() {
     slidesToScroll: 1,
   };
 
+  const CadastrarProduto = (e) => {
+    e.preventDefault();
+    let dados = {
+      nome: nomeProduto,
+      descricao: descrição,
+      codigo_barras: "",
+      preco_venda: preçoVenda,
+      preco_custo: preçoCompra,
+      estoque_atual: 0,
+      estoque_minimo: 0,
+      markup: markup,
+      categoria: marca,
+      categoria_id: categoria,
+      unidade_medida: "",
+      ativo: true,
+    };
+
+    fetchapi
+      .novoProduto(dados, imageReq)
+      .then((resposta) => {
+        //limpar
+      })
+      .catch((erro) => {
+        setErroApi(true);
+      });
+  };
+
+  const calculeValor = (campo , valor) => {
+    valor = parseFloat(valor) || 0;
+
+    if (campo === "precoCompra") {
+      setPreçoCompra(valor);
+      const novoPrecoVenda = valor + (valor * markup) / 100;
+      setPreçoVenda(novoPrecoVenda);
+    } else if (campo === "margem") {
+      setMarkup(valor);
+      const novoPrecoVenda = preçoCompra + (preçoCompra * valor) / 100;
+      setPreçoVenda(novoPrecoVenda);
+    } else if (campo === "precoVenda") {
+      setPreçoVenda(valor);
+      const novaMargem = ((valor - preçoCompra) / preçoCompra) * 100;
+      setMarkup(novaMargem);
+    }
+  };
+
   return (
     <div id="cadastrarProduto">
       {renderModal()}
@@ -103,8 +162,8 @@ function CadastrarProduto() {
             <input
               type="text"
               className="nomeNovoProduto"
-              onChange={(e) => escrever("produto", e)}
-              value={produto}
+              onChange={(e) => setNomeProduto(e.target.value)}
+              value={nomeProduto}
               required
               placeholder="Nome do produto..."
             />
@@ -115,12 +174,27 @@ function CadastrarProduto() {
               id="SelectCategoriaProduto"
               placeholder="Categoria"
               styles={customStyles}
-              onChange={(e) => `` /*renderInfoProduto(e)*/}
+              options={categorias}
+              onChange={(e) => {
+                setMarca(e.label);
+                setCategoria(e.value);
+              }}
             />
-            <button id="AddCategoria" onClick={(e) => {
-              e.preventDefault()
-              setModal("criarCategoria")
-            }}>+</button>
+            <button
+              id="AddCategoria"
+              onClick={(e) => {
+                e.preventDefault();
+                setModal("criarCategoria");
+              }}
+            >
+              +
+            </button>
+            <button
+              id="AtualizarCategoria"
+              onClick={(e) => buscarCategorias(e)}
+            >
+              <GrUpdate />
+            </button>
           </la>
 
           <la>
@@ -143,17 +217,32 @@ function CadastrarProduto() {
           <div id="DivisãoPreçoCadastroProduto">
             <la>
               <p>Preço de Compra: </p>
-              <input type="number" placeholder="somente numeros" />
+              <input
+                type="number"
+                placeholder="somente numeros"
+                value={preçoCompra}
+                onChange={(e) => calculeValor("precoCompra" , e.target.value)}
+              />
             </la>
 
             <la>
               <p>Margem:</p>
-              <input type="number" placeholder="somente numeros" />
+              <input
+                type="number"
+                placeholder="somente numeros"
+                value={markup}
+                onChange={(e) => calculeValor("margem" , e.target.value)}
+              />
             </la>
 
             <la>
               <p>Preço De Venda:</p>
-              <input type="number" value={""} placeholder="somente numeros" />
+              <input
+                type="number"
+                value={preçoVenda}
+                placeholder="somente numeros"
+                onChange={(e) => calculeValor("precoVenda" , e.target.value)}
+              />
             </la>
           </div>
 
@@ -163,7 +252,7 @@ function CadastrarProduto() {
               id="texto"
               rows="4"
               cols="50"
-              onChange={(e) => escrever("descrição", e)}
+              onChange={(e) => setDescrição(e.target.value)}
               value={descrição}
               required
               placeholder="descrição do produto..."

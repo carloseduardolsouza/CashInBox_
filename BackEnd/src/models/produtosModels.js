@@ -1,11 +1,19 @@
 const connection = require("./db");
 
-const listarCliente = async () => {
-  const query = `SELECT * FROM produtos`;
+// Listar todos os produtos
+const listarProdutos = async (p) => {
+  let query;
+  let values = [];
 
-  // Use o método `all` para retornar todos os resultados da consulta
-  const users = await new Promise((resolve, reject) => {
-    connection.all(query, (err, rows) => {
+  if (p === "all") {
+    query = `SELECT * FROM produtos`;
+  } else {
+    query = `SELECT * FROM produtos WHERE nome LIKE ?`;
+    values.push(`%${p}%`); // Isso garante aspas e evita SQL injection
+  }
+
+  const produtos = await new Promise((resolve, reject) => {
+    connection.all(query, values, (err, rows) => {
       if (err) {
         reject(err);
       } else {
@@ -14,10 +22,10 @@ const listarCliente = async () => {
     });
   });
 
-  // Retorna os usuários (ou clientes) invertidos
-  return users.reverse();
+  return produtos.reverse(); // Retorna os produtos invertidos
 };
 
+// Criar um novo produto
 const novoProduto = async (dados) => {
   const {
     nome,
@@ -29,9 +37,10 @@ const novoProduto = async (dados) => {
     estoque_minimo,
     markup,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo,
+    imagens, // Adicionando a propriedade de imagens
   } = dados;
 
   const created_at = new Date().toISOString();
@@ -39,7 +48,7 @@ const novoProduto = async (dados) => {
 
   const query = `
     INSERT INTO produtos 
-    (nome, descricao, codigo_barras, preco_venda, preco_custo, estoque_atual, estoque_minimo,markup, categoria, marca, unidade_medida, ativo, created_at, updated_at)
+    (nome, descricao, codigo_barras, preco_venda, preco_custo, estoque_atual, estoque_minimo, markup, categoria, categoria_id, unidade_medida, ativo, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
@@ -53,7 +62,7 @@ const novoProduto = async (dados) => {
     estoque_minimo || 0,
     markup || 0,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo === false ? 0 : 1,
     created_at,
@@ -65,12 +74,44 @@ const novoProduto = async (dados) => {
       if (err) {
         reject(err);
       } else {
-        resolve(this.lastID);
+        const produtoId = this.lastID; // ID do produto recém-criado
+
+        // Agora inserimos as imagens (simples ou com variações)
+        if (imagens && imagens.length > 0) {
+          const insertImagensQuery = `
+            INSERT INTO variacoes (produto_id, cor, tamanho, imagem_path)
+            VALUES (?, ?, ?, ?)
+          `;
+
+          imagens.forEach((imagem) => {
+            if (imagem.cor && imagem.tamanho) {
+              connection.run(
+                insertImagensQuery,
+                [produtoId, imagem.cor, imagem.tamanho, imagem.imagem_path],
+                (err) => {
+                  if (err) reject(err);
+                }
+              );
+            } else {
+              // Caso não haja variação, salvamos apenas a imagem
+              connection.run(
+                insertImagensQuery,
+                [produtoId, null, null, imagem.imagem_path],
+                (err) => {
+                  if (err) reject(err);
+                }
+              );
+            }
+          });
+        }
+
+        resolve(produtoId); // Retorna o ID do produto
       }
     });
   });
 };
 
+// Editar um produto
 const editarProduto = async (id, dados) => {
   const {
     nome,
@@ -82,7 +123,7 @@ const editarProduto = async (id, dados) => {
     estoque_minimo,
     markup,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo,
   } = dados;
@@ -101,7 +142,7 @@ const editarProduto = async (id, dados) => {
       estoque_minimo = ?, 
       markup = ?, 
       categoria = ?, 
-      marca = ?, 
+      categoria_id = ?, 
       unidade_medida = ?, 
       ativo = ?, 
       updated_at = ?
@@ -118,7 +159,7 @@ const editarProduto = async (id, dados) => {
     estoque_minimo || 0,
     markup || 0,
     categoria,
-    marca,
+    categoria_id,
     unidade_medida,
     ativo === false ? 0 : 1,
     updated_at,
@@ -130,50 +171,100 @@ const editarProduto = async (id, dados) => {
       if (err) {
         reject(err);
       } else if (this.changes === 0) {
-        resolve(null); // Nenhuma linha foi alterada
+        resolve(null); // Nenhuma linha foi atualizada (ID pode não existir)
       } else {
-        resolve(this.changes); // Retorna o número de linhas alteradas
+        resolve(this.changes); // Quantidade de linhas alteradas
       }
     });
   });
 };
 
+// Deletar um produto
 const deletarProduto = async (id) => {
-  const query = `DELETE FROM produtos WHERE id = ${id}`;
-
+  // Primeiro, removemos as variações do produto
+  const deleteImagesQuery = `DELETE FROM variacoes WHERE produto_id = ?`;
   await new Promise((resolve, reject) => {
-    connection.run(query, function (err) {
-      if (err) {
-        reject(err); // Caso ocorra algum erro
-      } else {
-        resolve(this.lastID); // Retorna o ID do funcionario inserido
-      }
+    connection.run(deleteImagesQuery, [id], function (err) {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+
+  // Agora deletamos o produto
+  const query = `DELETE FROM produtos WHERE id = ?`;
+
+  return new Promise((resolve, reject) => {
+    connection.run(query, [id], function (err) {
+      if (err) reject(err);
+      else resolve(this.lastID); // ID do produto deletado
     });
   });
 };
 
+// Buscar produto por ID
 const procurarProdutoId = async (id) => {
-  const query = `SELECT * FROM produtos WHERE id = ${id}`;
+  const query = `SELECT * FROM produtos WHERE id = ?`;
 
-  // Use o método `all` para retornar todos os resultados da consulta
-  const users = await new Promise((resolve, reject) => {
-    connection.all(query, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+  const produto = await new Promise((resolve, reject) => {
+    connection.all(query, [id], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
     });
   });
 
-  // Retorna os usuários (ou Funcionarios) invertidos
-  return users;
+  return produto;
+};
+
+// Criar uma nova variação para um produto
+const criarVariacao = async ({ produto_id, cor, tamanho, imagem_path }) => {
+  const query = `
+    INSERT INTO variacoes (produto_id, cor, tamanho, imagem_path)
+    VALUES (?, ?, ?, ?)
+  `;
+
+  return new Promise((resolve, reject) => {
+    connection.run(
+      query,
+      [produto_id, cor, tamanho, imagem_path],
+      function (err) {
+        if (err) reject(err);
+        else resolve(this.lastID); // Retorna o ID da variação criada
+      }
+    );
+  });
+};
+
+// Buscar variações de um produto por ID
+const getVariacoesPorProduto = async (produto_id) => {
+  const query = `SELECT * FROM variacoes WHERE produto_id = ?`;
+
+  return new Promise((resolve, reject) => {
+    connection.all(query, [produto_id], (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    });
+  });
+};
+
+// Deletar todas as variações de um produto
+const deletarVVariacoesDoProduto = async (produto_id) => {
+  const query = `DELETE FROM variacoes WHERE produto_id = ?`;
+
+  return new Promise((resolve, reject) => {
+    connection.run(query, [produto_id], function (err) {
+      if (err) reject(err);
+      else resolve(this.changes); // Número de variações deletadas
+    });
+  });
 };
 
 module.exports = {
-  listarCliente,
+  listarProdutos,
   novoProduto,
   editarProduto,
   deletarProduto,
-  procurarProdutoId
+  procurarProdutoId,
+  criarVariacao,
+  getVariacoesPorProduto,
+  deletarVVariacoesDoProduto,
 };

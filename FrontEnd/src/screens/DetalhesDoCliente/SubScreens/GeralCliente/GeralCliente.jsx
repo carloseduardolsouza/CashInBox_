@@ -1,6 +1,6 @@
 import "./GeralCliente.css";
 import { useState, useEffect } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //conexão com a api
 import fetchapi from "../../../../api/fetchapi";
@@ -18,8 +18,16 @@ import { FaCheckCircle } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
 
 function GeralCliente({ infoCliente }) {
-  const { id, nome, cpf_cnpj, email, endereco, data_nascimento, telefone } =
-    infoCliente || {};
+  const {
+    id,
+    nome,
+    cpf_cnpj,
+    email,
+    endereco,
+    data_nascimento,
+    telefone,
+    genero,
+  } = infoCliente || {};
   const navigate = useNavigate();
 
   const [editar, setEditar] = useState(false);
@@ -27,6 +35,7 @@ function GeralCliente({ infoCliente }) {
   const [nomeEdit, setNomeEdit] = useState(nome);
   const [cpfEdit, setCpfEdit] = useState(cpf_cnpj);
   const [emailEdit, setEmailEdit] = useState(email);
+  const [generoEdit, setGeneroEdit] = useState(genero);
   const [enderecoEdit, setenderecoEdit] = useState(endereco);
   const [telefoneEdit, setTelefoneEdit] = useState(telefone);
   const [data_nascimentoEdit, setData_nascimentoEdit] =
@@ -37,6 +46,7 @@ function GeralCliente({ infoCliente }) {
       setNomeEdit(infoCliente.nome || "");
       setCpfEdit(infoCliente.cpf_cnpj || "");
       setEmailEdit(infoCliente.email || "");
+      setGeneroEdit(infoCliente.genero || "");
       setenderecoEdit(infoCliente.endereco || "");
       setTelefoneEdit(infoCliente.telefone || "");
       setData_nascimentoEdit(infoCliente.data_nascimento || "");
@@ -53,6 +63,7 @@ function GeralCliente({ infoCliente }) {
       nome: nomeEdit,
       cpf_cnpj: cpfEdit,
       email: emailEdit,
+      genero: generoEdit,
       telefone: telefoneEdit,
       data_nascimento: data_nascimentoEdit,
       endereco: enderecoEdit,
@@ -106,7 +117,10 @@ function GeralCliente({ infoCliente }) {
             <p className="DetalhesClientesP">
               <strong>Genero: </strong>
             </p>
-            <select>
+            <select
+              onChange={(e) => setGeneroEdit(e.target.value)}
+              value={generoEdit}
+            >
               <option value="Masculino">Masculino</option>
               <option value="Feminino">Feminino</option>
             </select>
@@ -177,7 +191,7 @@ function GeralCliente({ infoCliente }) {
           </p>
           <p className="DetalhesClientesP">
             <strong>Genero: </strong>
-            {"Masculino"}
+            {generoEdit}
           </p>
           <p className="DetalhesClientesP">
             <strong>Telefone: </strong>
@@ -195,18 +209,21 @@ function GeralCliente({ infoCliente }) {
             <strong>Email: </strong>
             {emailEdit}
           </p>
-          <button
-            className="bttEditarClienteInfo"
-            onClick={() => setEditar(true)}
-          >
-            <FaEdit /> Editar
-          </button>
-          <button
-            className="bttDeleteClienteInfo"
-            onClick={() => deletarCliente()}
-          >
-            <MdDeleteOutline /> Excluir Cliente
-          </button>
+
+          <div id="areaButtonInfoClientes">
+            <button
+              className="bttEditarClienteInfo"
+              onClick={() => setEditar(true)}
+            >
+              <FaEdit /> Editar
+            </button>
+            <button
+              className="bttDeleteClienteInfo"
+              onClick={() => deletarCliente()}
+            >
+              <MdDeleteOutline /> Excluir Cliente
+            </button>
+          </div>
         </div>
       )}
     </div>

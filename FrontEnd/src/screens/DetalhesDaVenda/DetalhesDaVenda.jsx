@@ -1,6 +1,31 @@
 import "./DetalhesDaVenda.css";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../context/AppContext";
+import { useParams } from "react-router-dom";
+import services from "../../services/services";
+
+//conexão com a api
+import fetchapi from "../../api/fetchapi";
 
 function DetalhesDaVenda() {
+  const { id } = useParams();
+
+  const [venda, setVenda] = useState({});
+  const [cliente, setCliente] = useState({});
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    fetchapi.produrarVendaId(id).then((response) => {
+      setVenda(response[0]);
+      fetchapi.ProcurarClienteId(response[0].cliente_id).then((response) => {
+        setCliente(response[0]);
+
+        fetchapi.procurarProdutosVenda(id).then((response) => {
+          setProdutos(response);
+        });
+      });
+    });
+  }, []);
   return (
     <div id="DetalhesDaVenda">
       <div id="DetalhesDaVendaDisplay">
@@ -13,16 +38,20 @@ function DetalhesDaVenda() {
 
             <div>
               <p>
-                <strong>Nome: </strong>Carlos Eduardo Lourenço de Souza
+                <strong>Nome: </strong>
+                {cliente.nome}
               </p>
               <p>
-                <strong>Numero: </strong>(62) 9 9336-2090
+                <strong>Numero: </strong>
+                {services.formatarNumeroCelular(cliente.telefone)}
               </p>
               <p>
-                <strong>CPF: </strong>712.478.141-81
+                <strong>CPF: </strong>
+                {services.formatarCPF(cliente.cpf_cnpj)}
               </p>
               <p>
-                <strong>Endereço: </strong>R.2 , Qd.2 , Lt.13 , Jd. Petrópolis
+                <strong>Endereço: </strong>
+                {cliente.endereco}
               </p>
             </div>
           </div>
@@ -32,20 +61,22 @@ function DetalhesDaVenda() {
               <thead>
                 <tr>
                   <th>Produto</th>
+                  <th>Valor Unitario</th>
                   <th>Quantidade</th>
-                  <th>Valor</th>
-                  <th>Desconto</th>
                   <th>Total</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Comoda Capri</td>
-                  <td>1</td>
-                  <td>R$ 100,00</td>
-                  <td>5% / R$ 5,00</td>
-                  <td>R$ 95,00</td>
-                </tr>
+                {produtos.map((produto) => {
+                  return (
+                    <tr>
+                      <td>{produto.produto_nome}</td>
+                      <td>{services.formatarCurrency(produto.preco_unitario)}</td>
+                      <td>{produto.quantidade}</td>
+                      <td>{services.formatarCurrency(produto.valor_total)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -53,8 +84,12 @@ function DetalhesDaVenda() {
 
         <div id="DetalhesDaVendaDisplay2">
           <div id="DetalhesDaVendaDisplay2Pt1">
-            <h2>R$ 1.250,00</h2>
-            <a>Venda #0001 - 25 Abr 2024 - 15:45</a>
+            <h2>{services.formatarCurrency(venda.valor_total)}</h2>
+            <a>
+              Venda # {venda.id} -{" "}
+              {services.formatarDataCurta(venda.data_venda)} -{" "}
+              {services.formatarHorario(venda.data_venda)}
+            </a>
           </div>
 
           <div id="DetalhesDaVendaDisplay2Pt2">
@@ -62,16 +97,20 @@ function DetalhesDaVenda() {
               <strong>Pagamento: </strong>Dinheiro
             </p>
             <p>
-              <strong>Status: </strong>Concluida
+              <strong>Status: </strong>
+              {venda.status}
             </p>
             <p>
-              <strong>Quantidade de itens: </strong>2
+              <strong>Vendedor: </strong>
+              {venda.nome_funcionario}
             </p>
             <p>
-              <strong>Vendedor: </strong>Carlos Eduardo
+              <strong>Descontos: </strong>
+              {venda.descontos}
             </p>
             <p>
-              <strong>Status: </strong>Concluida
+              <strong>Acrescimos/Frete: </strong>
+              {venda.acrescimos}
             </p>
           </div>
 

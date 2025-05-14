@@ -86,10 +86,8 @@
 }
 
 .ProdutosNovaVenda {
-  background-color: #eeee;
   height: 85vh;
-  border: solid black 1px;
-  width: 100%;
+  width: 120%;
   padding: 5px;
   border-radius: 10px;
   margin-left: 15px;
@@ -113,5 +111,22 @@
 
 .FaturarNovaVenda:hover {
   background-color: #0071c2;
-  transition: .5s;
+  transition: 0.5s;
+}
+
+#buttonOkPontoDeVenda {
+  width: 100%;
+  background-color: #0071c2;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+.buttonDeleteArrayVenda {
+  cursor: pointer;
+  color: red;
+
 }

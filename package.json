@@ -1,0 +1,55 @@
+{
+  "name": "CashInBox",
+  "version": "1.0.0",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "cd FrontEnd && npm install && npm run build"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.seuapp.desktop",
+    "productName": "CashInBox",
+    "directories": {
+      "buildResources": "public",
+      "output": "dist"
+    },
+    "files": [
+      "FrontEnd/build/**/*",
+      "BackEnd/**/*",
+      "main/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/",
+        "to": "backend/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "carloseduardolsouza",
+        "repo": "PontoDeVenda-Sytem2.0"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-is-dev": "^3.0.1",
+    "electron-updater": "^6.6.2"
+  }
+}

@@ -1,5 +1,6 @@
 import "./CadastrarCliente.css";
-import { useState } from "react";
+import { useState , useContext } from "react";
+import AppContext from "../../context/AppContext";
 
 //icones
 import { FaUserAlt } from "react-icons/fa";
@@ -8,6 +9,8 @@ import { FaUserAlt } from "react-icons/fa";
 import fetchapi from "../../api/fetchapi";
 
 function CadastrarCliente() {
+  const {setErroApi} = useContext(AppContext)
+
   const [nome, setNome] = useState("");
   const [numero, setNumero] = useState("");
   const [endereço, setEndereço] = useState("");
@@ -59,6 +62,7 @@ function CadastrarCliente() {
       nome: nome,
       cpf_cnpj: cpf,
       email: email,
+      genero: genero,
       telefone: numero,
       data_nascimento: nascimento,
       endereco: endereço,
@@ -67,7 +71,6 @@ function CadastrarCliente() {
     fetchapi
       .NovoCliente(dados)
       .then((resposta) => {
-        window.alert("Cliente criado com sucesso!", resposta);
         setCpf('')
         setEmail('')
         setEndereço('')
@@ -77,8 +80,7 @@ function CadastrarCliente() {
         setNascimento('')
       })
       .catch((erro) => {
-        window.alert("Erro ao criar cliente:", erro);
-        // aqui você pode exibir uma mensagem de erro para o usuário
+        setErroApi(true)
       });
   };
 
@@ -154,8 +156,9 @@ function CadastrarCliente() {
               className="SelectNovoCliente"
               onChange={(event) => escreverDados("Gênero", event)}
               value={genero}
+              required
             >
-              <option value="Selecione o Genero">Selecione o Genero</option>
+              <option value="">Selecione o Genero</option>
               <option value="Masculino">Masculino</option>
               <option value="Feminino">Feminino</option>
             </select>

@@ -1,21 +1,54 @@
 import "./Funcionarios.css";
-import { Link , useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import AppContext from "../../context/AppContext";
+
+//conexão com a api
+import fetchapi from "../../api/fetchapi";
+
+//servissos
+import services from "../../services/services";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
 
 function Funcionarios() {
-  const navigate = useNavigate()
+  const { setErroApi } = useContext(AppContext);
+
+  const [pesquisaFuncionario, setPesquisaFuncionario] = useState("all");
+  const [resultFuncionario, setResultFuncionario] = useState([]);
+
+  useEffect(() => {
+    const buscarClientes = async () => {
+      try {
+        const resultado = await fetchapi.ProcurarFuncionario(
+          pesquisaFuncionario
+        );
+        setResultFuncionario(resultado); 
+      } catch (err) {
+        setErroApi(true);
+      }
+    };
+
+    buscarClientes();
+  }, []);
+
+  const renderFuncionario = async (e) => {
+    e.preventDefault();
+    const resultado = await fetchapi.ProcurarFuncionario(pesquisaFuncionario).then((response) => setResultFuncionario(response)).catch((erro) => setErroApi(true));
+  };
+
+  const navigate = useNavigate();
   return (
     <div id="Funcionarios">
-      <h2>Funcionarios</h2>
+      <h2>Funcionarios ({resultFuncionario.length})</h2>
       <div>
-        <form>
+        <form onSubmit={(e) => renderFuncionario(e)}>
           <button
             className="AddProduto"
             onClick={(e) => {
               e.preventDefault();
-              navigate("/cadastrarFuncionario")
+              navigate("/cadastrarFuncionario");
             }}
             type="button"
           >
@@ -25,6 +58,7 @@ function Funcionarios() {
             type="text"
             className="InputClientes"
             placeholder="Procurar no Funcionario..."
+            onChange={(e) => setPesquisaFuncionario(e.target.value)}
           />
           <button className="Search" type="submit">
             <FaSearch />
@@ -43,18 +77,23 @@ function Funcionarios() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <Link to={"/detalhesDoFuncionario/1"} className="aTdFuncionarios">
-                  Carlos Eduardo Lourenço de Souza
-                </Link>
-              </td>
-              <td>(62) 9 9336-2090</td>
-              <td>R$ 400,00</td>
-              <td>CLT</td>
-              <td>Ativo</td>
-              <td>Vendedor</td>
-            </tr>
+            {resultFuncionario.map((data) => (
+              <tr key={data.id}>
+                <td>
+                  <Link
+                    to={`/detalhesDoFuncionario/${data.id}`}
+                    className="aTdFuncionarios"
+                  >
+                    {data.nome}
+                  </Link>
+                </td>
+                <td>{services.formatarNumeroCelular(data.telefone)}</td>
+                <td>{services.formatarCurrency(data.comissao_mes)}</td>
+                <td>{data.regime_contrato}</td>
+                <td>{data.status}</td>
+                <td>{data.funcao}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

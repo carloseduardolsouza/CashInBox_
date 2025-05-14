@@ -26,20 +26,21 @@ const listarCliente = async (p) => {
 
 
 const novoCliente = async (dados) => {
-  const { nome, cpf_cnpj, email, telefone, data_nascimento, endereco } = dados;
+  const { nome, cpf_cnpj, email, telefone, data_nascimento, endereco , genero } = dados;
 
   const created_at = new Date().toISOString();
 
   const query = `
       INSERT INTO clientes 
-      (nome, cpf_cnpj, email, telefone, data_nascimento, endereco, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      (nome, cpf_cnpj, email, genero , telefone, data_nascimento, endereco, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ? , ?)
     `;
 
   const values = [
     nome,
     cpf_cnpj,
     email,
+    genero,
     telefone,
     data_nascimento,
     endereco,
@@ -72,11 +73,11 @@ const deletarCliente = async (id) => {
 };
 
 const editarCliente = async (id, dados) => {
-  const { nome, cpf_cnpj, email, telefone, data_nascimento, endereco } = dados;
+  const { nome, cpf_cnpj, email, genero , telefone, data_nascimento, endereco } = dados;
 
   const query = `
       UPDATE clientes
-      SET nome = ?, cpf_cnpj = ?, email = ?, telefone = ?, data_nascimento = ?, endereco = ?, updated_at = ?
+      SET nome = ?, cpf_cnpj = ?, email = ?, genero = ? , telefone = ?, data_nascimento = ?, endereco = ?, updated_at = ?
       WHERE id = ?
     `;
 
@@ -89,6 +90,7 @@ const editarCliente = async (id, dados) => {
         nome,
         cpf_cnpj,
         email,
+        genero,
         telefone,
         data_nascimento,
         endereco,

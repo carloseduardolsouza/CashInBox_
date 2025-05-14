@@ -24,6 +24,70 @@
   background-color: #c0c0c0;
 }
 
+.Table tr td {
+  border-bottom: 1px solid black;
+}
+
+.Table .ativo {
+  background-color: #0296ff29;
+}
+
 .aTdTabelaHistoricoVendas {
   color: black;
+}
+
+.DetalhesHistoricoVendas {
+  width: 70%;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: #0295ff;
+  color: white;
+  cursor: pointer;
+}
+
+.DetalhesHistoricoVendas:hover {
+  background-color: #006cb9;
+  transition: .3s;
+}
+
+.buttonExcluirItensSelecionadosAtivado {
+  width: 30px;
+  height: 30px;
+  border: solid red 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  border-radius: 10px;
+  cursor: pointer;
+  background: none;
+  cursor: pointer;
+}
+
+.buttonExcluirItensSelecionadosAtivado:hover {
+  color: white;
+  background-color: red;
+  transition: .3s;
+}
+
+.buttonExcluirItensSelecionadosDesativado {
+  width: 30px;
+  height: 30px;
+  border: solid #ff5353 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff5353;
+  border-radius: 10px;
+  cursor: pointer;
+  background: none;
+  cursor: not-allowed;
+}
+
+#AreaFIltroHistoricoVendas {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
 }

@@ -2,11 +2,13 @@
   "name": "pontodevenda-system2.0",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "date-fns": "^4.1.0",
     "install": "^0.13.0",
     "npm": "^11.3.0",
     "react": "^19.1.0",

@@ -1,53 +1,108 @@
 import "./HistoricoVendas.css";
+import { useState, useContext, useEffect } from "react";
+import AppContext from "../../../../context/AppContext";
 import { Link } from "react-router-dom";
 
+import services from "../../../../services/services";
+
+//conexão com a api
+import fetchapi from "../../../../api/fetchapi";
+
 import { FaFilter } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 function HistoricoVendas() {
+  const { setErroApi } = useContext(AppContext);
+  const [resultadosVendas, setResultadosVendas] = useState([]);
+  const [arraySelect, setArraySelect] = useState([]);
+
+  useEffect(() => {
+    fetchapi
+      .listarVendas()
+      .then((response) => {
+        setResultadosVendas(response);
+      })
+      .catch(() => {
+        setErroApi(true);
+      });
+  }, []);
+
+  const toggleArraySelect = (id) => {
+    if (arraySelect.includes(id)) {
+      setArraySelect(arraySelect.filter((item) => item !== id));
+    } else {
+      setArraySelect([...arraySelect, id]);
+    }
+  };
+
+  const excluirVendasSelecionadas = () => {
+    if (arraySelect.length === 0) return;
+  };
+
   return (
     <div>
-      <form>
-        <input type="date" className="FilterDateVendas" />
-        <button className="FilterICONDateVendas">
-          <FaFilter />
+      <div id="AreaFIltroHistoricoVendas">
+        <div>
+          <input type="date" className="FilterDateVendas" />
+          <button className="FilterICONDateVendas">
+            <FaFilter />
+          </button>
+        </div>
+
+        <button
+          className={
+            arraySelect.length >= 1
+              ? "buttonExcluirItensSelecionadosAtivado"
+              : "buttonExcluirItensSelecionadosDesativado"
+          }
+          onClick={() => excluirVendasSelecionadas()}
+        >
+          <FaTrash />
         </button>
-      </form>
+      </div>
       <table className="Table">
         <thead>
           <tr>
-            <th>Produto</th>
+            <th>*</th>
+            <th>Detalhes</th>
             <th>Cliente</th>
-            <th>Preço</th>
-            <th>Quantidade</th>
             <th>Desconto</th>
+            <th>Acrescimos</th>
             <th>Total</th>
+            <th>status</th>
             <th>Data</th>
           </tr>
         </thead>
 
         <tbody>
-          <tr>
-            <td><Link to={"/detalhesDaVenda/1"} className="aTdTabelaHistoricoVendas">Comoda Capri</Link></td>
-            <td>Carlos Eduardo Lourenço de Souza</td>
-            <td>R$ 100,00</td>
-            <td>1</td>
-            <td>5% / R$ 50,00</td>
-            <td>R$ 22.095,00</td>
-            <td>10/10/2005</td>
-          </tr>
-          {/*(loadingVendas && <Loading />) ||
-            resultVendas.map((vendas) => {
-              return (
-                <tr>
-                  <td>Comoda Capri</td>
-                  <td>R$ 100,00</td>
-                  <td>1</td>
-                  <td>5%</td>
-                  <td>R$ 95,00</td>
-                  <td>10/10/2005</td>
-                </tr>
-              );
-            })*/}
+          {resultadosVendas.map((dados) => {
+            return (
+              <tr className={arraySelect.includes(dados.id) ? "ativo" : ""}>
+                <td>
+                  <input
+                    type="checkbox"
+                    onChange={() => toggleArraySelect(dados.id)}
+                  />
+                </td>
+                <td>
+                  <Link
+                    to={`/detalhesDaVenda/${dados.id}`}
+                    className="aTdTabelaHistoricoVendas"
+                  >
+                    <button className="DetalhesHistoricoVendas">
+                      Detalhes
+                    </button>
+                  </Link>
+                </td>
+                <td>{dados.nome_cliente}</td>
+                <td>{dados.descontos}</td>
+                <td>{dados.acrescimos}</td>
+                <td>{services.formatarCurrency(dados.valor_total)}</td>
+                <td>{dados.status}</td>
+                <td>{services.formatarData(dados.data_venda)}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

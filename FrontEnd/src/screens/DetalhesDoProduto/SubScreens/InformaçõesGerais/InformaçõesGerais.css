@@ -1,19 +1,261 @@
-#InformaçõesGerais {
-    width: 1000px;
-    margin: auto;
-    font-size: 20px;
-    margin-top: 20px;
+/* From Uiverse.io by Shoh2008 */
+.checkbox-wrapper-4 * {
+  box-sizing: border-box;
+  color: black;
 }
 
-#mainInformaçõesGerais {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+.checkbox-wrapper-4 .cbx {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: inline-block;
 }
 
-#imageProdutoInformaçõesGerais {
-    background-color: black;
-    border-radius: 10px;
-    width: 300px;
-    height: 300px;
+.checkbox-wrapper-4 .cbx:not(:last-child) {
+  margin-right: 6px;
+}
+
+.checkbox-wrapper-4 .cbx:hover {
+  background: rgba(0, 119, 255, 0.176);
+}
+
+.checkbox-wrapper-4 .cbx span {
+  float: left;
+  vertical-align: middle;
+  transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-4 .cbx span:first-child {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  transform: scale(1);
+  border: 1px solid #cccfdb;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 1px rgba(0, 16, 75, 0.05);
+}
+
+.checkbox-wrapper-4 .cbx span:first-child svg {
+  position: absolute;
+  top: 3px;
+  left: 2px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16px;
+  stroke-dashoffset: 16px;
+  transition: all 0.3s ease;
+  transition-delay: 0.1s;
+  transform: translate3d(0, 0, 0);
+}
+
+.checkbox-wrapper-4 .cbx span:last-child {
+  padding-left: 8px;
+  line-height: 18px;
+}
+
+.checkbox-wrapper-4 .cbx:hover span:first-child {
+  border-color: #07f;
+}
+
+.checkbox-wrapper-4 .inp-cbx {
+  position: absolute;
+  visibility: hidden;
+}
+
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
+  background: #07f;
+  border-color: #07f;
+  animation: wave-4 0.4s ease;
+}
+
+.checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child svg {
+  stroke-dashoffset: 0;
+}
+
+.checkbox-wrapper-4 .inline-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media screen and (max-width: 640px) {
+  .checkbox-wrapper-4 .cbx {
+    width: 100%;
+    display: inline-block;
+  }
+}
+
+@-moz-keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@-webkit-keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@-o-keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes wave-4 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+#InformaçõesGeraisProdutos {
+  width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectInputsContentInfoProdutos {
+  width: 50%;
+}
+
+.divInputsContentInfoProdutos {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+#InformaçõesGeraisProdutos input {
+  width: 50%;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#InformaçõesGeraisProdutos textarea {
+  width: 50%;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+#InputsInfoProdutos {
+  width: 50%;
+}
+
+.itemDeImagemInfoProduto {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border: solid black 1px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  align-items: center;
+  font-size: 17px;
+}
+
+.itemDeImagemInfoProduto button {
+  border: solid red 1px;
+  border-radius: 10px;
+  color: red;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.itemDeImagemInfoProduto button:hover {
+  border: solid red 1px;
+  border-radius: 10px;
+  background-color: red;
+  color: white;
+  transition: .3s;
+}
+
+.ImageItemDeImagemInfoProduto {
+  width: 50px;
+  height: 50px;
+  border: solid black 1px;
+  background-size: cover;
+}
+
+#InputFileInfoProdutos {
+  width: 100%;
+  cursor: pointer;
+}
+
+#navInfoProdutos {
+  position: fixed;
+  bottom: 0px;
+  left: 40px;
+  width: 100vw;
+  height: 50px;
+  background-color: #dbdbdb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+#navInfoProdutos > div > .salvar {
+  margin-right: 10px;
+  font-size: 15px;
+  background-color: #07f;
+  width: 200px;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+}
+
+#navInfoProdutos > div > .cancelar {
+  margin-right: 10px;
+  font-size: 15px;
+  width: 200px;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  border: solid #00000053 1px;
+}
+
+#buttonExcluirInfoProduto {
+  margin-right: 70px;
+  font-size: 15px;
+  border-radius: 5px;
+  background: none;
+  padding: 5px;
+  color: red;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#ControleDeEstoque {
+  display: flex;
+}
+
+.ControleDeEstoqueInputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ControleDeEstoqueInputs strong {
+  font-size: 15px;
+  margin-left: 10px;
 }

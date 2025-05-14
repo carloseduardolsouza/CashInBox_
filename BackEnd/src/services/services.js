@@ -1,40 +1,33 @@
-const connection = require('../models/connection')
+const fs = require("fs");
+const path = require("path");
 
-const estastisticas = async (req , res) => {
-    var receita = 0
-    var despesas = 0
+const restart = (req, res) => {
+  const flagPath = path.resolve(__dirname, "../../restart.flag");
+  fs.writeFileSync(flagPath, `Reiniciado em: ${new Date().toISOString()}`);
+  console.log("API será reiniciada...");
+  res.send("Reiniciando...");
+  process.exit(0);
+};
 
-    const [vendas] = await connection.execute(`SELECT * FROM vendas`)
-    vendas.forEach((venda) => {
-        receita += +venda.total;
+const deletarImagem = (nomeArquivo) => {
+  const caminhoImagem = path.join(__dirname, "../../uploads", nomeArquivo);
+  console.log(caminhoImagem)
+
+  // Verifica se o arquivo existe antes de tentar deletar
+  if (fs.existsSync(caminhoImagem)) {
+    fs.unlink(caminhoImagem, (err) => {
+      if (err) {
+        console.error("Erro ao deletar imagem:", err);
+      } else {
+        console.log("Imagem deletada com sucesso:", nomeArquivo);
+      }
     });
-
-    const response = {
-        'receita': receita
-    }
-
-    res.json(response)
-    
-}
-
-const editarProdutoAutomatico = async (req , res) => {
-    const {
-        produto,
-        preçocompra,
-        preçovenda,
-        margem,
-        emestoque
-    } = req.body
-
-    const query = `UPDATE produtos SET  preçocompra = ?, margem = ?, preçovenda = ?, emestoque = ? WHERE referencia LIKE '%${produto}%'`;
-    
-    const [editarProduto] = await connection.execute(query, [ preçocompra, margem , preçovenda, emestoque]); 
-    console.log(produto)
-        
-    res.status(200).json(editarProduto)
-}
+  } else {
+    console.warn("Arquivo não encontrado:", nomeArquivo);
+  }
+};
 
 module.exports = {
-    estastisticas,
-    editarProdutoAutomatico
-}
+  restart,
+  deletarImagem,
+};

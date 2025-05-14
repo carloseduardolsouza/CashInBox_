@@ -1,6 +1,7 @@
 import "./clientes.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AppContext from "../../context/AppContext";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
@@ -12,6 +13,8 @@ import fetchapi from "../../api/fetchapi";
 import services from "../../services/services";
 
 function Clientes() {
+  const { setErroApi } = useContext(AppContext);
+
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
     Data.getUTCMonth() + 1
@@ -28,9 +31,9 @@ function Clientes() {
     const buscarClientes = async () => {
       try {
         const resultado = await fetchapi.ProcurarCliente(pesquisar);
-        setResultClientes(resultado); // supondo que `setResultClientes` seja seu setState
+        setResultClientes(resultado);
       } catch (err) {
-        console.error("Erro ao buscar clientes:", err);
+        setErroApi(true);
       }
     };
 

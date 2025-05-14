@@ -1,29 +1,52 @@
 import "./DetalhesDoProduto.css";
-import { useState } from "react";
+import { useState, useEffect , useContext } from "react";
+import { useParams } from "react-router-dom";
+import AppContext from "../../context/AppContext";
 
 //Componentes
 import Loading from "../../components/Loading/Loading";
 
+//conexão com a api
+import fetchapi from "../../api/fetchapi";
+
 //SubTelas
 import InformaçõesGerais from "./SubScreens/InformaçõesGerais/InformaçõesGerais";
-import Estoque_Tributario from "./SubScreens/Estoque_Tributario/Estoque_Tributario";
-import Preços from "./SubScreens/Preços/Preços";
+import Opções from "./SubScreens/Opções/Opções";
 
 function DetalhesDoProduto() {
+  const { id } = useParams();
+  const {setErroApi} = useContext(AppContext)
+  const [infoProduto, setInfoProduto] = useState([]);
   const [abaAtiva, setAbaAtiva] = useState("InfoGerais");
+
+  useEffect(() => {
+    const buscarProdutos = async () => {
+      try {
+        const resultado = await fetchapi.ProcurarProdutoId(id);
+        setInfoProduto(resultado);
+      } catch (err) {
+        setErroApi(true)
+      }
+    };
+
+    buscarProdutos();
+  }, []);
 
   const renderAba = () => {
     switch (abaAtiva) {
       case "InfoGerais":
         return <InformaçõesGerais />;
-      case "EstoqueTributario":
-        return <Estoque_Tributario />;
-      case "Preços":
-        return <Preços />;
+      case "Opções":
+        return <Opções />;
       default:
         return null;
     }
   };
+
+  if (!infoProduto) {
+    return <Loading />;
+  }
+
   return (
     <div id="DetalhesDoProduto">
       <h2>Detalhes do Produto</h2>
@@ -37,20 +60,12 @@ function DetalhesDoProduto() {
           Informações Gerais
         </button>
         <button
-          onClick={() => setAbaAtiva("Preços")}
+          onClick={() => setAbaAtiva("Opções")}
           className={`ButãoDetalhesDoProduto ${
-            abaAtiva === "Preços" ? "ativo" : ""
+            abaAtiva === "Opções" ? "ativo" : ""
           }`}
         >
-          Preços-Promoções
-        </button>
-        <button
-          onClick={() => setAbaAtiva("EstoqueTributario")}
-          className={`ButãoDetalhesDoProduto ${
-            abaAtiva === "EstoqueTributario" ? "ativo" : ""
-          }`}
-        >
-          Estoque-Tributario
+          Opções
         </button>
       </div>
       <div>{renderAba()}</div>

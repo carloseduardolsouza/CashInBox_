@@ -7,7 +7,7 @@ import ItemProduto from "./components/ItemProduto/ItemProduto";
 //import Loading from "../../components/AçãoRealizada/AçãoRealizada";
 
 //Controlador da api
-//import fetchapi from "../../api/fetchapi";
+import fetchapi from "../../api/fetchapi";
 
 //icones
 import { FaSearch } from "react-icons/fa";
@@ -22,29 +22,35 @@ function Produtos() {
   const [loadingProdutos, setloadingProdutos] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
 
-  /*useEffect(() => {
-        fetchapi.ProcurarProdutos(pesquisar).then((response) => {
-            setResultProdutos(response)
-            setloadingProdutos(false)
-        })
-    }, [])*/
+  useEffect(() => {
+    const buscarProdutos = async () => {
+      try {
+        const resultado = await fetchapi.ProcurarProdutos(pesquisar);
+        setResultProdutos(resultado);
+      } catch (err) {
+        console.error("Erro ao buscar produtos:", err);
+      }
+    };
 
-  /*const renderClientes = async (e) => {
-        e.preventDefault()
-        setloadingProdutos(true)
-        const client = await fetchapi.ProcurarProdutos(pesquisar)
-        setloadingProdutos(false)
-        setResultProdutos(client)
-    }*/
+    buscarProdutos();
+  }, []);
+
+  const renderProdutos = async (e) => {
+    e.preventDefault();
+    setloadingProdutos(true);
+    const produtos = await fetchapi.ProcurarProdutos(pesquisar);
+    setloadingProdutos(false);
+    setResultProdutos(produtos);
+  };
 
   return (
     <div id="PRODUTOS">
       <header id="HeaderProduto">
-        <h2>Produtos ({/*resultProdutos.length*/ ``})</h2>
+        <h2>Produtos ({resultProdutos.length})</h2>
         <p>{log}</p>
       </header>
       <article className="ArticleProduto">
-        <form onSubmit={(e) => /*renderClientes(e)*/ ``}>
+        <form onSubmit={(e) => renderProdutos(e)}>
           <input
             type="text"
             className="InputProduto"
@@ -57,13 +63,9 @@ function Produtos() {
         </form>
       </article>
       <table className="tableProdutos">
-        <ItemProduto />
-        <ItemProduto />
-        <ItemProduto />
-        <ItemProduto />
-        <ItemProduto />
-        <ItemProduto />
-        <ItemProduto />
+        {resultProdutos.map((produto) => {
+          return <ItemProduto dado={produto} />;
+        })}
       </table>
     </div>
   );

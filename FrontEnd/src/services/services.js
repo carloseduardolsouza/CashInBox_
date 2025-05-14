@@ -1,4 +1,4 @@
-//import { format } from "date-fns";
+import format from "date-fns/format";
 
 function formatarCurrency(numero) {
   // Converter para número, se possível
@@ -37,12 +37,12 @@ function formatarDataNascimento(data) {
   return dataFormatada;
 }
 
-/*function formatarData(data, formato = "dd/MM/yyyy") {
+function formatarData(data, formato = "dd/MM/yyyy") {
   const dataObj = new Date(data);
   const dataFormatada = format(dataObj, formato);
 
   return <span>{dataFormatada}</span>;
-}*/
+}
 
 function mascaraDeDinheroInput(e) {
   let inputValue = e.target.value;
@@ -65,10 +65,33 @@ function mascaraDeDinheroInput(e) {
   return inputValue;
 }
 
+function formatarDataCurta(dataString) {
+  const data = new Date(dataString);
+  const dia = data.getDate();
+  const ano = data.getFullYear();
+
+  const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+  const mes = meses[data.getMonth()];
+
+  return `${dia.toString().padStart(2, '0')} ${mes} ${ano}`;
+}
+
+function formatarHorario(dataString) {
+  const data = new Date(dataString);
+  const horas = data.getHours().toString().padStart(2, '0');
+  const minutos = data.getMinutes().toString().padStart(2, '0');
+  return `${horas}:${minutos}`;
+}
+
+
+
 export default {
   formatarCurrency,
   formatarDataNascimento,
   formatarCPF,
+  formatarData,
   formatarNumeroCelular,
   mascaraDeDinheroInput,
+  formatarDataCurta,
+  formatarHorario
 };
