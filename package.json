@@ -4,15 +4,23 @@
   "main": "main/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "cd FrontEnd && npm install && npm run build"
+    "build": "cd FrontEnd && npm install && npm run build",
+    "react-build": "react-scripts build",
+    "preelectron-build": "copy node_modules\\electron\\dist\\ffmpeg.dll .",
+    "electron-build": "npm run preelectron-build && electron-builder"
   },
   "devDependencies": {
     "electron": "^29.0.0",
     "electron-builder": "^26.0.12"
   },
+  "dependencies": {
+    "electron-is-dev": "^3.0.1",
+    "electron-updater": "^6.6.2"
+  },
   "build": {
-    "appId": "com.seuapp.desktop",
+    "appId": "com.carloseduardolsouza.cashinbox",
     "productName": "CashInBox",
+    "asar": false,
     "directories": {
       "buildResources": "public",
       "output": "dist"
@@ -21,6 +29,7 @@
       "FrontEnd/build/**/*",
       "BackEnd/**/*",
       "main/**/*",
+      "ffmpeg.dll",
       "package.json"
     ],
     "extraResources": [
@@ -40,16 +49,11 @@
       "perMachine": true,
       "allowToChangeInstallationDirectory": true
     },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "carloseduardolsouza",
-        "repo": "PontoDeVenda-Sytem2.0"
-      }
-    ]
-  },
-  "dependencies": {
-    "electron-is-dev": "^3.0.1",
-    "electron-updater": "^6.6.2"
+    "publish": {
+      "provider": "github",
+      "owner": "carloseduardolsouza",
+      "repo": "PontoDeVenda-Sytem2.0",
+      "releaseType": "draft"
+    }
   }
 }
