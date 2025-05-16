@@ -57,6 +57,7 @@ router.post("/novaVenda" , vendaControlles.NovaVenda)
 router.get("/listarVendas/:filtro?/:pesquisa?" , vendaControlles.listarVendas)
 router.get("/procurarVendaId/:id" , vendaControlles.produrarVendaId)
 router.get("/procurarProdutosVenda/:id" , vendaControlles.procurarProdutosVenda)
+router.delete("/deletarVenda/:id" , vendaControlles.deletarVenda)
 
 
 router.get("/restart" , services.restart)

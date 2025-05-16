@@ -23,9 +23,16 @@ const procurarProdutosVenda = async (req , res) => {
     return res.status(201).json(produtos)
 }
 
+const deletarVenda = async (req , res) => {
+    const {id} = req.params
+    const venda = await vendaModels.deletarVenda(id)
+    return res.status(201)
+}
+
 module.exports = {
     NovaVenda,
     listarVendas,
     produrarVendaId,
-    procurarProdutosVenda
+    procurarProdutosVenda,
+    deletarVenda
 }

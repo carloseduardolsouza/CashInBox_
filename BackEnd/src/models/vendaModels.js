@@ -156,9 +156,24 @@ const procurarProdutosVenda = async (id) => {
   return venda;
 };
 
+const deletarVenda = async (id) => {
+  const query = `DELETE FROM vendas WHERE id = ${id}`;
+
+  await new Promise((resolve, reject) => {
+    connection.run(query, function (err) {
+      if (err) {
+        reject(err); // Caso ocorra algum erro
+      } else {
+        resolve(this.lastID); // Retorna o ID do cliente inserido
+      }
+    });
+  });
+}
+
 module.exports = {
   NovaVenda,
   listarVendas,
   produrarVendaId,
   procurarProdutosVenda,
+  deletarVenda
 };

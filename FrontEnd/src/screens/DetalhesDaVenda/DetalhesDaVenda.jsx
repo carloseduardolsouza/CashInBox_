@@ -39,19 +39,19 @@ function DetalhesDaVenda() {
             <div>
               <p>
                 <strong>Nome: </strong>
-                {cliente.nome}
+                {cliente?.nome || "indefinido"}
               </p>
               <p>
                 <strong>Numero: </strong>
-                {services.formatarNumeroCelular(cliente.telefone)}
+                {services.formatarNumeroCelular(cliente?.telefone || "indefinido")}
               </p>
               <p>
                 <strong>CPF: </strong>
-                {services.formatarCPF(cliente.cpf_cnpj)}
+                {services.formatarCPF(cliente?.cpf_cnpj || "indefinido")}
               </p>
               <p>
                 <strong>Endereço: </strong>
-                {cliente.endereco}
+                {cliente?.endereco || "indefinido"}
               </p>
             </div>
           </div>

@@ -8,30 +8,66 @@ let apiProcess;
 
 // Cria a janela principal do Electron
 function createWindow() {
-  // Obtém as dimensões da tela principal
-  const mainScreen = screen.getPrimaryDisplay();
-  const { width, height } = mainScreen.workAreaSize;
-
-  // Remove menu da aplicação
+  // Remove o menu da aplicação
   const mainMenu = Menu.buildFromTemplate([]);
   Menu.setApplicationMenu(mainMenu);
 
-  // Cria a janela
   mainWindow = new BrowserWindow({
     title: "CashInBox",
-    fullscreen: true,
+    width: 800,
+    height: 600,
+    frame: false,
+    resizable: false,
+    movable: false,
+    minimizable: true,
+    fullscreenable: false,
+    skipTaskbar: false,
     webPreferences: {
-      nodeIntegration: false, // Segurança
-      contextIsolation: true, // Isolamento entre main e renderer
-      preload: path.join(__dirname, "preload.js"), // Opcional, para comunicação IPC
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
-  // Carrega o frontend compilado (React build)
-  mainWindow.loadFile(path.join(__dirname, "../FrontEnd/build/index.html"));
+  // Faz a janela ocupar toda a área disponível da tela, respeitando a taskbar
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { x, y, width, height } = primaryDisplay.workArea;
+  mainWindow.setBounds({ x, y, width, height });
+
+  // Carrega o React compilado
+  const indexPath = path.join(__dirname, "../FrontEnd/build/index.html");
+  mainWindow.loadFile(indexPath).catch((err) => {
+    console.error("❌ Erro ao carregar o frontend:", err);
+  });
 }
 
-// Configura os eventos do autoUpdater
+// Inicia a API local
+function startApi() {
+  const apiPath = path.join(__dirname, "../BackEnd/src/server.js");
+
+  apiProcess = spawn(process.execPath, [apiPath], {
+    cwd: path.join(__dirname, "../BackEnd"),
+    shell: true,
+    stdio: ["pipe", "pipe", "pipe"],
+  });
+
+  apiProcess.stdout.on("data", (data) => {
+    console.log(`[API]: ${data.toString()}`);
+  });
+
+  apiProcess.stderr.on("data", (data) => {
+    console.error(`[API ERROR]: ${data.toString()}`);
+  });
+
+  apiProcess.on("close", (code) => {
+    console.log(`[API] encerrada com código ${code}`);
+  });
+
+  apiProcess.on("error", (err) => {
+    console.error("❌ Erro ao iniciar a API:", err);
+  });
+}
+
+// Configura o sistema de atualizações automáticas
 function setupAutoUpdater() {
   autoUpdater.on("checking-for-update", () => {
     console.log("🔄 Verificando por atualizações...");
@@ -50,13 +86,12 @@ function setupAutoUpdater() {
   });
 
   autoUpdater.on("update-downloaded", () => {
-    console.log("📦 Atualização baixada, pronta para instalar.");
+    console.log("📦 Atualização baixada.");
     const options = {
       type: "question",
       buttons: ["Sim", "Não"],
       title: "Atualização disponível",
-      message:
-        "Uma nova versão foi baixada. Deseja reiniciar agora para instalar?",
+      message: "Uma nova versão foi baixada. Deseja reiniciar agora para instalar?",
     };
 
     dialog.showMessageBox(mainWindow, options).then((result) => {
@@ -67,69 +102,28 @@ function setupAutoUpdater() {
   });
 }
 
-function startApi() {
-  const apiPath = path.join(__dirname, "../BackEnd/src/server.js");
-  apiProcess = spawn("node", [apiPath], {
-    shell: true,
-    stdio: ["pipe", "pipe", "pipe"],
-  });
-
-  apiProcess.stdout.on("data", (data) => {
-    console.log(`[API]: ${data.toString()}`);
-  });
-
-  apiProcess.stderr.on("data", (data) => {
-    console.error(`[API ERROR]: ${data.toString()}`);
-  });
-
-  apiProcess.on("close", (code) => {
-    console.log(`[API] encerrada com código ${code}`);
-  });
-
-  apiProcess.on("error", (err) => {
-    console.error("Erro ao iniciar a API:", err);
-  });
-}
-
-
-// Inicia o backend (Node.js)
-function startBackend() {
-  const backendProcess = spawn("node", ["BackEnd/server.js"], {
-    shell: true,
-    stdio: "inherit", // Redireciona logs para o console principal
-  });
-
-  backendProcess.on("error", (err) => {
-    console.error("❌ Erro ao iniciar o backend:", err);
-  });
-
-  backendProcess.on("exit", (code) => {
-    if (code !== 0) {
-      console.log(`⚠️ Backend terminou com código ${code}`);
-    }
-  });
-}
-
 // Quando o app estiver pronto
 app.whenReady().then(() => {
-  //startBackend(); // Inicia o backend
-  createWindow(); // Cria a janela
+  startApi(); // Inicia a API primeiro
+  createWindow(); // Cria a janela do app
   setupAutoUpdater(); // Configura atualizações
-  startApi() //inicia a api
   autoUpdater.checkForUpdatesAndNotify();
 
-  // Verificações periódicas de update (a cada 1 hora)
+  // Verifica atualizações a cada 1 hora
   setInterval(() => {
     autoUpdater.checkForUpdates();
   }, 1000 * 60 * 60);
 });
 
-// Encerra o app quando todas as janelas forem fechadas (exceto no macOS)
+// Fecha o app se todas as janelas forem fechadas
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+  if (process.platform !== "darwin") {
+    if (apiProcess) apiProcess.kill();
+    app.quit();
+  }
 });
 
-// macOS: recria a janela ao clicar no ícone do dock
+// macOS: recria janela se o usuário clicar no ícone do dock
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();

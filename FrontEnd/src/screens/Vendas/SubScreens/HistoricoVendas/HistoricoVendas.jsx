@@ -16,15 +16,17 @@ function HistoricoVendas() {
   const [resultadosVendas, setResultadosVendas] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
 
+  const carregarVendas = async () => {
+    try {
+      const response = await fetchapi.listarVendas();
+      setResultadosVendas(response);
+    } catch (error) {
+      setErroApi(true);
+    }
+  };
+
   useEffect(() => {
-    fetchapi
-      .listarVendas()
-      .then((response) => {
-        setResultadosVendas(response);
-      })
-      .catch(() => {
-        setErroApi(true);
-      });
+    carregarVendas()
   }, []);
 
   const toggleArraySelect = (id) => {
@@ -35,8 +37,14 @@ function HistoricoVendas() {
     }
   };
 
-  const excluirVendasSelecionadas = () => {
-    if (arraySelect.length === 0) return;
+  const excluirVendasSelecionadas = async () => {
+    if (arraySelect.length === 0) {
+      return;
+    }
+
+    await Promise.all(arraySelect.map((id) => fetchapi.deletarVenda(id)));
+    await carregarVendas()
+    setArraySelect([])
   };
 
   return (
@@ -50,6 +58,7 @@ function HistoricoVendas() {
         </div>
 
         <button
+          disabled={arraySelect.length === 0}
           className={
             arraySelect.length >= 1
               ? "buttonExcluirItensSelecionadosAtivado"

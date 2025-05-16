@@ -393,9 +393,11 @@ const NovaVendaEmBloco = async (dados) => {
 };
 
 const procurarProdutosVenda = async (id) => {
-  const produtos = await fetch(`http://localhost:3322/procurarProdutosVenda/${id}`)
+  const produtos = await fetch(
+    `http://localhost:3322/procurarProdutosVenda/${id}`
+  )
     .then((response) => {
-      return response; 
+      return response;
     })
     .catch((erro) => {
       return erro;
@@ -403,6 +405,18 @@ const procurarProdutosVenda = async (id) => {
 
   const dados = await produtos.json();
   return dados;
+};
+
+const deletarVenda = async (id) => {
+  const venda = await fetch(`http://localhost:3322/deletarVenda/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!venda.ok) {
+    throw new Error("Falha ao excluir venda");
+  }
+
+  console.log("venda excluída com sucesso");
 };
 
 const restartApi = async () => {
@@ -443,4 +457,5 @@ export default {
   NovaVendaEmBloco,
   produrarVendaId,
   procurarProdutosVenda,
+  deletarVenda
 };
