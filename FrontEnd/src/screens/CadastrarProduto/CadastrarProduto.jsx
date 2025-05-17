@@ -113,7 +113,7 @@ function CadastrarProduto() {
       preco_custo: preçoCompra,
       estoque_atual: 0,
       estoque_minimo: 0,
-      markup: markup,
+      markup: markup.toFixed(2),
       categoria: marca,
       categoria_id: categoria,
       unidade_medida: "",
@@ -123,7 +123,16 @@ function CadastrarProduto() {
     fetchapi
       .novoProduto(dados, imageReq)
       .then((resposta) => {
-        //limpar
+        setCategoria("")
+        setDescrição("")
+        setImageReq([])
+        setImages([])
+        setMarca("")
+        setMarkup("")
+        setNomeProduto("")
+        setPreçoCompra("")
+        setPreçoVenda("")
+        setOpenImagens(false)
       })
       .catch((erro) => {
         setErroApi(true);

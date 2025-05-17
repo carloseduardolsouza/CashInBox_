@@ -1,6 +1,7 @@
 import "./CadastrarCliente.css";
 import { useState , useContext } from "react";
 import AppContext from "../../context/AppContext";
+import Executando from "../../components/Executando/Executando"
 
 //icones
 import { FaUserAlt } from "react-icons/fa";
@@ -19,7 +20,7 @@ function CadastrarCliente() {
   const [genero, setGenero] = useState("Selecione o Genero");
   const [nascimento, setNascimento] = useState("");
 
-  const [concluido, setConcluindo] = useState(false);
+  const [executando, setExecutando] = useState(false);
 
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
@@ -58,6 +59,8 @@ function CadastrarCliente() {
 
   const cadastrarCliente = (e) => {
     e.preventDefault();
+    setExecutando(true)
+
     let dados = {
       nome: nome,
       cpf_cnpj: cpf,
@@ -78,6 +81,7 @@ function CadastrarCliente() {
         setNome('')
         setNumero('')
         setNascimento('')
+        setExecutando(false)
       })
       .catch((erro) => {
         setErroApi(true)
@@ -86,6 +90,7 @@ function CadastrarCliente() {
 
   return (
     <div id="novoCliente">
+      {executando && <Executando/>}
       <h2>Novo Cliente</h2>
       <p>{log}</p>
       <div id="CENTRALIZAR">

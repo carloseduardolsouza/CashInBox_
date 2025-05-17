@@ -91,7 +91,14 @@ function PontoDeVenda() {
 
   return (
     <div id="NOVAVENDA" tabIndex={0} onKeyDown={handleKeyDown}>
-      {faturado && <FaturarVenda fechar={setFaturado} venda={arrayVenda}/>}
+      {faturado && (
+        <FaturarVenda
+          fechar={setFaturado}
+          venda={arrayVenda}
+          limparVenda={setArrayVenda}
+          limparValor={setValorTotal}
+        />
+      )}
       <header>
         <h2>Nova Venda</h2>
         <p>{log}</p>

@@ -14,8 +14,6 @@ function createWindow() {
 
   mainWindow = new BrowserWindow({
     title: "CashInBox",
-    width: 800,
-    height: 600,
     frame: false,
     resizable: false,
     movable: false,
@@ -27,11 +25,6 @@ function createWindow() {
       contextIsolation: false,
     },
   });
-
-  // Faz a janela ocupar toda a área disponível da tela, respeitando a taskbar
-  const primaryDisplay = screen.getPrimaryDisplay();
-  const { x, y, width, height } = primaryDisplay.workArea;
-  mainWindow.setBounds({ x, y, width, height });
 
   // Carrega o React compilado
   const indexPath = path.join(__dirname, "../FrontEnd/build/index.html");

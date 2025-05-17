@@ -164,16 +164,38 @@ const deletarVenda = async (id) => {
       if (err) {
         reject(err); // Caso ocorra algum erro
       } else {
-        resolve(this.lastID); // Retorna o ID do cliente inserido
+        resolve(this.lastID);
       }
     });
   });
-}
+
+  const queryDeleteItens = `DELETE FROM vendas_itens WHERE venda_id = ${id}`;
+  await new Promise((resolve, reject) => {
+    connection.run(queryDeleteItens, function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(this.lastID)
+      }
+    });
+  });
+
+  const queryFormaPagamento = `DELETE FROM pagamentos WHERE venda_id = ${id}`;
+  return new Promise((resolve, reject) => {
+    connection.run(queryDeleteItens, function (err) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(this.lastID)
+      }
+    });
+  });
+};
 
 module.exports = {
   NovaVenda,
   listarVendas,
   produrarVendaId,
   procurarProdutosVenda,
-  deletarVenda
+  deletarVenda,
 };

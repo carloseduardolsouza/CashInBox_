@@ -26,7 +26,7 @@ const procurarProdutosVenda = async (req , res) => {
 const deletarVenda = async (req , res) => {
     const {id} = req.params
     const venda = await vendaModels.deletarVenda(id)
-    return res.status(201)
+    return res.status(201).json(venda)
 }
 
 module.exports = {

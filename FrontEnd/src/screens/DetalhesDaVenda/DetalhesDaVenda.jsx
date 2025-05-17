@@ -1,7 +1,7 @@
 import "./DetalhesDaVenda.css";
 import { useState, useEffect, useContext } from "react";
 import AppContext from "../../context/AppContext";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
 import services from "../../services/services";
 
 //conexão com a api
@@ -9,6 +9,9 @@ import fetchapi from "../../api/fetchapi";
 
 function DetalhesDaVenda() {
   const { id } = useParams();
+  const navigate = useNavigate()
+
+  const {setErroApi} = useContext(AppContext)
 
   const [venda, setVenda] = useState({});
   const [cliente, setCliente] = useState({});
@@ -26,6 +29,15 @@ function DetalhesDaVenda() {
       });
     });
   }, []);
+
+  const cancelarVenda = () => {
+    fetchapi.deletarVenda(id).then(() => {
+      navigate("/vendas")
+    }).catch(() => {
+      setErroApi(true)
+    })
+  }
+
   return (
     <div id="DetalhesDaVenda">
       <div id="DetalhesDaVendaDisplay">
@@ -115,7 +127,7 @@ function DetalhesDaVenda() {
           </div>
 
           <div id="DetalhesDaVendaDisplay2Pt3">
-            <p id="CancelarVendaDetalhesDaVenda">Cancelar Venda</p>
+            <p id="CancelarVendaDetalhesDaVenda" onClick={() => cancelarVenda()}>Cancelar Venda</p>
             <div>
               <button className="ButãoEditarDetalhesDaVenda ButãoDetalhesDaVenda">
                 Editar

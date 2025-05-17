@@ -154,6 +154,7 @@
 }
 
 .itemDeImagemInfoProduto {
+  cursor: grab;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -163,6 +164,11 @@
   border-radius: 10px;
   align-items: center;
   font-size: 17px;
+}
+
+.itemDeImagemInfoProduto:active {
+  opacity: 0.6;
+  cursor: grabbing;
 }
 
 .itemDeImagemInfoProduto button {
@@ -181,7 +187,7 @@
   border-radius: 10px;
   background-color: red;
   color: white;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .ImageItemDeImagemInfoProduto {

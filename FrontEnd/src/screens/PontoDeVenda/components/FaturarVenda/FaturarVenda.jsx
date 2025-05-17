@@ -7,7 +7,7 @@ import fetchapi from "../../../../api/fetchapi";
 //icones
 import { FaTrash } from "react-icons/fa6";
 
-function FaturarVenda({ fechar, venda }) {
+function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
   const [valorCompra, setValorCompra] = useState(0);
   const [descontoReais, setDescontoReais] = useState(0);
   const [descontoPorcentagem, setDescontoPorcentagem] = useState(0);
@@ -149,7 +149,13 @@ function FaturarVenda({ fechar, venda }) {
       pagamentos: formaPagemento,
     };
 
-    fetchapi.NovaVendaEmBloco(dados).then(() => {}).catch(() => {})
+    fetchapi.NovaVendaEmBloco(dados).then(() => {
+      limparVenda([])
+      limparValor(0)
+      fechar(false)
+    }).catch(() => {
+      //carregar erro
+    })
   };
 
   return (
