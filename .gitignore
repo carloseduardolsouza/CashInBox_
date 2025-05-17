@@ -12,6 +12,7 @@ yarn-error.log*
 # Diretórios comuns de dependências
 node_modules/
 **/node_modules/
+CashInBox-Front-win32-x64/
 
 # Pastas de build (front e back)
 dist/

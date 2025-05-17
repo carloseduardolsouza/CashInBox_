@@ -5,10 +5,9 @@
   "scripts": {
     "start": "electron .",
     "build": "cd FrontEnd && npm install && npm run build",
-    "react-build": "react-scripts build",
-    "preelectron-build": "copy node_modules\\electron\\dist\\ffmpeg.dll .",
-    "electron-build": "npm run preelectron-build && electron-builder",
-     "package": "electron-packager . MeuApp --platform=win32 --arch=x64 --out=dist"
+    "postbuild": "copy node_modules\\electron\\dist\\ffmpeg.dll .",
+    "dist": "npm run build && npm run postbuild && electron-builder",
+    "package": "electron-packager . MeuApp --platform=win32 --arch=x64 --out=dist"
   },
   "devDependencies": {
     "electron": "^29.0.0",
@@ -38,11 +37,9 @@
     ],
     "extraResources": [
       {
-        "from": "backend/",
-        "to": "backend/",
-        "filter": [
-          "**/*"
-        ]
+        "from": "BackEnd/",
+        "to": "BackEnd/",
+        "filter": ["**/*"]
       }
     ],
     "win": {
