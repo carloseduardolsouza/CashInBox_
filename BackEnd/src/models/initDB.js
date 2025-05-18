@@ -132,7 +132,7 @@ db.serialize(() => {
       descontos TEXT,
       acrescimos TEXT,
       valor_total REAL NOT NULL,
-      status TEXT CHECK(status IN ('concluida', 'pendente', 'cancelada', 'orcamento')) NOT NULL,
+      status TEXT CHECK(status IN ('concluida', 'pendente', 'cancelada', 'orçamento')) NOT NULL,
       observacoes TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT DEFAULT CURRENT_TIMESTAMP,

@@ -360,6 +360,20 @@ const listarVendas = async (filtro, pesquisa) => {
   }
 };
 
+const listarOrcamentos = async (filtro, pesquisa) => {
+  if (filtro == undefined && pesquisa == undefined) {
+    const Orcamentos = await fetch(`http://localhost:3322/listarOrcamentos`)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      });
+    const data = await Orcamentos.json();
+    return data;
+  }
+};
+
 const produrarVendaId = async (id) => {
   const venda = await fetch(`http://localhost:3322/procurarVendaId/${id}`)
     .then((response) => {
@@ -454,6 +468,7 @@ export default {
   AtualizarProduto,
 
   listarVendas,
+  listarOrcamentos,
   NovaVendaEmBloco,
   produrarVendaId,
   procurarProdutosVenda,

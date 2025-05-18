@@ -105,7 +105,31 @@ const listarVendas = async (filtro, pesquisa) => {
   let values = [];
 
   if (filtro == undefined && pesquisa == undefined) {
-    query = `SELECT * FROM vendas`;
+    query = `SELECT * FROM vendas WHERE status != 'orçamento'`;
+  } else {
+    query = `SELECT * FROM vendas WHERE nome LIKE ?`;
+    values.push(`%${id}%`); // Isso garante aspas e evita SQL injection
+  }
+
+  const vendas = await new Promise((resolve, reject) => {
+    connection.all(query, values, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return vendas.reverse();
+};
+
+const listarOrcamentos = async (filtro, pesquisa) => {
+  let query;
+  let values = [];
+
+  if (filtro == undefined && pesquisa == undefined) {
+    query = `SELECT * FROM vendas WHERE status = 'orçamento'`;
   } else {
     query = `SELECT * FROM vendas WHERE nome LIKE ?`;
     values.push(`%${id}%`); // Isso garante aspas e evita SQL injection
@@ -173,9 +197,9 @@ const deletarVenda = async (id) => {
   await new Promise((resolve, reject) => {
     connection.run(queryDeleteItens, function (err) {
       if (err) {
-        reject(err)
+        reject(err);
       } else {
-        resolve(this.lastID)
+        resolve(this.lastID);
       }
     });
   });
@@ -184,9 +208,9 @@ const deletarVenda = async (id) => {
   return new Promise((resolve, reject) => {
     connection.run(queryDeleteItens, function (err) {
       if (err) {
-        reject(err)
+        reject(err);
       } else {
-        resolve(this.lastID)
+        resolve(this.lastID);
       }
     });
   });
@@ -198,4 +222,5 @@ module.exports = {
   produrarVendaId,
   procurarProdutosVenda,
   deletarVenda,
+  listarOrcamentos,
 };

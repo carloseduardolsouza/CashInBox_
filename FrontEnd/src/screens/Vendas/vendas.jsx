@@ -4,10 +4,7 @@ import { Link } from "react-router-dom";
 
 // Subtelas
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
-import PedidosEmAberto from "./SubScreens/PedidosEmAberto/PedidosEmAberto";
-import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber";
 import Orçamentos from "./SubScreens/Orçamentos/Orçamentos";
-import PedidosOnline from "./SubScreens/PedidosOnline/PedidosOnline";
 
 function Vendas() {
   const Data = new Date();
@@ -22,14 +19,8 @@ function Vendas() {
     switch (abaAtiva) {
       case "historico":
         return <HistoricoVendas />;
-      case "pedidosEmAberto":
-        return <PedidosEmAberto />;
-      case "vendasReceber":
-        return <VendasAReceber />;
       case "orcamentos":
         return <Orçamentos />;
-      case "pedidosOnline":
-        return <PedidosOnline />;
       default:
         return null;
     }
@@ -60,35 +51,11 @@ function Vendas() {
           </button>
           <button
             className={`ButãoVendasAbas ${
-              abaAtiva === "pedidosEmAberto" ? "ativo" : ""
-            }`}
-            onClick={() => setAbaAtiva("pedidosEmAberto")}
-          >
-            Pedidos em Aberto
-          </button>
-          <button
-            className={`ButãoVendasAbas ${
-              abaAtiva === "vendasReceber" ? "ativo" : ""
-            }`}
-            onClick={() => setAbaAtiva("vendasReceber")}
-          >
-            Vendas a Receber
-          </button>
-          <button
-            className={`ButãoVendasAbas ${
               abaAtiva === "orcamentos" ? "ativo" : ""
             }`}
             onClick={() => setAbaAtiva("orcamentos")}
           >
             Orçamentos
-          </button>
-          <button
-            className={`ButãoVendasAbas ${
-              abaAtiva === "pedidosOnline" ? "ativo" : ""
-            }`}
-            onClick={() => setAbaAtiva("pedidosOnline")}
-          >
-            Pedidos Online
           </button>
         </div>
 

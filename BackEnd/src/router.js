@@ -55,6 +55,7 @@ router.put("/editarCategorias/:id" , categoriasControllers.editarCategoria)
 
 router.post("/novaVenda" , vendaControlles.NovaVenda)
 router.get("/listarVendas/:filtro?/:pesquisa?" , vendaControlles.listarVendas)
+router.get("/listarOrcamentos/:filtro?/:pesquisa?" , vendaControlles.listarOrcamentos)
 router.get("/procurarVendaId/:id" , vendaControlles.produrarVendaId)
 router.get("/procurarProdutosVenda/:id" , vendaControlles.procurarProdutosVenda)
 router.delete("/deletarVenda/:id" , vendaControlles.deletarVenda)

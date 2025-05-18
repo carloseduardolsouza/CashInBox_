@@ -151,14 +151,6 @@ function PontoDeVenda() {
               </button>
             </form>
           </div>
-          <label className="statusVenda">
-            <strong>Status: </strong>
-            <select className="SelectStatusVenda">
-              <option value="concluida">concluida</option>
-              <option value="entregar">entregar</option>
-              <option value="pagar e entregar">pagar e entregar</option>
-            </select>
-          </label>
           <div className="PreçoNovaVenda">
             <h1>Total : {services.formatarCurrency(valorTotal)}</h1>
           </div>
@@ -197,7 +189,13 @@ function PontoDeVenda() {
           </table>
           <button
             className="FaturarNovaVenda"
-            onClick={() => setFaturado(true)}
+            onClick={() => {
+              if (arrayVenda.length === 0) {
+                return;
+              } else {
+                setFaturado(true);
+              }
+            }}
           >
             (F2) - Faturar
           </button>

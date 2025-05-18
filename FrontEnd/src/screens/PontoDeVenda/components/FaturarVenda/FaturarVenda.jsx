@@ -134,7 +134,7 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
     }),
   };
 
-  const faturarVendaEmBloco = () => {
+  const faturarVendaEmBloco = (status) => {
     let dados = {
       cliente_id: id_cliente,
       nome_cliente: nome_cliente,
@@ -143,7 +143,7 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
       descontos: `R$ ${descontoReais.toFixed(2)} / ${descontoPorcentagem.toFixed(2)}%`,
       acrescimos: `R$ ${acrescimoReais.toFixed(2)} / ${acrescimoPorcentagem.toFixed(2)}%`,
       valor_total: totalPagar,
-      status: "concluida",
+      status: status,
       observacoes: "",
       produtos: venda,
       pagamentos: formaPagemento,
@@ -324,8 +324,8 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
           <button>NFC-e Off-Line</button>
         </div>
         <div>
-          <button onClick={() => faturarVendaEmBloco()}>Lançamento NF de bloco</button>
-          <button>Orçamento</button>
+          <button onClick={() => faturarVendaEmBloco("concluida")}>Lançamento NF de bloco</button>
+          <button onClick={() => faturarVendaEmBloco("orçamento")}>Orçamento</button>
         </div>
       </div>
     </div>
