@@ -1,60 +1,50 @@
 {
   "name": "CashInBox",
   "version": "0.0.1",
-  "main": "main/main.js",
+  "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "cd FrontEnd && npm install && npm run build",
-    "postbuild": "copy node_modules\\electron\\dist\\ffmpeg.dll .",
-    "dist": "npm run build && npm run postbuild && electron-builder",
-    "package": "electron-packager . MeuApp --platform=win32 --arch=x64 --out=dist"
-  },
-  "devDependencies": {
-    "electron": "^29.0.0",
-    "electron-builder": "^26.0.12",
-    "electron-packager": "^17.1.2"
-  },
-  "dependencies": {
-    "electron-is-dev": "^3.0.1",
-    "electron-updater": "^6.6.2"
+    "build-react": "cd frontend && npm install && npm run build",
+    "build": "npm run build-react && electron-builder"
   },
   "build": {
-    "appId": "com.carloseduardolsouza.cashinbox",
-    "productName": "CashInBox",
-    "asar": false,
-    "directories": {
-      "buildResources": "public",
-      "output": "dist"
-    },
-    "files": [
-      "FrontEnd/build/**/*",
-      "BackEnd/**/*",
-      "main/**/*",
-      "ffmpeg.dll",
-      "package.json",
-      "!**/*.sqlite",
-      "!uploads/**"
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "carloseduardolsouza",
+        "repo": "CashInBox_"
+      }
     ],
     "extraResources": [
       {
-        "from": "BackEnd/",
-        "to": "BackEnd/",
-        "filter": ["**/*"]
+        "from": "BackEnd",
+        "to": "BackEnd",
+        "filter": [
+          "**/*"
+        ]
       }
     ],
+    "appId": "com.seu.app",
+    "files": [
+      "main.js",
+      "FrontEnd/build/**/*",
+      "BackEnd/**/*"
+    ],
+    "asar": true,
     "win": {
       "target": "nsis"
     },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true
+    "linux": {
+      "target": "AppImage"
     },
-    "publish": {
-      "provider": "github",
-      "owner": "carloseduardolsouza",
-      "repo": "PontoDeVenda-Sytem2.0",
-      "releaseType": "draft"
+    "mac": {
+      "target": "dmg"
     }
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "electron-updater": "^6.6.2"
   }
 }

@@ -1,6 +1,9 @@
+const API_URL = "http://localhost:3322"; // Porta da sua API rodando local
+
+
 const ProcurarCliente = async (p) => {
   if (p === "") {
-    const clientes = await fetch(`http://localhost:3322/clientes/all`)
+    const clientes = await fetch(`${API_URL}/clientes/all`)
       .then((response) => {
         return response;
       })
@@ -10,7 +13,7 @@ const ProcurarCliente = async (p) => {
     const data = await clientes.json();
     return data;
   } else {
-    const clientes = await fetch(`http://localhost:3322/clientes/${p}`)
+    const clientes = await fetch(`${API_URL}/clientes/${p}`)
       .then((response) => {
         return response;
       })
@@ -23,7 +26,7 @@ const ProcurarCliente = async (p) => {
 };
 
 const ProcurarClienteId = async (p) => {
-  const clientes = await fetch(`http://localhost:3322/procurarClienteId/${p}`)
+  const clientes = await fetch(`${API_URL}/procurarClienteId/${p}`)
     .then((response) => {
       return response;
     })
@@ -36,7 +39,7 @@ const ProcurarClienteId = async (p) => {
 
 const AtualizarCliente = async (dados) => {
   const { id } = dados;
-  const response = await fetch(`http://localhost:3322/editarCliente/${id}`, {
+  const response = await fetch(`${API_URL}/editarCliente/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -55,7 +58,7 @@ const AtualizarCliente = async (dados) => {
 };
 
 const DeletarCliente = async (p) => {
-  const response = await fetch(`http://localhost:3322/deletarCliente/${p}`, {
+  const response = await fetch(`${API_URL}/deletarCliente/${p}`, {
     method: "DELETE",
   }).catch((error) => {
     return error;
@@ -71,7 +74,7 @@ const DeletarCliente = async (p) => {
 };
 
 const NovoCliente = async (dados) => {
-  const response = await fetch("http://localhost:3322/novoCliente", {
+  const response = await fetch(`${API_URL}/novoCliente`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -91,7 +94,7 @@ const NovoCliente = async (dados) => {
 
 const ProcurarFuncionario = async (p) => {
   if (p === "") {
-    const funcionario = await fetch(`http://localhost:3322/funcionario/all`)
+    const funcionario = await fetch(`${API_URL}/funcionario/all`)
       .then((response) => {
         return response;
       })
@@ -101,7 +104,7 @@ const ProcurarFuncionario = async (p) => {
     const data = await funcionario.json();
     return data;
   } else {
-    const funcionario = await fetch(`http://localhost:3322/funcionario/${p}`)
+    const funcionario = await fetch(`${API_URL}/funcionario/${p}`)
       .then((response) => {
         return response;
       })
@@ -115,7 +118,7 @@ const ProcurarFuncionario = async (p) => {
 
 const ProcurarFuncionarioId = async (p) => {
   const funcionario = await fetch(
-    `http://localhost:3322/procurarFuncionarioId/${p}`
+    `${API_URL}/procurarFuncionarioId/${p}`
   )
     .then((response) => {
       return response;
@@ -130,7 +133,7 @@ const ProcurarFuncionarioId = async (p) => {
 const AtualizarFuncionario = async (dados) => {
   const { id } = dados;
   const response = await fetch(
-    `http://localhost:3322/editarFuncionario/${id}`,
+    `${API_URL}/editarFuncionario/${id}`,
     {
       method: "PUT",
       headers: {
@@ -152,7 +155,7 @@ const AtualizarFuncionario = async (dados) => {
 
 const DeletarFuncionario = async (p) => {
   const response = await fetch(
-    `http://localhost:3322/deletarFuncionario/${p}`,
+    `${API_URL}/deletarFuncionario/${p}`,
     {
       method: "DELETE",
     }
@@ -170,7 +173,7 @@ const DeletarFuncionario = async (p) => {
 };
 
 const NovoFuncionario = async (dados) => {
-  const response = await fetch("http://localhost:3322/novoFuncionario", {
+  const response = await fetch(`${API_URL}/novoFuncionario`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -189,7 +192,7 @@ const NovoFuncionario = async (dados) => {
 };
 
 const novaCategoria = async (dados) => {
-  const response = await fetch("http://localhost:3322/novaCategoria", {
+  const response = await fetch(`${API_URL}/novaCategoria`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -208,7 +211,7 @@ const novaCategoria = async (dados) => {
 };
 
 const listarCategorias = async () => {
-  const funcionario = await fetch(`http://localhost:3322/categorias`)
+  const funcionario = await fetch(`${API_URL}/categorias`)
     .then((response) => {
       return response;
     })
@@ -231,7 +234,7 @@ const novoProduto = async (dados, imageReq) => {
     });
   }
 
-  const response = await fetch("http://localhost:3322/novoProduto", {
+  const response = await fetch(`${API_URL}/novoProduto`, {
     method: "POST",
     body: formData,
   });
@@ -245,7 +248,7 @@ const novoProduto = async (dados, imageReq) => {
 
 const AtualizarProduto = async (dados) => {
   const { id } = dados;
-  const response = await fetch(`http://localhost:3322/editarProduto/${id}`, {
+  const response = await fetch(`${API_URL}/editarProduto/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -265,7 +268,7 @@ const AtualizarProduto = async (dados) => {
 
 const ProcurarProdutos = async (p) => {
   if (p === "") {
-    const produtos = await fetch(`http://localhost:3322/produtos/all`)
+    const produtos = await fetch(`${API_URL}/produtos/all`)
       .then((response) => {
         return response;
       })
@@ -275,7 +278,7 @@ const ProcurarProdutos = async (p) => {
     const data = await produtos.json();
     return data;
   } else {
-    const produtos = await fetch(`http://localhost:3322/produtos/${p}`)
+    const produtos = await fetch(`${API_URL}/produtos/${p}`)
       .then((response) => {
         return response;
       })
@@ -288,7 +291,7 @@ const ProcurarProdutos = async (p) => {
 };
 
 const ProcurarProdutoId = async (p) => {
-  const produtos = await fetch(`http://localhost:3322/procurarProdutoId/${p}`)
+  const produtos = await fetch(`${API_URL}/procurarProdutoId/${p}`)
     .then((response) => {
       return response;
     })
@@ -300,7 +303,7 @@ const ProcurarProdutoId = async (p) => {
 };
 
 const DeletarProduto = async (p) => {
-  const response = await fetch(`http://localhost:3322/deletarProduto/${p}`, {
+  const response = await fetch(`${API_URL}/deletarProduto/${p}`, {
     method: "DELETE",
   }).catch((error) => {
     return error;
@@ -316,7 +319,7 @@ const DeletarProduto = async (p) => {
 };
 
 const listarImagens = async (id) => {
-  const imagens = await fetch(`http://localhost:3322/imageProdutoId/${id}`)
+  const imagens = await fetch(`${API_URL}/imageProdutoId/${id}`)
     .then((response) => {
       return response;
     })
@@ -330,7 +333,7 @@ const listarImagens = async (id) => {
 const deletarVariacaoProduto = async (id) => {
   try {
     const response = await fetch(
-      `http://localhost:3322/deletarVariacaoProduto/${id}`,
+      `${API_URL}/deletarVariacaoProduto/${id}`,
       {
         method: "DELETE",
       }
@@ -348,7 +351,7 @@ const deletarVariacaoProduto = async (id) => {
 
 const listarVendas = async (filtro, pesquisa) => {
   if (filtro == undefined && pesquisa == undefined) {
-    const vendas = await fetch(`http://localhost:3322/listarVendas`)
+    const vendas = await fetch(`${API_URL}/listarVendas`)
       .then((response) => {
         return response;
       })
@@ -362,7 +365,7 @@ const listarVendas = async (filtro, pesquisa) => {
 
 const listarOrcamentos = async (filtro, pesquisa) => {
   if (filtro == undefined && pesquisa == undefined) {
-    const Orcamentos = await fetch(`http://localhost:3322/listarOrcamentos`)
+    const Orcamentos = await fetch(`${API_URL}/listarOrcamentos`)
       .then((response) => {
         return response;
       })
@@ -375,7 +378,7 @@ const listarOrcamentos = async (filtro, pesquisa) => {
 };
 
 const produrarVendaId = async (id) => {
-  const venda = await fetch(`http://localhost:3322/procurarVendaId/${id}`)
+  const venda = await fetch(`${API_URL}/procurarVendaId/${id}`)
     .then((response) => {
       return response;
     })
@@ -388,7 +391,7 @@ const produrarVendaId = async (id) => {
 };
 
 const NovaVendaEmBloco = async (dados) => {
-  const response = await fetch("http://localhost:3322/novaVenda", {
+  const response = await fetch(`${API_URL}/novaVenda`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -408,7 +411,7 @@ const NovaVendaEmBloco = async (dados) => {
 
 const procurarProdutosVenda = async (id) => {
   const produtos = await fetch(
-    `http://localhost:3322/procurarProdutosVenda/${id}`
+    `${API_URL}/procurarProdutosVenda/${id}`
   )
     .then((response) => {
       return response;
@@ -422,7 +425,7 @@ const procurarProdutosVenda = async (id) => {
 };
 
 const deletarVenda = async (id) => {
-  const venda = await fetch(`http://localhost:3322/deletarVenda/${id}`, {
+  const venda = await fetch(`${API_URL}/deletarVenda/${id}`, {
     method: "DELETE",
   });
 
@@ -434,7 +437,7 @@ const deletarVenda = async (id) => {
 };
 
 const restartApi = async () => {
-  const response = await fetch("http://localhost:3322/restart").catch(
+  const response = await fetch(`${API_URL}/restart`).catch(
     (error) => {
       return error;
     }
@@ -472,5 +475,5 @@ export default {
   NovaVendaEmBloco,
   produrarVendaId,
   procurarProdutosVenda,
-  deletarVenda
+  deletarVenda,
 };
