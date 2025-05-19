@@ -22,7 +22,7 @@ O **CashInBox** é um sistema de ponto de venda (PDV) desenvolvido para atender 
 **Backend:**
 - Node.js
 - Express
-- MySql
+- Sqlite
 
 **Frontend:**
 - React.js
@@ -35,12 +35,11 @@ O **CashInBox** é um sistema de ponto de venda (PDV) desenvolvido para atender 
 ### 🔧 Requisitos
 - Node.js v18+
 - JavaScript
-- Banco de dados (MySql)
 - Git
 
 ### ⚙️ Clonar o projeto
 ```bash
-git clone https://github.com/seuusuario/cashinbox.git
+git clone https://github.com/carloseduardolsouza/cashinbox.git
 npm start
 ```
 
@@ -56,15 +55,6 @@ npm run dev
 cd frontend
 npm install
 npm start
-```
-
----
-
-## 🔐 Login Padrão (para testes)
-
-```txt
-Usuário: admin@cashinbox.com
-Senha: admin123
 ```
 
 ---

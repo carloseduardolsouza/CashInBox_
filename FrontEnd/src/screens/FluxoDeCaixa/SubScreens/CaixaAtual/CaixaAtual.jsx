@@ -21,7 +21,7 @@ function CaixaAtual() {
   const renderAbaSobreposta = () => {
     switch (abaSobreposta) {
       case "SaldoInicial":
-        return <SaldoInicial />;
+        return <SaldoInicial fecharAba={setAbaSobreposta} statusCaixa={setStatusCaixa}/>;
       case "RetirarSaldo":
         return <RetirarSaldo fecharAba={setAbaSobreposta} />;
       case "AdicionarSaldo":
@@ -36,7 +36,6 @@ function CaixaAtual() {
       setStatusCaixa("Fechado");
     } else {
       setAbaSobreposta("SaldoInicial")
-      setStatusCaixa("Aberto");
     }
   };
 

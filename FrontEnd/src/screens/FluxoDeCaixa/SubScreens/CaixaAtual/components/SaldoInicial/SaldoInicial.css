@@ -14,3 +14,31 @@
   ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
   border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
 }
+
+#formSaldoInicialFluxoCaixa {
+  display: flex;
+  flex-direction: column;
+}
+
+#formSaldoInicialFluxoCaixa label {
+  display: flex;
+  flex-direction: column;
+}
+
+#formSaldoInicialFluxoCaixa input {
+  font-size: 15px;
+  border-radius: 10px;
+  padding: 5px;
+  border: solid black 1px;
+}
+
+#formSaldoInicialFluxoCaixa button {
+  width: 100%;
+  font-weight: bold;
+  color: white;
+  background-color: #0295ff;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
