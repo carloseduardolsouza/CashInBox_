@@ -1,6 +1,5 @@
 const API_URL = "http://localhost:3322"; // Porta da sua API rodando local
 
-
 const ProcurarCliente = async (p) => {
   if (p === "") {
     const clientes = await fetch(`${API_URL}/clientes/all`)
@@ -117,9 +116,7 @@ const ProcurarFuncionario = async (p) => {
 };
 
 const ProcurarFuncionarioId = async (p) => {
-  const funcionario = await fetch(
-    `${API_URL}/procurarFuncionarioId/${p}`
-  )
+  const funcionario = await fetch(`${API_URL}/procurarFuncionarioId/${p}`)
     .then((response) => {
       return response;
     })
@@ -132,17 +129,14 @@ const ProcurarFuncionarioId = async (p) => {
 
 const AtualizarFuncionario = async (dados) => {
   const { id } = dados;
-  const response = await fetch(
-    `${API_URL}/editarFuncionario/${id}`,
-    {
-      method: "PUT",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dados),
-    }
-  ).catch((error) => {
+  const response = await fetch(`${API_URL}/editarFuncionario/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dados),
+  }).catch((error) => {
     return error;
   });
 
@@ -154,12 +148,9 @@ const AtualizarFuncionario = async (dados) => {
 };
 
 const DeletarFuncionario = async (p) => {
-  const response = await fetch(
-    `${API_URL}/deletarFuncionario/${p}`,
-    {
-      method: "DELETE",
-    }
-  ).catch((error) => {
+  const response = await fetch(`${API_URL}/deletarFuncionario/${p}`, {
+    method: "DELETE",
+  }).catch((error) => {
     return error;
   });
 
@@ -332,12 +323,9 @@ const listarImagens = async (id) => {
 
 const deletarVariacaoProduto = async (id) => {
   try {
-    const response = await fetch(
-      `${API_URL}/deletarVariacaoProduto/${id}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch(`${API_URL}/deletarVariacaoProduto/${id}`, {
+      method: "DELETE",
+    });
 
     if (!response.ok) {
       throw new Error("Falha ao excluir variação");
@@ -410,9 +398,7 @@ const NovaVendaEmBloco = async (dados) => {
 };
 
 const procurarProdutosVenda = async (id) => {
-  const produtos = await fetch(
-    `${API_URL}/procurarProdutosVenda/${id}`
-  )
+  const produtos = await fetch(`${API_URL}/procurarProdutosVenda/${id}`)
     .then((response) => {
       return response;
     })
@@ -436,16 +422,46 @@ const deletarVenda = async (id) => {
   console.log("venda excluída com sucesso");
 };
 
+const dadosEmpresa = async () => {
+  const produtos = await fetch(`${API_URL}/dadosEmpresa`)
+    .then((response) => {
+      return response;
+    })
+    .catch((erro) => {
+      return erro;
+    });
+
+  const dados = await produtos.json();
+  return dados;
+};
+
+const EditarDadosEmpresa = async (data) => {
+  const produtos = await fetch(`${API_URL}/salvarDadosEmpresa`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      return response;
+    })
+    .catch((erro) => {
+      return erro;
+    });
+
+  const dados = await produtos.json();
+  return dados;
+};
+
 const restartApi = async () => {
-  const response = await fetch(`${API_URL}/restart`).catch(
-    (error) => {
-      return error;
-    }
-  );
+  const response = await fetch(`${API_URL}/restart`).catch((error) => {
+    return error;
+  });
 };
 
 export default {
   restartApi,
+
+  dadosEmpresa,
+  EditarDadosEmpresa,
 
   ProcurarCliente,
   ProcurarClienteId,

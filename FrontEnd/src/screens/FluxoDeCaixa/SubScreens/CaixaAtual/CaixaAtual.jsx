@@ -12,6 +12,7 @@ import { BsFillCreditCard2FrontFill } from "react-icons/bs";
 //componentes
 import AdicionarSaldo from "./components/AdicionarSaldo/AdicionarSaldo";
 import RetirarSaldo from "./components/RetirarSaldo/RetirarSaldo";
+import SaldoInicial from "./components/SaldoInicial/SaldoInicial";
 
 function CaixaAtual() {
   const [abaSobreposta, setAbaSobreposta] = useState(null);
@@ -19,6 +20,8 @@ function CaixaAtual() {
 
   const renderAbaSobreposta = () => {
     switch (abaSobreposta) {
+      case "SaldoInicial":
+        return <SaldoInicial />;
       case "RetirarSaldo":
         return <RetirarSaldo fecharAba={setAbaSobreposta} />;
       case "AdicionarSaldo":
@@ -32,6 +35,7 @@ function CaixaAtual() {
     if (statusCaixa == "Aberto") {
       setStatusCaixa("Fechado");
     } else {
+      setAbaSobreposta("SaldoInicial")
       setStatusCaixa("Aberto");
     }
   };
@@ -133,7 +137,7 @@ function CaixaAtual() {
               <h1>{"R$ 200,00"}</h1>
             </div>
           ) : (
-            <div id="divFantasmaTotalCaixa"/>
+            <div id="divFantasmaTotalCaixa" />
           )}
           <button
             id="ButtonCaixa"

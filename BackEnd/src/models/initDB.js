@@ -162,4 +162,27 @@ db.serialize(() => {
       nome TEXT NOT NULL
     )
   `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS caixas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    data_abertura DATETIME NOT NULL,
+    data_fechamento DATETIME,
+    valor_abertura REAL NOT NULL,
+    valor_fechamento REAL,
+    status TEXT CHECK(status IN ('aberto', 'fechado')) DEFAULT 'aberto'
+  )
+  `);
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS movimentacoes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    caixa_id INTEGER NOT NULL,
+    data DATETIME NOT NULL,
+    descricao TEXT,
+    tipo TEXT CHECK(tipo IN ('entrada', 'saida')) NOT NULL,
+    valor REAL NOT NULL,
+    FOREIGN KEY (caixa_id) REFERENCES caixas(id)
+  )
+  `);
 });

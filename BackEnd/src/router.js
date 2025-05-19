@@ -2,27 +2,33 @@ const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
 const router = express.Router();
 
+// === Pasta persistente para uploads (na pasta do usuário) ===
+const userDataPath = path.join(os.homedir(), 'AppData', 'Roaming', 'CashInBox');
+const uploadPath = path.join(userDataPath, 'uploads');
+
 // Garante que a pasta 'uploads' exista
-const uploadPath = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath);
+  fs.mkdirSync(uploadPath, { recursive: true });
 }
 
-// Configuração do armazenamento com multer
+// Configuração do Multer para salvar imagens com nomes únicos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + '-' + file.originalname;
+    // Limpa o nome do arquivo
+    const originalName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const uniqueName = `${Date.now()}-${originalName}`;
     cb(null, uniqueName);
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 // Importa os controllers
 const categoriasControllers = require('./controllers/categoriasControllers');
@@ -30,6 +36,7 @@ const clientesControllers = require('./controllers/clientesControllers');
 const funcionariosControllers = require('./controllers/funcionariosControllers');
 const produtosControllers = require('./controllers/produtosController');
 const vendaControlles = require('./controllers/vendaControllers');
+const userController = require('./controllers/userController')
 const services = require("./services/services");
 
 // Rotas de clientes
@@ -69,6 +76,10 @@ router.get("/listarOrcamentos/:filtro?/:pesquisa?", vendaControlles.listarOrcame
 router.get("/procurarVendaId/:id", vendaControlles.produrarVendaId);
 router.get("/procurarProdutosVenda/:id", vendaControlles.procurarProdutosVenda);
 router.delete("/deletarVenda/:id", vendaControlles.deletarVenda);
+
+//usuario
+router.get("/dadosEmpresa", userController.getDados);
+router.post("/salvarDadosEmpresa", userController.salvarDados);
 
 // Outras rotas
 router.get("/restart", services.restart);

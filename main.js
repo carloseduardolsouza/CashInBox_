@@ -7,6 +7,8 @@ const { spawn } = require("child_process");
 let mainWindow;
 let backend;
 
+const dbPath = path.join(app.getPath('userData'), 'database.sqlite');
+
 function getBackendPath() {
   // Corrige o caminho do backend dependendo se está empacotado ou não
   return app.isPackaged

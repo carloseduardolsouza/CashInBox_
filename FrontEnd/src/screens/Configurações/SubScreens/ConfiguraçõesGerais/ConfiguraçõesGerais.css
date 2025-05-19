@@ -45,4 +45,10 @@
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: bold;
+}
+
+#formConfiguraçõesGerais button:disabled {
+  background-color: #40afff;
+  cursor: not-allowed;
 }
