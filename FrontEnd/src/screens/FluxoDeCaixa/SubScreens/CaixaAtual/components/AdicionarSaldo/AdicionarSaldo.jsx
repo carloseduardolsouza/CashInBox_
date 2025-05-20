@@ -1,9 +1,29 @@
 import "./AdicionarSaldo.css";
-import { useState } from "react";
-import services from "../../../../../../services/services";
+import { useState , useContext } from "react";
+import AppContext from "../../../../../../context/AppContext";
 
-function AdicionarSaldo({ fecharAba }) {
+import fetchapi from "../../../../../../api/fetchapi";
+
+function AdicionarSaldo({ fecharAba, idCaixa, atualizar }) {
+  const {setErroApi} = useContext(AppContext)
   const [value, setValue] = useState("");
+  const [descricao, setDescricao] = useState("");
+
+  const adicionarSaldo = async (e) => {
+    e.preventDefault();
+    let dados = {
+      descricao: descricao || "não definido",
+      tipo: "entrada",
+      valor: value,
+    };
+
+    await fetchapi.NovaMovimentacao(idCaixa, dados).then(() => {
+      atualizar();
+      fecharAba(null);
+    }).catch(() => {
+      setErroApi(true)
+    });
+  };
 
   return (
     <div className="blurModal">
@@ -12,15 +32,16 @@ function AdicionarSaldo({ fecharAba }) {
           X
         </button>
         <h3>Adicionar dinheiro ao caixa</h3>
-        <form>
+        <form onSubmit={(e) => adicionarSaldo(e)}>
           <label className="labelAdicionarSaldo">
             <span>Valor:</span>
             <input
               type="text"
               id="valor"
               value={value}
+              required
               onChange={(e) => {
-                setValue(services.mascaraDeDinheroInput(e));
+                setValue(e.target.value);
               }}
               placeholder="Digite o valor"
             />
@@ -28,9 +49,16 @@ function AdicionarSaldo({ fecharAba }) {
 
           <label className="labelAdicionarSaldo">
             <span>Descrição:</span>
-            <textarea type="text" placeholder="Descrição..." />
+            <textarea
+              type="text"
+              placeholder="Descrição..."
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+            />
           </label>
-          <button id="ButtonSalvarAdicionarSaldo">Salvar</button>
+          <button id="ButtonSalvarAdicionarSaldo" type="submit">
+            Salvar
+          </button>
         </form>
       </div>
     </div>

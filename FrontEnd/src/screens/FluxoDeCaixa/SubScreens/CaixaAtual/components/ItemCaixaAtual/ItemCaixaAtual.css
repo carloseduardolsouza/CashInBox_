@@ -1,0 +1,36 @@
+#ItemCaixaAtual {
+    display: flex;
+    margin-bottom: 2px;
+    justify-content: space-between;
+}
+
+#ItemCaixaAtual > div {
+    display: flex;
+    margin-bottom: 2px;
+}
+
+#bolinhaItemCaixaAtual {
+    width: 13px;
+    height: 13px;
+    background-color: black;
+    border-radius: 50%;
+}
+
+#linhaItemCaixaAtual {
+    width: 2px;
+    height: 50px;
+    background-color: black;
+}
+
+#detalheesteticoItemCaixaAtual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 5px;
+}
+
+#HoraItemCaixaAtual {
+    height: 100%;
+    text-align: right;
+    width: 60%;
+}

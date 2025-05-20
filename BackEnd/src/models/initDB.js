@@ -170,6 +170,10 @@ db.serialize(() => {
     data_fechamento DATETIME,
     valor_abertura REAL NOT NULL,
     valor_fechamento REAL,
+    total_recebido REAL DEFAULT 0,
+    saldo_adicionado REAL DEFAULT 0,
+    saldo_retirada REAL DEFAULT 0,
+    valor_esperado REAL DEFAULT 0,
     status TEXT CHECK(status IN ('aberto', 'fechado')) DEFAULT 'aberto'
   )
   `);

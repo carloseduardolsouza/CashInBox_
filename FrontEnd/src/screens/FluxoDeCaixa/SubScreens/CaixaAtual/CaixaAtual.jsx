@@ -1,5 +1,9 @@
 import "./CaixaAtual.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import services from "../../../../services/services";
+
+import ItemCaixaAtual from "./components/ItemCaixaAtual/ItemCaixaAtual";
 
 //icones
 import { FaMoneyBill1 } from "react-icons/fa6";
@@ -13,19 +17,94 @@ import { BsFillCreditCard2FrontFill } from "react-icons/bs";
 import AdicionarSaldo from "./components/AdicionarSaldo/AdicionarSaldo";
 import RetirarSaldo from "./components/RetirarSaldo/RetirarSaldo";
 import SaldoInicial from "./components/SaldoInicial/SaldoInicial";
+import FecharCaixa from "./components/FecharCaixa/FecharCaixa";
+
+import fetchapi from "../../../../api/fetchapi";
 
 function CaixaAtual() {
   const [abaSobreposta, setAbaSobreposta] = useState(null);
   const [statusCaixa, setStatusCaixa] = useState("Fechado");
 
+  const [data_abertura, setData_abertura] = useState(0);
+  const [saldo_inicial, setSaldo_inicial] = useState(0);
+  const [valor_esperado, setValor_esperado] = useState(0);
+  const [saldo_adicionado, setSaldo_adicionado] = useState(0);
+  const [saldo_retirada, setSaldo_retirada] = useState(0);
+  const [idCaixa, setIdCaixa] = useState(0);
+
+  const [movimentacoes, setMovimentacoes] = useState([]);
+
+  const BuscarCaixasAbertosPage = async () => {
+    const response = await fetchapi.BuscarCaixasAbertos();
+    const caixa = response[0];
+    setIdCaixa(caixa.id || 0);
+    setSaldo_inicial(caixa.valor_abertura);
+    setValor_esperado(caixa.valor_esperado);
+    setSaldo_adicionado(caixa.saldo_adicionado);
+    setSaldo_retirada(caixa.saldo_retirada);
+    setData_abertura(caixa.data_abertura);
+
+    if (response.length === 0) {
+      setStatusCaixa("Fechado");
+      setMovimentacoes([]);
+      return;
+    }
+
+    if (response.length > 0) {
+      const movimentacoess = await fetchapi.BuscarMovimentacao(caixa.id);
+      setMovimentacoes(movimentacoess);
+      setStatusCaixa("Aberto");
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await BuscarCaixasAbertosPage();
+      } catch (error) {
+        console.error("Erro ao buscar dados do caixa:", error);
+        setStatusCaixa("Fechado");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const renderAbaSobreposta = () => {
     switch (abaSobreposta) {
       case "SaldoInicial":
-        return <SaldoInicial fecharAba={setAbaSobreposta} statusCaixa={setStatusCaixa}/>;
+        return (
+          <SaldoInicial
+            fecharAba={setAbaSobreposta}
+            statusCaixa={setStatusCaixa}
+            atualizar={BuscarCaixasAbertosPage}
+          />
+        );
+      case "FecharCaixa":
+        return (
+          <FecharCaixa
+            fecharAba={setAbaSobreposta}
+            statusCaixa={setStatusCaixa}
+            atualizar={BuscarCaixasAbertosPage}
+            id={idCaixa}
+          />
+        );
       case "RetirarSaldo":
-        return <RetirarSaldo fecharAba={setAbaSobreposta} />;
+        return (
+          <RetirarSaldo
+            fecharAba={setAbaSobreposta}
+            atualizar={BuscarCaixasAbertosPage}
+            idCaixa={idCaixa}
+          />
+        );
       case "AdicionarSaldo":
-        return <AdicionarSaldo fecharAba={setAbaSobreposta} />;
+        return (
+          <AdicionarSaldo
+            fecharAba={setAbaSobreposta}
+            atualizar={BuscarCaixasAbertosPage}
+            idCaixa={idCaixa}
+          />
+        );
       case null:
         return null;
     }
@@ -33,9 +112,9 @@ function CaixaAtual() {
 
   const AbirFecharCaixa = () => {
     if (statusCaixa == "Aberto") {
-      setStatusCaixa("Fechado");
+      setAbaSobreposta("FecharCaixa");
     } else {
-      setAbaSobreposta("SaldoInicial")
+      setAbaSobreposta("SaldoInicial");
     }
   };
 
@@ -46,20 +125,25 @@ function CaixaAtual() {
         <div>
           <div className="Resumodecaixa">
             <div>
-              <h3>Resumo de Caixa # 02/05</h3>
-              <p id="dataAberturaCaixa">Aberto hoje (09:30)</p>
+              <h3>Resumo de Caixa # {services.formatarData(data_abertura)}</h3>
+              <p id="dataAberturaCaixa">
+                Aberto hoje ({services.formatarHorario(data_abertura)})
+              </p>
             </div>
             {statusCaixa === "Aberto" ? (
               <div id="DetalhesResumoCaixa">
-                <div>
-                  <strong>Total Recebido: {"R$400,00"}</strong>
-                </div>
-                <p>Saldo Inicial: {"R$ 100,00"}</p>
-                <p>Total Recebido: {"R$ 400,00"}</p>
-                <p>Saldo Adicionado: {"R$ 5.000,00"}</p>
-                <p>Saldo Retirado: {"R$ 50,00"}</p>
+                <p>Saldo Inicial: {services.formatarCurrency(saldo_inicial)}</p>
                 <p>
-                  <strong>Saldo Final: {"R$ 4.230,98"}</strong>
+                  Saldo Adicionado:{" "}
+                  {services.formatarCurrency(saldo_adicionado)}
+                </p>
+                <p>
+                  Saldo Retirado: {services.formatarCurrency(saldo_retirada)}
+                </p>
+                <p>
+                  <strong>
+                    Saldo Final: {services.formatarCurrency(valor_esperado)}
+                  </strong>
                 </p>
               </div>
             ) : (
@@ -127,13 +211,17 @@ function CaixaAtual() {
 
       <div className="InfoCaixaAtual">
         <h3>Movimentações</h3>
-        <div id="sectionrolavel"></div>
+        <div id="sectionrolavel">
+          {movimentacoes.map((response) => {
+            return <ItemCaixaAtual dados={response} />;
+          })}
+        </div>
 
         <div className="FooterCaixaAtual">
           {statusCaixa === "Aberto" ? (
             <div>
               <strong>Saldo Final</strong>
-              <h1>{"R$ 200,00"}</h1>
+              <h1>{services.formatarCurrency(valor_esperado)}</h1>
             </div>
           ) : (
             <div id="divFantasmaTotalCaixa" />

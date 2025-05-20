@@ -451,6 +451,64 @@ const EditarDadosEmpresa = async (data) => {
   return dados;
 };
 
+const AbrirCaixa = async (data) => {
+  await fetch(`${API_URL}/iniciarNovoCaixa`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((response) => {
+    return response;
+  });
+};
+
+const FecharCaixa = async (data, id) => {
+  await fetch(`${API_URL}/fecharCaixa/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((response) => {
+    return response;
+  });
+};
+
+const BuscarCaixasAbertos = async () => {
+  const caixaAberto = await fetch(`${API_URL}/buscarCaixasAbertos`);
+  const dados = await caixaAberto.json();
+  return dados;
+};
+
+const BuscarCaixas = async () => {
+  const caixas = await fetch(`${API_URL}/buscarCaixas`);
+  const dados = await caixas.json();
+  return dados;
+};
+
+const NovaMovimentacao = async (id, data) => {
+  const response = await fetch(`${API_URL}/adicionarMovimentacoes/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao adicionar movimentação");
+  }
+
+  return await response.json(); // agora retorna o corpo da resposta
+};
+
+const BuscarMovimentacao = async (id) => {
+  const movimentacao = await fetch(`${API_URL}/buscarMovimentacoes/${id}`);
+  const dados = await movimentacao.json();
+  return dados;
+};
+
 const restartApi = async () => {
   const response = await fetch(`${API_URL}/restart`).catch((error) => {
     return error;
@@ -492,4 +550,11 @@ export default {
   produrarVendaId,
   procurarProdutosVenda,
   deletarVenda,
+
+  AbrirCaixa,
+  BuscarCaixas,
+  BuscarCaixasAbertos,
+  FecharCaixa,
+  NovaMovimentacao,
+  BuscarMovimentacao,
 };

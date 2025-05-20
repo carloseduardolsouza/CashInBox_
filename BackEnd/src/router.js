@@ -99,13 +99,14 @@ router.delete("/deletarVenda/:id", vendaControlles.deletarVenda);
 
 //Rotas caixa
 router.get("/buscarCaixas", caixaControlles.buscarCaixas);
+router.get("/buscarCaixasAbertos", caixaControlles.buscarCaixasAbertos);
 router.post("/iniciarNovoCaixa", caixaControlles.iniciarNovoCaixa);
 router.post(
   "/adicionarMovimentacoes/:id",
   caixaControlles.adicionarMovimentações
 );
 router.get("/buscarMovimentacoes/:id", caixaControlles.buscarMovimentações);
-//router.put("/fecharCaixa/:id", caixaControlles.iniciarNovoCaixa);
+router.put("/fecharCaixa/:id", caixaControlles.fecharCaixa);
 
 //usuario
 router.get("/dadosEmpresa", userController.getDados);

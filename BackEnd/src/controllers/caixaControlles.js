@@ -16,6 +16,11 @@ const buscarCaixas = async (req, res) => {
   }
 };
 
+const buscarCaixasAbertos = async (req , res) => {
+  const caixaAberto = await caixaModels.buscarCaixasAbertos()
+  return res.status(201).json(caixaAberto)
+}
+
 const adicionarMovimentações = async (req, res) => {
     const {id} = req.params
     const dados = req.body
@@ -29,9 +34,18 @@ const buscarMovimentações = async (req , res) => {
     return res.status(201).json(movimentacoes)
 }
 
+const fecharCaixa = async (req , res) => {
+  const {id} = req.params
+  const dados = req.body
+  const fecharCaixa = await caixaModels.fecharCaixa(id , dados)
+  return res.status(201).json(fecharCaixa)
+}
+
 module.exports = {
   buscarCaixas,
+  buscarCaixasAbertos,
   adicionarMovimentações,
   iniciarNovoCaixa,
-  buscarMovimentações
+  buscarMovimentações,
+  fecharCaixa
 };
