@@ -7,10 +7,7 @@ const { spawn } = require("child_process");
 let mainWindow;
 let backend;
 
-const dbPath = path.join(app.getPath('userData'), 'database.sqlite');
-
 function getBackendPath() {
-  // Corrige o caminho do backend dependendo se está empacotado ou não
   return app.isPackaged
     ? path.join(process.resourcesPath, "BackEnd", "src", "server.js")
     : path.join(__dirname, "BackEnd", "src", "server.js");
@@ -22,7 +19,6 @@ function getUserFilePaths() {
   const databasePath = path.join(userDataPath, "database.sqlite");
   const uploadsPath = path.join(userDataPath, "uploads");
 
-  // Garante que a pasta de uploads existe
   if (!fs.existsSync(uploadsPath)) {
     fs.mkdirSync(uploadsPath, { recursive: true });
   }
@@ -32,8 +28,7 @@ function getUserFilePaths() {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    show: false, // só mostra depois de carregar
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -46,6 +41,12 @@ function createWindow() {
 
   mainWindow.loadFile(frontEndPath);
 
+  // Maximiza quando estiver pronto e então mostra
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.maximize(); // ocupa toda a tela, sem sobrepor taskbar
+    mainWindow.show();
+  });
+
   mainWindow.on("closed", () => {
     if (backend) {
       backend.kill();
@@ -56,17 +57,27 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(() => {
+function startBackend() {
   const { databasePath, uploadsPath } = getUserFilePaths();
 
   const backendArgs = [getBackendPath(), databasePath, uploadsPath];
   backend = spawn("node", backendArgs, {
-    stdio: "inherit",
+    detached: true,
+    stdio: "ignore",       // não abre o terminal
+    windowsHide: true,     // esconde CMD no Windows
   });
 
-  createWindow();
+  backend.unref(); // solta o processo
+}
 
+function setupAutoUpdater() {
   autoUpdater.checkForUpdatesAndNotify();
+
+  // Verifica atualização de 1 em 1 hora
+  setInterval(() => {
+    console.log("🔄 Verificando atualizações...");
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 60 * 60 * 1000);
 
   autoUpdater.on("update-available", () => {
     console.log("🚀 Atualização disponível!");
@@ -79,11 +90,12 @@ app.whenReady().then(() => {
   autoUpdater.on("error", (err) => {
     console.error("⚠️ Erro ao buscar atualização:", err);
   });
+}
 
-  backend.on("close", (code) => {
-    console.log(`Backend encerrado com código ${code}`);
-    if (mainWindow) mainWindow.close();
-  });
+app.whenReady().then(() => {
+  startBackend();
+  createWindow();
+  setupAutoUpdater();
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

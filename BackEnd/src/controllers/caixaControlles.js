@@ -9,7 +9,7 @@ const iniciarNovoCaixa = async (req , res) => {
 const buscarCaixas = async (req, res) => {
   try {
     const caixas = await caixaModels.buscarCaixas();
-    return res.status(201).json(caixas);
+    return res.status(201).json(caixas.reverse());
   } catch (error) {
     console.error("Erro ao listar categorias:", error);
     return res.status(500).json({ erro: "Erro ao listar caixas" });
