@@ -48,7 +48,7 @@ function Home() {
 
   return (
     <div id="Homescreen">
-      <div className="NotificationHomeScreen" onClick={() => ""}>
+      <div className="NotificationHomeScreen">
         <button id="ButtonDarkMode" onClick={() => setIsDark(!isDark)}>
           {isDark ? "☀️" : "🌙"}
         </button>
