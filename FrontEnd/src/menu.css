@@ -1,5 +1,5 @@
 .MenuLateralBoxArea {
-  background-color: #eeeeee;
+  background-color: var(--div-color);
   width: 160px;
   height: 100vh;
   position: fixed;
@@ -21,13 +21,13 @@
   margin-left: 5px;
   text-align: left;
   text-decoration: none;
-  color: black;
+  color: var(--text-color);
   font-weight: 500;
 }
 
 .iconsMenuLateral {
   font-size: 20px;
-  color: black;
+  color: var(--text-color);
 }
 
 .Outline {

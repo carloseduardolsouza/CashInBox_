@@ -162,7 +162,7 @@ button.disabled {
 }
 
 .imageProduto > div {
-  background-color: #a2a2a2;
+  background-color: var(--div-color);
   width: 250px;
   height: 250px;
   display: flex;
@@ -272,7 +272,7 @@ button.disabled {
 }
 
 #DivisãoPreçoCadastroProduto {
-  background-color: #dfdfdf;
+  background-color: var(--div-color);
   padding: 10px;
   border-radius: 10px;
 }

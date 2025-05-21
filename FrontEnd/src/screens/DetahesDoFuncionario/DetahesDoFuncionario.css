@@ -22,13 +22,13 @@
   border-bottom: 2px solid transparent;
   transition: color 0.3s ease;
   font-weight: 300;
-  color: black;
+  color: var(--text-color);
   position: relative;
 }
 
 .bttDetalhesDoFuncionario:hover {
   font-weight: 600;
-  color: black;
+  color: var(--text-color);
 }
 
 .bttDetalhesDoFuncionario.ativo {
@@ -42,7 +42,7 @@
   left: 20%; /* Começo da linha */
   width: 60%; /* Largura da linha */
   height: 3px;
-  background-color: #0295ff;
+  background-color: var(--button-color);
   transition: all 0.3s ease;
   border-radius: 5px;
 }
@@ -54,12 +54,12 @@
   left: 20%;
   width: 60%;
   height: 3px;
-  background-color: #0295ff;
+  background-color: var(--button-color);
   transition: all 0.3s ease;
   border-radius: 5px;
 }
 
 /* Linha se for ativo + hover */
 .bttDetalhesDoFuncionario.ativo:hover::after {
-  background-color: #0295ff; /* mantém preto se for ativo */
+  background-color: var(--button-color); /* mantém preto se for ativo */
 }

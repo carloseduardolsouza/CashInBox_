@@ -1,3 +1,3 @@
 .aTdTabelaCompras {
-    color: black;
+    color: var(--text-color);
 }

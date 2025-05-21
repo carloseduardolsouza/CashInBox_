@@ -1,5 +1,5 @@
 #ConfiguraçõesGerais {
-  background-color: #eeeeee;
+  background-color: var(--div-color);
   padding: 10px;
   border-radius: 10px;
 }
@@ -7,9 +7,9 @@
 #LogoDaEmpresaConfiguraçõesGerais {
   width: 290px;
   height: 290px;
-  background-color: white;
+  background-color: var(--div-color);
   border-radius: 50%;
-  border: solid black 1px;
+  border: solid var(--text-color) 1px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,13 +32,13 @@
   padding: 5px;
   width: 100%;
   margin-bottom: 15px;
-  border: solid black 1px;
+  border: solid var(--text-color) 1px;
   border-radius: 10px;
 }
 
 #formConfiguraçõesGerais button {
   margin-top: 20px;
-  background-color: #0295ff;
+  background-color: var(--button-color);
   color: white;
   width: 100%;
   font-size: 20px;
@@ -49,6 +49,6 @@
 }
 
 #formConfiguraçõesGerais button:disabled {
-  background-color: #40afff;
+  background-color: var(--button-color);
   cursor: not-allowed;
 }

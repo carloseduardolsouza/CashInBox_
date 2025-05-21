@@ -12,7 +12,7 @@
 }
 
 .ButtonEditContasAPagar:hover {
-    color: #0295ff;
-    border: solid #0295ff 1px;
+    color: var(--button-color);
+    border: solid var(--button-color) 1px;
     transition: .3s;
 }

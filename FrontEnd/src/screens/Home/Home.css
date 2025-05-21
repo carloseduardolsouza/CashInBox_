@@ -2,12 +2,35 @@
   margin-left: 55px;
 }
 
+#ButtonDarkMode {
+  margin-right: 10px;
+  font-size: 15px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  border: unset;
+  border-radius: 15px;
+  z-index: 1;
+  background: var(--div-color);
+  position: relative;
+  font-weight: 1000;
+  transition: all 250ms;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .NotificationHomeScreen {
   position: absolute;
   font-size: 25px;
   top: 10px;
   right: 20px;
   cursor: pointer;
+  display: flex;
 }
 
 .HeaderHomeDeashBoard {
@@ -29,9 +52,9 @@
   width: 180px;
   border: unset;
   border-radius: 15px;
-  color: #212121;
+  color: var(--text-color);
   z-index: 1;
-  background: #e8e8e8;
+  background: var(--div-color);
   position: relative;
   font-weight: 1000;
   transition: all 250ms;
@@ -50,7 +73,7 @@
   height: 100%;
   width: 0;
   border-radius: 15px;
-  background-color: #0295ff;
+  background-color: var(--button-color);
   z-index: -1;
   -webkit-box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
   box-shadow: 4px 8px 19px -3px rgba(0, 0, 0, 0.27);
@@ -132,7 +155,7 @@
 }
 
 .MainHomeDeashBoard > article {
-  background-color: #eee;
+  background-color: var(--div-color);
   width: 45%;
   text-align: center;
   border: 1px solid black;

@@ -1,6 +1,6 @@
 import "./App.css";
 import "./menu.css";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import AppContext from "./context/AppContext";
 
 //Componentes
@@ -80,6 +80,7 @@ import { MdInsertChart } from "react-icons/md";
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 function App() {
+  
   const { erroApi } = useContext(AppContext);
   //Status do menu
   const [statusMenu, setStatusMenu] = useState("home");

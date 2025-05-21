@@ -7,13 +7,13 @@
   font-size: 16px;
   padding: 10px;
   margin: 10px;
-  border: solid black 1px;
+  border: solid var(--text-color) 1px;
   border-radius: 10px;
 }
 
 .articleNovoFuncionario {
   position: relative;
-  background-color: #e7e7e7;
+  background-color: var(--div-color);
   padding: 15px;
   border-radius: 10px;
   z-index: 1;

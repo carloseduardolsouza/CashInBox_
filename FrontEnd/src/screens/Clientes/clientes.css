@@ -8,7 +8,7 @@
 }
 
 .AddCliente {
-  background-color: #0295ff;
+  background-color: var(--button-color);
   border: none;
   width: 35px;
   height: 35px;
@@ -63,15 +63,5 @@
 }
 
 .aTdClientes {
-  color: black;
-}
-
-#AçãoButãoClientes {
-  background-color: #0295ff;
-  width: 100%;
-  cursor: pointer;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
-  padding: 5px;
+  color: var(--text-color);
 }

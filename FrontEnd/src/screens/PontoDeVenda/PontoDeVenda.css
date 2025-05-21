@@ -13,7 +13,7 @@
   background-color: #eee;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid black;
+  border: 1px solid var(--text-color);
   font-size: 20px;
 }
 
@@ -66,21 +66,6 @@
   width: 330px;
 }
 
-.lançarPreçoNovaVenda {
-  border-radius: 7px;
-  width: 100%;
-  padding: 5px;
-  cursor: pointer;
-  border: none;
-  background-color: #d1ffa7;
-  font-size: 20px;
-}
-
-.lançarPreçoNovaVenda:hover {
-  background-color: #9cff3f;
-  transition: 0.5s;
-}
-
 .MainNovaVenda {
   display: flex;
 }
@@ -106,7 +91,7 @@
   border: none;
   border-radius: 10px;
   padding: 5px;
-  background-color: #0295ff;
+  background-color: var(--button-color);
 }
 
 .FaturarNovaVenda:hover {
@@ -116,7 +101,7 @@
 
 #buttonOkPontoDeVenda {
   width: 100%;
-  background-color: #0071c2;
+  background-color: var(--button-color);
   margin-top: 10px;
   padding: 10px;
   border-radius: 10px;
@@ -128,5 +113,5 @@
 .buttonDeleteArrayVenda {
   cursor: pointer;
   color: red;
-
+  background: none;
 }

@@ -1,7 +1,7 @@
 /* From Uiverse.io by Shoh2008 */
 .checkbox-wrapper-4 * {
   box-sizing: border-box;
-  color: black;
+  color: var(--text-color);
 }
 
 .checkbox-wrapper-4 .cbx {
@@ -62,7 +62,7 @@
 }
 
 .checkbox-wrapper-4 .cbx:hover span:first-child {
-  border-color: #07f;
+  border-color: var(--button-color);
 }
 
 .checkbox-wrapper-4 .inp-cbx {
@@ -71,8 +71,8 @@
 }
 
 .checkbox-wrapper-4 .inp-cbx:checked + .cbx span:first-child {
-  background: #07f;
-  border-color: #07f;
+  background: var(--button-color);
+  border-color: var(--button-color);
   animation: wave-4 0.4s ease;
 }
 
@@ -158,7 +158,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  border: solid black 1px;
+  border: solid var(--text-color) 1px;
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 10px;
@@ -174,6 +174,7 @@
 .itemDeImagemInfoProduto button {
   border: solid red 1px;
   border-radius: 10px;
+  background: none;
   color: red;
   padding: 5px;
   display: flex;
@@ -193,7 +194,7 @@
 .ImageItemDeImagemInfoProduto {
   width: 50px;
   height: 50px;
-  border: solid black 1px;
+  border: solid var(--text-color) 1px;
   background-size: cover;
 }
 
@@ -208,7 +209,7 @@
   left: 40px;
   width: 100vw;
   height: 50px;
-  background-color: #dbdbdb;
+  background-color: var(--div-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -218,7 +219,7 @@
 #navInfoProdutos > div > .salvar {
   margin-right: 10px;
   font-size: 15px;
-  background-color: #07f;
+  background-color: var(--button-color);
   width: 200px;
   padding: 5px;
   font-weight: bold;
@@ -245,6 +246,7 @@
   background: none;
   padding: 5px;
   color: red;
+  background: none;
   cursor: pointer;
   display: flex;
   justify-content: center;

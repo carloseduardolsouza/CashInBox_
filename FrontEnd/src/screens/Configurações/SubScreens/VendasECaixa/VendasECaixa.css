@@ -1,5 +1,5 @@
 #VendasECaixa {
-  background-color: #eeeeee;
+  background-color: var(--div-color);
   padding: 10px;
   border-radius: 10px;
 }

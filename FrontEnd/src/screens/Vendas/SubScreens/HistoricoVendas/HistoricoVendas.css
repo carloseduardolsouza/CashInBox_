@@ -21,7 +21,7 @@
 }
 
 .Table thead {
-  background-color: #c0c0c0;
+  background-color: var(--div-color);
 }
 
 .Table tr td {
@@ -33,7 +33,7 @@
 }
 
 .aTdTabelaHistoricoVendas {
-  color: black;
+  color: var(--text-color);
 }
 
 .DetalhesHistoricoVendas {
@@ -42,13 +42,13 @@
   padding: 5px;
   border-radius: 5px;
   font-weight: bold;
-  background-color: #0295ff;
+  background-color: var(--button-color);
   color: white;
   cursor: pointer;
 }
 
 .DetalhesHistoricoVendas:hover {
-  background-color: #006cb9;
+  background-color: var(--button-color);
   transition: .3s;
 }
 

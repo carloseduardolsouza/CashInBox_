@@ -12,14 +12,14 @@
 #bolinhaItemCaixaAtual {
     width: 13px;
     height: 13px;
-    background-color: black;
+    background-color: var(--text-color);
     border-radius: 50%;
 }
 
 #linhaItemCaixaAtual {
     width: 2px;
     height: 50px;
-    background-color: black;
+    background-color: var(--text-color);
 }
 
 #detalheesteticoItemCaixaAtual {

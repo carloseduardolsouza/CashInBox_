@@ -97,7 +97,7 @@ function DetalhesDaVenda() {
         <div id="DetalhesDaVendaDisplay2">
           <div id="DetalhesDaVendaDisplay2Pt1">
             <h2>{services.formatarCurrency(venda.valor_total)}</h2>
-            <a>
+            <a id="infoTempoDetalhesdaVenda">
               Venda # {venda.id} -{" "}
               {services.formatarDataCurta(venda.data_venda)} -{" "}
               {services.formatarHorario(venda.data_venda)}

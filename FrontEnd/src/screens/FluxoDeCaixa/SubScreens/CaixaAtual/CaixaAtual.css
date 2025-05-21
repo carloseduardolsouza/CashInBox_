@@ -6,7 +6,7 @@
 }
 
 #dataAberturaCaixa {
-  color: #0000008f;
+  color: var(--text-color);
   font-size: 12px;
 }
 
@@ -17,7 +17,6 @@
   max-height: 150px; /* ou qualquer altura que faça sentido no seu layout */
   overflow-y: auto;
   padding-right: 8px; /* evita que o conteúdo fique colado à barra */
-  border-left: 2px solid #eee; /* opcional: só para estilo */
 }
 
 .buttonRetiarAddSaldo {
@@ -25,7 +24,7 @@
   font-size: 15px;
   padding: 5px;
   border-radius: 10px;
-  border: solid black 1px;
+  border: solid var(--text-color) 1px;
   cursor: pointer;  
 }
 
@@ -52,7 +51,7 @@
 
 .InfoCaixaAtual {
   width: 31%;
-  border-left: 1px solid #5e5e5e;
+  border-left: 1px solid var(--text-color);
   max-height: 80vh;
   padding: 10px;
 }
@@ -63,14 +62,14 @@
   align-items: center;
   padding: 10px;
   font-size: 17px;
-  border-bottom: solid 1px #0000008f;
+  border-bottom: solid 1px var(--text-color);
   margin: 10px
 }
 
 #ButtonCaixa {
   width: 100%;
   padding: 5px;
-  background-color: #0295ff;
+  background-color: var(--button-color);
   color: white;
   font-size: 18px;
   border: none;
@@ -79,7 +78,7 @@
 }
 
 .Resumodecaixa {
-  border: 1px solid #0000008f;
+  border: 1px solid var(--text-color);
   padding: 10px;
   border-radius: 10px;
   width: 400px;
@@ -100,7 +99,7 @@
 }
 
 #meiosDePagamentoDiv {
-  border: solid #0000008f 1px;
+  border: solid var(--text-color) 1px;
   padding: 10px;
   border-radius: 10px;
   width: 400px;

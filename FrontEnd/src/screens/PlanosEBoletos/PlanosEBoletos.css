@@ -2,187 +2,31 @@
   margin-left: 55px;
 }
 
-.CardPlanos {
-  padding: 20px;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 22%;
-  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
-}
-
-.AssineAgoraPlanos {
-  width: 100%;
-  padding: 10px;
-  font-weight: 600;
+#BlocoUmDetalhesPagamento {
+  margin-top: 20px;
+  border: solid #00000099 1px;
   border-radius: 10px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-#AreaCardPlanos {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  margin-top: 70px;
-}
-
-.Basic {
-  background-color: #e0e0e0;
-}
-
-.Essencial {
-  background-color: #0295ff;
-  color: white;
-}
-
-.Premium {
-  background-color: #e0e0e0;
-}
-
-#PositionButton {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.divHeaderCardPlanos {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-/* From Uiverse.io by vinodjangid07 */
-.Download-button {
-  display: flex;
-  align-items: center;
-  font-family: inherit;
-  font-weight: 500;
-  font-size: 17px;
-  padding: 12px 20px;
-  color: white;
-  background: #0295ff;
-  border: none;
-  box-shadow: 0 0.7em 1.5em -0.5em #0295ff;
-  letter-spacing: 0.05em;
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
-}
-
-.Download-button svg {
-  margin-right: 8px;
-  width: 25px;
-}
-
-.Download-button:hover {
-  box-shadow: 0 0.5em 1.5em -0.5em rgba(88, 71, 116, 0.627);
-}
-
-.Download-button:active {
-  box-shadow: 0 0.3em 1em -0.5em rgba(88, 71, 116, 0.627);
-}
-
-.Download-button::before {
-  content: "";
-  width: 4px;
-  height: 40%;
-  background-color: white;
-  position: absolute;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  left: 0;
-  transition: all 0.2s;
-}
-
-.Download-button::after {
-  content: "";
-  width: 4px;
-  height: 40%;
-  background-color: white;
-  position: absolute;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  right: 0;
-  transition: all 0.2s;
-}
-
-.Download-button:hover::before,
-.Download-button:hover::after {
-  height: 60%;
-}
-
-/* From Uiverse.io by htwarriors108 */
-.card {
-  position: relative;
-  transition: 0.5s;
-  cursor: pointer;
-}
-
-.card:hover {
-  transform: translateY(-20px);
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 1.2em;
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  filter: blur(30px);
-}
-
-.card span {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  right: 6px;
-  bottom: 6px;
-  z-index: 2;
-  border-radius: 1em;
-}
-
-.card span::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.card .content {
-  position: relative;
   padding: 10px;
-  z-index: 10;
+  width: 600px;
+}
+
+#areaPlanosEPagamento {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 1.5em;
+  justify-content: space-between;
 }
 
-#divMaisPopular {
-    background-color: #ffffff4e;
-    padding: 5px;
-    border-radius: 10px;
-    width: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 11px;
+#BlocoUmDetalhesPagamento span {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  color: #00000099;
 }
 
-.button1 {
-  background-color: #0295ff;
-  color: white;
+#cardDadosDoEstabelecimentoPlanosEBoletos {
+  margin-top: 20px;
+  border: solid #00000099 1px;
+  margin-right: 40px;
+  border-radius: 10px;
+  padding: 10px;
+  width: 580px;
 }

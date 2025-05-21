@@ -41,24 +41,8 @@
 .ImageUserDetalhesCliente {
   width: 200px;
   border-radius: 50%;
-  border: 1px solid #7b7b7b;
+  border: 1px solid var(--text-color);
   margin-bottom: 10px;
-}
-
-.bttContaCliente {
-  margin-top: 5px;
-  font-size: 17px;
-  padding: 5px;
-  border-radius: 20px;
-  border: 1px solid #7b7b7b;
-  cursor: pointer;
-  width: 200px;
-  background-color: #00000000;
-}
-
-.bttContaCliente:hover {
-  border: 1px solid #000000;
-  transition: 0.5s;
 }
 
 .bttDeleteClienteInfo {
@@ -69,7 +53,7 @@
   border: 1px solid #ff5b5b;
   cursor: pointer;
   width: 200px;
-  background-color: #00000000;
+  background: none;
   margin-top: 20px;
 }
 
@@ -87,7 +71,7 @@
 }
 
 #divIconeGeralCliente {
-  border: solid black 1.5px;
+  border: solid var(--text-color) 1.5px;
   border-radius: 50%;
   width: 200px;
   height: 200px;
@@ -101,16 +85,17 @@
   font-size: 17px;
   padding: 5px;
   border-radius: 20px;
-  border: 1px solid #000000;
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
   cursor: pointer;
   width: 200px;
-  background-color: #00000000;
+  background: none;
   margin-top: 20px;
 }
 
 .bttEditarClienteInfo:hover {
-  border: 1px solid white;
-  background-color: #000000;
-  color: white;
+  border: 1px solid var(--text-color);
+  background-color: var(--text-color);
+  color: var(--bg-color);
   transition: 0.5s;
 }

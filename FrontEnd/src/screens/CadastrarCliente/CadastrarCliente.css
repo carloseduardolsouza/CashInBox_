@@ -12,7 +12,7 @@
 .ImageUser {
   width: 270px;
   height: 270px;
-  border: 1px solid black;
+  border: 1px solid var(--text-color);
   border-radius: 50%;
   margin-right: 100px;
   margin-top: 40px;
@@ -28,7 +28,7 @@
 
 .articleNovoCliente {
   position: relative;
-  background-color: #e7e7e7;
+  background-color: var(--div-color);
   padding: 15px;
   width: 550px;
   border-radius: 10px;

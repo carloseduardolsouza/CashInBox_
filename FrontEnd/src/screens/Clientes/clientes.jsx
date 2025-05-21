@@ -75,7 +75,7 @@ function Clientes() {
           </button>
         </form>
       </article>
-      <table className="table">
+      <table className="Table">
         <thead>
           <tr>
             <th>Nome</th>

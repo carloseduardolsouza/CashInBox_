@@ -6,7 +6,7 @@
   padding: 10px;
   margin-top: 20px;
   border-radius: 10px;
-  border: solid #00000046 2px;
+  border: solid var(--text-color) 2px;
   display: flex;
   justify-content: space-around;
 }
@@ -21,7 +21,7 @@
 }
 
 #chaveNF span {
-  color: #0000008b;
+  color: var(--text-color);
 }
 
 #chaveNF button {
@@ -32,14 +32,6 @@
   cursor: pointer;
 }
 
-#tabelaNotaDeEntrada {
-  text-align: center;
-  width: 100%;
-  border: solid black 1px;
-  max-height: 400px;
-  overflow-y: scroll;
-  border-collapse: collapse;
-}
 
 .tabela-container {
   margin-top: 20px;
@@ -50,10 +42,6 @@
 #tabelaNotaDeEntrada > tbody > tr:hover {
   border: solid black 1px;
   cursor: pointer;
-}
-
-#tabelaNotaDeEntrada thead {
-  background-color: #0000003b;
 }
 
 #divButtonsNotaFiscal {

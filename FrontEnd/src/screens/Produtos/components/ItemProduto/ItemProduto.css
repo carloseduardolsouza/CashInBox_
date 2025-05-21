@@ -1,6 +1,6 @@
 #ItensTableProdutos {
   width: 600px;
-  background-color: #e7e7e7;
+  background-color: var(--div-color);
   padding: 5px;
   margin-bottom: 15px;
   border-radius: 10px;

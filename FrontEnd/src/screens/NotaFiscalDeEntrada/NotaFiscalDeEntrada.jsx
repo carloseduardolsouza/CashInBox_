@@ -15,7 +15,7 @@ function NotaFiscalDeEntrada() {
       </div>
 
       <div class="tabela-container">
-        <table id="tabelaNotaDeEntrada">
+        <table id="tabelaNotaDeEntrada" className="Table">
           <thead>
             <tr>
               <th>Cod. Produto</th>
