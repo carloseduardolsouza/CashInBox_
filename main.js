@@ -9,7 +9,7 @@ let mainWindow;
 let backend;
 
 const preloadPath = app.isPackaged
-  ? path.join(process.resourcesPath, "preload.js")
+  ? path.join(__dirname, "preload.js")
   : path.join(__dirname, "preload.js");
 
 function getBackendPath() {

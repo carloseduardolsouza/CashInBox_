@@ -1,8 +1,8 @@
 import "./App.css";
 import "./menu.css";
-import { useState, useContext} from "react";
+import { useState, useContext } from "react";
 import AppContext from "./context/AppContext";
-import WindowControls from "./components/Buttons/WindowControls"
+import WindowControls from "./components/Buttons/WindowControls";
 
 //Componentes
 import Aviso from "./components/Aviso/Aviso";
@@ -81,7 +81,6 @@ import { MdInsertChart } from "react-icons/md";
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 function App() {
-  
   const { erroApi } = useContext(AppContext);
   //Status do menu
   const [statusMenu, setStatusMenu] = useState("home");
@@ -122,156 +121,168 @@ function App() {
       <WindowControls />
       {erroApi && <ApiDesconectada />}
       <Router>
-        <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>
-          <div className="MenuLateralBox Outline" onClick={VerificarStatusMenu}>
-            <RiMenu2Fill className="iconsMenuLateral" />
+          <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>
+            <div
+              className="MenuLateralBox Outline"
+              onClick={VerificarStatusMenu}
+            >
+              <RiMenu2Fill className="iconsMenuLateral" />
+            </div>
+            <Link
+              to="/"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("home")}
+            >
+              {(statusMenu === "home" && (
+                <GoHomeFill className="iconsMenuLateral" />
+              )) || <GoHome className="iconsMenuLateral" />}
+              <p style={style}>Home</p>
+            </Link>
+            <Link
+              to="/vendas"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("vendas")}
+            >
+              {(statusMenu === "vendas" && (
+                <RiMoneyDollarCircleFill className="iconsMenuLateral" />
+              )) || <RiMoneyDollarCircleLine className="iconsMenuLateral" />}
+              <p style={style}>Vendas</p>
+            </Link>
+            <Link
+              to="/clientes"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("clientes")}
+            >
+              {(statusMenu === "clientes" && (
+                <FaUser className="iconsMenuLateral" />
+              )) || <FaRegUser className="iconsMenuLateral" />}
+              <p style={style}>clientes</p>
+            </Link>
+            <Link
+              to="/produtos"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("produtos")}
+            >
+              {(statusMenu === "produtos" && (
+                <MdSell className="iconsMenuLateral" />
+              )) || <MdOutlineSell className="iconsMenuLateral" />}
+              <p style={style}>produtos</p>
+            </Link>
+            <Link
+              to="/estoque"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("estoque")}
+            >
+              {(statusMenu === "estoque" && (
+                <BsBox2Fill className="iconsMenuLateral" />
+              )) || <BsBox2 className="iconsMenuLateral" />}
+              <p style={style}>Estoque</p>
+            </Link>
+            <Link
+              to="/fidelidade"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("fidelidade")}
+            >
+              {(statusMenu === "fidelidade" && (
+                <FaStar className="iconsMenuLateral" />
+              )) || <FaRegStar className="iconsMenuLateral" />}
+              <p style={style}>Fidelidade</p>
+            </Link>
+            <Link
+              to="/contasPagar"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("contasPagar")}
+            >
+              {(statusMenu === "contasPagar" && (
+                <FaMoneyBill1 className="iconsMenuLateral" />
+              )) || <FaRegMoneyBillAlt className="iconsMenuLateral" />}
+              <p style={style}>Contas a pagar</p>
+            </Link>
+            <Link
+              to="/fluxoDeCaixa"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("fluxoDeCaixa")}
+            >
+              {(statusMenu === "fluxoDeCaixa" && (
+                <PiCashRegisterFill className="iconsMenuLateral" />
+              )) || <PiCashRegisterLight className="iconsMenuLateral" />}
+              <p style={style}>Caixa</p>
+            </Link>
+
+            <Link
+              to="/relatorios"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("relatorios")}
+            >
+              {(statusMenu === "relatorios" && (
+                <MdInsertChart className="iconsMenuLateral" />
+              )) || <MdInsertChartOutlined className="iconsMenuLateral" />}
+              <p style={style}>Relatorios</p>
+            </Link>
+
+            <Link
+              to="/centralCashInBox"
+              className="MenuLateralBox"
+              onClick={() => setStatusMenu("centralCashInBox")}
+            >
+              {(statusMenu === "centralCashInBox" && (
+                <PiHeadsetFill className="iconsMenuLateral" />
+              )) || <PiHeadsetDuotone className="iconsMenuLateral" />}
+              <p style={style}>SAC CashInBox</p>
+            </Link>
+
+            <Link
+              to="/configurações"
+              className="MenuLateralBox Preferencias"
+              onClick={() => setStatusMenu("configurações")}
+            >
+              {(statusMenu === "configurações" && (
+                <BsGearFill className="iconsMenuLateral" />
+              )) || <BsGear className="iconsMenuLateral" />}
+              <p style={style}>Preferencias</p>
+            </Link>
+            <div className="MenuLateralBox"></div>
           </div>
-          <Link
-            to="/"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("home")}
-          >
-            {(statusMenu === "home" && (
-              <GoHomeFill className="iconsMenuLateral" />
-            )) || <GoHome className="iconsMenuLateral" />}
-            <p style={style}>Home</p>
-          </Link>
-          <Link
-            to="/vendas"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("vendas")}
-          >
-            {(statusMenu === "vendas" && (
-              <RiMoneyDollarCircleFill className="iconsMenuLateral" />
-            )) || <RiMoneyDollarCircleLine className="iconsMenuLateral" />}
-            <p style={style}>Vendas</p>
-          </Link>
-          <Link
-            to="/clientes"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("clientes")}
-          >
-            {(statusMenu === "clientes" && (
-              <FaUser className="iconsMenuLateral" />
-            )) || <FaRegUser className="iconsMenuLateral" />}
-            <p style={style}>clientes</p>
-          </Link>
-          <Link
-            to="/produtos"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("produtos")}
-          >
-            {(statusMenu === "produtos" && (
-              <MdSell className="iconsMenuLateral" />
-            )) || <MdOutlineSell className="iconsMenuLateral" />}
-            <p style={style}>produtos</p>
-          </Link>
-          <Link
-            to="/estoque"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("estoque")}
-          >
-            {(statusMenu === "estoque" && (
-              <BsBox2Fill className="iconsMenuLateral" />
-            )) || <BsBox2 className="iconsMenuLateral" />}
-            <p style={style}>Estoque</p>
-          </Link>
-          <Link
-            to="/fidelidade"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("fidelidade")}
-          >
-            {(statusMenu === "fidelidade" && (
-              <FaStar className="iconsMenuLateral" />
-            )) || <FaRegStar className="iconsMenuLateral" />}
-            <p style={style}>Fidelidade</p>
-          </Link>
-          <Link
-            to="/contasPagar"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("contasPagar")}
-          >
-            {(statusMenu === "contasPagar" && (
-              <FaMoneyBill1 className="iconsMenuLateral" />
-            )) || <FaRegMoneyBillAlt className="iconsMenuLateral" />}
-            <p style={style}>Contas a pagar</p>
-          </Link>
-          <Link
-            to="/fluxoDeCaixa"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("fluxoDeCaixa")}
-          >
-            {(statusMenu === "fluxoDeCaixa" && (
-              <PiCashRegisterFill className="iconsMenuLateral" />
-            )) || <PiCashRegisterLight className="iconsMenuLateral" />}
-            <p style={style}>Caixa</p>
-          </Link>
+          <Routes>
+            <Route path="/" Component={Home} />
+            <Route path="/vendas" Component={Vendas} />
+            <Route path="/clientes" Component={Clientes} />
+            <Route path="/pontoDeVenda" Component={PontoDeVenda} />
+            <Route path="/produtos" Component={Produtos} />
+            <Route path="/estoque" Component={Estoque} />
+            <Route path="/fluxoDeCaixa" Component={FluxoDeCaixa} />
+            <Route path="/relatorios" Component={Relatorios} />
 
-          <Link
-            to="/relatorios"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("relatorios")}
-          >
-            {(statusMenu === "relatorios" && (
-              <MdInsertChart className="iconsMenuLateral" />
-            )) || <MdInsertChartOutlined className="iconsMenuLateral" />}
-            <p style={style}>Relatorios</p>
-          </Link>
+            <Route path="/cadastrarProduto" Component={CadastrarProduto} />
+            <Route path="/cadastrarCliente" Component={CadastrarCliente} />
+            <Route path="/funcionarios" Component={Funcionarios} />
+            <Route path="/planosEBoletos" Component={PlanosEBoletos} />
+            <Route
+              path="/cadastrarFuncionario"
+              Component={CadastrarFuncionario}
+            />
+            <Route
+              path="/detalhesDoCliente/:id"
+              Component={DetalhesDoCliente}
+            />
+            <Route path="/detalhesDaVenda/:id" Component={DetalhesDaVenda} />
+            <Route
+              path="/detalhesDoFuncionario/:id"
+              Component={DetalhesDoFuncionario}
+            />
+            <Route
+              path="/detalhesDoProduto/:id"
+              Component={DetalhesDoProduto}
+            />
+            <Route path="/contasPagar" Component={ContasAPagar} />
+            <Route
+              path="/notaFiscalDeEntrada"
+              Component={NotaFiscalDeEntrada}
+            />
 
-          <Link
-            to="/centralCashInBox"
-            className="MenuLateralBox"
-            onClick={() => setStatusMenu("centralCashInBox")}
-          >
-            {(statusMenu === "centralCashInBox" && (
-              <PiHeadsetFill className="iconsMenuLateral" />
-            )) || <PiHeadsetDuotone className="iconsMenuLateral" />}
-            <p style={style}>SAC CashInBox</p>
-          </Link>
-
-          <Link
-            to="/configurações"
-            className="MenuLateralBox Preferencias"
-            onClick={() => setStatusMenu("configurações")}
-          >
-            {(statusMenu === "configurações" && (
-              <BsGearFill className="iconsMenuLateral" />
-            )) || <BsGear className="iconsMenuLateral" />}
-            <p style={style}>Preferencias</p>
-          </Link>
-          <div className="MenuLateralBox"></div>
-        </div>
-        <Routes>
-          <Route path="/" Component={Home} />
-          <Route path="/vendas" Component={Vendas} />
-          <Route path="/clientes" Component={Clientes} />
-          <Route path="/pontoDeVenda" Component={PontoDeVenda} />
-          <Route path="/produtos" Component={Produtos} />
-          <Route path="/estoque" Component={Estoque} />
-          <Route path="/fluxoDeCaixa" Component={FluxoDeCaixa} />
-          <Route path="/relatorios" Component={Relatorios} />
-
-          <Route path="/cadastrarProduto" Component={CadastrarProduto} />
-          <Route path="/cadastrarCliente" Component={CadastrarCliente} />
-          <Route path="/funcionarios" Component={Funcionarios} />
-          <Route path="/planosEBoletos" Component={PlanosEBoletos} />
-          <Route
-            path="/cadastrarFuncionario"
-            Component={CadastrarFuncionario}
-          />
-          <Route path="/detalhesDoCliente/:id" Component={DetalhesDoCliente} />
-          <Route path="/detalhesDaVenda/:id" Component={DetalhesDaVenda} />
-          <Route
-            path="/detalhesDoFuncionario/:id"
-            Component={DetalhesDoFuncionario}
-          />
-          <Route path="/detalhesDoProduto/:id" Component={DetalhesDoProduto} />
-          <Route path="/contasPagar" Component={ContasAPagar} />
-          <Route path="/notaFiscalDeEntrada" Component={NotaFiscalDeEntrada} />
-
-          <Route path="*" Component={Error} />
-          <Route path="/configurações" Component={Configurações} />
-        </Routes>
+            <Route path="*" Component={Error} />
+            <Route path="/configurações" Component={Configurações} />
+          </Routes>
       </Router>
     </div>
   );

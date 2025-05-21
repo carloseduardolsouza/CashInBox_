@@ -4,8 +4,8 @@ const WindowControls = () => {
   return (
     <div id="WindowControls">
 
-      <button onClick={() => window.electronAPI.minimize()}>—</button>
-      <button onClick={() => window.electronAPI.close()}>✕</button>
+      <button id="buttonMinimizeElectron" onClick={() => window.electronAPI.minimize()}>—</button>
+      <button id="buttonCloseElectron" onClick={() => window.electronAPI.close()}>✕</button>
     </div>
   );
 };
