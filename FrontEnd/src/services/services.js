@@ -25,8 +25,24 @@ function formatarNumeroCelular(numero) {
 
 // Formatar CPF 123.456.789-01
 function formatarCPF(cpf) {
-  if (!cpf) return '';
+  if (!cpf) return "";
   return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
+function formatarCNPJ(cnpj) {
+  // Remove tudo que não for número
+  cnpj = cnpj.replace(/\D/g, "");
+
+  // Confere se tem 14 dígitos
+  if (cnpj.length !== 14) {
+    throw new Error("CNPJ inválido. Deve conter 14 dígitos.");
+  }
+
+  // Formata com máscara
+  return cnpj.replace(
+    /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+    "$1.$2.$3/$4-$5"
+  );
 }
 
 // Formatar data de nascimento 01/01/1990
@@ -70,28 +86,40 @@ function formatarDataCurta(dataString) {
   const dia = data.getDate();
   const ano = data.getFullYear();
 
-  const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+  const meses = [
+    "Jan",
+    "Fev",
+    "Mar",
+    "Abr",
+    "Mai",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Set",
+    "Out",
+    "Nov",
+    "Dez",
+  ];
   const mes = meses[data.getMonth()];
 
-  return `${dia.toString().padStart(2, '0')} ${mes} ${ano}`;
+  return `${dia.toString().padStart(2, "0")} ${mes} ${ano}`;
 }
 
 function formatarHorario(dataString) {
   const data = new Date(dataString);
-  const horas = data.getHours().toString().padStart(2, '0');
-  const minutos = data.getMinutes().toString().padStart(2, '0');
+  const horas = data.getHours().toString().padStart(2, "0");
+  const minutos = data.getMinutes().toString().padStart(2, "0");
   return `${horas}:${minutos}`;
 }
 
-
-
 export default {
   formatarCurrency,
+  formatarCNPJ,
   formatarDataNascimento,
   formatarCPF,
   formatarData,
   formatarNumeroCelular,
   mascaraDeDinheroInput,
   formatarDataCurta,
-  formatarHorario
+  formatarHorario,
 };

@@ -4,14 +4,14 @@
   --bg-color: #ffffff;
   --text-color: #000000;
   --button-color: #0295ff;
-  --div-color: #d9d9d9;
+  --div-color: #c8c8c8cb;
 }
 
 .dark-theme {
   --bg-color: #121212;
   --text-color: #ffffff;
   --button-color: #00528d;
-  --div-color: #484848;
+  --div-color: #484848ec;
 }
 
 * {

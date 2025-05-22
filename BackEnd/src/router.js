@@ -89,6 +89,9 @@ router.put("/editarCategorias/:id", categoriasControllers.editarCategoria);
 // Rotas de vendas
 router.post("/novaVenda", vendaControlles.NovaVenda);
 router.get("/listarVendas/:filtro?/:pesquisa?", vendaControlles.listarVendas);
+router.get("/listarVendasCliente/:id", vendaControlles.listarVendasCliente);
+router.get("/listarVendasFuncionario/:id", vendaControlles.listarVendasFuncionario);
+router.get("/listarOrcamentoCliente/:id", vendaControlles.listarOrcamentoCliente);
 router.get(
   "/listarOrcamentos/:filtro?/:pesquisa?",
   vendaControlles.listarOrcamentos

@@ -124,6 +124,63 @@ const listarVendas = async (filtro, pesquisa) => {
   return vendas.reverse();
 };
 
+const listarVendasCliente = async (id) => {
+  let query;
+  let values = [];
+
+  query = `SELECT * FROM vendas WHERE status != 'orçamento' AND cliente_id = ${id}`;
+
+  const vendas = await new Promise((resolve, reject) => {
+    connection.all(query, values, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return vendas.reverse();
+};
+
+const listarOrcamentoCliente = async (id) => {
+  let query;
+  let values = [];
+
+  query = `SELECT * FROM vendas WHERE status == 'orçamento' AND cliente_id = ${id}`;
+
+  const vendas = await new Promise((resolve, reject) => {
+    connection.all(query, values, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return vendas.reverse();
+}
+
+const listarVendasFuncionario = async (id) => {
+  let query;
+  let values = [];
+
+  query = `SELECT * FROM vendas WHERE status != 'orçamento' AND funcionario_id = ${id}`;
+
+  const vendas = await new Promise((resolve, reject) => {
+    connection.all(query, values, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return vendas.reverse();
+}
+
 const listarOrcamentos = async (filtro, pesquisa) => {
   let query;
   let values = [];
@@ -219,6 +276,9 @@ const deletarVenda = async (id) => {
 module.exports = {
   NovaVenda,
   listarVendas,
+  listarVendasCliente,
+  listarOrcamentoCliente,
+  listarVendasFuncionario,
   produrarVendaId,
   procurarProdutosVenda,
   deletarVenda,

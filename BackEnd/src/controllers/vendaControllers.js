@@ -11,6 +11,24 @@ const listarVendas = async (req, res) => {
   return res.status(201).json(vendas);
 };
 
+const listarVendasCliente = async (req , res) => {
+  const {id} = req.params
+  const vendas = await vendaModels.listarVendasCliente(id)
+  return res.status(201).json(vendas)
+}
+
+const listarOrcamentoCliente = async (req , res) => {
+  const {id} = req.params
+  const vendas = await vendaModels.listarOrcamentoCliente(id)
+  return res.status(201).json(vendas)
+}
+
+const listarVendasFuncionario = async (req, res) => {
+  const {id} = req.params
+  const vendas = await vendaModels.listarVendasFuncionario(id)
+  return res.status(201).json(vendas)
+}
+
 const listarOrcamentos = async (req, res) => {
   const { filtro, pesquisa } = req.params;
   const orcamentos = await vendaModels.listarOrcamentos(filtro, pesquisa);
@@ -38,6 +56,9 @@ const deletarVenda = async (req, res) => {
 module.exports = {
   NovaVenda,
   listarVendas,
+  listarVendasCliente,
+  listarOrcamentoCliente,
+  listarVendasFuncionario,
   produrarVendaId,
   procurarProdutosVenda,
   deletarVenda,

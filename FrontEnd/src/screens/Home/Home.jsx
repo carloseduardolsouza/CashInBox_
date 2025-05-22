@@ -25,7 +25,7 @@ function Home() {
   const [notificaçãp, setNotificação] = useState(false);
   const [receitas, setReceitas] = useState();
 
-  const { isDark, setIsDark } = useContext(AppContext);
+  const { isDark, setIsDark , dadosLoja } = useContext(AppContext);
 
   useEffect(() => {
     if (isDark) {
@@ -60,7 +60,7 @@ function Home() {
         </button>
       </div>
 
-      <h1>{"CashInBox"}</h1>
+      <h1>{dadosLoja.nomeEstabelecimento || "CashInBox..."}</h1>
 
       <header className="HeaderHomeDeashBoard">
         <LineChart

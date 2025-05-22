@@ -1,17 +1,21 @@
 import "./DetalhesDaVenda.css";
 import { useState, useEffect, useContext } from "react";
 import AppContext from "../../context/AppContext";
-import { useParams , useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import services from "../../services/services";
+
+import EscolherFormatoNF from "./components/EscolherFormatoNF/EscolherFormatoNF";
 
 //conexão com a api
 import fetchapi from "../../api/fetchapi";
 
 function DetalhesDaVenda() {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const {setErroApi} = useContext(AppContext)
+  const { setErroApi, dadosLoja } = useContext(AppContext);
+
+  const [modalAtiva, setModalAtiva] = useState(null);
 
   const [venda, setVenda] = useState({});
   const [cliente, setCliente] = useState({});
@@ -31,15 +35,36 @@ function DetalhesDaVenda() {
   }, []);
 
   const cancelarVenda = () => {
-    fetchapi.deletarVenda(id).then(() => {
-      navigate("/vendas")
-    }).catch(() => {
-      setErroApi(true)
-    })
-  }
+    fetchapi
+      .deletarVenda(id)
+      .then(() => {
+        navigate("/vendas");
+      })
+      .catch(() => {
+        setErroApi(true);
+      });
+  };
 
+  const renderModal = () => {
+    switch (modalAtiva) {
+      case "EscolherFormatoNota":
+        return (
+          <EscolherFormatoNF
+            fechar={setModalAtiva}
+            produtos={produtos}
+            cliente={cliente}
+            venda={venda}
+            dadosLoja={dadosLoja}
+          />
+        );
+      case null:
+        return null;
+    }
+  };
   return (
     <div id="DetalhesDaVenda">
+      {renderModal()}
+
       <div id="DetalhesDaVendaDisplay">
         <div id="DetalhesDaVendaDisplay1">
           <h2>Detalhes da Venda</h2>
@@ -55,7 +80,9 @@ function DetalhesDaVenda() {
               </p>
               <p>
                 <strong>Numero: </strong>
-                {services.formatarNumeroCelular(cliente?.telefone || "indefinido")}
+                {services.formatarNumeroCelular(
+                  cliente?.telefone || "indefinido"
+                )}
               </p>
               <p>
                 <strong>CPF: </strong>
@@ -83,7 +110,9 @@ function DetalhesDaVenda() {
                   return (
                     <tr>
                       <td>{produto.produto_nome}</td>
-                      <td>{services.formatarCurrency(produto.preco_unitario)}</td>
+                      <td>
+                        {services.formatarCurrency(produto.preco_unitario)}
+                      </td>
                       <td>{produto.quantidade}</td>
                       <td>{services.formatarCurrency(produto.valor_total)}</td>
                     </tr>
@@ -127,12 +156,20 @@ function DetalhesDaVenda() {
           </div>
 
           <div id="DetalhesDaVendaDisplay2Pt3">
-            <p id="CancelarVendaDetalhesDaVenda" onClick={() => cancelarVenda()}>Cancelar Venda</p>
+            <p
+              id="CancelarVendaDetalhesDaVenda"
+              onClick={() => cancelarVenda()}
+            >
+              Cancelar Venda
+            </p>
             <div>
               <button className="ButãoEditarDetalhesDaVenda ButãoDetalhesDaVenda">
                 Editar
               </button>
-              <button className="ButãoNotasDetalhesDaVenda ButãoDetalhesDaVenda">
+              <button
+                className="ButãoNotasDetalhesDaVenda ButãoDetalhesDaVenda"
+                onClick={() => setModalAtiva("EscolherFormatoNota")}
+              >
                 (NF-e / NFC-e)
               </button>
             </div>

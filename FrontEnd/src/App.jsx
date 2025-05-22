@@ -2,7 +2,6 @@ import "./App.css";
 import "./menu.css";
 import { useState, useContext } from "react";
 import AppContext from "./context/AppContext";
-import WindowControls from "./components/Buttons/WindowControls";
 
 //Componentes
 import Aviso from "./components/Aviso/Aviso";
@@ -118,7 +117,6 @@ function App() {
 
   return (
     <div className="App">
-      <WindowControls />
       {erroApi && <ApiDesconectada />}
       <Router>
           <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>

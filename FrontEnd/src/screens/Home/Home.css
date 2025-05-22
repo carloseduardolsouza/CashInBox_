@@ -27,7 +27,7 @@
 .NotificationHomeScreen {
   position: absolute;
   font-size: 25px;
-  top: 30px;
+  top: 10px;
   right: 20px;
   cursor: pointer;
   display: flex;

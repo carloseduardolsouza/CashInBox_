@@ -351,6 +351,42 @@ const listarVendas = async (filtro, pesquisa) => {
   }
 };
 
+const listarVendasCliente = async (id) => {
+  const vendas = await fetch(`${API_URL}/listarVendasCliente/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
+};
+
+const listarVendasFuncionario = async (id) => {
+  const vendas = await fetch(`${API_URL}/listarVendasFuncionario/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
+};
+
+const listarOrcamentoCliente = async (id) => {
+  const vendas = await fetch(`${API_URL}/listarOrcamentoCliente/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
+};
+
 const listarOrcamentos = async (filtro, pesquisa) => {
   if (filtro == undefined && pesquisa == undefined) {
     const Orcamentos = await fetch(`${API_URL}/listarOrcamentos`)
@@ -438,6 +474,9 @@ const dadosEmpresa = async () => {
 const EditarDadosEmpresa = async (data) => {
   const produtos = await fetch(`${API_URL}/salvarDadosEmpresa`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(data),
   })
     .then((response) => {
@@ -545,6 +584,9 @@ export default {
   AtualizarProduto,
 
   listarVendas,
+  listarVendasCliente,
+  listarVendasFuncionario,
+  listarOrcamentoCliente,
   listarOrcamentos,
   NovaVendaEmBloco,
   produrarVendaId,

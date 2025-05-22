@@ -25,7 +25,7 @@
 }
 
 .Table tr td {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid var(--text-color);
 }
 
 .Table .ativo {

@@ -64,7 +64,7 @@ function ConfiguraçõesGerais() {
             <label>
               <p>Telefone:</p>
               <input
-                type="text"
+                type="number"
                 value={telefone}
                 onChange={(e) => {
                   setTelefone(e.target.value);
