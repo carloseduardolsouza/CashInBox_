@@ -36,11 +36,11 @@ function CadastrarProduto() {
   const [descrição, setDescrição] = useState();
   const [preçoCompra, setPreçoCompra] = useState("");
   const [preçoVenda, setPreçoVenda] = useState("");
-  const [markup, setMarkup] = useState("");
+  const [markup, setMarkup] = useState(0);
   const [categoria, setCategoria] = useState("");
-
-  const [isDisabled, setIsDisabled] = useState(true);
   const [referencia, setReferencia] = useState("");
+
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const buscarCategorias = async () => {
     try {
@@ -91,7 +91,6 @@ function CadastrarProduto() {
     });
 
     setImages((prevImages) => [...prevImages, ...imagesArray]);
-    setIsDisabled(false);
     setOpenImagens(true);
   };
 
@@ -108,12 +107,13 @@ function CadastrarProduto() {
     let dados = {
       nome: nomeProduto,
       descricao: descrição,
+      referencia: referencia,
       codigo_barras: "",
-      preco_venda: preçoVenda,
+      preco_venda: preçoVenda || 0,
       preco_custo: preçoCompra,
       estoque_atual: 0,
       estoque_minimo: 0,
-      markup: markup.toFixed(2),
+      markup: markup.toFixed(2) || 0,
       categoria: marca,
       categoria_id: categoria,
       unidade_medida: "",
@@ -200,6 +200,7 @@ function CadastrarProduto() {
             </button>
             <button
               id="AtualizarCategoria"
+              type="button"
               onClick={(e) => buscarCategorias(e)}
             >
               <GrUpdate />
@@ -263,7 +264,6 @@ function CadastrarProduto() {
               cols="50"
               onChange={(e) => setDescrição(e.target.value)}
               value={descrição}
-              required
               placeholder="descrição do produto..."
             />
           </la>

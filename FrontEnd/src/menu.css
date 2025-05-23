@@ -1,5 +1,8 @@
 .MenuLateralBoxArea {
   background-color: var(--div-color);
+
+  backdrop-filter: blur(5px); /* Desfoque */
+
   width: 160px;
   height: 100vh;
   position: fixed;

@@ -1,6 +1,5 @@
-const { app, BrowserWindow, screen } = require("electron");
+const { app, BrowserWindow, screen, ipcMain } = require("electron");
 const { autoUpdater } = require("electron-updater");
-const { ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { spawn } = require("child_process");
@@ -8,9 +7,7 @@ const { spawn } = require("child_process");
 let mainWindow;
 let backend;
 
-const preloadPath = app.isPackaged
-  ? path.join(__dirname, "preload.js")
-  : path.join(__dirname, "preload.js");
+const preloadPath = path.join(__dirname, "preload.js");
 
 function getBackendPath() {
   return app.isPackaged
@@ -23,26 +20,30 @@ function getUserFilePaths() {
   const databasePath = path.join(userDataPath, "database.sqlite");
   const uploadsPath = path.join(userDataPath, "uploads");
 
-  if (!fs.existsSync(uploadsPath)) {
-    fs.mkdirSync(uploadsPath, { recursive: true });
+  try {
+    if (!fs.existsSync(uploadsPath)) {
+      fs.mkdirSync(uploadsPath, { recursive: true });
+    }
+  } catch (err) {
+    console.error("❌ Erro criando pasta uploads:", err);
   }
 
   return { databasePath, uploadsPath };
 }
 
 function createWindow() {
-  const { workArea } = screen.getPrimaryDisplay(); // pega só a área útil (sem taskbar)
+  const { workArea } = screen.getPrimaryDisplay();
 
   mainWindow = new BrowserWindow({
     x: workArea.x,
     y: workArea.y,
     width: workArea.width,
     height: workArea.height,
-    frame: false,            // remove moldura e barra padrão
-    resizable: false,        // não permite redimensionar
-    movable: false,          // não permite mover a janela
+    frame: false,
+    resizable: false,
+    movable: false,
     maximizable: false,
-    minimizable: true,      // se quiser, pode ativar depois
+    minimizable: true,
     fullscreenable: false,
     skipTaskbar: false,
     alwaysOnTop: false,
@@ -50,16 +51,14 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      sandbox: false, // ⚠️ atenção aos riscos!
       preload: preloadPath,
     },
   });
 
-  mainWindow.setMenu(null); // remove a barra de menu (alt etc.)
+  mainWindow.setMenu(null);
 
-  const frontEndPath = app.isPackaged
-    ? path.join(__dirname, "FrontEnd", "build", "index.html")
-    : path.join(__dirname, "FrontEnd", "build", "index.html");
+  const frontEndPath = path.join(__dirname, "FrontEnd", "build", "index.html");
 
   mainWindow.loadFile(frontEndPath);
 
@@ -79,15 +78,19 @@ function createWindow() {
 
 function startBackend() {
   const { databasePath, uploadsPath } = getUserFilePaths();
-  const backendArgs = [getBackendPath(), databasePath, uploadsPath];
+  const backendScript = getBackendPath();
+
+  const backendArgs = [backendScript, databasePath, uploadsPath];
 
   backend = spawn("node", backendArgs, {
-    detached: true,
-    stdio: "ignore",
+    detached: false,
+    stdio: app.isPackaged ? "ignore" : "inherit", // Silencie só em prod
     windowsHide: true,
   });
 
   backend.unref();
+
+  console.log("🚀 Backend iniciado:", backendScript);
 }
 
 ipcMain.on("window:minimize", () => {
@@ -125,16 +128,19 @@ app.whenReady().then(() => {
   setupAutoUpdater();
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
   });
 });
 
 app.on("window-all-closed", () => {
-  if (backend) {
-    backend.kill();
-    backend = null;
-  }
+  // No macOS, apps continuam abertos até CMD+Q
   if (process.platform !== "darwin") {
+    if (backend) {
+      backend.kill();
+      backend = null;
+    }
     app.quit();
   }
 });

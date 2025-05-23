@@ -31,6 +31,7 @@ const novoProduto = async (dados) => {
     nome,
     descricao,
     codigo_barras,
+    referencia,
     preco_venda,
     preco_custo,
     estoque_atual,
@@ -48,13 +49,14 @@ const novoProduto = async (dados) => {
 
   const query = `
     INSERT INTO produtos 
-    (nome, descricao, codigo_barras, preco_venda, preco_custo, estoque_atual, estoque_minimo, markup, categoria, categoria_id, unidade_medida, ativo, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    (nome, descricao, referencia , codigo_barras, preco_venda, preco_custo, estoque_atual, estoque_minimo, markup, categoria, categoria_id, unidade_medida, ativo, created_at, updated_at)
+    VALUES (?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
     nome,
     descricao,
+    referencia,
     codigo_barras,
     preco_venda,
     preco_custo || 0,
