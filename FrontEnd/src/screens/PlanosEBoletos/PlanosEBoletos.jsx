@@ -19,20 +19,27 @@ function PlanosEBoletos() {
             </span>
 
             <span>
-            <p>De 26/12/2024 a 21/12/2025</p>
-            <p>Próximo boleto em 28 dias</p>
-
+              <p>De 26/12/2024 a 21/12/2025</p>
+              <p>Próximo boleto em 28 dias</p>
             </span>
-            
-            <button>Dowload Boleto</button>
-            <strong>Pagamento recebido</strong>
+
+            <a id="mudarPlanoPlanosBoletos">Mudar Plano</a>
+
+            <div id="areaStatusPagamento">
+              <button id="ButtonDowloadBoleto">Dowload Boleto</button>
+              <strong>Pagamento recebido</strong>
+            </div>
           </div>
         </div>
 
         <div id="cardDadosDoEstabelecimentoPlanosEBoletos">
           <h2>Dados da conta</h2>
-          <p><strong>Nome do estabelecimento: </strong> {"CashInBox - Dev"}</p>
-          <p><strong>Cnpj: </strong> {"8481000185485"}</p>
+          <p>
+            <strong>Nome do estabelecimento: </strong> {"CashInBox - Dev"}
+          </p>
+          <p>
+            <strong>Cnpj: </strong> {"8481000185485"}
+          </p>
         </div>
       </div>
     </div>
