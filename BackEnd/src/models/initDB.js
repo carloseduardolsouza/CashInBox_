@@ -5,24 +5,19 @@ const fs = require("fs");
 let dbPath;
 
 try {
-  // Detecta se está rodando dentro do Electron
   const electron = require("electron");
   const app = electron.app || (electron.remote && electron.remote.app);
 
-  if (!app) {
-    throw new Error("Não foi possível acessar app do Electron.");
-  }
+  if (!app) throw new Error("Não foi possível acessar app do Electron.");
 
   const userDataPath = app.getPath("userData");
-
-  if (!fs.existsSync(userDataPath)) {
-    fs.mkdirSync(userDataPath, { recursive: true });
-  }
+  if (!fs.existsSync(userDataPath)) fs.mkdirSync(userDataPath, { recursive: true });
 
   dbPath = path.join(userDataPath, "database.sqlite");
-} catch (err) {
-  // Ambiente fora do Electron (modo dev)
-  const baseDir = path.resolve(__dirname, "../../");
+} catch {
+  const baseDir = process.pkg
+    ? path.dirname(process.execPath)
+    : path.resolve(__dirname, "../../");
   dbPath = path.join(baseDir, "database.sqlite");
   console.warn("⚠️ Electron não detectado. Usando caminho local para o banco.");
 }
@@ -34,121 +29,94 @@ const db = new sqlite3.Database(dbPath, (err) => {
   console.log("✅ Conectado ao SQLite!");
 });
 
-function applyMigrations(db) {
-  const migrationsDir = path.join(__dirname, "migrations");
-  const appliedMigrations = new Set();
-
-  db.all("SELECT name FROM migrations", [], (err, rows) => {
-    if (err) {
-      console.error("Erro ao buscar migrations:", err);
-      return;
-    }
-
-    rows.forEach((row) => appliedMigrations.add(row.name));
-
-    fs.readdir(migrationsDir, (err, files) => {
-      if (err) {
-        console.error("Erro ao ler pasta de migrations:", err);
-        return;
-      }
-
-      const migrations = files.filter((file) => !appliedMigrations.has(file));
-      migrations.sort();
-
-      migrations.forEach((file) => {
-        const sql = fs
-          .readFileSync(path.join(migrationsDir, file), "utf8")
-          .trim();
-
-        const alterRegex =
-          /ALTER\s+TABLE\s+(\w+)\s+ADD\s+COLUMN\s+(\w+)\s+(\w+)/i;
-        const match = sql.match(alterRegex);
-
-        if (match) {
-          const [, tableName, columnName, columnType] = match;
-          console.log(`🔍 Detectado ALTER TABLE para ${tableName}.${columnName}`);
-
-          addColumnIfNotExists(
-            db,
-            tableName,
-            columnName,
-            columnType.toUpperCase(),
-            () => {
-              db.run(
-                "INSERT INTO migrations (name) VALUES (?)",
-                [file],
-                (err) => {
-                  if (err) {
-                    console.error("Erro ao registrar migration:", err);
-                  } else {
-                    console.log(`✅ Migration ${file} registrada com sucesso.`);
-                  }
-                }
-              );
-            }
-          );
-        } else {
-          db.exec(sql, (err) => {
-            if (err) {
-              console.error(`Erro ao aplicar migration ${file}:`, err);
-              return;
-            }
-
-            db.run(
-              "INSERT INTO migrations (name) VALUES (?)",
-              [file],
-              (err) => {
-                if (err) {
-                  console.error("Erro ao registrar migration:", err);
-                } else {
-                  console.log(`✅ Migration ${file} aplicada com sucesso.`);
-                }
-              }
-            );
-          });
-        }
-      });
+function runAsync(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) reject(err);
+      else resolve(this);
     });
   });
 }
 
-function addColumnIfNotExists(db, tableName, columnName, columnType, callback) {
-  db.all(`PRAGMA table_info(${tableName});`, [], (err, rows) => {
-    if (err) {
-      console.error(`Erro ao verificar colunas da tabela ${tableName}:`, err);
-      return callback && callback();
-    }
-
-    const columnExists = rows.some((row) => row.name === columnName);
-
-    if (columnExists) {
-      console.log(
-        `✅ Coluna '${columnName}' já existe na tabela '${tableName}'. Pulando...`
-      );
-      if (callback) callback();
-    } else {
-      const alterSQL = `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType};`;
-      db.run(alterSQL, [], (err) => {
-        if (err) {
-          console.error(
-            `❌ Erro ao adicionar coluna '${columnName}' na tabela '${tableName}':`,
-            err
-          );
-        } else {
-          console.log(
-            `✅ Coluna '${columnName}' adicionada com sucesso na tabela '${tableName}'.`
-          );
-        }
-        if (callback) callback();
-      });
-    }
+function allAsync(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    });
   });
 }
 
-applyMigrations(db);
+async function addColumnIfNotExists(tableName, columnName, columnType) {
+  const rows = await allAsync(`PRAGMA table_info(${tableName})`);
+  const exists = rows.some((row) => row.name === columnName);
+  if (exists) {
+    console.log(`✅ Coluna '${columnName}' já existe na tabela '${tableName}'. Pulando...`);
+    return;
+  }
+  const alterSQL = `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType};`;
+  await runAsync(alterSQL);
+  console.log(`✅ Coluna '${columnName}' adicionada com sucesso na tabela '${tableName}'.`);
+}
 
-db.serialize(() => {
-  db.run(`CREATE TABLE IF NOT EXISTS clientes (
+async function applyMigrations() {
+  const migrationsDir = path.join(__dirname, "migrations");
+
+  // Garante que a tabela migrations existe antes de tudo
+  await runAsync(`CREATE TABLE IF NOT EXISTS migrations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    applied_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  const appliedRows = await allAsync("SELECT name FROM migrations");
+  const appliedMigrations = new Set(appliedRows.map((r) => r.name));
+
+  if (!fs.existsSync(migrationsDir)) {
+    console.warn("⚠️ Pasta de migrations não encontrada, pulando migrations.");
+    return;
+  }
+
+  const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql'));
+  files.sort();
+
+  for (const file of files) {
+    if (appliedMigrations.has(file)) {
+      console.log(`✅ Migration ${file} já aplicada, pulando.`);
+      continue;
+    }
+
+    const sql = fs.readFileSync(path.join(migrationsDir, file), "utf8").trim();
+    const alterRegex = /ALTER\s+TABLE\s+(\w+)\s+ADD\s+COLUMN\s+(\w+)\s+(\w+)/i;
+    const match = sql.match(alterRegex);
+
+    if (match) {
+      const [, tableName, columnName, columnType] = match;
+      console.log(`🔍 Detectado ALTER TABLE para ${tableName}.${columnName}`);
+
+      try {
+        await addColumnIfNotExists(tableName, columnName, columnType.toUpperCase());
+        await runAsync("INSERT INTO migrations (name) VALUES (?)", [file]);
+        console.log(`✅ Migration ${file} registrada com sucesso.`);
+      } catch (err) {
+        console.error(`❌ Erro na migration ${file}:`, err);
+        throw err;
+      }
+    } else {
+      try {
+        await runAsync(sql);
+        await runAsync("INSERT INTO migrations (name) VALUES (?)", [file]);
+        console.log(`✅ Migration ${file} aplicada com sucesso.`);
+      } catch (err) {
+        console.error(`❌ Erro ao aplicar migration ${file}:`, err);
+        throw err;
+      }
+    }
+  }
+}
+
+async function criarTabelasPrincipais() {
+  await runAsync(`CREATE TABLE IF NOT EXISTS clientes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     cpf_cnpj TEXT NOT NULL,
@@ -164,7 +132,7 @@ db.serialize(() => {
     updated_at TEXT DEFAULT (datetime('now'))
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS funcionarios (
+  await runAsync(`CREATE TABLE IF NOT EXISTS funcionarios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     cpf TEXT NOT NULL,
@@ -185,7 +153,7 @@ db.serialize(() => {
     updated_at TEXT DEFAULT (datetime('now'))
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS produtos (
+  await runAsync(`CREATE TABLE IF NOT EXISTS produtos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
     descricao TEXT,
@@ -205,13 +173,7 @@ db.serialize(() => {
     updated_at TEXT DEFAULT (datetime('now'))
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS migrations (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE,
-    applied_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
-
-  db.run(`CREATE TABLE IF NOT EXISTS variacoes (
+  await runAsync(`CREATE TABLE IF NOT EXISTS variacoes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     produto_id INTEGER,
     cor TEXT,
@@ -220,7 +182,7 @@ db.serialize(() => {
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS pagamentos (
+  await runAsync(`CREATE TABLE IF NOT EXISTS pagamentos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     venda_id INTEGER,
     tipo_pagamento TEXT,
@@ -228,7 +190,7 @@ db.serialize(() => {
     FOREIGN KEY (venda_id) REFERENCES vendas(id)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS vendas (
+  await runAsync(`CREATE TABLE IF NOT EXISTS vendas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     cliente_id INTEGER,
     nome_cliente TEXT,
@@ -246,7 +208,7 @@ db.serialize(() => {
     FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS vendas_itens (
+  await runAsync(`CREATE TABLE IF NOT EXISTS vendas_itens (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     venda_id INTEGER NOT NULL,
     produto_id INTEGER NOT NULL,
@@ -259,12 +221,12 @@ db.serialize(() => {
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS categorias (
+  await runAsync(`CREATE TABLE IF NOT EXISTS categorias (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS caixas (
+  await runAsync(`CREATE TABLE IF NOT EXISTS caixas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     data_abertura DATETIME NOT NULL,
     data_fechamento DATETIME,
@@ -277,7 +239,7 @@ db.serialize(() => {
     status TEXT CHECK(status IN ('aberto', 'fechado')) DEFAULT 'aberto'
   )`);
 
-  db.run(`CREATE TABLE IF NOT EXISTS movimentacoes (
+  await runAsync(`CREATE TABLE IF NOT EXISTS movimentacoes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     caixa_id INTEGER NOT NULL,
     data DATETIME NOT NULL,
@@ -286,4 +248,19 @@ db.serialize(() => {
     valor REAL NOT NULL,
     FOREIGN KEY (caixa_id) REFERENCES caixas(id)
   )`);
-});
+}
+
+async function initDB() {
+  try {
+    await criarTabelasPrincipais();
+    await applyMigrations();
+    console.log("🎉 Banco inicializado com sucesso!");
+  } catch (err) {
+    console.error("❌ Erro na inicialização do banco:", err);
+  }
+}
+
+// Rodar initDB para iniciar tudo
+initDB();
+
+module.exports = { db };

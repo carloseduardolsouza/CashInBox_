@@ -1,42 +1,31 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
-// ✅ Recebe caminho do banco por ENV ou argumento
-let dbPath = process.env.DB_PATH || process.argv[2];
+// Caminho para a pasta segura do app (pasta persistente por usuário)
+const userDataPath = path.join(os.homedir(), 'AppData', 'Roaming', 'CashInBox'); // Windows
+const dbPath = path.join(userDataPath, 'database.sqlite');
 
-if (!dbPath) {
-  // Fallback: local dev
-  const baseDir = path.resolve(__dirname, '../../');
-  dbPath = path.join(baseDir, 'database.sqlite');
-  console.warn('⚠️ DB_PATH não definido. Usando fallback:', dbPath);
-} else {
-  console.log('✅ Usando DB_PATH:', dbPath);
+// Caminho do banco original (aquele que vem com o app empacotado)
+const originalDbPath = path.resolve(__dirname, '../../database.sqlite');
+
+// Garante que a pasta existe
+if (!fs.existsSync(userDataPath)) {
+  fs.mkdirSync(userDataPath, { recursive: true });
 }
 
-// ✅ Garante que a pasta do banco existe
-const dbDir = path.dirname(dbPath);
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-
-// ✅ Template DB: usa process.resourcesPath se empacotado
-const isPackaged = process.mainModule?.filename.indexOf('app.asar') !== -1;
-
-const templateDbPath = isPackaged
-  ? path.join(process.resourcesPath, 'template-database.sqlite')
-  : path.resolve(__dirname, '../../template-database.sqlite');
-
-if (!fs.existsSync(dbPath) && fs.existsSync(templateDbPath)) {
+// Se ainda não existir o banco na pasta segura, copia do original
+if (!fs.existsSync(dbPath)) {
   try {
-    fs.copyFileSync(templateDbPath, dbPath);
-    console.log('📁 Banco de dados copiado para:', dbPath);
+    fs.copyFileSync(originalDbPath, dbPath);
+    console.log('📁 Banco de dados copiado para pasta segura:', dbPath);
   } catch (err) {
-    console.error('❌ Erro ao copiar o banco:', err.message);
+    console.error('Erro ao copiar o banco de dados:', err.message);
   }
 }
 
-// ✅ Conecta ao banco
+// Conecta ao banco na pasta segura
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('❌ Erro ao conectar ao SQLite:', err.message);
