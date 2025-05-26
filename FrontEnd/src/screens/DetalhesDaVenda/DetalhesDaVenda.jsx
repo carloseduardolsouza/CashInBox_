@@ -4,7 +4,7 @@ import AppContext from "../../context/AppContext";
 import { useParams, useNavigate } from "react-router-dom";
 import services from "../../services/services";
 
-import EscolherFormatoNF from "./components/EscolherFormatoNF/EscolherFormatoNF";
+import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
 
 //conexão com a api
 import fetchapi from "../../api/fetchapi";
@@ -15,11 +15,13 @@ function DetalhesDaVenda() {
 
   const { setErroApi, dadosLoja } = useContext(AppContext);
 
-  const [modalAtiva, setModalAtiva] = useState(null);
+  const [EscolherNotas, setEscolherNotas] = useState(false);
 
   const [venda, setVenda] = useState({});
   const [cliente, setCliente] = useState({});
   const [produtos, setProdutos] = useState([]);
+
+  const [tipoNota, setTipoNota] = useState(null);
 
   useEffect(() => {
     fetchapi.produrarVendaId(id).then((response) => {
@@ -45,26 +47,28 @@ function DetalhesDaVenda() {
       });
   };
 
-  const renderModal = () => {
-    switch (modalAtiva) {
-      case "EscolherFormatoNota":
-        return (
-          <EscolherFormatoNF
-            fechar={setModalAtiva}
-            produtos={produtos}
-            cliente={cliente}
-            venda={venda}
-            dadosLoja={dadosLoja}
-          />
-        );
-      case null:
-        return null;
-    }
+  const imprimirNota = (tipo) => {
+    setTipoNota(tipo);
+    setTimeout(() => {
+      window.print();
+      setTipoNota(null); // limpa após imprimir
+    }, 100); // Dá tempo de aplicar o estado antes de imprimir
   };
+
   return (
     <div id="DetalhesDaVenda">
-      {renderModal()}
-
+      <div
+        id="DetalhesDaVendaPage"
+      >
+        {tipoNota === "NotaGrande" && (
+          <NotaGrandeDetalhesVenda
+            venda={venda}
+            cliente={cliente}
+            produtos={produtos}
+            dadosLoja={dadosLoja}
+          />
+        )}
+      </div>
       <div id="DetalhesDaVendaDisplay">
         <div id="DetalhesDaVendaDisplay1">
           <h2>Detalhes da Venda</h2>
@@ -162,16 +166,39 @@ function DetalhesDaVenda() {
             >
               Cancelar Venda
             </p>
-            <div>
+            <div id="areaButtonsDetalhesVedna">
               <button className="ButãoEditarDetalhesDaVenda ButãoDetalhesDaVenda">
                 Editar
               </button>
-              <button
-                className="ButãoNotasDetalhesDaVenda ButãoDetalhesDaVenda"
-                onClick={() => setModalAtiva("EscolherFormatoNota")}
-              >
-                (NF-e / NFC-e)
-              </button>
+              {EscolherNotas ? (
+                <div id="areaButtonsEscolherNotas">
+                  <button
+                    className="EsolhaDeNotas"
+                    onClick={() => imprimirNota("NotaGrande")}
+                  >
+                    Nota Grande
+                  </button>
+                  <button
+                    className="EsolhaDeNotas"
+                    onClick={() => imprimirNota("NotaPequena")}
+                  >
+                    Nota Pequena
+                  </button>
+                  <button
+                    className="EsolhaDeNotas"
+                    onClick={() => imprimirNota("NotaRomaneio")}
+                  >
+                    Nota de romaneio
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="ButãoDetalhesDaVenda ButãoNotasDetalhesDaVenda"
+                  onClick={() => setEscolherNotas(true)}
+                >
+                  (NF-e / NFC-e)
+                </button>
+              )}
             </div>
           </div>
         </div>

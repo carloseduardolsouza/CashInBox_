@@ -21,6 +21,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.10.1",
     "react-slick": "^0.30.3",
+    "react-to-print": "^3.1.0",
     "recharts": "^2.15.3",
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"

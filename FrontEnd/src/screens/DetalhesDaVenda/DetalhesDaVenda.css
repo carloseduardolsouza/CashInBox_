@@ -85,3 +85,60 @@
 #infoTempoDetalhesdaVenda {
   color: var(--text-color);
 }
+
+#EscolherNotas {
+  height: 100px;
+  transition: 0.5s;
+}
+
+.itensNotas {
+  font-size: 14px;
+}
+
+.itensNotas:hover {
+  text-decoration: underline solid white;
+}
+
+#areaButtonsDetalhesVedna {
+  display: flex;
+  justify-content: space-between;
+}
+
+#areaButtonsEscolherNotas {
+  display: flex;
+  flex-direction: column;
+}
+
+.EsolhaDeNotas {
+  cursor: pointer;
+  background-color: var(--button-color);
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: white;
+  border-radius: 10px;
+  padding: 5px;
+  width: 100%;
+}
+
+#DetalhesDaVendaPage,
+#DetalhesDaVendaPage * {
+  visibility: hidden !important;
+}
+
+@media print {
+  body * {
+  visibility: hidden !important;
+}
+
+#DetalhesDaVendaPage,
+#DetalhesDaVendaPage * {
+  visibility: visible !important;
+}
+
+#DetalhesDaVendaPage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+}
