@@ -1,26 +1,11 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const fs = require("fs");
+const os = require('os');
 
-let dbPath;
-
-try {
-  const electron = require("electron");
-  const app = electron.app || (electron.remote && electron.remote.app);
-
-  if (!app) throw new Error("Não foi possível acessar app do Electron.");
-
-  const userDataPath = app.getPath("userData");
-  if (!fs.existsSync(userDataPath)) fs.mkdirSync(userDataPath, { recursive: true });
-
-  dbPath = path.join(userDataPath, "database.sqlite");
-} catch {
-  const baseDir = process.pkg
-    ? path.dirname(process.execPath)
-    : path.resolve(__dirname, "../../");
-  dbPath = path.join(baseDir, "database.sqlite");
-  console.warn("⚠️ Electron não detectado. Usando caminho local para o banco.");
-}
+// Caminho para a pasta segura do app (pasta persistente por usuário)
+const userDataPath = path.join(os.homedir(), 'AppData', 'Roaming', 'CashInBox'); // Windows
+const dbPath = path.join(userDataPath, 'database.sqlite');
 
 console.log("📁 Banco de dados será salvo em:", dbPath);
 
@@ -51,12 +36,16 @@ async function addColumnIfNotExists(tableName, columnName, columnType) {
   const rows = await allAsync(`PRAGMA table_info(${tableName})`);
   const exists = rows.some((row) => row.name === columnName);
   if (exists) {
-    console.log(`✅ Coluna '${columnName}' já existe na tabela '${tableName}'. Pulando...`);
+    console.log(
+      `✅ Coluna '${columnName}' já existe na tabela '${tableName}'. Pulando...`
+    );
     return;
   }
   const alterSQL = `ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnType};`;
   await runAsync(alterSQL);
-  console.log(`✅ Coluna '${columnName}' adicionada com sucesso na tabela '${tableName}'.`);
+  console.log(
+    `✅ Coluna '${columnName}' adicionada com sucesso na tabela '${tableName}'.`
+  );
 }
 
 async function applyMigrations() {
@@ -77,7 +66,7 @@ async function applyMigrations() {
     return;
   }
 
-  const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql'));
+  const files = fs.readdirSync(migrationsDir).filter((f) => f.endsWith(".sql"));
   files.sort();
 
   for (const file of files) {
@@ -95,7 +84,11 @@ async function applyMigrations() {
       console.log(`🔍 Detectado ALTER TABLE para ${tableName}.${columnName}`);
 
       try {
-        await addColumnIfNotExists(tableName, columnName, columnType.toUpperCase());
+        await addColumnIfNotExists(
+          tableName,
+          columnName,
+          columnType.toUpperCase()
+        );
         await runAsync("INSERT INTO migrations (name) VALUES (?)", [file]);
         console.log(`✅ Migration ${file} registrada com sucesso.`);
       } catch (err) {
@@ -200,6 +193,7 @@ async function criarTabelasPrincipais() {
     descontos TEXT,
     acrescimos TEXT,
     valor_total REAL NOT NULL,
+    total_bruto REAL ,
     status TEXT CHECK(status IN ('concluida', 'pendente', 'cancelada', 'orçamento')) NOT NULL,
     observacoes TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,

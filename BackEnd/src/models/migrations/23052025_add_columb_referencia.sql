@@ -1,1 +1,1 @@
-ALTER TABLE produtos ADD COLLUMB referencia TEXT;
+ALTER TABLE produtos ADD COLUMB referencia TEXT;

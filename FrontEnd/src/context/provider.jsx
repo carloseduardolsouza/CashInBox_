@@ -1,20 +1,46 @@
-import { useState , useEffect } from "react";
-import fetchapi from "../api/fetchapi"
+import { useState, useEffect } from "react";
+import fetchapi from "../api/fetchapi";
 import AppContext from "./AppContext";
 import PropTypes from "prop-types";
 
 export function AppProvider({ children }) {
-  const [dadosLoja , setDadosLoja] = useState({})
+  const [dadosLoja, setDadosLoja] = useState({});
   const [isDark, setIsDark] = useState(false);
   const [erroApi, setErroApi] = useState(false);
+  const [Whastsapp, setWhastsapp] = useState(false);
+
+  const fetchStatus = async () => {
+    try {
+      const response = await fetchapi.pegarQrCode().then((response) => {
+        if (response.status_bot === "online") {
+          setWhastsapp(true);
+        } else {
+          setWhastsapp(false);
+        }
+      });
+    } catch (error) {
+      console.error("Erro ao buscar status:", error);
+    }
+  };
 
   useEffect(() => {
-    fetchapi.dadosEmpresa().then((response) => {
-      setDadosLoja(response)
-    }).catch(() => {
-      setErroApi(true)
-    })
-  },[])
+    const fetchDadosEmpresa = async () => {
+      try {
+        const response = await fetchapi.dadosEmpresa();
+        setDadosLoja(response);
+      } catch {
+        setErroApi(true);
+      }
+    };
+
+    fetchDadosEmpresa();
+
+    const interval = setInterval(() => {
+      fetchStatus();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const valores = {
     erroApi,
@@ -22,7 +48,9 @@ export function AppProvider({ children }) {
     isDark,
     setIsDark,
     dadosLoja,
-    setDadosLoja
+    setDadosLoja,
+    Whastsapp,
+    setWhastsapp,
   };
 
   return <AppContext.Provider value={valores}>{children}</AppContext.Provider>;

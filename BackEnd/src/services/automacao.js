@@ -2,6 +2,7 @@ const QRCode = require("qrcode");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcodeTerminal = require("qrcode-terminal");
 
+// Função para gerar mensagem de compra
 function gerarMensagemCompra(dados) {
   let mensagem = `🧾 Detalhes da sua compra:\n\n`;
   mensagem += `👤 Cliente: ${dados.cliente}\n`;
@@ -11,7 +12,7 @@ function gerarMensagemCompra(dados) {
   mensagem += `🔺 Acréscimos: ${dados.valores.acrescimos}\n\n`;
   mensagem += `📦 Produtos:\n\n`;
 
-  dados.produtos.forEach(prod => {
+  dados.produtos.forEach((prod) => {
     mensagem += `- ${prod.nome} — ${prod.quantidade} un. — Total: ${prod.total}\n`;
   });
 
@@ -20,19 +21,27 @@ function gerarMensagemCompra(dados) {
   return mensagem;
 }
 
-
 // Inicializa cliente WhatsApp com sessão local
 const client = new Client({
   authStrategy: new LocalAuth(),
-  puppeteer: {
-    headless: true, // Evita travamentos gráficos
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  }
+  headless: true, // Headless ON pra não aparecer
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-accelerated-2d-canvas",
+    "--no-first-run",
+    "--no-zygote",
+    "--single-process", // tenta rodar tudo num processo só
+    "--disable-gpu",
+    "--window-size=1920,1080",
+  ],
 });
 
 // Status do Bot
 let statusBot = "offline";
 let ultimoQRCode = null;
+let qrTimeout = null;
 
 // === Eventos do cliente ===
 
@@ -42,78 +51,110 @@ client.on("qr", (qr) => {
   qrcodeTerminal.generate(qr, { small: true });
   ultimoQRCode = qr;
   statusBot = "aguardando conexão";
+
+  // Reinicializa se não conectar em 2 minutos
+  if (qrTimeout) clearTimeout(qrTimeout);
+  qrTimeout = setTimeout(() => {
+    if (statusBot !== "online") {
+      console.log("⚠️ Não conectado após 2 minutos. Reinicializando...");
+      client.destroy().then(() => client.initialize());
+    }
+  }, 2 * 60 * 1000);
 });
 
 // Cliente pronto
 client.on("ready", () => {
   statusBot = "online";
+  ultimoQRCode = null; // Limpando QR Code, não precisa mais
   console.log("✅ Bot está pronto e conectado!");
+  if (qrTimeout) clearTimeout(qrTimeout);
 });
 
 // Cliente desconectado
 client.on("disconnected", (reason) => {
   statusBot = "offline";
+  ultimoQRCode = null;
   console.log(`❌ Bot foi desconectado! Motivo: ${reason}`);
-  // Opcional: reiniciar o client em caso de desconexão
-  // setTimeout(() => client.initialize(), 5000);
+  // Reinicializa automaticamente
+  setTimeout(() => client.initialize(), 5000);
 });
 
 // Falha na autenticação
 client.on("auth_failure", (msg) => {
   statusBot = "offline";
+  ultimoQRCode = null;
   console.error("❌ Falha na autenticação:", msg);
 });
 
 // Erro geral
 client.on("error", (error) => {
+  statusBot = "erro";
   console.error("❌ Erro no cliente WhatsApp:", error);
 });
 
-// === Endpoints ===
+// === Funções de API ===
 
-// Gera QR Code via API
+// Endpoint para pegar o QR Code
 const qrCode = async (req, res) => {
   try {
+    if (statusBot === "online") {
+      return res.status(200).json({
+        status_bot: statusBot,
+        mensagem_status: "✅ Bot já está conectado",
+        qr_code: null,
+        ultima_atualizacao: new Date().toISOString(),
+      });
+    }
+
     if (!ultimoQRCode) {
-      return res.status(404).json({ error: "Nenhum QR Code disponível no momento." });
+      return res.status(404).json({
+        error:
+          "Nenhum QR Code disponível no momento. Aguarde o bot gerar ou reinicie.",
+        status_bot: statusBot,
+      });
     }
 
     const qrCodeBase64 = await QRCode.toDataURL(ultimoQRCode);
-    const mensagemStatus = statusBot === "online" ? "✅ Bot em funcionamento" : "❌ Bot fora do ar";
 
     return res.json({
       status_bot: statusBot,
-      mensagem_status: mensagemStatus,
+      mensagem_status: "🔄 Bot aguardando escaneamento do QR Code",
       qr_code: qrCodeBase64,
       ultima_atualizacao: new Date().toISOString(),
     });
   } catch (error) {
     console.error("❌ Erro ao gerar QR Code:", error);
-    return res.status(500).json({ error: "Erro ao gerar QR Code" });
+    return res
+      .status(500)
+      .json({ error: "Erro ao gerar QR Code", details: error.message });
   }
 };
 
-// Envia mensagem via WhatsApp
+// Função utilitária para sanitizar número
+const sanitizarNumero = (numero) => {
+  let limpo = numero.replace(/\D/g, "");
+  if (!limpo.startsWith("55")) {
+    limpo = `55${limpo}`;
+  }
+  return limpo;
+};
+
+// Endpoint para enviar mensagem
 const enviarMensagem = async (req, res) => {
   try {
     if (!client.info || statusBot !== "online") {
-      return res.status(503).json({ error: "Cliente WhatsApp ainda não está pronto" });
+      return res
+        .status(503)
+        .json({ error: "Cliente WhatsApp ainda não está pronto" });
     }
 
     const { numero, mensagem } = req.body;
 
     if (!numero || !mensagem) {
-      return res.status(400).json({ error: "Número e mensagem são obrigatórios" });
+      return res
+        .status(400)
+        .json({ error: "Número e mensagem são obrigatórios" });
     }
-
-    // Sanitiza e adiciona DDI do Brasil se não tiver
-    const sanitizarNumero = (numero) => {
-      let limpo = numero.replace(/\D/g, "");
-      if (!limpo.startsWith("55")) {
-        limpo = `55${limpo}`;
-      }
-      return limpo;
-    };
 
     const numeroSanitizado = sanitizarNumero(numero);
     const chatId = `${numeroSanitizado}@c.us`;
@@ -122,12 +163,14 @@ const enviarMensagem = async (req, res) => {
 
     const isRegistered = await client.isRegisteredUser(chatId);
     if (!isRegistered) {
-      return res.status(404).json({ error: "Número não está registrado no WhatsApp" })
+      return res
+        .status(404)
+        .json({ error: "Número não está registrado no WhatsApp" });
     }
 
-    const menssagemFormatada = gerarMensagemCompra(mensagem)
+    const mensagemFormatada = gerarMensagemCompra(mensagem);
 
-    await client.sendMessage(chatId, menssagemFormatada);
+    await client.sendMessage(chatId, mensagemFormatada);
 
     return res.json({
       success: true,
@@ -148,9 +191,12 @@ const enviarMensagem = async (req, res) => {
     await client.initialize();
   } catch (error) {
     console.error("❌ Erro ao inicializar o cliente:", error);
+    // tenta reiniciar em 5 segundos
+    setTimeout(() => client.initialize(), 5000);
   }
 })();
 
+// Exporta funções
 module.exports = {
   qrCode,
   enviarMensagem,

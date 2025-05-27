@@ -17,10 +17,22 @@ function formatarCurrency(numero) {
   return numeroFormatado;
 }
 
-// Formatar número de celular (11) 91234-5678
+// Formatar número de celular: (11) 91234-5678 ou (62) 9336-2090
 function formatarNumeroCelular(numero) {
   if (!numero) return "";
-  return numero.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+
+  numero = numero.replace(/\D/g, ""); // Remove tudo que não for número
+
+  if (numero.length === 11) {
+    // Ex.: 11912345678
+    return numero.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+  } else if (numero.length === 10) {
+    // Ex.: 6293362090
+    return numero.replace(/(\d{2})(\d{4})(\d{4})/, "($1) $2-$3");
+  } else {
+    // Se não for 10 ou 11 dígitos, retorna como está
+    return numero;
+  }
 }
 
 // Formatar CPF 123.456.789-01

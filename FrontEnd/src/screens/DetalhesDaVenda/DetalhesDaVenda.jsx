@@ -16,7 +16,7 @@ function DetalhesDaVenda() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { setErroApi, dadosLoja } = useContext(AppContext);
+  const { setErroApi, dadosLoja, Whastsapp } = useContext(AppContext);
 
   const [escolherNotas, setEscolherNotas] = useState(false);
   const [tipoNota, setTipoNota] = useState(null);
@@ -71,6 +71,10 @@ function DetalhesDaVenda() {
   };
 
   const enviarDetalhesWhatsApp = async () => {
+    if (Whastsapp != true) {
+      window.alert("Conecte seu whatsApp Primeiro");
+      return;
+    }
     const arrayDeProdutos = produtos.map((dados) => ({
       nome: dados.produto_nome,
       quantidade: dados.quantidade,
@@ -83,7 +87,7 @@ function DetalhesDaVenda() {
         cliente: cliente.nome,
         numero_venda: id,
         valores: {
-          total_bruto: services.formatarCurrency(venda.valor_total),
+          total_bruto: services.formatarCurrency(venda.total_bruto),
           descontos: venda.descontos,
           acrescimos: venda.acrescimos,
         },
