@@ -47,6 +47,12 @@ const procurarProdutosVenda = async (req, res) => {
   return res.status(201).json(produtos);
 };
 
+const procurarPagamentoVenda = async (req, res) => {
+  const {id} = req.params
+  const pagamento = await vendaModels.procurarPagamentoVenda(id)
+  return res.status(201).json(pagamento)
+}
+
 const deletarVenda = async (req, res) => {
   const { id } = req.params;
   const venda = await vendaModels.deletarVenda(id);
@@ -61,6 +67,7 @@ module.exports = {
   listarVendasFuncionario,
   produrarVendaId,
   procurarProdutosVenda,
+  procurarPagamentoVenda,
   deletarVenda,
   listarOrcamentos
 };

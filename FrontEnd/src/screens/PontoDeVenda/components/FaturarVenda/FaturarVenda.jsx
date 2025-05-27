@@ -142,6 +142,7 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
       nome_funcionario: nome_vendedor,
       descontos: `R$ ${descontoReais.toFixed(2)} / ${descontoPorcentagem.toFixed(2)}%`,
       acrescimos: `R$ ${acrescimoReais.toFixed(2)} / ${acrescimoPorcentagem.toFixed(2)}%`,
+      total_bruto: valorCompra,
       valor_total: totalPagar,
       status: status,
       observacoes: "",

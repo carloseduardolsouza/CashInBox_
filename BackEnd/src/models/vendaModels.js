@@ -9,6 +9,7 @@ const NovaVenda = async (dados) => {
     descontos,
     acrescimos,
     valor_total,
+    total_bruto,
     status,
     observacoes,
     produtos,
@@ -20,8 +21,8 @@ const NovaVenda = async (dados) => {
 
   const insertVendaQuery = `
     INSERT INTO vendas 
-    (cliente_id, nome_cliente , funcionario_id, nome_funcionario , descontos, acrescimos, valor_total, status, observacoes, created_at, updated_at , data_venda)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ? , ?)
+    (cliente_id, nome_cliente , funcionario_id, nome_funcionario , descontos, acrescimos, valor_total, total_bruto, status, observacoes, created_at, updated_at , data_venda)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ?)
   `;
 
   const vendaValues = [
@@ -32,6 +33,7 @@ const NovaVenda = async (dados) => {
     descontos,
     acrescimos,
     valor_total,
+    total_bruto,
     status || "concluida",
     observacoes || "",
     created_at,
@@ -237,6 +239,22 @@ const procurarProdutosVenda = async (id) => {
   return venda;
 };
 
+const procurarPagamentoVenda = async (id) => {
+  const query = `SELECT * FROM pagamentos WHERE venda_id = ${id}`;
+
+  const pagamentos = await new Promise((resolve, reject) => {
+    connection.all(query, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return pagamentos;
+}
+
 const deletarVenda = async (id) => {
   const query = `DELETE FROM vendas WHERE id = ${id}`;
 
@@ -283,4 +301,5 @@ module.exports = {
   procurarProdutosVenda,
   deletarVenda,
   listarOrcamentos,
+  procurarPagamentoVenda
 };

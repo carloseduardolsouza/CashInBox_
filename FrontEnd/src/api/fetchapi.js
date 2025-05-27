@@ -237,6 +237,30 @@ const novoProduto = async (dados, imageReq) => {
   return response;
 };
 
+const novaImagemProduto = async (id, imageReq) => {
+  const filePadrao = new Blob(["file_padrão"], { type: "text/plain" });
+  const formData = new FormData();
+
+  if (!imageReq || !imageReq.length) {
+    formData.append("imagens", filePadrao);
+  } else {
+    imageReq.forEach((image) => {
+      formData.append("imagens", image);
+    });
+  }
+
+  const response = await fetch(`${API_URL}/novaImagemProduto/${id}`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao tentar adicionar nova imagem de produto");
+  }
+
+  return response;
+};
+
 const AtualizarProduto = async (dados) => {
   const { id } = dados;
   const response = await fetch(`${API_URL}/editarProduto/${id}`, {
@@ -446,6 +470,19 @@ const procurarProdutosVenda = async (id) => {
   return dados;
 };
 
+const procurarPagamentoVenda = async (id) => {
+  const pagamentos = await fetch(`${API_URL}/procurarPagamentoVenda/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((erro) => {
+      return erro;
+    });
+
+  const dados = await pagamentos.json();
+  return dados;
+};
+
 const deletarVenda = async (id) => {
   const venda = await fetch(`${API_URL}/deletarVenda/${id}`, {
     method: "DELETE",
@@ -554,8 +591,35 @@ const restartApi = async () => {
   });
 };
 
+const pegarQrCode = async () => {
+  const responde = await fetch(`${API_URL}/qrCodeAutomacao`);
+  const dados = await responde.json();
+  return dados;
+};
+
+const enviarMensagem = async (dados) => {
+  const response = await fetch(`${API_URL}/EnviarMenssagemWhatsapp`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(dados),
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao enviar mensagem");
+  }
+
+  const resultado = await response.json();
+  return resultado;
+};
+
 export default {
   restartApi,
+
+  pegarQrCode,
+  enviarMensagem,
 
   dadosEmpresa,
   EditarDadosEmpresa,
@@ -577,6 +641,7 @@ export default {
   listarCategorias,
 
   novoProduto,
+  novaImagemProduto,
   ProcurarProdutos,
   ProcurarProdutoId,
   deletarVariacaoProduto,
@@ -591,6 +656,7 @@ export default {
   NovaVendaEmBloco,
   produrarVendaId,
   procurarProdutosVenda,
+  procurarPagamentoVenda,
   deletarVenda,
 
   AbrirCaixa,

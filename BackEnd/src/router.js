@@ -39,6 +39,7 @@ const vendaControlles = require("./controllers/vendaControllers");
 const userController = require("./controllers/userController");
 const caixaControlles = require("./controllers/caixaControlles");
 const services = require("./services/services");
+const automacao = require("./services/automacao")
 
 // Rotas de clientes
 router.get("/clientes/:id", clientesControllers.procurarCliente);
@@ -66,6 +67,11 @@ router.post(
   "/novoProduto",
   upload.array("imagens"),
   produtosControllers.novoProduto
+);
+router.post(
+  "/novaImagemProduto/:id", 
+  upload.array("imagens"),
+  produtosControllers.novaImagemProduto
 );
 router.put("/editarProduto/:id", produtosControllers.editarProduto);
 router.delete("/deletarProduto/:id", produtosControllers.deletarProduto);
@@ -98,6 +104,7 @@ router.get(
 );
 router.get("/procurarVendaId/:id", vendaControlles.produrarVendaId);
 router.get("/procurarProdutosVenda/:id", vendaControlles.procurarProdutosVenda);
+router.get("/procurarPagamentoVenda/:id", vendaControlles.procurarPagamentoVenda);
 router.delete("/deletarVenda/:id", vendaControlles.deletarVenda);
 
 //Rotas caixa
@@ -117,5 +124,8 @@ router.post("/salvarDadosEmpresa", userController.salvarDados);
 
 // Outras rotas
 router.get("/restart", services.restart);
+
+router.post("/EnviarMenssagemWhatsapp" , automacao.enviarMensagem)
+router.get("/qrCodeAutomacao" , automacao.qrCode)
 
 module.exports = router;

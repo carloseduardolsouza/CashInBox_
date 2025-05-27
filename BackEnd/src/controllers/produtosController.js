@@ -50,6 +50,21 @@ const novoProduto = async (req, res) => {
   }
 };
 
+const novaImagemProduto = async (req, res) => {
+  const { id } = req.params;
+
+  const arquivos = req.files || [];
+
+  // Assumindo que os arquivos vêm na mesma ordem que dados.imagens
+  arquivos.map(async (image) => {
+    await variacaoProdutoModels.criarVariacao(image, id);
+  });
+
+  return res.status(201).json({
+    sucesso: true,
+  });
+};
+
 // Função para editar um produto
 const editarProduto = async (req, res) => {
   const { id } = req.params;
@@ -138,6 +153,7 @@ const deletarVariacaoProdutos = async (req, res) => {
 module.exports = {
   procurarProduto,
   novoProduto,
+  novaImagemProduto,
   editarProduto,
   deletarProduto,
   procurarProdutoId,

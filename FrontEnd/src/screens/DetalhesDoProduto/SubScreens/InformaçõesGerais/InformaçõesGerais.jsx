@@ -1,7 +1,7 @@
 import "./InformaçõesGerais.css";
 import Select from "react-select";
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import AppContext from "../../../../context/AppContext";
 
 import fetchapi from "../../../../api/fetchapi";
@@ -10,6 +10,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 function InformaçõesGerais() {
   const { setErroApi } = useContext(AppContext);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const [categoriaEdit, setCategoriaEdit] = useState("");
@@ -24,6 +25,8 @@ function InformaçõesGerais() {
   const [preco_custoEdit, setPreco_custoEdit] = useState("");
   const [markupEdit, setMarkupEdit] = useState("");
   const [preco_vendaEdit, setPreco_vendaEdit] = useState("");
+
+  const fileInputRef = useRef(null);
 
   const buscarCategorias = async () => {
     try {
@@ -43,6 +46,12 @@ function InformaçõesGerais() {
     label: categoria.nome,
   }));
 
+  const buscarImagens = async () => {
+    const dadosImage = await fetchapi.listarImagens(id).then((response) => {
+      setImagensProdutosEdit(response);
+    });
+  };
+
   useEffect(() => {
     const buscarProduto = async () => {
       const dadosProduto = await fetchapi.ProcurarProdutoId(id);
@@ -55,12 +64,6 @@ function InformaçõesGerais() {
       setPreco_vendaEdit(dadosProduto[0].preco_venda);
       setcodBarrasEdit(dadosProduto[0].codigo_barras);
       setCategoriaEdit(dadosProduto[0].categoria);
-    };
-
-    const buscarImagens = async () => {
-      const dadosImage = await fetchapi.listarImagens(id).then((response) => {
-        setImagensProdutosEdit(response);
-      });
     };
     buscarProduto();
     buscarImagens();
@@ -127,6 +130,14 @@ function InformaçõesGerais() {
       .catch((erro) => {
         setErroApi(true);
       });
+  };
+
+  const HandleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    fetchapi.novaImagemProduto(id, files).then(() => {
+      buscarImagens();
+    });
   };
 
   return (
@@ -259,7 +270,14 @@ function InformaçõesGerais() {
           );
         })}
 
-        <input type="file" id="InputFileInfoProdutos" />
+        <input
+          type="file"
+          multiple
+          className="imageProduto"
+          id="InputFileInfoProdutos"
+          ref={fileInputRef}
+          onChange={HandleImageChange}
+        />
       </div>
 
       <nav id="navInfoProdutos">

@@ -1,0 +1,17 @@
+#AutomacaoWhats {
+  background-color: var(--div-color);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#divSpanConectado {
+  display: flex;
+  align-items: center;
+}
+
+#spanConectadoOrNo {
+  margin-right: 10px;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+}

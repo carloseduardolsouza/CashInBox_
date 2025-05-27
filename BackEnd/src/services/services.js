@@ -1,6 +1,11 @@
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
+// Pasta segura do app para dados do usuário (Windows)
+const userDataPath = path.join(os.homedir(), "AppData", "Roaming", "CashInBox");
+
+// Função para reiniciar a API (deixa como tá)
 const restart = (req, res) => {
   const flagPath = path.resolve(__dirname, "../../restart.flag");
   fs.writeFileSync(flagPath, `Reiniciado em: ${new Date().toISOString()}`);
@@ -9,11 +14,11 @@ const restart = (req, res) => {
   process.exit(0);
 };
 
+// Função para deletar imagem, usando versão async do unlink pra evitar callback hell
 const deletarImagem = (nomeArquivo) => {
-  const caminhoImagem = path.join(__dirname, "../../uploads", nomeArquivo);
-  console.log(caminhoImagem)
+  const caminhoImagem = path.join(userDataPath, "uploads", nomeArquivo);
+  console.log("Tentando deletar:", caminhoImagem);
 
-  // Verifica se o arquivo existe antes de tentar deletar
   if (fs.existsSync(caminhoImagem)) {
     fs.unlink(caminhoImagem, (err) => {
       if (err) {

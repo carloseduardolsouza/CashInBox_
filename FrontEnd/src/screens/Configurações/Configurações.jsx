@@ -5,6 +5,8 @@ import { useState } from "react";
 import ConfiguraçõesGerais from "./SubScreens/ConfiguraçõesGerais/ConfiguraçõesGerais";
 import VendasECaixa from "./SubScreens/VendasECaixa/VendasECaixa";
 
+import AutomacaoWhats from "./SubScreens/AutomacaoWhats/AutomacaoWhats"
+
 function Configurações() {
   const [abaAtiva, setAbaAtiva] = useState("configuraçõesGerais");
 
@@ -14,6 +16,8 @@ function Configurações() {
         return <ConfiguraçõesGerais />;
       case "VendasECaixa":
         return <VendasECaixa />;
+      case "AutomacaoWhats":
+        return <AutomacaoWhats />;
       default:
         return null;
     }
@@ -57,8 +61,9 @@ function Configurações() {
         </button>
         <button
           className={`bttConfiguraçõesAba ${
-            abaAtiva === "Integrações" ? "ativo" : ""
+            abaAtiva === "AutomacaoWhats" ? "ativo" : ""
           }`}
+          onClick={() => setAbaAtiva("AutomacaoWhats")}
         >
           🤖Automação
         </button>

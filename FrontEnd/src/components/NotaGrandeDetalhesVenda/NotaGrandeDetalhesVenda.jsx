@@ -3,25 +3,36 @@ import { forwardRef } from "react";
 import services from "../../services/services";
 
 const NotaGrandeDetalhesVenda = forwardRef(
-  ({ venda, cliente, produtos, dadosLoja }, ref) => {
+  ({ venda, cliente, produtos, dadosLoja, pagamento }, ref) => {
     return (
       <div ref={ref}>
         <div>
           <div id="cabecalhoNotaGrande">
-              <img src={""} alt="#" className="LogoImpresa" />
+            <img src={""} alt="#" className="LogoImpresa" />
             <div>
-              <strong>CNPJ: {dadosLoja.cnpj}</strong>
+              <strong>
+                CNPJ:{" "}
+                {services.formatarCNPJ(dadosLoja.cnpj || "00000000000000")}
+              </strong>
               <br />
-              <strong>{dadosLoja.endereco}</strong>
+              <strong>{dadosLoja.endereco || "Endereço não cadastrado"}</strong>
               <br />
-              <strong>{dadosLoja.telefone}</strong>
+              <strong>
+                {services.formatarNumeroCelular(
+                  dadosLoja.telefone || "00000000000"
+                )}
+              </strong>
             </div>
           </div>
           <main>
             <div>
               <p>
                 <strong>Pagamento: </strong>
-                {venda.pagamentos || "Desconhecido"}
+                {pagamento.map((dados) => {
+                  return `${services.formatarCurrency(dados.valor)} : ${
+                    dados.tipo_pagamento
+                  }     ,`;
+                }) || "Desconhecido"}
               </p>
             </div>
             <div className="BoxInfo">
@@ -77,17 +88,22 @@ const NotaGrandeDetalhesVenda = forwardRef(
           </footer>
         </div>
 
-
-
         <div>
           <div id="cabecalhoNotaGrande2">
-              <img src={""} alt="#" className="LogoImpresa" />
+            <img src={""} alt="#" className="LogoImpresa" />
             <div>
-              <strong>CNPJ: {dadosLoja.cnpj}</strong>
+              <strong>
+                CNPJ:{" "}
+                {services.formatarCNPJ(dadosLoja.cnpj || "00000000000000")}
+              </strong>
               <br />
-              <strong>{dadosLoja.endereco}</strong>
+              <strong>{dadosLoja.endereco || "Endereço não cadastrado"}</strong>
               <br />
-              <strong>{dadosLoja.telefone}</strong>
+              <strong>
+                {services.formatarNumeroCelular(
+                  dadosLoja.telefone || "00000000000"
+                )}
+              </strong>
             </div>
           </div>
           <main>
