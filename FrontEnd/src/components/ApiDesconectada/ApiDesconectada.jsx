@@ -6,10 +6,14 @@ import fetchapi from "../../api/fetchapi";
 
 function ApiDesconectada() {
   const { setErroApi } = useContext(AppContext);
+
   const reiniciarApi = () => {
     fetchapi.restartApi();
     setErroApi(false);
   };
+  const fecharModal = () => {
+    setErroApi(false);
+  }
 
   return (
     <div id="ApiDesconectada">
@@ -38,7 +42,7 @@ function ApiDesconectada() {
           <button className="acceptButton" onClick={() => reiniciarApi()}>
             Reiniciar
           </button>
-          <button className="declineButton">Fechar</button>
+          <button className="declineButton" onClick={() => fecharModal()}>Fechar</button>
         </div>
       </div>
     </div>

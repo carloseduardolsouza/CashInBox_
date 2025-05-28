@@ -1,5 +1,6 @@
 import "./ConfiguraçõesGerais.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
+import AppContext from "../../../../context/AppContext"
 
 //icones
 import { MdAddPhotoAlternate } from "react-icons/md";
@@ -12,6 +13,8 @@ function ConfiguraçõesGerais() {
   const [endereco, setEndereco] = useState("");
   const [InscriçãoEstadual, setInscriçãoEstadual] = useState("");
 
+  const {setErroApi} = useContext(AppContext)
+
   const [bttDisabled, setBttDisabled] = useState(true);
 
   useEffect(() => {
@@ -21,7 +24,7 @@ function ConfiguraçõesGerais() {
       setEndereco(response.endereco);
       setInscriçãoEstadual(response.InscriçãoEstadual);
       setTelefone(response.telefone);
-    });
+    }).catch(() => setErroApi(true));
   }, []);
 
   const alterarDadosDaEmpresa = async (e) => {

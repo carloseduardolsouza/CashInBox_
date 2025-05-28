@@ -159,3 +159,13 @@
   color: red;
   cursor: pointer;
 }
+
+#alertEscolhaFormaPagamento {
+  background-color: #ff7777;
+  color: var(--text-color);
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+}

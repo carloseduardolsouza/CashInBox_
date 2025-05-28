@@ -3,6 +3,9 @@ import { useState, useContext, useEffect } from "react";
 import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
 
+import services from "../../services/services";
+import fetchapi from "../../api/fetchapi";
+
 //Biblioteca de Gráficos
 import {
   LineChart,
@@ -22,10 +25,9 @@ import { FaComputer } from "react-icons/fa6";
 import { IoMdArrowDropup } from "react-icons/io";
 
 function Home() {
-  const [notificaçãp, setNotificação] = useState(false);
-  const [receitas, setReceitas] = useState();
-
-  const { isDark, setIsDark , dadosLoja } = useContext(AppContext);
+  const [relatoriosBasicos, setRelatoriosBasicos] = useState({});
+  const { isDark, setIsDark, dadosLoja, setErroApi } = useContext(AppContext);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (isDark) {
@@ -35,16 +37,43 @@ function Home() {
     }
   }, [isDark]);
 
-  //informações dos gráficos
-  const data = [
-    { name: "Jan", Despesas: 4000, Receitas: 2400 },
-    { name: "Fev", Despesas: 3000, Receitas: 1398 },
-    { name: "Mar", Despesas: 2000, Receitas: 9800 },
-    { name: "Abr", Despesas: 2780, Receitas: 3908 },
-    { name: "Mai", Despesas: 1890, Receitas: 4800 },
-    { name: "Jun", Despesas: 2390, Receitas: 3800 },
-    { name: "Jul", Despesas: 3490, Receitas: 4300 },
-  ];
+  useEffect(() => {
+    fetchapi
+      .buscarRelatoriosBasicos()
+      .then((response) => {
+        setRelatoriosBasicos(response);
+
+        const newData = response.faturamento.map((dados) => ({
+          name: dados.mes,
+          Despesas: 0,
+          Receitas: dados.faturamento,
+        }));
+
+        setData(newData);
+      })
+      .catch(() => {
+        const newData = [];
+        for (let i = 0; i < 7; i++) {
+          newData.push({
+          name: "Mês",
+          Despesas: 10,
+          Receitas: 40,
+        })
+        }
+        setData(newData)
+        setErroApi(true);
+      });
+  }, []);
+
+  // Calcular o faturamento atual, anterior e a variação
+  const faturamentoArray = relatoriosBasicos.faturamento || [];
+  const len = faturamentoArray.length;
+
+  const faturamentoAtual = len >= 1 ? faturamentoArray[len - 1].faturamento : 0;
+  const faturamentoAnterior =
+    len >= 2 ? faturamentoArray[len - 2].faturamento : 0;
+
+  const variacao = len >= 1 ? faturamentoArray[len - 1].variacao : 0;
 
   return (
     <div id="Homescreen">
@@ -53,8 +82,8 @@ function Home() {
           {isDark ? "☀️" : "🌙"}
         </button>
 
-        <button class="button">
-          <svg viewBox="0 0 448 512" class="bell">
+        <button className="button">
+          <svg viewBox="0 0 448 512" className="bell">
             <path d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
           </svg>
         </button>
@@ -100,7 +129,7 @@ function Home() {
             <div className="linha" />
             <div className="displayFlex">
               <div>
-                <p>Ultimo més</p>
+                <p>Último mês</p>
                 <strong>{"R$ 00,00"}</strong>
               </div>
               <div>
@@ -118,7 +147,7 @@ function Home() {
             <div className="linha" />
             <div className="displayFlex">
               <div>
-                <p>Ultimo més</p>
+                <p>Último mês</p>
                 <strong>{"R$ 00,00"}</strong>
               </div>
               <div>
@@ -132,40 +161,25 @@ function Home() {
 
           <article className="cardMétricasBox orange">
             <h2>Faturamento Mês</h2>
-            <h1>{"R$ 00,00"}</h1>
+            <h1>{services.formatarCurrency(faturamentoAtual || 0)}</h1>
             <div className="linha" />
             <div className="displayFlex">
               <div>
-                <p>Ultimo més</p>
-                <strong>{"R$ 00,00"}</strong>
+                <p>Último mês</p>
+                <strong>
+                  {services.formatarCurrency(faturamentoAnterior || 0)}
+                </strong>
               </div>
               <div>
                 <p>
                   <IoMdArrowDropup />
                 </p>
-                <strong>{"0%"}</strong>
+                <strong>{variacao}%</strong>
               </div>
             </div>
           </article>
         </div>
       </header>
-
-      <main className="MainHomeDeashBoard">
-        <article>
-          <h1>Vendas este mês</h1>
-          <h1 className="NotficationHome">{"0"}</h1>
-        </article>
-
-        <article>
-          <h1>Contas a pagar</h1>
-          <h1 className="NotficationHome">{"0"}</h1>
-        </article>
-
-        <article>
-          <h1>Vendas Pendentes</h1>
-          <h1 className="NotficationHome">{"0"}</h1>
-        </article>
-      </main>
     </div>
   );
 }

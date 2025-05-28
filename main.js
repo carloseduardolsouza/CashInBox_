@@ -1,4 +1,4 @@
-const { app, BrowserWindow, screen, ipcMain } = require("electron");
+const { app, BrowserWindow, screen, ipcMain, dialog } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const path = require("path");
 const fs = require("fs");
@@ -84,7 +84,7 @@ function startBackend() {
 
   backend = spawn("node", backendArgs, {
     detached: false,
-    stdio: app.isPackaged ? "ignore" : "inherit", // Silencie só em prod
+    stdio: app.isPackaged ? "ignore" : "inherit",
     windowsHide: true,
   });
 
@@ -102,6 +102,9 @@ ipcMain.on("window:close", () => {
 });
 
 function setupAutoUpdater() {
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = false;
+
   autoUpdater.checkForUpdatesAndNotify();
 
   setInterval(() => {
@@ -110,11 +113,29 @@ function setupAutoUpdater() {
   }, 60 * 60 * 1000);
 
   autoUpdater.on("update-available", () => {
-    console.log("🚀 Atualização disponível!");
+    console.log("🚀 Atualização disponível! Baixando...");
   });
 
   autoUpdater.on("update-downloaded", () => {
-    console.log("✅ Atualização baixada. Será aplicada ao reiniciar.");
+    console.log("✅ Atualização baixada.");
+
+    const options = {
+      type: "question",
+      buttons: ["Sim", "Agora não"],
+      defaultId: 1, // Mais conservador: "Agora não" é default
+      title: "Atualização disponível",
+      message: "Uma nova versão foi baixada.",
+      detail: "Deseja reiniciar agora para aplicar a atualização?",
+    };
+
+    dialog.showMessageBox(mainWindow, options).then((response) => {
+      if (response.response === 0) {
+        console.log("🔁 Reiniciando para atualizar...");
+        autoUpdater.quitAndInstall();
+      } else {
+        console.log("🕒 Usuário escolheu atualizar depois.");
+      }
+    });
   });
 
   autoUpdater.on("error", (err) => {
@@ -135,7 +156,6 @@ app.whenReady().then(() => {
 });
 
 app.on("window-all-closed", () => {
-  // No macOS, apps continuam abertos até CMD+Q
   if (process.platform !== "darwin") {
     if (backend) {
       backend.kill();

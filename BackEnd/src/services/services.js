@@ -32,6 +32,10 @@ const deletarImagem = (nomeArquivo) => {
   }
 };
 
+const interpretarBoleto  = (re , res) => {
+
+}
+
 module.exports = {
   restart,
   deletarImagem,

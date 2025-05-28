@@ -615,8 +615,16 @@ const enviarMensagem = async (dados) => {
   return resultado;
 };
 
+const buscarRelatoriosBasicos = async () => {
+  const buscarRelatoriosBasicos = await fetch(`${API_URL}/faturamentoMes`);
+  const dados = await buscarRelatoriosBasicos.json();
+  return dados;
+}
+
 export default {
   restartApi,
+
+  buscarRelatoriosBasicos,
 
   pegarQrCode,
   enviarMensagem,

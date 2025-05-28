@@ -1,5 +1,6 @@
 import "./CaixaAtual.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
+import AppContext from "../../../../context/AppContext";
 
 import services from "../../../../services/services";
 
@@ -22,6 +23,8 @@ import FecharCaixa from "./components/FecharCaixa/FecharCaixa";
 import fetchapi from "../../../../api/fetchapi";
 
 function CaixaAtual() {
+  const {setErroApi} = useContext(AppContext)
+
   const [abaSobreposta, setAbaSobreposta] = useState(null);
   const [statusCaixa, setStatusCaixa] = useState("Fechado");
 
@@ -35,7 +38,7 @@ function CaixaAtual() {
   const [movimentacoes, setMovimentacoes] = useState([]);
 
   const BuscarCaixasAbertosPage = async () => {
-    const response = await fetchapi.BuscarCaixasAbertos();
+    const response = await fetchapi.BuscarCaixasAbertos().catch(() => setErroApi(true));
     const caixa = response[0];
     setIdCaixa(caixa.id || 0);
     setSaldo_inicial(caixa.valor_abertura);

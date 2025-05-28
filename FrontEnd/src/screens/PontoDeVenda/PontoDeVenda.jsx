@@ -1,5 +1,6 @@
 import "./PontoDeVenda.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useContext } from "react";
+import AppContext from "../../context/AppContext.js"
 
 //icones
 import { FaTrash } from "react-icons/fa6";
@@ -15,6 +16,8 @@ import FaturarVenda from "./components/FaturarVenda/FaturarVenda";
 import Select from "react-select";
 
 function PontoDeVenda() {
+  const {setErroApi} = useContext(AppContext)
+
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
     Data.getUTCMonth() + 1
@@ -36,6 +39,8 @@ function PontoDeVenda() {
   useEffect(() => {
     fetchapi.ProcurarProdutos("all").then((response) => {
       setResultadoProdutos(response);
+    }).catch(() => {
+      setErroApi(true)
     });
   }, []);
 

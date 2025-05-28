@@ -40,6 +40,8 @@ const userController = require("./controllers/userController");
 const caixaControlles = require("./controllers/caixaControlles");
 const services = require("./services/services");
 const automacao = require("./services/automacao")
+const relatorios = require("./services/relatorios")
+const configController = require("./controllers/configController")
 
 // Rotas de clientes
 router.get("/clientes/:id", clientesControllers.procurarCliente);
@@ -122,8 +124,14 @@ router.put("/fecharCaixa/:id", caixaControlles.fecharCaixa);
 router.get("/dadosEmpresa", userController.getDados);
 router.post("/salvarDadosEmpresa", userController.salvarDados);
 
+//configuraçõpes
+router.get("/configuracoes", configController.getDados);
+router.post("/salvarConfiguracoes", configController.salvarDados);
+
 // Outras rotas
 router.get("/restart", services.restart);
+
+router.get("/faturamentoMes" , relatorios.calcularFaturamentoMensal)
 
 router.post("/EnviarMenssagemWhatsapp" , automacao.enviarMensagem)
 router.get("/qrCodeAutomacao" , automacao.qrCode)

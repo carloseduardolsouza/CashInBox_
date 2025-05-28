@@ -7,7 +7,7 @@ import fetchapi from "../../../../api/fetchapi";
 //icones
 import { FaTrash } from "react-icons/fa6";
 
-function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
+function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [valorCompra, setValorCompra] = useState(0);
   const [descontoReais, setDescontoReais] = useState(0);
   const [descontoPorcentagem, setDescontoPorcentagem] = useState(0);
@@ -29,6 +29,8 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
   const [formaPagemento, setFormaPagamento] = useState([]);
   const [faltaPagar, setFaltaPagar] = useState(0);
   const [troco, setTroco] = useState(0);
+
+  const [alertaFormaPagamento, setAlertaFormaPagamento] = useState(false);
 
   useEffect(() => {
     fetchapi
@@ -90,6 +92,7 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
 
   const addFormaPagamento = (e) => {
     e.preventDefault();
+    setAlertaFormaPagamento(false)
     if (faltaPagar <= 0) {
       return;
     }
@@ -135,13 +138,23 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
   };
 
   const faturarVendaEmBloco = (status) => {
+    if (formaPagemento.length <= 0 && status === "concluida") {
+      setAlertaFormaPagamento(true); // mostra o alerta dentro do form
+      return;
+    }
+    setAlertaFormaPagamento(false); // limpa o alerta se passou
+
     let dados = {
       cliente_id: id_cliente,
       nome_cliente: nome_cliente,
       funcionario_id: id_vendedor,
       nome_funcionario: nome_vendedor,
-      descontos: `R$ ${descontoReais.toFixed(2)} / ${descontoPorcentagem.toFixed(2)}%`,
-      acrescimos: `R$ ${acrescimoReais.toFixed(2)} / ${acrescimoPorcentagem.toFixed(2)}%`,
+      descontos: `R$ ${descontoReais.toFixed(
+        2
+      )} / ${descontoPorcentagem.toFixed(2)}%`,
+      acrescimos: `R$ ${acrescimoReais.toFixed(
+        2
+      )} / ${acrescimoPorcentagem.toFixed(2)}%`,
       total_bruto: valorCompra,
       valor_total: totalPagar,
       status: status,
@@ -150,13 +163,16 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
       pagamentos: formaPagemento,
     };
 
-    fetchapi.NovaVendaEmBloco(dados).then(() => {
-      limparVenda([])
-      limparValor(0)
-      fechar(false)
-    }).catch(() => {
-      //carregar erro
-    })
+    fetchapi
+      .NovaVendaEmBloco(dados)
+      .then(() => {
+        limparVenda([]);
+        limparValor(0);
+        fechar(false);
+      })
+      .catch(() => {
+        //carregar erro
+      });
   };
 
   return (
@@ -256,6 +272,7 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
               <form
                 onSubmit={(e) => addFormaPagamento(e)}
                 id="FaturarVendaFormaDePagamento"
+                style={{ position: "relative" }}
               >
                 <p>Forma de pagamento:</p>
                 <select
@@ -273,7 +290,14 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
                   value={valorSendoPago}
                 />
                 <button type="submit">ok</button>
+
               </form>
+                {alertaFormaPagamento && (
+                  <div id="alertEscolhaFormaPagamento"  >
+                    ⚠️ Escolha pelo menos uma forma de pagamento antes de
+                    concluir.
+                  </div>
+                )}
             </div>
           </div>
           <div>
@@ -325,8 +349,12 @@ function FaturarVenda({ fechar, venda , limparVenda , limparValor}) {
           <button>NFC-e Off-Line</button>
         </div>
         <div>
-          <button onClick={() => faturarVendaEmBloco("concluida")}>Lançamento NF de bloco</button>
-          <button onClick={() => faturarVendaEmBloco("orçamento")}>Orçamento</button>
+          <button onClick={() => faturarVendaEmBloco("concluida")}>
+            Lançamento NF de bloco
+          </button>
+          <button onClick={() => faturarVendaEmBloco("orçamento")}>
+            Orçamento
+          </button>
         </div>
       </div>
     </div>

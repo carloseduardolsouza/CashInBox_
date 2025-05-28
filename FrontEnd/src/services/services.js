@@ -124,6 +124,31 @@ function formatarHorario(dataString) {
   return `${horas}:${minutos}`;
 }
 
+function interpretarBoleto(codigo) {
+  if (codigo.length !== 44) {
+    throw new Error('Código de barras inválido!');
+  }
+
+  const banco = codigo.substring(0, 3);
+  const moeda = codigo[3];
+  const digitoVerificador = codigo[4];
+  const fatorVencimento = parseInt(codigo.substring(5, 9), 10);
+  const valor = parseInt(codigo.substring(9, 19), 10) / 100;
+  const codigoLivre = codigo.substring(19);
+
+  const baseDate = new Date(1997, 9, 7); // Outubro é 9
+  baseDate.setDate(baseDate.getDate() + fatorVencimento);
+
+  return {
+    banco,
+    moeda,
+    digitoVerificador,
+    vencimento: baseDate.toISOString().split('T')[0],
+    valor: `R$ ${valor.toFixed(2)}`,
+    codigoLivre
+  };
+}
+
 export default {
   formatarCurrency,
   formatarCNPJ,
@@ -134,4 +159,5 @@ export default {
   mascaraDeDinheroInput,
   formatarDataCurta,
   formatarHorario,
+  interpretarBoleto
 };

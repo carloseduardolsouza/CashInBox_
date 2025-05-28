@@ -1,16 +1,17 @@
 import "./CaixasAnteriores.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useContext} from "react";
 import fetchapi from "../../../../api/fetchapi";
 import services from "../../../../services/services";
-import { Link } from "react-router-dom";
+import AppContext from "../../../../context/AppContext"
 
 function CaixasAnteriores() {
+  const {setErroApi} = useContext(AppContext)
   const [caixasAnteriores, setCaixasAnteriores] = useState([]);
 
   useEffect(() => {
     fetchapi.BuscarCaixas().then((response) => {
       setCaixasAnteriores(response);
-    });
+    }).catch(() => setErroApi(true));
   }, []);
   return (
     <div id="CaixasAnteriores">

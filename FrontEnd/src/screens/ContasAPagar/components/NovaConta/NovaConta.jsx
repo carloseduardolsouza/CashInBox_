@@ -1,8 +1,10 @@
 import "./NovaConta.css";
 import { useState } from "react";
 
-function NovaConta({ fecharAba }) {
+function NovaConta({ fecharAba , atualizar}) {
   const [boleto, setBoleto] = useState(false);
+
+  const [codigoBoleto , setCodigoBoleto] = useState()
 
   const changeSelect = (event) => {
     if (event === "Boleto") {
@@ -11,6 +13,11 @@ function NovaConta({ fecharAba }) {
       setBoleto(false);
     }
   };
+
+  const lançarConta = (e) => {
+    e.preventDefault()
+
+  }
 
   return (
     <div className="blurModal">
@@ -28,11 +35,11 @@ function NovaConta({ fecharAba }) {
           <div>
             <div id="divBoletoTrue">
               <span>Digite o codigo do boleto</span>
-              <input type="text" />
+              <input type="text" onChange={(e) => setCodigoBoleto(e.target.value)}/>
             </div>
 
             <div id="divButoesNovaConta">
-              <button className="ButtonNovaConta SalvarNovaConta">
+              <button className="ButtonNovaConta SalvarNovaConta" onClick={(e) => lançarConta(e)}>
                 Salvar
               </button>
               <button
