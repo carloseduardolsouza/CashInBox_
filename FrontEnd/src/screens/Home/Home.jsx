@@ -23,6 +23,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { MdAttachMoney } from "react-icons/md";
 import { FaComputer } from "react-icons/fa6";
 import { IoMdArrowDropup } from "react-icons/io";
+import { FaBoxOpen } from "react-icons/fa";
 
 function Home() {
   const [relatoriosBasicos, setRelatoriosBasicos] = useState({});

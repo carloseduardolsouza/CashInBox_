@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import AppContext from "../../context/AppContext";
 import { useParams, useNavigate } from "react-router-dom";
 import services from "../../services/services";
+import { pdf } from "@react-pdf/renderer";
 
 // Icones
 import { BsFillSendFill } from "react-icons/bs";
@@ -61,16 +62,45 @@ function DetalhesDaVenda() {
     }
   };
 
-  const imprimirNota = (tipo) => {
-    setTipoNota(tipo);
-    setTimeout(() => {
-      window.print();
-      setTipoNota(null);
-    }, 100);
-    setEscolherNotas(false);
+  const handleDownload = async (tipoNota) => {
+    let doc;
+    if (tipoNota == "NotaGrande") {
+      doc = (
+        <NotaGrandeDetalhesVenda
+          venda={venda}
+          cliente={cliente}
+          produtos={produtos}
+          dadosLoja={dadosLoja}
+          pagamento={pagamentos}
+        />
+      );
+    }
+    if (tipoNota == "NotaPequena") {
+      return;
+    }
+
+    if (tipoNota == "NotaRomaneio") {
+      return;
+    }
+
+    const asPdf = pdf();
+    asPdf.updateContainer(doc);
+    const blob = await asPdf.toBlob();
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `venda#${id}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   const enviarDetalhesWhatsApp = async () => {
+    if (!venda.cliente_id) {
+      window.alert("Este cliente não tem número de WhatsApp cadastrado.");
+      return;
+    }
+
     if (Whastsapp != true) {
       window.alert("Conecte seu whatsApp Primeiro");
       return;
@@ -215,40 +245,66 @@ function DetalhesDaVenda() {
               Cancelar Venda
             </p>
 
-            <div id="areaButtonsDetalhesVedna">
+            <div id="areaButtonsDetalhesVedna" style={{ position: "relative" }}>
               <button className="ButãoEditarDetalhesDaVenda ButãoDetalhesDaVenda">
                 Editar
               </button>
 
-              {escolherNotas ? (
-                <div id="areaButtonsEscolherNotas">
-                  <button
-                    className="EsolhaDeNotas"
-                    onClick={() => imprimirNota("NotaGrande")}
-                  >
-                    Nota Grande
-                  </button>
-                  <button
-                    className="EsolhaDeNotas"
-                    onClick={() => imprimirNota("NotaPequena")}
-                  >
-                    Nota Pequena
-                  </button>
-                  <button
-                    className="EsolhaDeNotas"
-                    onClick={() => imprimirNota("NotaRomaneio")}
-                  >
-                    Nota de Romaneio
-                  </button>
-                </div>
-              ) : (
-                <button
-                  className="ButãoDetalhesDaVenda ButãoNotasDetalhesDaVenda"
-                  onClick={() => setEscolherNotas(true)}
+              <div
+                id="EscolherNotasArticle"
+                style={{
+                  position: "absolute",
+                  bottom: "100%",
+                  left: 0,
+                  background: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                  zIndex: 10,
+                  overflow: "hidden",
+                  transform: escolherNotas
+                    ? "translateY(0)"
+                    : "translateY(10px)",
+                  opacity: escolherNotas ? 1 : 0,
+                  pointerEvents: escolherNotas ? "auto" : "none",
+                  transition: "all 0.3s ease",
+                }}
+              >
+                <p
+                  onClick={() => {
+                    handleDownload("NotaGrande");
+                    setEscolherNotas(false);
+                  }}
+                  style={{ cursor: "pointer", padding: "8px", margin: 0 }}
                 >
-                  (NF-e / NFC-e)
-                </button>
-              )}
+                  Nota Grande
+                </p>
+                <p
+                  onClick={() => {
+                    handleDownload("NotaPequena");
+                    setEscolherNotas(false);
+                  }}
+                  style={{ cursor: "pointer", padding: "8px", margin: 0 }}
+                >
+                  Nota Pequena
+                </p>
+                <p
+                  onClick={() => {
+                    handleDownload("NotaRomaneio");
+                    setEscolherNotas(false);
+                  }}
+                  style={{ cursor: "pointer", padding: "8px", margin: 0 }}
+                >
+                  Nota Romaneio
+                </p>
+              </div>
+
+              <button
+                className="ButãoDetalhesDaVenda ButãoNotasDetalhesDaVenda"
+                onClick={() => setEscolherNotas(!escolherNotas)}
+              >
+                (NF-e / NFC-e)
+              </button>
             </div>
           </div>
         </div>

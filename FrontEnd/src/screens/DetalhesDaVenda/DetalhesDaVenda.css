@@ -125,24 +125,6 @@
   visibility: hidden !important;
 }
 
-@media print {
-  body * {
-  visibility: hidden !important;
-}
-
-#DetalhesDaVendaPage,
-#DetalhesDaVendaPage * {
-  visibility: visible !important;
-}
-
-#DetalhesDaVendaPage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-}
-
 #EnviarDetalhesVenda {
   position: absolute;
   top: 10px;
@@ -155,4 +137,9 @@
   border-radius: 5px;
   font-weight: bold;
   color: white;
+}
+
+#EscolherNotasArticle {
+  position: absolute;
+  right: 10px;
 }

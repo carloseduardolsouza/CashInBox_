@@ -1,6 +1,6 @@
 {
   "name": "CashInBox",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "main": "main.js",
   "scripts": {
     "build-react": "cd frontend && npm install && npm run build",
@@ -48,7 +48,8 @@
   },
   "devDependencies": {
     "electron": "^28.3.3",
-    "electron-builder": "^24.13.3"
+    "electron-builder": "^24.13.3",
+    "electron-rebuild": "^3.2.9"
   },
   "dependencies": {
     "electron-updater": "^6.6.2"

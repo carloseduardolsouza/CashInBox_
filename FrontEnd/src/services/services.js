@@ -1,4 +1,5 @@
 import format from "date-fns/format";
+import NotaGrandeDetalhesVenda from "../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
 
 function formatarCurrency(numero) {
   // Converter para número, se possível
@@ -126,7 +127,7 @@ function formatarHorario(dataString) {
 
 function interpretarBoleto(codigo) {
   if (codigo.length !== 44) {
-    throw new Error('Código de barras inválido!');
+    throw new Error("Código de barras inválido!");
   }
 
   const banco = codigo.substring(0, 3);
@@ -143,9 +144,9 @@ function interpretarBoleto(codigo) {
     banco,
     moeda,
     digitoVerificador,
-    vencimento: baseDate.toISOString().split('T')[0],
+    vencimento: baseDate.toISOString().split("T")[0],
     valor: `R$ ${valor.toFixed(2)}`,
-    codigoLivre
+    codigoLivre,
   };
 }
 
@@ -159,5 +160,5 @@ export default {
   mascaraDeDinheroInput,
   formatarDataCurta,
   formatarHorario,
-  interpretarBoleto
+  interpretarBoleto,
 };
