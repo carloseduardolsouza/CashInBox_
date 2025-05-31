@@ -9,6 +9,7 @@ import { pdf } from "@react-pdf/renderer";
 import { BsFillSendFill } from "react-icons/bs";
 
 import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
+import NotaFiscalDANFE from "../../components/NotaFiscalDetalhesVenda/NotaFiscalDetalhesVenda";
 
 // conexão com a api
 import fetchapi from "../../api/fetchapi";
@@ -62,6 +63,58 @@ function DetalhesDaVenda() {
     }
   };
 
+  var dados = {
+    emitente: {
+      nome: "Empresa Exemplo Ltda",
+      endereco: "Rua das Flores, 123 - Centro - São Paulo/SP",
+      cnpj: "12.345.678/0001-99",
+    },
+    destinatario: {
+      nome: "João da Silva",
+      endereco: "Av. Paulista, 1000 - Bela Vista - São Paulo/SP",
+      cnpj: "123.456.789-00",
+    },
+    nfe: {
+      numero: "12345",
+      serie: "1",
+      data_emissao: "2025-05-29",
+    },
+    produtos: [
+      {
+        codigo: "001",
+        descricao: "Produto A",
+        ncm: "1234.56.78",
+        cfop: "5102",
+        quantidade: 2,
+        valor_unitario: 50.0,
+        valor_total: 100.0,
+      },
+      {
+        codigo: "002",
+        descricao: "Produto B com descrição maior",
+        ncm: "8765.43.21",
+        cfop: "6102",
+        quantidade: 1,
+        valor_unitario: 200.0,
+        valor_total: 200.0,
+      },
+    ],
+    impostos: {
+      icms: 30.0,
+      ipi: 10.0,
+    },
+    totais: {
+      total: 310.0,
+    },
+    transportadora: {
+      razao_social: "Transportes Rápidos Ltda",
+      frete: "Por conta do destinatário",
+    },
+    dados_adicionais: "Entrega prevista para 5 dias úteis.",
+    chave_acesso: "1234 5678 9012 3456 7890 1234 5678 9012 3456",
+    protocolo_autorizacao: "135798642",
+  };
+
   const handleDownload = async (tipoNota) => {
     let doc;
     if (tipoNota == "NotaGrande") {
@@ -76,7 +129,11 @@ function DetalhesDaVenda() {
       );
     }
     if (tipoNota == "NotaPequena") {
-      return;
+      doc = (
+        <NotaFiscalDANFE
+          dados={dados}
+        />
+      );
     }
 
     if (tipoNota == "NotaRomaneio") {
@@ -256,7 +313,6 @@ function DetalhesDaVenda() {
                   position: "absolute",
                   bottom: "100%",
                   left: 0,
-                  background: "#fff",
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   boxShadow: "0 2px 5px rgba(0,0,0,0.2)",

@@ -1,6 +1,6 @@
 import "./PontoDeVenda.css";
-import { useState, useEffect , useContext } from "react";
-import AppContext from "../../context/AppContext.js"
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../context/AppContext.js";
 
 //icones
 import { FaTrash } from "react-icons/fa6";
@@ -16,7 +16,7 @@ import FaturarVenda from "./components/FaturarVenda/FaturarVenda";
 import Select from "react-select";
 
 function PontoDeVenda() {
-  const {setErroApi} = useContext(AppContext)
+  const { setErroApi } = useContext(AppContext);
 
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
@@ -37,11 +37,14 @@ function PontoDeVenda() {
   const [valorTotal, setValorTotal] = useState(0);
 
   useEffect(() => {
-    fetchapi.ProcurarProdutos("all").then((response) => {
-      setResultadoProdutos(response);
-    }).catch(() => {
-      setErroApi(true)
-    });
+    fetchapi
+      .ProcurarProdutos("all")
+      .then((response) => {
+        setResultadoProdutos(response);
+      })
+      .catch(() => {
+        setErroApi(true);
+      });
   }, []);
 
   const optionsProdutos = [];
@@ -68,20 +71,36 @@ function PontoDeVenda() {
 
   const adidiconarArrayDeVenda = (e) => {
     e.preventDefault();
-    // Verifica se precovenda é um número válido
+
     if (isNaN(precovenda) || isNaN(quantidadeProduto)) {
       console.warn("Preço ou quantidade inválidos.");
       return;
     }
 
-    let objetoDaVenda = {
-      produto_id: id_produto,
-      produto_nome: produto,
-      quantidade: quantidadeProduto,
-      preco_unitario: precovenda,
-      valor_total: precovenda * quantidadeProduto,
-    };
-    setArrayVenda([...arrayVenda, objetoDaVenda]);
+    const index = arrayVenda.findIndex(
+      (item) => item.produto_id === id_produto
+    );
+
+    if (index !== -1) {
+      // Produto já existe, atualiza quantidade e valor total
+      const novaArrayVenda = [...arrayVenda];
+      novaArrayVenda[index].quantidade += Number(quantidadeProduto);
+      novaArrayVenda[index].valor_total =
+        novaArrayVenda[index].quantidade * novaArrayVenda[index].preco_unitario;
+
+      setArrayVenda(novaArrayVenda);
+    } else {
+      // Produto não existe, adiciona normalmente
+      const objetoDaVenda = {
+        produto_id: id_produto,
+        produto_nome: produto,
+        quantidade: quantidadeProduto,
+        preco_unitario: precovenda,
+        valor_total: precovenda * quantidadeProduto,
+      };
+      setArrayVenda([...arrayVenda, objetoDaVenda]);
+    }
+
     setValorTotal(
       (prevValorTotal) => prevValorTotal + precovenda * quantidadeProduto
     );
@@ -145,7 +164,7 @@ function PontoDeVenda() {
                 <input
                   type="number"
                   value={quantidadeProduto}
-                  onChange={(e) => setQuantidadeProduto(e.target.value)}
+                  onChange={(e) => setQuantidadeProduto(Number(e.target.value))}
                 />
               </label>
               <button

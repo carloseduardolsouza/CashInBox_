@@ -120,6 +120,7 @@ function CadastrarFuncionario() {
               onChange={(e) => setCpf(e.target.value)}
               placeholder="CPF"
               value={cpf}
+              required
             />
             <p>
               <strong>Email</strong>

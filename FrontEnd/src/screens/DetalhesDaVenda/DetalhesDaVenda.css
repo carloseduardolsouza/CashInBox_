@@ -142,4 +142,10 @@
 #EscolherNotasArticle {
   position: absolute;
   right: 10px;
+  background: var(--div-color);
+}
+
+#EscolherNotasArticle p:hover {
+  color: var(--button-color);
+  transition: all 0.3s ease;
 }

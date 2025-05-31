@@ -92,7 +92,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
 
   const addFormaPagamento = (e) => {
     e.preventDefault();
-    setAlertaFormaPagamento(false)
+    setAlertaFormaPagamento(false);
     if (faltaPagar <= 0) {
       return;
     }
@@ -173,6 +173,12 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
       .catch(() => {
         //carregar erro
       });
+  };
+
+  const deletarEstaFormaPagamento = (dados, index) => {
+    const novoArray = formaPagemento.filter((_, i) => i !== index);
+    setValorSendoPago((prev) => prev + Number(dados.valor)); // ✅ MELHOR PRÁTICA
+    setFormaPagamento(novoArray);
   };
 
   return (
@@ -290,14 +296,13 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                   value={valorSendoPago}
                 />
                 <button type="submit">ok</button>
-
               </form>
-                {alertaFormaPagamento && (
-                  <div id="alertEscolhaFormaPagamento"  >
-                    ⚠️ Escolha pelo menos uma forma de pagamento antes de
-                    concluir.
-                  </div>
-                )}
+              {alertaFormaPagamento && (
+                <div id="alertEscolhaFormaPagamento">
+                  ⚠️ Escolha pelo menos uma forma de pagamento antes de
+                  concluir.
+                </div>
+              )}
             </div>
           </div>
           <div>
@@ -310,13 +315,18 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                 </tr>
               </thead>
               <tbody>
-                {formaPagemento.map((dados) => {
+                {formaPagemento.map((dados, index) => {
                   return (
                     <tr>
                       <td>{dados.tipo_pagamento}</td>
                       <td>{services.formatarCurrency(dados.valor)}</td>
                       <td>
-                        <button className="DeletarFormPagamentoFaturar">
+                        <button
+                          className="DeletarFormPagamentoFaturar"
+                          onClick={() =>
+                            deletarEstaFormaPagamento(dados, index)
+                          }
+                        >
                           <FaTrash />
                         </button>
                       </td>

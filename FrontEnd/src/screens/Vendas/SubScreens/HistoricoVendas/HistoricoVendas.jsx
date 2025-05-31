@@ -45,6 +45,7 @@ function HistoricoVendas() {
     await Promise.all(arraySelect.map((id) => fetchapi.deletarVenda(id)));
     await carregarVendas()
     setArraySelect([])
+    
   };
 
   return (

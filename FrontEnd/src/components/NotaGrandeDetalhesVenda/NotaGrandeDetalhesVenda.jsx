@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     borderTopColor: "black",
     borderTopStyle: "dashed",
     justifyContent: "space-around",
-    marginTop: 50,
+    marginTop: 20,
     width: "100%",
     alignItems: "center",
     paddingTop: 10,
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
   preFooter: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginVertical: 10,
+    marginVertical: 2,
   },
   footer: {
     borderWidth: 1,
     borderColor: "black",
     height: 60,
-    marginTop: 20,
+    marginTop: 10,
     flexDirection: "column",
     justifyContent: "space-around",
   },
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRightWidth: 0,
     borderBottomWidth: 0,
-    marginVertical: 10,
+    marginVertical: 4,
   },
   tableRow: {
     margin: "auto",
@@ -157,7 +157,7 @@ const NotaGrandeDetalhesVendaPdf = ({
         </Text>
         <Text>Endereço: {cliente.endereco || "Desconhecido"}</Text>
         <Text>
-          Data: {services.formatarData(venda.data_venda || 0) || "Desconhecido"}
+          Data: {services.formatarDataCurta(venda.data_venda) || "Desconhecido"}
         </Text>
       </View>
 
@@ -248,10 +248,7 @@ const NotaGrandeDetalhesVendaPdf = ({
         </Text>
         <Text>Endereço: {cliente.endereco || "Desconhecido"}</Text>
         <Text>
-          Data:{" "}
-          {venda.data_venda
-            ? services.formatarData(venda.data_venda)
-            : "Desconhecido"}
+          Data: {services.formatarDataCurta(venda.data_venda) || "Desconhecido"}
         </Text>
       </View>
 
