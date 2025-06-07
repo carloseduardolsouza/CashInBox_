@@ -22,25 +22,24 @@ function Produtos() {
   const [loadingProdutos, setloadingProdutos] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
 
-  useEffect(() => {
-    const buscarProdutos = async () => {
-      try {
-        const resultado = await fetchapi.ProcurarProdutos(pesquisar);
-        setResultProdutos(resultado);
-      } catch (err) {
-        console.error("Erro ao buscar produtos:", err);
-      }
-    };
+  const buscarProdutos = async () => {
+    try {
+      const resultado = await fetchapi.ProcurarProdutos(pesquisar);
+      setResultProdutos(resultado);
+    } catch (err) {
+      console.error("Erro ao buscar produtos:", err);
+    }
+  };
 
+  useEffect(() => {
     buscarProdutos();
   }, []);
 
   const renderProdutos = async (e) => {
     e.preventDefault();
     setloadingProdutos(true);
-    const produtos = await fetchapi.ProcurarProdutos(pesquisar);
+    buscarProdutos()
     setloadingProdutos(false);
-    setResultProdutos(produtos);
   };
 
   return (

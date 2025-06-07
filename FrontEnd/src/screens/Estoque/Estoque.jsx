@@ -74,7 +74,7 @@ function Estoque() {
           <tr>
             <th>Produto</th>
             <th>Preço de Compra</th>
-            <th>Mergem</th>
+            <th>Margem</th>
             <th>Preço de Venda</th>
             <th>Em Estoque</th>
             <th>Codigo</th>

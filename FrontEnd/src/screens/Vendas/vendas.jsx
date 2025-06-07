@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 // Subtelas
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
 import Orçamentos from "./SubScreens/Orçamentos/Orçamentos";
+import VendasAReceber from "./SubScreens/VendasAReceber/VendasAReceber";
 
 function Vendas() {
   const Data = new Date();
@@ -21,6 +22,8 @@ function Vendas() {
         return <HistoricoVendas />;
       case "orcamentos":
         return <Orçamentos />;
+      case "vendasReceber":
+        return <VendasAReceber/>
       default:
         return null;
     }
@@ -56,6 +59,15 @@ function Vendas() {
             onClick={() => setAbaAtiva("orcamentos")}
           >
             Orçamentos
+          </button>
+
+          <button
+            className={`ButãoVendasAbas ${
+              abaAtiva === "vendasReceber" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("vendasReceber")}
+          >
+            Vendas a receber
           </button>
         </div>
 

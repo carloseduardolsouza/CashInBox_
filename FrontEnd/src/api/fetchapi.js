@@ -375,8 +375,34 @@ const listarVendas = async (filtro, pesquisa) => {
   }
 };
 
+const listarVendasCrediario = async (filtro, pesquisa) => {
+  if (filtro == undefined && pesquisa == undefined) {
+    const vendas = await fetch(`${API_URL}/listarVendasCrediario`)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error;
+      });
+    const data = await vendas.json();
+    return data;
+  }
+};
+
 const listarVendasCliente = async (id) => {
   const vendas = await fetch(`${API_URL}/listarVendasCliente/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
+};
+
+const listarVendasCrediarioVenda = async (id) => {
+  const vendas = await fetch(`${API_URL}/listarVendasCrediarioVenda/${id}`)
     .then((response) => {
       return response;
     })
@@ -440,6 +466,25 @@ const produrarVendaId = async (id) => {
 
 const NovaVendaEmBloco = async (dados) => {
   const response = await fetch(`${API_URL}/novaVenda`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dados),
+  }).catch((error) => {
+    return error;
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao tentar adicionar nova venda");
+  }
+
+  return response;
+};
+
+const NovaVendaCrediario = async (dados) => {
+  const response = await fetch(`${API_URL}/novaVendaCrediario`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -619,7 +664,7 @@ const buscarRelatoriosBasicos = async () => {
   const buscarRelatoriosBasicos = await fetch(`${API_URL}/faturamentoMes`);
   const dados = await buscarRelatoriosBasicos.json();
   return dados;
-}
+};
 
 export default {
   restartApi,
@@ -657,10 +702,13 @@ export default {
   AtualizarProduto,
 
   listarVendas,
+  listarVendasCrediario,
+  listarVendasCrediarioVenda,
   listarVendasCliente,
   listarVendasFuncionario,
   listarOrcamentoCliente,
   listarOrcamentos,
+  NovaVendaCrediario,
   NovaVendaEmBloco,
   produrarVendaId,
   procurarProdutosVenda,

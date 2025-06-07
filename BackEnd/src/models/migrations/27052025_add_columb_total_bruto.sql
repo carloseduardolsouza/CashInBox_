@@ -1,1 +1,1 @@
-ALTER TABLE vendas ADD COLUMB total_bruto REAL;
+ALTER TABLE vendas ADD COLUMN total_bruto REAL;

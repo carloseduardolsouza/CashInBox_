@@ -57,14 +57,6 @@ import { MdOutlineSell } from "react-icons/md";
 import { BsBox2Fill } from "react-icons/bs";
 import { BsBox2 } from "react-icons/bs";
 
-//fidelidade
-import { FaStar } from "react-icons/fa6";
-import { FaRegStar } from "react-icons/fa6";
-
-//SAC cashInBox
-import { PiHeadsetDuotone } from "react-icons/pi";
-import { PiHeadsetFill } from "react-icons/pi";
-
 //contas a pagar
 import { FaMoneyBill1 } from "react-icons/fa6";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
@@ -177,16 +169,6 @@ function App() {
               <p style={style}>Estoque</p>
             </Link>
             <Link
-              to="/fidelidade"
-              className="MenuLateralBox"
-              onClick={() => setStatusMenu("fidelidade")}
-            >
-              {(statusMenu === "fidelidade" && (
-                <FaStar className="iconsMenuLateral" />
-              )) || <FaRegStar className="iconsMenuLateral" />}
-              <p style={style}>Fidelidade</p>
-            </Link>
-            <Link
               to="/contasPagar"
               className="MenuLateralBox"
               onClick={() => setStatusMenu("contasPagar")}
@@ -216,17 +198,6 @@ function App() {
                 <MdInsertChart className="iconsMenuLateral" />
               )) || <MdInsertChartOutlined className="iconsMenuLateral" />}
               <p style={style}>Relatorios</p>
-            </Link>
-
-            <Link
-              to="/centralCashInBox"
-              className="MenuLateralBox"
-              onClick={() => setStatusMenu("centralCashInBox")}
-            >
-              {(statusMenu === "centralCashInBox" && (
-                <PiHeadsetFill className="iconsMenuLateral" />
-              )) || <PiHeadsetDuotone className="iconsMenuLateral" />}
-              <p style={style}>SAC CashInBox</p>
             </Link>
 
             <Link

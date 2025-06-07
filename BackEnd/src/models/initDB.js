@@ -1,11 +1,11 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const fs = require("fs");
-const os = require('os');
+const os = require("os");
 
 // Caminho para a pasta segura do app (pasta persistente por usuário)
-const userDataPath = path.join(os.homedir(), 'AppData', 'Roaming', 'CashInBox'); // Windows
-const dbPath = path.join(userDataPath, 'database.sqlite');
+const userDataPath = path.join(os.homedir(), "AppData", "Roaming", "CashInBox"); // Windows
+const dbPath = path.join(userDataPath, "database.sqlite");
 
 console.log("📁 Banco de dados será salvo em:", dbPath);
 
@@ -51,7 +51,6 @@ async function addColumnIfNotExists(tableName, columnName, columnType) {
 async function applyMigrations() {
   const migrationsDir = path.join(__dirname, "migrations");
 
-  // Garante que a tabela migrations existe antes de tudo
   await runAsync(`CREATE TABLE IF NOT EXISTS migrations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE,
@@ -75,35 +74,39 @@ async function applyMigrations() {
       continue;
     }
 
-    const sql = fs.readFileSync(path.join(migrationsDir, file), "utf8").trim();
-    const alterRegex = /ALTER\s+TABLE\s+(\w+)\s+ADD\s+COLUMN\s+(\w+)\s+(\w+)/i;
-    const match = sql.match(alterRegex);
+    const rawSQL = fs
+      .readFileSync(path.join(migrationsDir, file), "utf8")
+      .trim();
 
-    if (match) {
-      const [, tableName, columnName, columnType] = match;
-      console.log(`🔍 Detectado ALTER TABLE para ${tableName}.${columnName}`);
+    try {
+      // Quebra o SQL em múltiplas instruções, respeitando `;`
+      const statements = rawSQL
+        .split(/;\s*(\r?\n|$)/)
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
 
-      try {
-        await addColumnIfNotExists(
-          tableName,
-          columnName,
-          columnType.toUpperCase()
+      for (const stmt of statements) {
+        // Detecta padrão ALTER TABLE ADD COLUMN
+        const alterAddColMatch = stmt.match(
+          /ALTER TABLE\s+(\w+)\s+ADD COLUMN\s+(\w+)\s+([\w()]+)(.*)/i
         );
-        await runAsync("INSERT INTO migrations (name) VALUES (?)", [file]);
-        console.log(`✅ Migration ${file} registrada com sucesso.`);
-      } catch (err) {
-        console.error(`❌ Erro na migration ${file}:`, err);
-        throw err;
+        if (alterAddColMatch) {
+          const tableName = alterAddColMatch[1];
+          const columnName = alterAddColMatch[2];
+          const columnType = alterAddColMatch[3];
+          // Usa a função que checa se coluna existe antes de criar
+          await addColumnIfNotExists(tableName, columnName, columnType);
+        } else {
+          // Executa normalmente outras queries
+          await runAsync(stmt);
+        }
       }
-    } else {
-      try {
-        await runAsync(sql);
-        await runAsync("INSERT INTO migrations (name) VALUES (?)", [file]);
-        console.log(`✅ Migration ${file} aplicada com sucesso.`);
-      } catch (err) {
-        console.error(`❌ Erro ao aplicar migration ${file}:`, err);
-        throw err;
-      }
+
+      await runAsync("INSERT INTO migrations (name) VALUES (?)", [file]);
+      console.log(`✅ Migration ${file} aplicada com sucesso.`);
+    } catch (err) {
+      console.error(`❌ Erro ao aplicar migration ${file}:`, err.message);
+      throw err;
     }
   }
 }
@@ -193,8 +196,8 @@ async function criarTabelasPrincipais() {
     descontos TEXT,
     acrescimos TEXT,
     valor_total REAL NOT NULL,
-    total_bruto REAL ,
-    status TEXT CHECK(status IN ('concluida', 'pendente', 'cancelada', 'orçamento')) NOT NULL,
+    total_bruto REAL,
+    status TEXT NOT NULL,
     observacoes TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,

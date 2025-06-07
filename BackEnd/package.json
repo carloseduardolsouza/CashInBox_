@@ -19,6 +19,7 @@
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "sqlite3": "^5.1.7",
+    "util": "^0.12.5",
     "whatsapp-web.js": "^1.28.0"
   },
   "devDependencies": {

@@ -1,10 +1,10 @@
 const caixaModels = require("../models/caixaModels");
 
-const iniciarNovoCaixa = async (req , res) => {
-    const dados = req.body
-    const novoCaixa = await caixaModels.iniciarNovoCaixa(dados)
-    return res.status(201).json(novoCaixa)
-}
+const iniciarNovoCaixa = async (req, res) => {
+  const dados = req.body;
+  const novoCaixa = await caixaModels.iniciarNovoCaixa(dados);
+  return res.status(201).json(novoCaixa);
+};
 
 const buscarCaixas = async (req, res) => {
   try {
@@ -16,36 +16,49 @@ const buscarCaixas = async (req, res) => {
   }
 };
 
-const buscarCaixasAbertos = async (req , res) => {
-  const caixaAberto = await caixaModels.buscarCaixasAbertos()
-  return res.status(201).json(caixaAberto)
-}
+const buscarCaixasAbertos = async (req, res) => {
+  const caixaAberto = await caixaModels.buscarCaixasAbertos();
+
+  if (!res) {
+    // Se não passar res, só retorna os dados
+    return caixaAberto;
+  } else {
+    // Se passar res, responde na rota HTTP
+    return res.status(200).json(caixaAberto);
+  }
+};
+
+const adicionarMovimentacaoHandler = async (id, dados) => {
+  const movimentacoes = await caixaModels.adicionarMovimentações(id, dados);
+  return movimentacoes;
+};
 
 const adicionarMovimentações = async (req, res) => {
-    const {id} = req.params
-    const dados = req.body
-    const movimentacoes = await caixaModels.adicionarMovimentações(id , dados)
-    return res.status(201).json(movimentacoes);
-}
+  const { id } = req.params;
+  const dados = req.body;
+  const movimentacoes = await adicionarMovimentacaoHandler(id, dados);
+  return res.status(201).json(movimentacoes);
+};
 
-const buscarMovimentações = async (req , res) => {
-    const {id} = req.params
-    const movimentacoes = await caixaModels.buscarMovimentações(id)
-    return res.status(201).json(movimentacoes)
-}
+const buscarMovimentações = async (req, res) => {
+  const { id } = req.params;
+  const movimentacoes = await caixaModels.buscarMovimentações(id);
+  return res.status(201).json(movimentacoes);
+};
 
-const fecharCaixa = async (req , res) => {
-  const {id} = req.params
-  const dados = req.body
-  const fecharCaixa = await caixaModels.fecharCaixa(id , dados)
-  return res.status(201).json(fecharCaixa)
-}
+const fecharCaixa = async (req, res) => {
+  const { id } = req.params;
+  const dados = req.body;
+  const fecharCaixa = await caixaModels.fecharCaixa(id, dados);
+  return res.status(201).json(fecharCaixa);
+};
 
 module.exports = {
   buscarCaixas,
   buscarCaixasAbertos,
   adicionarMovimentações,
+  adicionarMovimentacaoHandler,
   iniciarNovoCaixa,
   buscarMovimentações,
-  fecharCaixa
+  fecharCaixa,
 };

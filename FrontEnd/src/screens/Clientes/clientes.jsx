@@ -24,26 +24,24 @@ function Clientes() {
 
   //Controlador de Estados
   const [resultClientes, setResultClientes] = useState([]);
-  const [loadingClientes, setloadingClientes] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
 
-  useEffect(() => {
-    const buscarClientes = async () => {
-      try {
-        const resultado = await fetchapi.ProcurarCliente(pesquisar);
-        setResultClientes(resultado);
-      } catch (err) {
-        setErroApi(true);
-      }
-    };
+  const buscarClientes = async () => {
+    try {
+      const resultado = await fetchapi.ProcurarCliente(pesquisar);
+      setResultClientes(resultado);
+    } catch (err) {
+      setErroApi(true);
+    }
+  };
 
+  useEffect(() => {
     buscarClientes();
   }, []);
 
   const renderClientes = async (e) => {
     e.preventDefault();
-    const resultado = await fetchapi.ProcurarCliente(pesquisar);
-    setResultClientes(resultado);
+    buscarClientes()
   };
 
   return (

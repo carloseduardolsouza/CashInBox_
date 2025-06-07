@@ -14,6 +14,7 @@
     "date-fns": "^4.1.0",
     "html2canvas": "^1.4.1",
     "install": "^0.13.0",
+    "jsbarcode": "^3.11.6",
     "jspdf": "^3.0.1",
     "npm": "^11.3.0",
     "puppeteer": "^24.9.0",

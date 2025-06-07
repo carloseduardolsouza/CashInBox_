@@ -3,7 +3,6 @@
   top: 50%;
   right: 50%;
   width: 1000px;
-  height: 500px;
   z-index: 2;
   transform: translate(50%, -50%);
   background: rgba(118, 113, 113, 0.2);
@@ -159,6 +158,23 @@
   color: red;
   cursor: pointer;
 }
+
+#creadirioPropioDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 65%;
+}
+
+#creadirioPropioDiv input[type="number"] {
+  width: 40px;
+}
+
+#creadirioPropioDiv div {
+  display: flex;
+  flex-direction: column;
+}
+
 
 #alertEscolhaFormaPagamento {
   background-color: #ff7777;

@@ -150,6 +150,7 @@ function interpretarBoleto(codigo) {
   };
 }
 
+
 export default {
   formatarCurrency,
   formatarCNPJ,

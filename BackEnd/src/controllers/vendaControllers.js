@@ -5,6 +5,11 @@ const NovaVenda = async (req, res) => {
   return res.status(201).json(venda);
 };
 
+const NovaVendaCrediario = async (req, res) => {
+  const venda = await vendaModels.NovaVendaCrediario(req.body);
+  return res.status(201).json(venda);
+};
+
 const listarVendas = async (req, res) => {
   const { filtro, pesquisa } = req.params;
   const vendas = await vendaModels.listarVendas(filtro, pesquisa);
@@ -14,6 +19,12 @@ const listarVendas = async (req, res) => {
 const listarVendasCliente = async (req , res) => {
   const {id} = req.params
   const vendas = await vendaModels.listarVendasCliente(id)
+  return res.status(201).json(vendas)
+}
+
+const listarVendasCrediarioVenda = async (req , res) => {
+  const {id} = req.params
+  const vendas = await vendaModels.listarVendasCrediarioVenda(id)
   return res.status(201).json(vendas)
 }
 
@@ -33,6 +44,12 @@ const listarOrcamentos = async (req, res) => {
   const { filtro, pesquisa } = req.params;
   const orcamentos = await vendaModels.listarOrcamentos(filtro, pesquisa);
   return res.status(201).json(orcamentos);
+};
+
+const listarVendasCrediario = async (req, res) => {
+  const { filtro, pesquisa } = req.params;
+  const vendas = await vendaModels.listarVendasCrediario(filtro, pesquisa);
+  return res.status(201).json(vendas);
 };
 
 const produrarVendaId = async (req, res) => {
@@ -61,6 +78,7 @@ const deletarVenda = async (req, res) => {
 
 module.exports = {
   NovaVenda,
+  NovaVendaCrediario,
   listarVendas,
   listarVendasCliente,
   listarOrcamentoCliente,
@@ -69,5 +87,7 @@ module.exports = {
   procurarProdutosVenda,
   procurarPagamentoVenda,
   deletarVenda,
-  listarOrcamentos
+  listarOrcamentos,
+  listarVendasCrediario,
+  listarVendasCrediarioVenda
 };

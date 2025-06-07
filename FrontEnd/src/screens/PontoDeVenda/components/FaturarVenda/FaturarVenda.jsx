@@ -30,6 +30,39 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [faltaPagar, setFaltaPagar] = useState(0);
   const [troco, setTroco] = useState(0);
 
+  const [numParcelas, setNumParcelas] = useState("");
+  const [dataPrimeiraParcela, setDataPrimeiraParcela] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+
+  const [parcelasGeradas, setParcelasGeradas] = useState([]);
+
+  const gerarParcelas = () => {
+  // Validações básicas
+  if (!totalPagar || !numParcelas || !dataPrimeiraParcela) {
+    console.warn("Verifique os valores: totalPagar, numParcelas ou dataPrimeiraParcela estão faltando.");
+    return;
+  }
+
+  const parcelas = [];
+  const valorParcela = +(parseFloat(totalPagar) / parseInt(numParcelas)).toFixed(2);
+  const dataBase = new Date(dataPrimeiraParcela);
+
+  for (let i = 0; i < parseInt(numParcelas); i++) {
+    const vencimento = new Date(dataBase);
+    vencimento.setMonth(vencimento.getMonth() + i);
+
+    parcelas.push({
+      numero_parcela: i + 1,
+      valor_parcela: valorParcela,
+      data_vencimento: vencimento.toISOString().split("T")[0], // formato YYYY-MM-DD
+    });
+  }
+
+  setParcelasGeradas(parcelas);
+};
+
+
   const [alertaFormaPagamento, setAlertaFormaPagamento] = useState(false);
 
   useEffect(() => {
@@ -138,13 +171,23 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   };
 
   const faturarVendaEmBloco = (status) => {
-    if (formaPagemento.length <= 0 && status === "concluida") {
+    // Verifica se a forma de pagamento está vazia E não é crediário próprio
+    if (
+      formaPagemento.length <= 0 &&
+      status === "concluida" &&
+      formaPagementoAtual !== "Crediario Propio"
+    ) {
       setAlertaFormaPagamento(true); // mostra o alerta dentro do form
       return;
     }
+
+    if (formaPagementoAtual === "Crediario Propio" && id_cliente == 0) {
+      window.alert("Para vender no crediario e nescessario escolher um cliente")
+      return
+    }
     setAlertaFormaPagamento(false); // limpa o alerta se passou
 
-    let dados = {
+    const dadosComuns = {
       cliente_id: id_cliente,
       nome_cliente: nome_cliente,
       funcionario_id: id_vendedor,
@@ -157,22 +200,45 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
       )} / ${acrescimoPorcentagem.toFixed(2)}%`,
       total_bruto: valorCompra,
       valor_total: totalPagar,
-      status: status,
       observacoes: "",
       produtos: venda,
-      pagamentos: formaPagemento,
     };
 
-    fetchapi
-      .NovaVendaEmBloco(dados)
-      .then(() => {
-        limparVenda([]);
-        limparValor(0);
-        fechar(false);
-      })
-      .catch(() => {
-        //carregar erro
-      });
+    if (formaPagementoAtual === "Crediario Propio" && status === "concluida") {
+      const dados = {
+        ...dadosComuns,
+        status: "pendente",
+        parcelas: parcelasGeradas,
+      };
+
+      fetchapi
+        .NovaVendaCrediario(dados)
+        .then(() => {
+          limparVenda([]);
+          limparValor(0);
+          fechar(false);
+        })
+        .catch(() => {
+          //carregar erro
+        });
+    } else {
+      const dados = {
+        ...dadosComuns,
+        status: status,
+        pagamentos: formaPagemento,
+      };
+
+      fetchapi
+        .NovaVendaEmBloco(dados)
+        .then(() => {
+          limparVenda([]);
+          limparValor(0);
+          fechar(false);
+        })
+        .catch(() => {
+          // tratar erro aqui
+        });
+    }
   };
 
   const deletarEstaFormaPagamento = (dados, index) => {
@@ -191,6 +257,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
           <div>
             <p>Total da venda:</p>
             <input
+              readOnly
               type="text"
               placeholder="00,00"
               value={services.formatarCurrency(valorCompra)}
@@ -240,7 +307,11 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
           </div>
           <div>
             <p>Total a Pagar:</p>
-            <input type="text" value={services.formatarCurrency(totalPagar)} />
+            <input
+              type="text"
+              value={services.formatarCurrency(totalPagar)}
+              readOnly
+            />
           </div>
           <div>
             <p>itens</p>
@@ -280,22 +351,56 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                 id="FaturarVendaFormaDePagamento"
                 style={{ position: "relative" }}
               >
-                <p>Forma de pagamento:</p>
-                <select
-                  onChange={(e) => setFormaPagementoAtual(e.target.value)}
-                  value={formaPagementoAtual}
-                >
-                  <option value="Dinheiro">Dinheiro</option>
-                  <option value="Pix">Pix</option>
-                  <option value="Cartão de credito">Cartão de credito</option>
-                  <option value="Cartão de debito">Cartão de debito</option>
-                </select>
-                <input
-                  type="text"
-                  onChange={(e) => setValorSendoPago(e.target.value)}
-                  value={valorSendoPago}
-                />
-                <button type="submit">ok</button>
+                <div>
+                  <p>Forma de pagamento:</p>
+                  <select
+                    onChange={(e) => setFormaPagementoAtual(e.target.value)}
+                    value={formaPagementoAtual}
+                  >
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Cartão de credito">Cartão de credito</option>
+                    <option value="Cartão de debito">Cartão de debito</option>
+                    <option value="Crediario Propio">Crediario Propio</option>
+                  </select>
+                </div>
+
+                {formaPagementoAtual === "Crediario Propio" ? (
+                  <div id="creadirioPropioDiv">
+                    <div>
+                      <label>N° parcelas:</label>
+                      <input
+                        required
+                        type="number"
+                        value={numParcelas}
+                        onChange={(e) => setNumParcelas(e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label>primeiro vencimento:</label>
+                      <input
+                        required
+                        type="date"
+                        value={dataPrimeiraParcela}
+                        onChange={(e) => setDataPrimeiraParcela(e.target.value)}
+                      />
+                    </div>
+
+                    <button type="button" onClick={gerarParcelas}>
+                      OK
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <input
+                      type="text"
+                      onChange={(e) => setValorSendoPago(e.target.value)}
+                      value={valorSendoPago}
+                    />
+                    <button type="submit">ok</button>
+                  </div>
+                )}
               </form>
               {alertaFormaPagamento && (
                 <div id="alertEscolhaFormaPagamento">
@@ -305,52 +410,80 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
               )}
             </div>
           </div>
-          <div>
-            <table className="Table">
-              <thead>
-                <tr>
-                  <th>Forma de pagamento</th>
-                  <th>Valor</th>
-                  <th>Deletar</th>
-                </tr>
-              </thead>
-              <tbody>
-                {formaPagemento.map((dados, index) => {
-                  return (
+          {formaPagementoAtual === "Crediario Propio" ? (
+            <div>
+              <table className="Table">
+                <thead>
+                  <tr>
+                    <th>Vencimento</th>
+                    <th>Valor</th>
+                    <th>N° Parcela</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {parcelasGeradas.map((dados, index) => {
+                    return (
+                      <tr>
+                        <td>{services.formatarData(dados.data_vencimento)}</td>
+                        <td>
+                          {services.formatarCurrency(dados.valor_parcela)}
+                        </td>
+                        <td>{dados.numero_parcela}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div>
+              <div>
+                <table className="Table">
+                  <thead>
                     <tr>
-                      <td>{dados.tipo_pagamento}</td>
-                      <td>{services.formatarCurrency(dados.valor)}</td>
-                      <td>
-                        <button
-                          className="DeletarFormPagamentoFaturar"
-                          onClick={() =>
-                            deletarEstaFormaPagamento(dados, index)
-                          }
-                        >
-                          <FaTrash />
-                        </button>
-                      </td>
+                      <th>Forma de pagamento</th>
+                      <th>Valor</th>
+                      <th>Deletar</th>
                     </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-          <div id="FaturarVendaFaltaPagar">
-            <label>
-              <p>Falta pagar:</p>
-              <input
-                type="text"
-                value={services.formatarCurrency(faltaPagar)}
-              />
-            </label>
-            <label>
-              <p>Troco:</p>
-              <input type="text" value={services.formatarCurrency(troco)} />
-            </label>
-          </div>
+                  </thead>
+                  <tbody>
+                    {formaPagemento.map((dados, index) => {
+                      return (
+                        <tr>
+                          <td>{dados.tipo_pagamento}</td>
+                          <td>{services.formatarCurrency(dados.valor)}</td>
+                          <td>
+                            <button
+                              className="DeletarFormPagamentoFaturar"
+                              onClick={() =>
+                                deletarEstaFormaPagamento(dados, index)
+                              }
+                            >
+                              <FaTrash />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div id="FaturarVendaFaltaPagar">
+                <label>
+                  <p>Falta pagar:</p>
+                  <input
+                    type="text"
+                    value={services.formatarCurrency(faltaPagar)}
+                  />
+                </label>
+                <label>
+                  <p>Troco:</p>
+                  <input type="text" value={services.formatarCurrency(troco)} />
+                </label>
+              </div>
+            </div>
+          )}
         </div>
-        <div></div>
       </div>
       <div id="areaButtons">
         <div>

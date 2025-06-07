@@ -8,6 +8,7 @@ import { pdf } from "@react-pdf/renderer";
 // Icones
 import { BsFillSendFill } from "react-icons/bs";
 
+import CarnePagamento from "../../components/NotaCarné/NotaCarne";
 import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
 import NotaFiscalDANFE from "../../components/NotaFiscalDetalhesVenda/NotaFiscalDetalhesVenda";
 
@@ -27,29 +28,35 @@ function DetalhesDaVenda() {
   const [cliente, setCliente] = useState({});
   const [produtos, setProdutos] = useState([]);
   const [pagamentos, setPagamentos] = useState([]);
+  const [parcelas, setParcelas] = useState([]);
+
+  const carregarDados = async () => {
+    try {
+      const vendaResponse = await fetchapi.produrarVendaId(id);
+      setVenda(vendaResponse[0]);
+
+      const clienteResponse = await fetchapi.ProcurarClienteId(
+        vendaResponse[0].cliente_id
+      );
+      setCliente(clienteResponse[0]);
+
+      const produtosResponse = await fetchapi.procurarProdutosVenda(id);
+      setProdutos(produtosResponse);
+
+      const pagamentosResponse = await fetchapi.procurarPagamentoVenda(id);
+      setPagamentos(pagamentosResponse);
+
+      if (vendaResponse[0].status === "Crediario pendente") {
+        const parcelasResponse = await fetchapi.listarVendasCrediarioVenda(id);
+        setParcelas(parcelasResponse);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar dados da venda:", error);
+      setErroApi(true);
+    }
+  };
 
   useEffect(() => {
-    const carregarDados = async () => {
-      try {
-        const vendaResponse = await fetchapi.produrarVendaId(id);
-        setVenda(vendaResponse[0]);
-
-        const clienteResponse = await fetchapi.ProcurarClienteId(
-          vendaResponse[0].cliente_id
-        );
-        setCliente(clienteResponse[0]);
-
-        const produtosResponse = await fetchapi.procurarProdutosVenda(id);
-        setProdutos(produtosResponse);
-
-        const pagamentosResponse = await fetchapi.procurarPagamentoVenda(id);
-        setPagamentos(pagamentosResponse);
-      } catch (error) {
-        console.error("Erro ao carregar dados da venda:", error);
-        setErroApi(true);
-      }
-    };
-
     carregarDados();
   }, [id, setErroApi]);
 
@@ -63,90 +70,63 @@ function DetalhesDaVenda() {
     }
   };
 
-  var dados = {
-    emitente: {
-      nome: "Empresa Exemplo Ltda",
-      endereco: "Rua das Flores, 123 - Centro - São Paulo/SP",
-      cnpj: "12.345.678/0001-99",
+  const CarnePagamentoDados = {
+    logo: "URL_DA_IMAGEM",
+    cliente: {
+      nome: cliente?.nome || "indefinido",
+      endereco: cliente?.endereco || "indefinido",
+      cpf_cnpj: services.formatarCPF(cliente?.cpf_cnpj || "indefinido"),
     },
-    destinatario: {
-      nome: "João da Silva",
-      endereco: "Av. Paulista, 1000 - Bela Vista - São Paulo/SP",
-      cnpj: "123.456.789-00",
-    },
-    nfe: {
-      numero: "12345",
-      serie: "1",
-      data_emissao: "2025-05-29",
-    },
-    produtos: [
-      {
-        codigo: "001",
-        descricao: "Produto A",
-        ncm: "1234.56.78",
-        cfop: "5102",
-        quantidade: 2,
-        valor_unitario: 50.0,
-        valor_total: 100.0,
-      },
-      {
-        codigo: "002",
-        descricao: "Produto B com descrição maior",
-        ncm: "8765.43.21",
-        cfop: "6102",
-        quantidade: 1,
-        valor_unitario: 200.0,
-        valor_total: 200.0,
-      },
-    ],
-    impostos: {
-      icms: 30.0,
-      ipi: 10.0,
-    },
-    totais: {
-      total: 310.0,
-    },
-    transportadora: {
-      razao_social: "Transportes Rápidos Ltda",
-      frete: "Por conta do destinatário",
-    },
-    dados_adicionais: "Entrega prevista para 5 dias úteis.",
-    chave_acesso: "1234 5678 9012 3456 7890 1234 5678 9012 3456",
-    protocolo_autorizacao: "135798642",
+    instrucoes: "Pague até a data de vencimento para evitar juros.",
+    parcelas: parcelas,
+    emitente: dadosLoja.nomeEstabelecimento,
+    data_emissao: services.formatarDataCurta(venda.data_venda),
   };
 
   const handleDownload = async (tipoNota) => {
     let doc;
-    if (tipoNota == "NotaGrande") {
-      doc = (
-        <NotaGrandeDetalhesVenda
-          venda={venda}
-          cliente={cliente}
-          produtos={produtos}
-          dadosLoja={dadosLoja}
-          pagamento={pagamentos}
-        />
-      );
-    }
-    if (tipoNota == "NotaPequena") {
-      doc = (
-        <NotaFiscalDANFE
-          dados={dados}
-        />
-      );
+
+    switch (tipoNota) {
+      case "NotaGrande":
+        doc = (
+          <NotaGrandeDetalhesVenda
+            venda={venda}
+            cliente={cliente}
+            produtos={produtos}
+            dadosLoja={dadosLoja}
+            pagamento={pagamentos}
+          />
+        );
+        break;
+
+      case "NotaPequena":
+        // Aqui, trate direito ou mostre um aviso
+        console.warn("NotaPequena ainda não implementada");
+        return;
+
+      case "CarneCrediario":
+        doc = <CarnePagamento dados={CarnePagamentoDados} />;
+        break;
+
+      default:
+        console.error("Tipo de nota desconhecido:", tipoNota);
+        return;
     }
 
-    if (tipoNota == "NotaRomaneio") {
-      return;
-    }
-
+    // Se chegou até aqui, tem doc pra gerar PDF
     const asPdf = pdf();
     asPdf.updateContainer(doc);
     const blob = await asPdf.toBlob();
 
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `venda#${id}.pdf`;
+    link.download = `venda#${id} - ${
+      tipoNota === "CarneCrediario"
+        ? "carnePagamento"
+        : tipoNota === "NotaGrande"
+        ? "Nota Grande"
+        : tipoNota
+    }.pdf`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -346,12 +326,12 @@ function DetalhesDaVenda() {
                 </p>
                 <p
                   onClick={() => {
-                    handleDownload("NotaRomaneio");
+                    handleDownload("CarneCrediario");
                     setEscolherNotas(false);
                   }}
                   style={{ cursor: "pointer", padding: "8px", margin: 0 }}
                 >
-                  Nota Romaneio
+                  Carnê crediario
                 </p>
               </div>
 
