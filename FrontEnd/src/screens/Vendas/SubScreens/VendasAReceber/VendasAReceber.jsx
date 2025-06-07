@@ -1,7 +1,6 @@
 import "./VendasAReceber.css";
 import { useState, useContext, useEffect } from "react";
 import AppContext from "../../../../context/AppContext";
-import { Link } from "react-router-dom";
 
 import services from "../../../../services/services";
 
@@ -20,6 +19,12 @@ function VendasAReceber() {
       setErroApi(true);
     }
   };
+
+  const faturarVendaCrediario = async (id) => {
+    const pago = fetchapi.receberPagamentoParcela(id).then(() => {
+      carregarVendasCrediario()
+    })
+  }
 
   useEffect(() => {
     carregarVendasCrediario();
@@ -43,7 +48,7 @@ function VendasAReceber() {
             return (
               <tr>
                 <td>
-                  <button className="DetalhesHistoricoVendas">Faturar</button>
+                  <button className="DetalhesHistoricoVendas" onClick={() => faturarVendaCrediario(dados.id)}>Faturar</button>
                 </td>
                 <td>{dados.nome_cliente}</td>
                 <td>{services.formatarData(dados.data_vencimento)}</td>

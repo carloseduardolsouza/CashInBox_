@@ -288,7 +288,7 @@ const listarVendasCrediario = async () => {
   let query;
   let values = [];
 
-  query = `SELECT * FROM crediario_parcelas`;
+  query = `SELECT * FROM crediario_parcelas WHERE status == "pendente"`;
 
   const vendas = await new Promise((resolve, reject) => {
     connection.all(query, values, (err, rows) => {
@@ -377,6 +377,60 @@ const listarVendasFuncionario = async (id) => {
   });
 
   return vendas.reverse();
+};
+
+const receberVendaCrediario = async (id) => {
+  const dataPagamento = new Date().toISOString();
+
+  const query = `
+    UPDATE crediario_parcelas 
+    SET status = ?, data_pagamento = ? 
+    WHERE id = ?
+  `;
+
+  const values = ["pago", dataPagamento, id];
+
+  try {
+    // Atualiza o status da parcela
+    await runAsync(query, values);
+
+    // Pega os dados da parcela pra usar na movimentação
+    const parcela = await allAsync(
+      `SELECT * FROM crediario_parcelas WHERE id = ?`,
+      [id]
+    );
+
+    if (!parcela || parcela.length === 0) {
+      throw new Error("Parcela não encontrada");
+    }
+
+    const valorParcela = parcela[0].valor_parcela;
+
+    // Busca o caixa aberto
+    const caixaAberto = await caixaControlles.buscarCaixasAbertos();
+
+    if (caixaAberto.length > 0) {
+      const dadosMovimentacao = {
+        id: caixaAberto[0].id,
+        descricao: `Pagamento crediário ,venda #${id}`,
+        tipo: "entrada",
+        valor: valorParcela,
+      };
+
+      await caixaControlles.adicionarMovimentacaoHandler(
+        caixaAberto[0].id,
+        dadosMovimentacao
+      );
+    }
+
+    return {
+      success: true,
+      updatedId: id,
+      valor: valorParcela,
+    };
+  } catch (err) {
+    throw err;
+  }
 };
 
 const listarOrcamentos = async (filtro, pesquisa) => {
@@ -476,8 +530,19 @@ const deletarVenda = async (id) => {
   });
 
   const queryFormaPagamento = `DELETE FROM pagamentos WHERE venda_id = ${id}`;
-  return new Promise((resolve, reject) => {
+  new Promise((resolve, reject) => {
     connection.run(queryDeleteItens, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(this.lastID);
+      }
+    });
+  });
+
+  const queryParcelasCrediario = `DELETE FROM crediario_parcelas WHERE id_venda = ${id}`;
+  return new Promise((resolve, reject) => {
+    connection.run(queryParcelasCrediario, function (err) {
       if (err) {
         reject(err);
       } else {
@@ -498,7 +563,8 @@ module.exports = {
   produrarVendaId,
   procurarProdutosVenda,
   deletarVenda,
+  receberVendaCrediario,
   listarOrcamentos,
   procurarPagamentoVenda,
-  listarVendasCrediarioVenda
+  listarVendasCrediarioVenda,
 };

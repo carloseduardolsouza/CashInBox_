@@ -1,6 +1,6 @@
 {
   "name": "CashInBox",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "main.js",
   "scripts": {
     "build-react": "cd frontend && npm install && npm run build",

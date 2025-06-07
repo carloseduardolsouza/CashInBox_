@@ -413,6 +413,24 @@ const listarVendasCrediarioVenda = async (id) => {
   return data;
 };
 
+const receberPagamentoParcela = async (id) => {
+  const vendas = await fetch(`${API_URL}/receberVendaCrediario/${id}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
+};
+
 const listarVendasFuncionario = async (id) => {
   const vendas = await fetch(`${API_URL}/listarVendasFuncionario/${id}`)
     .then((response) => {
@@ -706,6 +724,7 @@ export default {
   listarVendasCrediarioVenda,
   listarVendasCliente,
   listarVendasFuncionario,
+  receberPagamentoParcela,
   listarOrcamentoCliente,
   listarOrcamentos,
   NovaVendaCrediario,

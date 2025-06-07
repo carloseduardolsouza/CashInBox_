@@ -39,9 +39,9 @@ const vendaControlles = require("./controllers/vendaControllers");
 const userController = require("./controllers/userController");
 const caixaControlles = require("./controllers/caixaControlles");
 const services = require("./services/services");
-const automacao = require("./services/automacao")
-const relatorios = require("./services/relatorios")
-const configController = require("./controllers/configController")
+const automacao = require("./services/automacao");
+const relatorios = require("./services/relatorios");
+const configController = require("./controllers/configController");
 
 // Rotas de clientes
 router.get("/clientes/:id", clientesControllers.procurarCliente);
@@ -71,7 +71,7 @@ router.post(
   produtosControllers.novoProduto
 );
 router.post(
-  "/novaImagemProduto/:id", 
+  "/novaImagemProduto/:id",
   upload.array("imagens"),
   produtosControllers.novaImagemProduto
 );
@@ -99,9 +99,22 @@ router.post("/novaVenda", vendaControlles.NovaVenda);
 router.post("/novaVendaCrediario", vendaControlles.NovaVendaCrediario);
 router.get("/listarVendas/:filtro?/:pesquisa?", vendaControlles.listarVendas);
 router.get("/listarVendasCliente/:id", vendaControlles.listarVendasCliente);
-router.get("/listarVendasFuncionario/:id", vendaControlles.listarVendasFuncionario);
-router.get("/listarOrcamentoCliente/:id", vendaControlles.listarOrcamentoCliente);
-router.get("/listarVendasCrediarioVenda/:id", vendaControlles.listarVendasCrediarioVenda);
+router.get(
+  "/listarVendasFuncionario/:id",
+  vendaControlles.listarVendasFuncionario
+);
+router.get(
+  "/listarOrcamentoCliente/:id",
+  vendaControlles.listarOrcamentoCliente
+);
+router.get(
+  "/listarVendasCrediarioVenda/:id",
+  vendaControlles.listarVendasCrediarioVenda
+);
+router.put(
+  "/receberVendaCrediario/:id",
+  vendaControlles.receberVendaCrediario
+);
 router.get(
   "/listarOrcamentos/:filtro?/:pesquisa?",
   vendaControlles.listarOrcamentos
@@ -112,7 +125,10 @@ router.get(
 );
 router.get("/procurarVendaId/:id", vendaControlles.produrarVendaId);
 router.get("/procurarProdutosVenda/:id", vendaControlles.procurarProdutosVenda);
-router.get("/procurarPagamentoVenda/:id", vendaControlles.procurarPagamentoVenda);
+router.get(
+  "/procurarPagamentoVenda/:id",
+  vendaControlles.procurarPagamentoVenda
+);
 router.delete("/deletarVenda/:id", vendaControlles.deletarVenda);
 
 //Rotas caixa
@@ -137,9 +153,9 @@ router.post("/salvarConfiguracoes", configController.salvarDados);
 // Outras rotas
 router.get("/restart", services.restart);
 
-router.get("/faturamentoMes" , relatorios.calcularFaturamentoMensal)
+router.get("/faturamentoMes", relatorios.calcularFaturamentoMensal);
 
-router.post("/EnviarMenssagemWhatsapp" , automacao.enviarMensagem)
-router.get("/qrCodeAutomacao" , automacao.qrCode)
+router.post("/EnviarMenssagemWhatsapp", automacao.enviarMensagem);
+router.get("/qrCodeAutomacao", automacao.qrCode);
 
 module.exports = router;

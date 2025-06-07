@@ -28,6 +28,12 @@ const listarVendasCrediarioVenda = async (req , res) => {
   return res.status(201).json(vendas)
 }
 
+const receberVendaCrediario = async (req , res) => {
+  const {id} = req.params
+  const vendas = await vendaModels.receberVendaCrediario(id)
+  return res.status(201).json(vendas)
+}
+
 const listarOrcamentoCliente = async (req , res) => {
   const {id} = req.params
   const vendas = await vendaModels.listarOrcamentoCliente(id)
@@ -88,6 +94,7 @@ module.exports = {
   procurarPagamentoVenda,
   deletarVenda,
   listarOrcamentos,
+  receberVendaCrediario,
   listarVendasCrediario,
   listarVendasCrediarioVenda
 };
