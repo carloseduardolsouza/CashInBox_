@@ -8,7 +8,7 @@ import { FaEdit } from "react-icons/fa";
 //componentes
 import NovaConta from "./components/NovaConta/NovaConta";
 import EditarConta from "./components/EditarConta/EditarConta";
-import FunçãoNãoDisponivel from "../../components/FunçãoNãoDisponivel/FunçãoNãoDisponivel";
+import EmBreve from "../../components/EmBreve/EmBreve";
 
 function ContasAPagar() {
   const [abaSobreposta, setAbaSopreposta] = useState(null);
@@ -26,6 +26,7 @@ function ContasAPagar() {
 
   return (
     <div id="ContasAPagar">
+      {<EmBreve/>}
       {renderAbaSobrePosta()}
       <h2>Contas a pagar</h2>
       <article className="ArticleClientes">

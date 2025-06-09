@@ -28,6 +28,6 @@
   font-weight: 600;
   margin-top: 10px;
   cursor: pointer;
-  background-color: #0295ff;
+  background-color: var(--buton-color);
   color: white;
 }

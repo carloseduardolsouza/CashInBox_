@@ -52,7 +52,7 @@ function HistoricoVendas() {
   return (
     <div>
       <div id="AreaFIltroHistoricoVendas">
-        <div>
+        <div id="filterHistoricoVendas">
           <input
             type="date"
             className="FilterDateVendas"
@@ -66,7 +66,7 @@ function HistoricoVendas() {
               carregarVendas(); // agora sim: valor atualizado
             }}
           >
-            <FaFilter />
+            <FaFilter  id="FaFilter"/>
           </button>
         </div>
 

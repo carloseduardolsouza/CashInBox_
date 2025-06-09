@@ -93,7 +93,7 @@ const CarnePagamento = ({ dados }) => (
               </View>
               <View style={styles.box}>
                 <Text style={styles.sectionTitle}>Valor</Text>
-                <Text style={styles.fieldText}>R$ {parcela.valor_parcela}</Text>
+                <Text style={styles.fieldText}>{services.formatarCurrency(parcela.valor_parcela)}</Text>
               </View>
             </View>
 
@@ -116,7 +116,7 @@ const CarnePagamento = ({ dados }) => (
             <View style={styles.row}>
               <View style={styles.box}>
                 <Text style={styles.sectionTitle}>Valor</Text>
-                <Text style={styles.fieldText}>R$ {parcela.valor_parcela}</Text>
+                <Text style={styles.fieldText}>{services.formatarCurrency(parcela.valor_parcela)}</Text>
               </View>
               <View style={styles.box}>
                 <Text style={styles.sectionTitle}>Vencimento</Text>

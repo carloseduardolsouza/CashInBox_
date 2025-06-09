@@ -290,7 +290,12 @@ const listarVendasCrediario = async () => {
   let query;
   let values = [];
 
-  query = `SELECT * FROM crediario_parcelas WHERE status == "pendente"`;
+  query = `
+    SELECT * 
+    FROM crediario_parcelas 
+    WHERE status != "pago" 
+    ORDER BY data_vencimento ASC
+  `;
 
   const vendas = await new Promise((resolve, reject) => {
     connection.all(query, values, (err, rows) => {
@@ -302,7 +307,7 @@ const listarVendasCrediario = async () => {
     });
   });
 
-  return vendas.reverse();
+  return vendas;
 };
 
 const listarVendasCliente = async (id) => {

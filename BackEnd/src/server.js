@@ -1,6 +1,8 @@
 // ✅ Carrega variáveis de ambiente antes de tudo
 require("dotenv").config();
 
+const rotinas = require("./services/rotinas")
+
 const path = require("path");
 const fs = require("fs");
 
@@ -26,5 +28,6 @@ require("./models/initDB");  // initDB deve usar process.env.DB_PATH ou similar
 const PORT = process.env.PORT || 3322;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Aplicação rodando em http://localhost:${PORT}`);
+  console.log(`🚀 Aplicação de CashInBox rodando em http://localhost:${PORT}`);
+  rotinas.verificarVencimentos()
 });

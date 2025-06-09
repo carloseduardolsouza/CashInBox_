@@ -30,7 +30,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [faltaPagar, setFaltaPagar] = useState(0);
   const [troco, setTroco] = useState(0);
 
-  const [numParcelas, setNumParcelas] = useState("");
+  const [numParcelas, setNumParcelas] = useState(1);
   const [dataPrimeiraParcela, setDataPrimeiraParcela] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -40,7 +40,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const gerarParcelas = () => {
   // Validações básicas
   if (!totalPagar || !numParcelas || !dataPrimeiraParcela) {
-    console.warn("Verifique os valores: totalPagar, numParcelas ou dataPrimeiraParcela estão faltando.");
+    window.warn("Verifique os valores: totalPagar, numParcelas ou dataPrimeiraParcela estão faltando.");
     return;
   }
 
@@ -183,6 +183,11 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
 
     if (formaPagementoAtual === "Crediario Propio" && id_cliente == 0) {
       window.alert("Para vender no crediario e nescessario escolher um cliente")
+      return
+    }
+
+    if (formaPagementoAtual === "Crediario Propio" && parcelasGeradas.length === 0) {
+      window.alert("Gere pelo menos 1 parcela para vender no crediario")
       return
     }
     setAlertaFormaPagamento(false); // limpa o alerta se passou
@@ -375,6 +380,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                       <input
                         required
                         type="number"
+                        min={1}
                         value={numParcelas}
                         onChange={(e) => setNumParcelas(e.target.value)}
                       />
@@ -427,7 +433,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                   {parcelasGeradas.map((dados, index) => {
                     return (
                       <tr>
-                        <td>{services.formatarData(dados.data_vencimento)}</td>
+                        <td>{services.formatarDataNascimento(dados.data_vencimento)}</td>
                         <td>
                           {services.formatarCurrency(dados.valor_parcela)}
                         </td>

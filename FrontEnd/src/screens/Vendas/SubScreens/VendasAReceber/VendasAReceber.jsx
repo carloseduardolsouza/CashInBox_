@@ -51,7 +51,7 @@ function VendasAReceber() {
                   <button className="DetalhesHistoricoVendas" onClick={() => faturarVendaCrediario(dados.id)}>Faturar</button>
                 </td>
                 <td>{dados.nome_cliente}</td>
-                <td>{services.formatarData(dados.data_vencimento)}</td>
+                <td>{services.formatarDataNascimento(dados.data_vencimento)}</td>
                 <td>{services.formatarCurrency(dados.valor_parcela)}</td>
                 <td>{dados.status}</td>
               </tr>

@@ -2,6 +2,8 @@ import "./vendas.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { FaComputer } from "react-icons/fa6";
+
 // Subtelas
 import HistoricoVendas from "./SubScreens/HistoricoVendas/HistoricoVendas";
 import Orçamentos from "./SubScreens/Orçamentos/Orçamentos";
@@ -38,7 +40,7 @@ function Vendas() {
 
       <article className="ArticleVendas">
         <Link to={"/pontoDeVenda"} className="NovaVenda">
-          Nova Venda
+          <FaComputer /> Nova Venda
         </Link>
       </article>
 
