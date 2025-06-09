@@ -1,6 +1,16 @@
 const QRCode = require("qrcode");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcodeTerminal = require("qrcode-terminal");
+const dns = require("dns");
+
+// Função para verificar se há conexão com a internet
+const temConexaoInternet = () => {
+  return new Promise((resolve) => {
+    dns.lookup("google.com", (err) => {
+      resolve(!err);
+    });
+  });
+};
 
 // Função para gerar mensagem de compra
 function gerarMensagemCompra(dados) {
@@ -24,7 +34,7 @@ function gerarMensagemCompra(dados) {
 // Inicializa cliente WhatsApp com sessão local
 const client = new Client({
   authStrategy: new LocalAuth(),
-  headless: true, // Headless ON pra não aparecer
+  headless: true,
   args: [
     "--no-sandbox",
     "--disable-setuid-sandbox",
@@ -32,7 +42,7 @@ const client = new Client({
     "--disable-accelerated-2d-canvas",
     "--no-first-run",
     "--no-zygote",
-    "--single-process", // tenta rodar tudo num processo só
+    "--single-process",
     "--disable-gpu",
     "--window-size=1920,1080",
   ],
@@ -45,14 +55,12 @@ let qrTimeout = null;
 
 // === Eventos do cliente ===
 
-// QR Code gerado
 client.on("qr", (qr) => {
   console.log("📲 Escaneia esse QR Code com seu WhatsApp:");
   qrcodeTerminal.generate(qr, { small: true });
   ultimoQRCode = qr;
   statusBot = "aguardando conexão";
 
-  // Reinicializa se não conectar em 2 minutos
   if (qrTimeout) clearTimeout(qrTimeout);
   qrTimeout = setTimeout(() => {
     if (statusBot !== "online") {
@@ -62,31 +70,26 @@ client.on("qr", (qr) => {
   }, 2 * 60 * 1000);
 });
 
-// Cliente pronto
 client.on("ready", () => {
   statusBot = "online";
-  ultimoQRCode = null; // Limpando QR Code, não precisa mais
+  ultimoQRCode = null;
   console.log("✅ Bot está pronto e conectado!");
   if (qrTimeout) clearTimeout(qrTimeout);
 });
 
-// Cliente desconectado
 client.on("disconnected", (reason) => {
   statusBot = "offline";
   ultimoQRCode = null;
   console.log(`❌ Bot foi desconectado! Motivo: ${reason}`);
-  // Reinicializa automaticamente
   setTimeout(() => client.initialize(), 5000);
 });
 
-// Falha na autenticação
 client.on("auth_failure", (msg) => {
   statusBot = "offline";
   ultimoQRCode = null;
   console.error("❌ Falha na autenticação:", msg);
 });
 
-// Erro geral
 client.on("error", (error) => {
   statusBot = "erro";
   console.error("❌ Erro no cliente WhatsApp:", error);
@@ -94,9 +97,16 @@ client.on("error", (error) => {
 
 // === Funções de API ===
 
-// Endpoint para pegar o QR Code
 const qrCode = async (req, res) => {
   try {
+    const online = await temConexaoInternet();
+    if (!online) {
+      return res.status(503).json({
+        error: "🛑 Sem conexão com a internet",
+        status_bot: "offline",
+      });
+    }
+
     if (statusBot === "online") {
       return res.status(200).json({
         status_bot: statusBot,
@@ -124,9 +134,10 @@ const qrCode = async (req, res) => {
     });
   } catch (error) {
     console.error("❌ Erro ao gerar QR Code:", error);
-    return res
-      .status(500)
-      .json({ error: "Erro ao gerar QR Code", details: error.message });
+    return res.status(500).json({
+      error: "Erro ao gerar QR Code",
+      details: error.message,
+    });
   }
 };
 
@@ -139,9 +150,13 @@ const sanitizarNumero = (numero) => {
   return limpo;
 };
 
-// Endpoint para enviar mensagem
 const enviarMensagem = async (req, res) => {
   try {
+    const online = await temConexaoInternet();
+    if (!online) {
+      return res.status(503).json({ error: "🛑 Sem conexão com a internet" });
+    }
+
     if (!client.info || statusBot !== "online") {
       return res
         .status(503)
@@ -185,14 +200,23 @@ const enviarMensagem = async (req, res) => {
   }
 };
 
-// Inicializa o cliente
+// Inicializa o cliente com verificação de internet
 (async () => {
   try {
+    const online = await temConexaoInternet();
+    if (!online) {
+      console.error("❌ Sem internet. Cliente não inicializado.");
+      return;
+    }
+
     await client.initialize();
   } catch (error) {
     console.error("❌ Erro ao inicializar o cliente:", error);
-    // tenta reiniciar em 5 segundos
-    setTimeout(() => client.initialize(), 5000);
+    setTimeout(async () => {
+      const online = await temConexaoInternet();
+      if (online) client.initialize();
+      else console.log("⚠️ Ainda sem internet, tentando novamente depois...");
+    }, 5000);
   }
 })();
 

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS vendas_old;
+
 ALTER TABLE vendas RENAME TO vendas_old;
 
 CREATE TABLE IF NOT EXISTS vendas (

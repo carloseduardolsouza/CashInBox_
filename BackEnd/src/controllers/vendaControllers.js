@@ -11,8 +11,8 @@ const NovaVendaCrediario = async (req, res) => {
 };
 
 const listarVendas = async (req, res) => {
-  const { filtro, pesquisa } = req.params;
-  const vendas = await vendaModels.listarVendas(filtro, pesquisa);
+  const { filtro } = req.params;
+  const vendas = await vendaModels.listarVendas(filtro);
   return res.status(201).json(vendas);
 };
 

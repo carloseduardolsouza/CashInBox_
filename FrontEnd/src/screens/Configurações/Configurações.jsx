@@ -43,16 +43,6 @@ function Configurações() {
           💵 Vendas e Caixa
         </button>
         <button
-          className={`bttConfiguraçõesAba ${abaAtiva === "Notas" ? "ativo" : ""}`}
-        >
-          🧾 Notas Fiscais (NF-e / NFC-e)
-        </button>
-        <button
-          className={`bttConfiguraçõesAba ${abaAtiva === "Estoque" ? "ativo" : ""}`}
-        >
-          📦 Estoque
-        </button>
-        <button
           className={`bttConfiguraçõesAba ${
             abaAtiva === "Segurança" ? "ativo" : ""
           }`}

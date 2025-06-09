@@ -260,15 +260,17 @@ const NovaVendaCrediario = async (dados) => {
   }
 };
 
-const listarVendas = async (filtro, pesquisa) => {
+const listarVendas = async (filtro) => {
   let query;
   let values = [];
 
-  if (filtro == undefined && pesquisa == undefined) {
+  if (!filtro) {
     query = `SELECT * FROM vendas WHERE status != 'orçamento'`;
   } else {
-    query = `SELECT * FROM vendas WHERE nome LIKE ?`;
-    values.push(`%${id}%`); // Isso garante aspas e evita SQL injection
+    // Adiciona hora 00:00:00.000Z para garantir que traga tudo a partir do começo do dia
+    const filtroFormatado = `${filtro}T00:00:00.000Z`;
+    query = `SELECT * FROM vendas WHERE status != 'orçamento' AND data_venda >= ?`;
+    values.push(filtroFormatado);
   }
 
   const vendas = await new Promise((resolve, reject) => {

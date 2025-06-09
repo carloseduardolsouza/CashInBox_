@@ -9,6 +9,7 @@ import fetchapi from "../../api/fetchapi";
 import GeralCliente from "./SubScreens/GeralCliente/GeralCliente";
 import Compras from "./SubScreens/Compras/Compras";
 import Orçamentos from "./SubScreens/Orçamentos/Orçamentos";
+import Pendencias from "./SubScreens/Pendencias/Pendencias";
 
 //componentes
 import Loading from "../../components/Loading/Loading";
@@ -40,6 +41,8 @@ function DetalhesDoCliente() {
         return <Compras />;
       case "Orçamentos":
         return <Orçamentos />;
+      case "Pendencias":
+        return <Pendencias />;
       default:
         return null;
     }
@@ -76,6 +79,15 @@ function DetalhesDoCliente() {
             onClick={() => setAbaAtiva("Orçamentos")}
           >
             Orçamentos
+          </p>
+
+          <p
+            className={`bttRenderInfoClientes ${
+              abaAtiva === "Pendencias" ? "ativo" : ""
+            }`}
+            onClick={() => setAbaAtiva("Pendencias")}
+          >
+            Pendencias
           </p>
         </div>
       </header>

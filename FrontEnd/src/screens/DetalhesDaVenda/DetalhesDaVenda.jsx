@@ -7,6 +7,7 @@ import { pdf } from "@react-pdf/renderer";
 
 // Icones
 import { BsFillSendFill } from "react-icons/bs";
+import { FaRegUser } from "react-icons/fa6";
 
 import CarnePagamento from "../../components/NotaCarné/NotaCarne";
 import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
@@ -193,7 +194,9 @@ function DetalhesDaVenda() {
 
           <div id="DivisãoClienteDetalhesDaVenda">
             <div>
-              <div id="ImgClienteDetalhesDaVenda"></div>
+              <div id="ImgClienteDetalhesDaVenda">
+                <FaRegUser />
+              </div>
             </div>
 
             <div>
@@ -253,6 +256,10 @@ function DetalhesDaVenda() {
           </div>
 
           <div id="DetalhesDaVendaDisplay2Pt2">
+            <p>
+              <strong>Total Bruto:</strong>{" "}
+              {services.formatarCurrency(venda.total_bruto)}
+            </p>
             <p>
               <strong>Pagamento:</strong>
             </p>
@@ -315,24 +322,17 @@ function DetalhesDaVenda() {
                 >
                   Nota Grande
                 </p>
-                <p
-                  onClick={() => {
-                    handleDownload("NotaPequena");
-                    setEscolherNotas(false);
-                  }}
-                  style={{ cursor: "pointer", padding: "8px", margin: 0 }}
-                >
-                  Nota Pequena
-                </p>
-                <p
-                  onClick={() => {
-                    handleDownload("CarneCrediario");
-                    setEscolherNotas(false);
-                  }}
-                  style={{ cursor: "pointer", padding: "8px", margin: 0 }}
-                >
-                  Carnê crediario
-                </p>
+                {venda.status === "Crediario pendente" && (
+                  <p
+                    onClick={() => {
+                      handleDownload("CarneCrediario");
+                      setEscolherNotas(false);
+                    }}
+                    style={{ cursor: "pointer", padding: "8px", margin: 0 }}
+                  >
+                    Carnê crediario
+                  </p>
+                )}
               </div>
 
               <button

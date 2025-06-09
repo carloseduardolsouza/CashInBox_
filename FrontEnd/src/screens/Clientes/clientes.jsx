@@ -41,7 +41,7 @@ function Clientes() {
 
   const renderClientes = async (e) => {
     e.preventDefault();
-    buscarClientes()
+    buscarClientes();
   };
 
   return (
@@ -96,7 +96,11 @@ function Clientes() {
                   </Link>
                 </td>
                 <td>{services.formatarNumeroCelular(dado.telefone)}</td>
-                <td>{dado.endereco}</td>
+                <td>
+                  {dado.endereco.length > 30
+                    ? dado.endereco.slice(0, 30) + "..."
+                    : dado.endereco}
+                </td>
                 <td>{services.formatarCurrency(dado.total_compras)}</td>
               </tr>
             );

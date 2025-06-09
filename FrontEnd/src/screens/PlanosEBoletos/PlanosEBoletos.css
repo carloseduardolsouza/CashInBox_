@@ -2,9 +2,16 @@
   margin-left: 55px;
 }
 
+#EditarDadosPlanosEBoletos {
+  font-weight: bold;
+  color: var(--button-color);
+  text-decoration: none;
+  
+}
+
 #BlocoUmDetalhesPagamento {
   margin-top: 20px;
-  border: solid #00000099 1px;
+  border: solid var(--text-color) 1px;
   border-radius: 10px;
   padding: 10px;
   width: 600px;
@@ -19,12 +26,12 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
-  color: #00000099;
+  color: var(--text-color);
 }
 
 #cardDadosDoEstabelecimentoPlanosEBoletos {
   margin-top: 20px;
-  border: solid #00000099 1px;
+  border: solid var(--text-color) 1px;
   margin-right: 40px;
   border-radius: 10px;
   padding: 10px;
@@ -42,7 +49,7 @@
 
 #areaStatusPagamento strong {
   border: solid #004f00 1px;
-  color: #004f00;
+  color: #6ad16a;
   background-color: #00800061;
   border-radius: 20px;
   padding: 5px;

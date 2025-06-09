@@ -361,18 +361,16 @@ const deletarVariacaoProduto = async (id) => {
   }
 };
 
-const listarVendas = async (filtro, pesquisa) => {
-  if (filtro == undefined && pesquisa == undefined) {
-    const vendas = await fetch(`${API_URL}/listarVendas`)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => {
-        return error;
-      });
-    const data = await vendas.json();
-    return data;
-  }
+const listarVendas = async (filtro) => {
+  const vendas = await fetch(`${API_URL}/listarVendas/${filtro}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
 };
 
 const listarVendasCrediario = async (filtro, pesquisa) => {

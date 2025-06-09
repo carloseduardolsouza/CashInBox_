@@ -38,15 +38,6 @@ function Estoque() {
   return (
     <div id="ESTOQUE">
       <h2>Estoque</h2>
-      <button
-        id="NotaEntradaButton"
-        onClick={(e) => {
-          e.preventDefault();
-          navigate("/notaFiscalDeEntrada");
-        }}
-      >
-        Nota de Entrada
-      </button>
       <div>
         <form onSubmit={(e) => renderProdutos(e)}>
           <button

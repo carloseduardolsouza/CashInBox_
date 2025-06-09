@@ -1,4 +1,6 @@
 import "./PlanosEBoletos.css";
+import { GoGear } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 function PlanosEBoletos() {
   return (
@@ -40,6 +42,8 @@ function PlanosEBoletos() {
           <p>
             <strong>Cnpj: </strong> {"8481000185485"}
           </p>
+
+          <Link to={`/configurações`} id="EditarDadosPlanosEBoletos"><GoGear /> Editar Dados</Link>
         </div>
       </div>
     </div>

@@ -1,14 +1,11 @@
 import "./VendasECaixa.css";
+import Select from "react-select";
 
 function VendasECaixa() {
   return (
     <div id="VendasECaixa">
       <h3>🧾 Geral</h3>
       <div>
-        <label className="labelVendasECaixa">
-          <p>Permitir venda sem cliente cadastrado?</p>
-          <input type="checkbox" />
-        </label>
 
         <label className="labelVendasECaixa">
           <p>Abertura com senha?</p>
@@ -29,17 +26,21 @@ function VendasECaixa() {
       <div>
         <label className="labelVendasECaixa">
           <p>Formas de pagamento aceitas:</p>
-          <input type="checkbox" />
-        </label>
-
-        <label className="labelVendasECaixa">
-          <p>Parcelamento no cartão:</p>
-          <input type="checkbox" />
+          <select>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão de debito">Cartão de debito</option>
+            <option value="Cartão de credito">Cartão de credito</option>
+            <option value="Crediario Propio">Crediario Propio</option>
+            <option value="Pix">Pix</option>
+          </select>
+          <div>
+            <span></span>
+          </div>
         </label>
 
         <label className="labelVendasECaixa">
           <p>Limite de desconto:</p>
-          <input type="checkbox" />
+          <input type="number" />
         </label>
       </div>
     </div>

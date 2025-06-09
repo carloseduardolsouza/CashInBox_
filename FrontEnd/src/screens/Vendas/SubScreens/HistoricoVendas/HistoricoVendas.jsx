@@ -16,9 +16,11 @@ function HistoricoVendas() {
   const [resultadosVendas, setResultadosVendas] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
 
+  const [filtroData, setFiltroData] = useState("");
+
   const carregarVendas = async () => {
     try {
-      const response = await fetchapi.listarVendas();
+      const response = await fetchapi.listarVendas(filtroData);
       setResultadosVendas(response);
     } catch (error) {
       setErroApi(true);
@@ -26,7 +28,7 @@ function HistoricoVendas() {
   };
 
   useEffect(() => {
-    carregarVendas()
+    carregarVendas();
   }, []);
 
   const toggleArraySelect = (id) => {
@@ -43,17 +45,27 @@ function HistoricoVendas() {
     }
 
     await Promise.all(arraySelect.map((id) => fetchapi.deletarVenda(id)));
-    await carregarVendas()
-    setArraySelect([])
-    
+    await carregarVendas();
+    setArraySelect([]);
   };
 
   return (
     <div>
       <div id="AreaFIltroHistoricoVendas">
         <div>
-          <input type="date" className="FilterDateVendas" />
-          <button className="FilterICONDateVendas">
+          <input
+            type="date"
+            className="FilterDateVendas"
+            value={filtroData} // mantém controlado
+            onChange={(e) => setFiltroData(e.target.value)}
+          />
+          <button
+            className="FilterICONDateVendas"
+            onClick={(e) => {
+              e.preventDefault();
+              carregarVendas(); // agora sim: valor atualizado
+            }}
+          >
             <FaFilter />
           </button>
         </div>

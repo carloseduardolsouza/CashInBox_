@@ -163,6 +163,8 @@ function PontoDeVenda() {
                 </p>
                 <input
                   type="number"
+                  min={1}
+                  step="1"
                   value={quantidadeProduto}
                   onChange={(e) => setQuantidadeProduto(Number(e.target.value))}
                 />

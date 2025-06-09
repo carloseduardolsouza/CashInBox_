@@ -266,7 +266,8 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
           <div>
             <p style={{ marginRight: "50px" }}>Desconto:</p>
             <input
-              type="text"
+              type="number"
+              min={0}
               placeholder="00,00"
               className="realDesconto"
               value={descontoReais}
@@ -275,7 +276,8 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
               }
             />
             <input
-              type="text"
+              type="number"
+              min={0}
               className="porcentagemDesconto"
               placeholder="5%"
               value={descontoPorcentagem}
@@ -287,7 +289,8 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
           <div>
             <p>Acrescimo/Frete:</p>
             <input
-              type="text"
+              type="number"
+              min={0}
               placeholder="00,00"
               className="realDesconto"
               value={acrescimoReais}
