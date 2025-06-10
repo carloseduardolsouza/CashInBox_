@@ -2,6 +2,7 @@
   background-color: var(--div-color);
   padding: 10px;
   border-radius: 10px;
+  min-height: 500px;
 }
 
 #divSpanConectado {
@@ -14,4 +15,20 @@
   height: 15px;
   width: 15px;
   border-radius: 50%;
+}
+
+#divStatusRobo {
+  position: absolute;
+  right: 20px;
+  background-color: var(--bg-color);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#divStatusRobo p {
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

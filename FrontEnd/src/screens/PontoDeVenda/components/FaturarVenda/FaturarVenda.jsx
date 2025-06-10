@@ -4,10 +4,14 @@ import "./FaturarVenda.css";
 import Select from "react-select";
 import fetchapi from "../../../../api/fetchapi";
 
+import Concluindo from "../../../../components/Concluindo/Concluindo";
+
 //icones
 import { FaTrash } from "react-icons/fa6";
 
 function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
+  const [concluindo, setConcluindo] = useState(false);
+
   const [valorCompra, setValorCompra] = useState(0);
   const [descontoReais, setDescontoReais] = useState(0);
   const [descontoPorcentagem, setDescontoPorcentagem] = useState(0);
@@ -38,30 +42,33 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [parcelasGeradas, setParcelasGeradas] = useState([]);
 
   const gerarParcelas = () => {
-  // Validações básicas
-  if (!totalPagar || !numParcelas || !dataPrimeiraParcela) {
-    window.warn("Verifique os valores: totalPagar, numParcelas ou dataPrimeiraParcela estão faltando.");
-    return;
-  }
+    // Validações básicas
+    if (!totalPagar || !numParcelas || !dataPrimeiraParcela) {
+      window.warn(
+        "Verifique os valores: totalPagar, numParcelas ou dataPrimeiraParcela estão faltando."
+      );
+      return;
+    }
 
-  const parcelas = [];
-  const valorParcela = +(parseFloat(totalPagar) / parseInt(numParcelas)).toFixed(2);
-  const dataBase = new Date(dataPrimeiraParcela);
+    const parcelas = [];
+    const valorParcela = +(
+      parseFloat(totalPagar) / parseInt(numParcelas)
+    ).toFixed(2);
+    const dataBase = new Date(dataPrimeiraParcela);
 
-  for (let i = 0; i < parseInt(numParcelas); i++) {
-    const vencimento = new Date(dataBase);
-    vencimento.setMonth(vencimento.getMonth() + i);
+    for (let i = 0; i < parseInt(numParcelas); i++) {
+      const vencimento = new Date(dataBase);
+      vencimento.setMonth(vencimento.getMonth() + i);
 
-    parcelas.push({
-      numero_parcela: i + 1,
-      valor_parcela: valorParcela,
-      data_vencimento: vencimento.toISOString().split("T")[0], // formato YYYY-MM-DD
-    });
-  }
+      parcelas.push({
+        numero_parcela: i + 1,
+        valor_parcela: valorParcela,
+        data_vencimento: vencimento.toISOString().split("T")[0], // formato YYYY-MM-DD
+      });
+    }
 
-  setParcelasGeradas(parcelas);
-};
-
+    setParcelasGeradas(parcelas);
+  };
 
   const [alertaFormaPagamento, setAlertaFormaPagamento] = useState(false);
 
@@ -182,15 +189,21 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
     }
 
     if (formaPagementoAtual === "Crediario Propio" && id_cliente == 0) {
-      window.alert("Para vender no crediario e nescessario escolher um cliente")
-      return
+      window.alert(
+        "Para vender no crediario e nescessario escolher um cliente"
+      );
+      return;
     }
 
-    if (formaPagementoAtual === "Crediario Propio" && parcelasGeradas.length === 0) {
-      window.alert("Gere pelo menos 1 parcela para vender no crediario")
-      return
+    if (
+      formaPagementoAtual === "Crediario Propio" &&
+      parcelasGeradas.length === 0
+    ) {
+      window.alert("Gere pelo menos 1 parcela para vender no crediario");
+      return;
     }
     setAlertaFormaPagamento(false); // limpa o alerta se passou
+    setConcluindo(true);
 
     const dadosComuns = {
       cliente_id: id_cliente,
@@ -219,9 +232,12 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
       fetchapi
         .NovaVendaCrediario(dados)
         .then(() => {
-          limparVenda([]);
-          limparValor(0);
-          fechar(false);
+          setTimeout(() => {
+            setConcluindo(false);
+            limparVenda([]);
+            limparValor(0);
+            fechar(false);
+          }, 1500);
         })
         .catch(() => {
           //carregar erro
@@ -236,9 +252,12 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
       fetchapi
         .NovaVendaEmBloco(dados)
         .then(() => {
-          limparVenda([]);
-          limparValor(0);
-          fechar(false);
+          setTimeout(() => {
+            setConcluindo(false);
+            fechar(false);
+            limparVenda([]);
+            limparValor(0);
+          }, 1500);
         })
         .catch(() => {
           // tratar erro aqui
@@ -254,6 +273,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
 
   return (
     <div id="FaturarVenda">
+      {concluindo && <Concluindo />}
       <button id="ButtonFecharAbaFaturarVenda" onClick={() => fechar(false)}>
         X
       </button>
@@ -320,9 +340,6 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
               value={services.formatarCurrency(totalPagar)}
               readOnly
             />
-          </div>
-          <div>
-            <p>itens</p>
           </div>
         </div>
         <div id="FaturarVendaDetalhesCliente">
@@ -397,7 +414,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                     </div>
 
                     <button type="button" onClick={gerarParcelas}>
-                      OK
+                      Parcelas
                     </button>
                   </div>
                 ) : (
@@ -433,7 +450,11 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                   {parcelasGeradas.map((dados, index) => {
                     return (
                       <tr>
-                        <td>{services.formatarDataNascimento(dados.data_vencimento)}</td>
+                        <td>
+                          {services.formatarDataNascimento(
+                            dados.data_vencimento
+                          )}
+                        </td>
                         <td>
                           {services.formatarCurrency(dados.valor_parcela)}
                         </td>

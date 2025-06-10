@@ -173,7 +173,7 @@ function PontoDeVenda() {
                 id="buttonOkPontoDeVenda"
                 onClick={(e) => adidiconarArrayDeVenda(e)}
               >
-                OK
+                Lançar item
               </button>
             </form>
           </div>

@@ -5,13 +5,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import services from "../../services/services";
 import { pdf } from "@react-pdf/renderer";
 
+import Concluindo from "../../components/Concluindo/Concluindo"
+
 // Icones
 import { BsFillSendFill } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa6";
 
 import CarnePagamento from "../../components/NotaCarné/NotaCarne";
 import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
-import NotaFiscalDANFE from "../../components/NotaFiscalDetalhesVenda/NotaFiscalDetalhesVenda";
 
 // conexão com a api
 import fetchapi from "../../api/fetchapi";
@@ -24,6 +25,8 @@ function DetalhesDaVenda() {
 
   const [escolherNotas, setEscolherNotas] = useState(false);
   const [tipoNota, setTipoNota] = useState(null);
+
+  const [concluindo , setConcluindo] = useState(false)
 
   const [venda, setVenda] = useState({});
   const [cliente, setCliente] = useState({});
@@ -143,6 +146,8 @@ function DetalhesDaVenda() {
       window.alert("Conecte seu whatsApp Primeiro");
       return;
     }
+
+    setConcluindo(true)
     const arrayDeProdutos = produtos.map((dados) => ({
       nome: dados.produto_nome,
       quantidade: dados.quantidade,
@@ -166,12 +171,17 @@ function DetalhesDaVenda() {
 
     await fetchapi
       .enviarMensagem(dados)
-      .then(() => {})
+      .then(() => {
+        setTimeout(() => {
+          setConcluindo(false)
+        },1500)
+      })
       .catch(() => setErroApi(true));
   };
 
   return (
     <div id="DetalhesDaVenda">
+      {concluindo && <Concluindo/>}
       <button id="EnviarDetalhesVenda" onClick={enviarDetalhesWhatsApp}>
         <BsFillSendFill /> Enviar Detalhes
       </button>
