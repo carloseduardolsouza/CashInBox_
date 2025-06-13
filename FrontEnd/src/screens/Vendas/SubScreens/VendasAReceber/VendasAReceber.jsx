@@ -4,12 +4,17 @@ import AppContext from "../../../../context/AppContext";
 
 import services from "../../../../services/services";
 
+import ModalFaturar from "./components/ModalFaturar/ModalFaturar";
+
 //conexão com a api
 import fetchapi from "../../../../api/fetchapi";
 
 function VendasAReceber() {
   const { setErroApi } = useContext(AppContext);
   const [resultadosVendas, setResultadosVendas] = useState([]);
+
+  const [modalAtiva, setModalAtiva] = useState(null);
+  const [dadosParaModal, setDadosParaModal] = useState(null);
 
   const carregarVendasCrediario = async () => {
     try {
@@ -20,11 +25,25 @@ function VendasAReceber() {
     }
   };
 
-  const faturarVendaCrediario = async (id) => {
-    const pago = fetchapi.receberPagamentoParcela(id).then(() => {
-      carregarVendasCrediario()
-    })
-  }
+  const abrirModalFaturar = (dadosDaVenda) => {
+    setDadosParaModal(dadosDaVenda);
+    setModalAtiva("faturar");
+  };
+
+  const renderModal = () => {
+    switch (modalAtiva) {
+      case "faturar":
+        return (
+          <ModalFaturar
+            fechar={setModalAtiva}
+            dados={dadosParaModal}
+            atualizarVendas={carregarVendasCrediario}
+          />
+        );
+      case null:
+        return null;
+    }
+  };
 
   useEffect(() => {
     carregarVendasCrediario();
@@ -32,6 +51,7 @@ function VendasAReceber() {
 
   return (
     <div>
+      {renderModal()}
       <table className="Table">
         <thead>
           <tr>
@@ -48,10 +68,17 @@ function VendasAReceber() {
             return (
               <tr>
                 <td>
-                  <button className="DetalhesHistoricoVendas" onClick={() => faturarVendaCrediario(dados.id)}>Faturar</button>
+                  <button
+                    className="DetalhesHistoricoVendas"
+                    onClick={() => abrirModalFaturar(dados)}
+                  >
+                    Faturar
+                  </button>
                 </td>
                 <td>{dados.nome_cliente}</td>
-                <td>{services.formatarDataNascimento(dados.data_vencimento)}</td>
+                <td>
+                  {services.formatarDataNascimento(dados.data_vencimento)}
+                </td>
                 <td>{services.formatarCurrency(dados.valor_parcela)}</td>
                 <td>{dados.status}</td>
               </tr>

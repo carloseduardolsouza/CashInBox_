@@ -1,0 +1,74 @@
+#ModalFaturar {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 500px;
+  z-index: 2;
+  transform: translate(50%, -50%);
+  background: rgba(31, 30, 30, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.headerModalFaturar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerModalFaturar button {
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: solid red 1px;
+  color: red;
+  font-weight: bold;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.headerModalFaturar button:hover {
+  background-color: red;
+  color: white;
+  transition: 0.5s;
+}
+
+.labelInputs {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.labelInputs input {
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+#divButtonsModalFaturar {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+#divButtonsModalFaturar button {
+  font-size: 15px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 45%;
+}
+
+.buttConfirmarModalFaturar {
+  background-color: var(--button-color);
+  color: white;
+}
+
+#nomeClienteModalFaturar {
+  margin: 10px;
+}
