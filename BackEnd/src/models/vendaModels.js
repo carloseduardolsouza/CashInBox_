@@ -386,16 +386,19 @@ const listarVendasFuncionario = async (id) => {
   return vendas.reverse();
 };
 
-const receberVendaCrediario = async (id) => {
-  const dataPagamento = new Date().toISOString();
+const receberVendaCrediario = async (id , dados) => {
+  const {
+    data,
+    valor_pago
+  } = dados
 
   const query = `
     UPDATE crediario_parcelas 
-    SET status = ?, data_pagamento = ? 
+    SET status = ?, data_pagamento = ? , valor_pago = ?
     WHERE id = ?
   `;
 
-  const values = ["pago", dataPagamento, id];
+  const values = ["pago", data, valor_pago, id];
 
   try {
     // Atualiza o status da parcela

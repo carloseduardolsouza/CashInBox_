@@ -16,6 +16,7 @@ import EnviarOrçamento from "./EnviarOrçamento/EnviarOrçamento";
 function Orçamentos() {
   const { setErroApi } = useContext(AppContext);
   const [modal, setModal] = useState(null);
+  const [dadosParaModal, setDadosParaModal] = useState(null);
   const [resultadosOrçamentos, setResultadosOrçamentos] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
 
@@ -50,10 +51,15 @@ function Orçamentos() {
     setArraySelect([]);
   };
 
+  const abrirModalEnvarMsg = (dadosDaVenda) => {
+    setDadosParaModal(dadosDaVenda);
+    setModal("Enviar");
+  };
+
   const renderModal = () => {
     switch (modal) {
       case "Enviar":
-        return <EnviarOrçamento fechar={setModal} />;
+        return <EnviarOrçamento fechar={setModal} dados={dadosParaModal}/>;
       case null:
         return null;
     }
@@ -103,7 +109,7 @@ function Orçamentos() {
                 <td>
                   <button
                     className="ButãoTabelaOrçamento ButãoEnviarOrçamento"
-                    onClick={() => setModal("Enviar")}
+                    onClick={() => abrirModalEnvarMsg(dados)}
                   >
                     <BsFillSendFill /> Enviar
                   </button>

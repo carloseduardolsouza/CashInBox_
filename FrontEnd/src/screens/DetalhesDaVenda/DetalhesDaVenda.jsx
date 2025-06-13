@@ -155,6 +155,7 @@ function DetalhesDaVenda() {
     }));
 
     const dados = {
+      tipo: "venda",
       numero: cliente.telefone,
       mensagem: {
         cliente: cliente.nome,

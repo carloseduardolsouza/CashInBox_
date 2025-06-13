@@ -16,35 +16,36 @@ const listarVendas = async (req, res) => {
   return res.status(201).json(vendas);
 };
 
-const listarVendasCliente = async (req , res) => {
-  const {id} = req.params
-  const vendas = await vendaModels.listarVendasCliente(id)
-  return res.status(201).json(vendas)
-}
+const listarVendasCliente = async (req, res) => {
+  const { id } = req.params;
+  const vendas = await vendaModels.listarVendasCliente(id);
+  return res.status(201).json(vendas);
+};
 
-const listarVendasCrediarioVenda = async (req , res) => {
-  const {id} = req.params
-  const vendas = await vendaModels.listarVendasCrediarioVenda(id)
-  return res.status(201).json(vendas)
-}
+const listarVendasCrediarioVenda = async (req, res) => {
+  const { id } = req.params;
+  const vendas = await vendaModels.listarVendasCrediarioVenda(id);
+  return res.status(201).json(vendas);
+};
 
-const receberVendaCrediario = async (req , res) => {
-  const {id} = req.params
-  const vendas = await vendaModels.receberVendaCrediario(id)
-  return res.status(201).json(vendas)
-}
+const receberVendaCrediario = async (req, res) => {
+  const { id } = req.params;
+  const dados = req.body;
+  const vendas = await vendaModels.receberVendaCrediario(id, dados);
+  return res.status(201).json(vendas);
+};
 
-const listarOrcamentoCliente = async (req , res) => {
-  const {id} = req.params
-  const vendas = await vendaModels.listarOrcamentoCliente(id)
-  return res.status(201).json(vendas)
-}
+const listarOrcamentoCliente = async (req, res) => {
+  const { id } = req.params;
+  const vendas = await vendaModels.listarOrcamentoCliente(id);
+  return res.status(201).json(vendas);
+};
 
 const listarVendasFuncionario = async (req, res) => {
-  const {id} = req.params
-  const vendas = await vendaModels.listarVendasFuncionario(id)
-  return res.status(201).json(vendas)
-}
+  const { id } = req.params;
+  const vendas = await vendaModels.listarVendasFuncionario(id);
+  return res.status(201).json(vendas);
+};
 
 const listarOrcamentos = async (req, res) => {
   const { filtro, pesquisa } = req.params;
@@ -71,10 +72,10 @@ const procurarProdutosVenda = async (req, res) => {
 };
 
 const procurarPagamentoVenda = async (req, res) => {
-  const {id} = req.params
-  const pagamento = await vendaModels.procurarPagamentoVenda(id)
-  return res.status(201).json(pagamento)
-}
+  const { id } = req.params;
+  const pagamento = await vendaModels.procurarPagamentoVenda(id);
+  return res.status(201).json(pagamento);
+};
 
 const deletarVenda = async (req, res) => {
   const { id } = req.params;
@@ -96,5 +97,5 @@ module.exports = {
   listarOrcamentos,
   receberVendaCrediario,
   listarVendasCrediario,
-  listarVendasCrediarioVenda
+  listarVendasCrediarioVenda,
 };

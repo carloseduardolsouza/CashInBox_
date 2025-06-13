@@ -411,13 +411,14 @@ const listarVendasCrediarioVenda = async (id) => {
   return data;
 };
 
-const receberPagamentoParcela = async (id) => {
+const receberPagamentoParcela = async (id, dados) => {
   const vendas = await fetch(`${API_URL}/receberVendaCrediario/${id}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(dados),
   })
     .then((response) => {
       return response;

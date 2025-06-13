@@ -1,0 +1,1 @@
+ALTER TABLE crediario_parcelas ADD COLUMN valor_pago INT;
