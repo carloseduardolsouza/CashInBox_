@@ -9,7 +9,7 @@ import { FaSearch } from "react-icons/fa";
 import fetchapi from "../../api/fetchapi";
 
 function Estoque() {
-  const { setErroApi } = useContext(AppContext);
+  const { setErroApi , setVencido } = useContext(AppContext);
   const navigate = useNavigate();
   const [modalEstoque, setModalEstoque] = useState(null);
 
@@ -20,6 +20,21 @@ function Estoque() {
     const buscarProdutos = async () => {
       try {
         const resultado = await fetchapi.ProcurarProdutos(pesquisa);
+        if (
+          resultado.message ===
+          "Assinatura vencida. Por favor, renove sua assinatura."
+        ) {
+          setVencido(true);
+          return;
+        }
+
+        if (Array.isArray(resultado)) {
+          setResultProdutos(resultado);
+        } else {
+          setResultProdutos([]); // Evita o erro
+          console.warn("Resposta inesperada:", resultado);
+        }
+
         setResultProdutos(resultado);
       } catch {
         setErroApi(true);

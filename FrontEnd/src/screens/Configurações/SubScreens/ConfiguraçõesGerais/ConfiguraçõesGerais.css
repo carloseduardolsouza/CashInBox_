@@ -4,6 +4,15 @@
   border-radius: 10px;
 }
 
+#MudarCredenciais {
+  position: absolute;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  background-color: var(--button-color);
+}
+
 #LogoDaEmpresaConfiguraçõesGerais {
   width: 290px;
   height: 290px;

@@ -46,6 +46,7 @@ function Configurações() {
           className={`bttConfiguraçõesAba ${
             abaAtiva === "Segurança" ? "ativo" : ""
           }`}
+          onClick={() => setAbaAtiva("Segurança")}
         >
           🔒 Segurança
         </button>

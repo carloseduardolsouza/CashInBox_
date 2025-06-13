@@ -12,7 +12,7 @@ import { FaFilter } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
 function HistoricoVendas() {
-  const { setErroApi } = useContext(AppContext);
+  const { setErroApi , setVencido } = useContext(AppContext);
   const [resultadosVendas, setResultadosVendas] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
 
@@ -21,6 +21,22 @@ function HistoricoVendas() {
   const carregarVendas = async () => {
     try {
       const response = await fetchapi.listarVendas(filtroData);
+
+      if (
+        response.message ===
+        "Assinatura vencida. Por favor, renove sua assinatura."
+      ) {
+        setVencido(true);
+        return;
+      }
+
+      if (Array.isArray(response)) {
+        setResultadosVendas(response);
+      } else {
+        setResultadosVendas([]); // Evita o erro
+        console.warn("Resposta inesperada:", response);
+      }
+
       setResultadosVendas(response);
     } catch (error) {
       setErroApi(true);

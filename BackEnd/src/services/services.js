@@ -32,11 +32,34 @@ const deletarImagem = (nomeArquivo) => {
   }
 };
 
-const interpretarBoleto  = (re , res) => {
+const login = (req, res) => {
+  const { email, senha } = req.body;
 
-}
+  if (!email || !senha) {
+    return res.status(400).json({ erro: "Email e senha são obrigatórios." });
+  }
+
+  // Garante que a pasta segura exista
+  if (!fs.existsSync(userDataPath)) {
+    fs.mkdirSync(userDataPath, { recursive: true });
+  }
+
+  const caminhoCredenciais = path.join(userDataPath, "credenciais.json");
+  const dados = { email, senha };
+
+  try {
+    // Escreve sempre, sobrescrevendo se o arquivo já existir
+    fs.writeFileSync(caminhoCredenciais, JSON.stringify(dados, null, 2));
+    console.log("Credenciais salvas ou atualizadas em:", caminhoCredenciais);
+    res.status(200).json({ mensagem: "Credenciais salvas com sucesso." });
+  } catch (err) {
+    console.error("Erro ao salvar credenciais:", err);
+    res.status(500).json({ erro: "Erro ao salvar credenciais." });
+  }
+};
 
 module.exports = {
   restart,
   deletarImagem,
+  login,
 };

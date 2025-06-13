@@ -13,7 +13,7 @@ import fetchapi from "../../api/fetchapi";
 import services from "../../services/services";
 
 function Clientes() {
-  const { setErroApi } = useContext(AppContext);
+  const { setErroApi, setVencido } = useContext(AppContext);
 
   const Data = new Date();
   const log = `${Data.getUTCDate()}/${
@@ -29,7 +29,21 @@ function Clientes() {
   const buscarClientes = async () => {
     try {
       const resultado = await fetchapi.ProcurarCliente(pesquisar);
-      setResultClientes(resultado);
+
+      if (
+        resultado.message ===
+        "Assinatura vencida. Por favor, renove sua assinatura."
+      ) {
+        setVencido(true);
+        return;
+      }
+
+      if (Array.isArray(resultado)) {
+        setResultClientes(resultado);
+      } else {
+        setResultClientes([]); // Evita o erro
+        console.warn("Resposta inesperada:", resultado);
+      }
     } catch (err) {
       setErroApi(true);
     }

@@ -6,7 +6,13 @@ import PropTypes from "prop-types";
 export function AppProvider({ children }) {
   const [dadosLoja, setDadosLoja] = useState({});
   const [isDark, setIsDark] = useState(false);
+
   const [erroApi, setErroApi] = useState(false);
+
+  const [fazerLogin , setFazerLogin] = useState(false)
+
+  const [vencido , setVencido] = useState(false)
+
   const [Whastsapp, setWhastsapp] = useState(false);
 
   const fetchStatus = async () => {
@@ -51,6 +57,10 @@ export function AppProvider({ children }) {
     setDadosLoja,
     Whastsapp,
     setWhastsapp,
+    vencido,
+    setVencido,
+    fazerLogin,
+    setFazerLogin
   };
 
   return <AppContext.Provider value={valores}>{children}</AppContext.Provider>;

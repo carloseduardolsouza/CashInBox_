@@ -683,8 +683,25 @@ const buscarRelatoriosBasicos = async () => {
   return dados;
 };
 
+const cadastrarCredenciais = async (dados) => {
+  const response = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dados),
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao fazer login");
+  }
+
+  return await response.json(); 
+};
+
 export default {
   restartApi,
+  cadastrarCredenciais,
 
   buscarRelatoriosBasicos,
 

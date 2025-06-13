@@ -2,6 +2,8 @@ import "./ConfiguraçõesGerais.css";
 import { useState, useEffect , useContext } from "react";
 import AppContext from "../../../../context/AppContext"
 
+import CardLogin from "../../../../components/CardLogin/CardLogin";
+
 //icones
 import { MdAddPhotoAlternate } from "react-icons/md";
 import fetchapi from "../../../../api/fetchapi";
@@ -13,7 +15,7 @@ function ConfiguraçõesGerais() {
   const [endereco, setEndereco] = useState("");
   const [InscriçãoEstadual, setInscriçãoEstadual] = useState("");
 
-  const {setErroApi} = useContext(AppContext)
+  const {setErroApi , fazerLogin , setFazerLogin} = useContext(AppContext)
 
   const [bttDisabled, setBttDisabled] = useState(true);
 
@@ -42,6 +44,8 @@ function ConfiguraçõesGerais() {
 
   return (
     <div id="ConfiguraçõesGerais">
+      {fazerLogin && <CardLogin fechar={setFazerLogin}/>}
+      <button id="MudarCredenciais" onClick={() => setFazerLogin(true)}>Mudar Credenciais</button>
       <main id="mainConfiguraçõesGerais">
         <div id="LogoDaEmpresaConfiguraçõesGerais">
           <MdAddPhotoAlternate id="MdAddPhotoAlternate" />

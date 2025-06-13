@@ -27,7 +27,7 @@ import { FaBoxOpen } from "react-icons/fa";
 
 function Home() {
   const [relatoriosBasicos, setRelatoriosBasicos] = useState({});
-  const { isDark, setIsDark, dadosLoja, setErroApi } = useContext(AppContext);
+  const { isDark, setIsDark, dadosLoja, setErroApi , setVencido } = useContext(AppContext);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -42,6 +42,21 @@ function Home() {
     fetchapi
       .buscarRelatoriosBasicos()
       .then((response) => {
+        if (
+        response.message ===
+        "Assinatura vencida. Por favor, renove sua assinatura."
+      ) {
+        setVencido(true);
+        return;
+      }
+
+      if (Array.isArray(response)) {
+        setRelatoriosBasicos(response);
+      } else {
+        setRelatoriosBasicos([]); // Evita o erro
+        console.warn("Resposta inesperada:", response);
+      }
+
         setRelatoriosBasicos(response);
 
         const newData = response.faturamento.map((dados) => ({

@@ -1,6 +1,6 @@
 import "./Produtos.css";
-import { useState, useEffect } from "react";
-import { Form } from "react-router-dom";
+import { useState, useEffect , useContext } from "react";
+import AppContext from "../../context/AppContext";
 
 //componentes
 import ItemProduto from "./components/ItemProduto/ItemProduto";
@@ -18,6 +18,8 @@ function Produtos() {
     Data.getUTCMonth() + 1
   }/${Data.getUTCFullYear()}`;
 
+  const {setVencido , setErroApi} = useContext(AppContext)
+
   const [resultProdutos, setResultProdutos] = useState([]);
   const [loadingProdutos, setloadingProdutos] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
@@ -25,6 +27,22 @@ function Produtos() {
   const buscarProdutos = async () => {
     try {
       const resultado = await fetchapi.ProcurarProdutos(pesquisar);
+
+      if (
+        resultado.message ===
+        "Assinatura vencida. Por favor, renove sua assinatura."
+      ) {
+        setVencido(true);
+        return;
+      }
+
+      if (Array.isArray(resultado)) {
+        setResultProdutos(resultado);
+      } else {
+        setResultProdutos([]); // Evita o erro
+        console.warn("Resposta inesperada:", resultado);
+      }
+
       setResultProdutos(resultado);
     } catch (err) {
       console.error("Erro ao buscar produtos:", err);
