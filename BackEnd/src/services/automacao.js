@@ -13,8 +13,8 @@ const temConexaoInternet = () => {
 };
 
 // Função para gerar mensagem de compra
-function gerarMensagemCompra(dados) {
-  if (dados.tipo === "venda") {
+function gerarMensagemCompra(dados, tipo) {
+  if (tipo === "venda") {
     let mensagem = `🧾 Detalhes da sua compra:\n\n`;
     mensagem += `👤 Cliente: ${dados.cliente}\n`;
     mensagem += `📄 Nº da Venda: ${dados.numero_venda}\n\n`;
@@ -30,19 +30,28 @@ function gerarMensagemCompra(dados) {
     mensagem += `\n✅ Valor Total da Compra: ${dados.valor_total_compra}`;
 
     return mensagem;
-  } else if (dados.tipo === "orçamento") {
-    let mensagem = `🧾 Detalhes do seu orçamento:\n\n`;
-    mensagem += `👤 Cliente: ${dados.cliente}\n`;
-    mensagem += `💰 Total Bruto: ${dados.valores.total_bruto}\n`;
-    mensagem += `🔻 Descontos: ${dados.valores.descontos}\n`;
-    mensagem += `🔺 Acréscimos: ${dados.valores.acrescimos}\n\n`;
-    mensagem += `📦 Produtos:\n\n`;
+  } else if (tipo === "orçamento") {
+    let mensagem = `🧾 *Orçamento Detalhado*\n\n`;
 
-    dados.produtos.forEach((prod) => {
-      mensagem += `- ${prod.nome} — ${prod.quantidade} un. — Total: ${prod.total}\n`;
+    mensagem += `👤 *Cliente:* ${dados.cliente}\n`;
+    mensagem += `💰 *Total Bruto:* R$ ${dados.valores.total_bruto}\n`;
+    mensagem += `🔻 *Descontos:* R$ ${dados.valores.descontos}\n`;
+    mensagem += `🔺 *Acréscimos:* R$ ${dados.valores.acrescimos}\n`;
+    mensagem += `🧮 *Subtotal:* R$ ${(
+      Number(dados.valores.total_bruto) -
+      Number(dados.valores.descontos) +
+      Number(dados.valores.acrescimos)
+    ).toFixed(2)}\n\n`;
+
+    mensagem += `📦 *Produtos*\n`;
+
+    dados.produtos.forEach((prod, index) => {
+      mensagem += `\n${index + 1}. ${prod.nome}\n`;
+      mensagem += `   - Quantidade: ${prod.quantidade} un\n`;
+      mensagem += `   - Total: R$ ${prod.total}`;
     });
 
-    mensagem += `\n✅ Valor Total: ${dados.valor_total_compra}`;
+    mensagem += `\n\n✅ *Valor Total do Orçamento:* R$ ${dados.valor_total_compra}`;
 
     return mensagem;
   }
@@ -180,7 +189,7 @@ const enviarMensagem = async (req, res) => {
         .json({ error: "Cliente WhatsApp ainda não está pronto" });
     }
 
-    const { numero, mensagem } = req.body;
+    const { numero, mensagem, tipo } = req.body;
 
     if (!numero || !mensagem) {
       return res
@@ -200,7 +209,7 @@ const enviarMensagem = async (req, res) => {
         .json({ error: "Número não está registrado no WhatsApp" });
     }
 
-    const mensagemFormatada = gerarMensagemCompra(mensagem);
+    const mensagemFormatada = gerarMensagemCompra(mensagem, tipo);
 
     await client.sendMessage(chatId, mensagemFormatada);
 

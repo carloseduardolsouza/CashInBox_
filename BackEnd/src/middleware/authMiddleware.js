@@ -51,6 +51,12 @@ function verificarCamusq(res, next) {
     });
   }
 
+  if (dados["data-vencimento"] === "vencido") {
+    return res.status(403).json({
+      message: "Assinatura vencida. Por favor, renove sua assinatura.",
+    });
+  }
+
   if (isLoginExpirado(dados["ultimo-login"])) {
     return res
       .status(403)
@@ -81,6 +87,7 @@ async function authMiddleware(req, res, next) {
     let dados;
     try {
       const credData = JSON.parse(fs.readFileSync(credPath, "utf8"));
+
       dados = {
         email: credData.email,
         senha: credData.senha,
@@ -120,11 +127,9 @@ async function authMiddleware(req, res, next) {
           "utf8"
         );
 
-        return res
-          .status(403)
-          .json({
-            message: "Assinatura vencida. Por favor, renove sua assinatura.",
-          });
+        return res.status(403).json({
+          message: "Assinatura vencida. Por favor, renove sua assinatura.",
+        });
       }
 
       console.warn("❌ Login falhou. Tentando verificar pelo camusq.json...");

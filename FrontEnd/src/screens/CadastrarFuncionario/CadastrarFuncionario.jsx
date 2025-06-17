@@ -110,6 +110,7 @@ function CadastrarFuncionario() {
               onChange={(e) => setEndereco(e.target.value)}
               placeholder="Endereço"
               value={endereco}
+              required
             />
             <p>
               <strong>CPF</strong>
@@ -131,6 +132,7 @@ function CadastrarFuncionario() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               value={email}
+              required
             />
 
             <p>
@@ -142,6 +144,7 @@ function CadastrarFuncionario() {
               onChange={(e) => setSalario(e.target.value)}
               value={salario}
               placeholder="Salario em R$"
+              required
             />
             <div>
               <label>
@@ -151,11 +154,8 @@ function CadastrarFuncionario() {
                   onChange={(e) => setTipoComissao(e.target.value)}
                   value={tipoComissao}
                 >
-                  <option value="Não contabilizar comissão">
-                    Não contabilizar comissão
-                  </option>
-                  <option value="percentual">percentual</option>
                   <option value="fixa">fixa</option>
+                  <option value="percentual">percentual</option>
                 </select>
               </label>
 
@@ -167,6 +167,7 @@ function CadastrarFuncionario() {
                   className="InputNovoFuncionarioValorComissão"
                   onChange={(e) => setValorComissao(e.target.value)}
                   value={valorComissao}
+                  required
                 />
               </label>
             </div>
@@ -180,7 +181,6 @@ function CadastrarFuncionario() {
                   value={genero}
                   onChange={(e) => setGenero(e.target.value)}
                 >
-                  <option value="Selecione o Genero">Selecione o Genero</option>
                   <option value="Masculino">Masculino</option>
                   <option value="Feminino">Feminino</option>
                 </select>
@@ -195,7 +195,6 @@ function CadastrarFuncionario() {
                   value={cargo}
                   onChange={(e) => setCargo(e.target.value)}
                 >
-                  <option value="Selecione o Genero">Selecione o Cargo</option>
                   <option value="Vendedor">Vendedor</option>
                   <option value="Gerente">Gerente</option>
                   <option value="Entregador">Entregador</option>
@@ -212,9 +211,6 @@ function CadastrarFuncionario() {
                   onChange={(e) => setRegime_contrato(e.target.value)}
                   value={regime_contrato}
                 >
-                  <option value="Selecione o Genero">
-                    Selecione o Regime de contrato
-                  </option>
                   <option value="CLT">CLT</option>
                   <option value="Contrato">Contrato</option>
                   <option value="Temporario">Temporario</option>
@@ -226,6 +222,7 @@ function CadastrarFuncionario() {
               type="date"
               className="DataNovoCliente"
               onChange={(e) => setNascimento(e.target.value)}
+              required
             />
             <button className="CadastrarNovoCliente" type="submit">
               Cadastrar

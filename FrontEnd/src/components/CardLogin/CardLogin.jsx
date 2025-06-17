@@ -26,7 +26,6 @@ function CardLogin() {
     <div className="blurModal">
       <div id="centralizarCardLogin">
         <form className="form_container" onSubmit={(e) => fazerLogin(e)}>
-          <button onClick={() => setFazerLogin(false)} id="fecharCardLogin">X</button>
           <div className="title_container">
             <p className="title">Login CashInBox</p>
             <span className="subtitle">

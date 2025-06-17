@@ -7,16 +7,9 @@ import services from "../../../../services/services";
 
 import fetchapi from "../../../../api/fetchapi";
 
-//Icones
-import { BsFillSendFill } from "react-icons/bs";
-
-//componentes
-import EnviarOrçamento from "./EnviarOrçamento/EnviarOrçamento";
 
 function Orçamentos() {
   const { setErroApi } = useContext(AppContext);
-  const [modal, setModal] = useState(null);
-  const [dadosParaModal, setDadosParaModal] = useState(null);
   const [resultadosOrçamentos, setResultadosOrçamentos] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
 
@@ -51,22 +44,8 @@ function Orçamentos() {
     setArraySelect([]);
   };
 
-  const abrirModalEnvarMsg = (dadosDaVenda) => {
-    setDadosParaModal(dadosDaVenda);
-    setModal("Enviar");
-  };
-
-  const renderModal = () => {
-    switch (modal) {
-      case "Enviar":
-        return <EnviarOrçamento fechar={setModal} dados={dadosParaModal}/>;
-      case null:
-        return null;
-    }
-  };
   return (
     <div>
-      {renderModal()}
       <table className="Table">
         <thead>
           <tr>
@@ -77,7 +56,6 @@ function Orçamentos() {
             <th>Acrescimo</th>
             <th>Total</th>
             <th>Status</th>
-            <th>Ações</th>
           </tr>
         </thead>
 
@@ -106,14 +84,6 @@ function Orçamentos() {
                 <td>{dados.acrescimos}</td>
                 <td>{services.formatarCurrency(dados.valor_total)}</td>
                 <td>{dados.status}</td>
-                <td>
-                  <button
-                    className="ButãoTabelaOrçamento ButãoEnviarOrçamento"
-                    onClick={() => abrirModalEnvarMsg(dados)}
-                  >
-                    <BsFillSendFill /> Enviar
-                  </button>
-                </td>
               </tr>
             );
           })}

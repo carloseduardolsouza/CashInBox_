@@ -699,9 +699,24 @@ const cadastrarCredenciais = async (dados) => {
   return await response.json(); 
 };
 
+const informacoesPlanos = async () => {
+  const informacoesPlanos = await fetch(`${API_URL}/informacoesPlano`);
+  const dados = await informacoesPlanos.json();
+  return dados;
+}
+
+const gerarBoleto = async () => {
+  const boleto = await fetch(`${API_URL}/gerarBoleto`);
+  const dados = await boleto.json();
+  return dados;
+}
+
 export default {
   restartApi,
   cadastrarCredenciais,
+  
+  informacoesPlanos,
+  gerarBoleto,
 
   buscarRelatoriosBasicos,
 

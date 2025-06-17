@@ -5,16 +5,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import services from "../../services/services";
 import { pdf } from "@react-pdf/renderer";
 
-import Concluindo from "../../components/Concluindo/Concluindo"
+import Concluindo from "../../components/Concluindo/Concluindo";
 
-// Icones
+// Ícones
 import { BsFillSendFill } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa6";
 
 import CarnePagamento from "../../components/NotaCarné/NotaCarne";
 import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
 
-// conexão com a api
 import fetchapi from "../../api/fetchapi";
 
 function DetalhesDaVenda() {
@@ -25,8 +24,7 @@ function DetalhesDaVenda() {
 
   const [escolherNotas, setEscolherNotas] = useState(false);
   const [tipoNota, setTipoNota] = useState(null);
-
-  const [concluindo , setConcluindo] = useState(false)
+  const [concluindo, setConcluindo] = useState(false);
 
   const [venda, setVenda] = useState({});
   const [cliente, setCliente] = useState({});
@@ -104,7 +102,6 @@ function DetalhesDaVenda() {
         break;
 
       case "NotaPequena":
-        // Aqui, trate direito ou mostre um aviso
         console.warn("NotaPequena ainda não implementada");
         return;
 
@@ -117,7 +114,6 @@ function DetalhesDaVenda() {
         return;
     }
 
-    // Se chegou até aqui, tem doc pra gerar PDF
     const asPdf = pdf();
     asPdf.updateContainer(doc);
     const blob = await asPdf.toBlob();
@@ -137,25 +133,34 @@ function DetalhesDaVenda() {
   };
 
   const enviarDetalhesWhatsApp = async () => {
-    if (!venda.cliente_id) {
+    if (!cliente?.telefone) {
       window.alert("Este cliente não tem número de WhatsApp cadastrado.");
       return;
     }
 
-    if (Whastsapp != true) {
-      window.alert("Conecte seu whatsApp Primeiro");
+    if (Whastsapp !== true) {
+      window.alert("Conecte seu WhatsApp primeiro.");
       return;
     }
 
-    setConcluindo(true)
+    setConcluindo(true);
+
     const arrayDeProdutos = produtos.map((dados) => ({
       nome: dados.produto_nome,
       quantidade: dados.quantidade,
       total: services.formatarCurrency(dados.valor_total),
     }));
 
+    const typeCompra = () => {
+      if (venda.status === "orçamento") {
+        return "orçamento"
+      } else {
+        return "compra"
+      }
+    }
+
     const dados = {
-      tipo: "venda",
+      tipo: typeCompra(),
       numero: cliente.telefone,
       mensagem: {
         cliente: cliente.nome,
@@ -170,19 +175,20 @@ function DetalhesDaVenda() {
       },
     };
 
-    await fetchapi
-      .enviarMensagem(dados)
-      .then(() => {
-        setTimeout(() => {
-          setConcluindo(false)
-        },1500)
-      })
-      .catch(() => setErroApi(true));
+    try {
+      await fetchapi.enviarMensagem(dados);
+    } catch (error) {
+      console.error("Erro ao enviar mensagem no WhatsApp:", error);
+      setErroApi(true);
+      window.alert("Erro ao enviar mensagem no WhatsApp.");
+    } finally {
+      setTimeout(() => setConcluindo(false), 1500);
+    }
   };
 
   return (
     <div id="DetalhesDaVenda">
-      {concluindo && <Concluindo/>}
+      {concluindo && <Concluindo />}
       <button id="EnviarDetalhesVenda" onClick={enviarDetalhesWhatsApp}>
         <BsFillSendFill /> Enviar Detalhes
       </button>
@@ -216,7 +222,7 @@ function DetalhesDaVenda() {
                 {cliente?.nome || "indefinido"}
               </p>
               <p>
-                <strong>Numero: </strong>
+                <strong>Número: </strong>
                 {services.formatarNumeroCelular(
                   cliente?.telefone || "indefinido"
                 )}
@@ -341,7 +347,7 @@ function DetalhesDaVenda() {
                     }}
                     style={{ cursor: "pointer", padding: "8px", margin: 0 }}
                   >
-                    Carnê crediario
+                    Carnê crediário
                   </p>
                 )}
               </div>

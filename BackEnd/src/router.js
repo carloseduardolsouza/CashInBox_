@@ -43,120 +43,139 @@ const automacao = require("./services/automacao");
 const relatorios = require("./services/relatorios");
 const configController = require("./controllers/configController");
 
-const authMiddleware = require("./middleware/authMiddleware")
+const authMiddleware = require("./middleware/authMiddleware");
 
 // Rotas de clientes
-router.get("/clientes/:id", authMiddleware, clientesControllers.procurarCliente);
-router.post("/novoCliente", authMiddleware, clientesControllers.novoCliente);
-router.delete("/deletarCliente/:id", authMiddleware, clientesControllers.deletarCliente);
-router.put("/editarCliente/:id", authMiddleware, clientesControllers.editarCliente);
-router.get("/procurarClienteId/:id", authMiddleware, clientesControllers.procurarClienteId);
+router.get(
+  "/clientes/:id",
+  authMiddleware,
+  clientesControllers.procurarCliente
+);
+router.post("/novoCliente", clientesControllers.novoCliente);
+router.delete("/deletarCliente/:id", clientesControllers.deletarCliente);
+router.put("/editarCliente/:id", clientesControllers.editarCliente);
+router.get("/procurarClienteId/:id", clientesControllers.procurarClienteId);
 
 // Rotas de funcionários
-router.get("/funcionario/:id", authMiddleware, funcionariosControllers.procurarFuncionario);
-router.post("/novoFuncionario", authMiddleware, funcionariosControllers.novoFuncionario);
+router.get("/funcionario/:id", funcionariosControllers.procurarFuncionario);
+router.post("/novoFuncionario", funcionariosControllers.novoFuncionario);
 router.delete(
-  "/deletarFuncionario/:id", authMiddleware ,
+  "/deletarFuncionario/:id",
   funcionariosControllers.deletarFuncionario
 );
 router.get(
-  "/procurarFuncionarioId/:id", authMiddleware ,
+  "/procurarFuncionarioId/:id",
   funcionariosControllers.procurarFuncionarioId
 );
-router.put("/editarFuncionario/:id", authMiddleware , funcionariosControllers.editarFuncionario);
+router.put("/editarFuncionario/:id", funcionariosControllers.editarFuncionario);
 
 // Rotas de produtos
-router.get("/produtos/:id", authMiddleware , produtosControllers.procurarProduto);
+router.get(
+  "/produtos/:id",
+  authMiddleware,
+  produtosControllers.procurarProduto
+);
 router.post(
-  "/novoProduto", authMiddleware ,
+  "/novoProduto",
   upload.array("imagens"),
   produtosControllers.novoProduto
 );
 router.post(
-  "/novaImagemProduto/:id", authMiddleware ,
+  "/novaImagemProduto/:id",
   upload.array("imagens"),
   produtosControllers.novaImagemProduto
 );
-router.put("/editarProduto/:id", authMiddleware , produtosControllers.editarProduto);
-router.delete("/deletarProduto/:id", authMiddleware , produtosControllers.deletarProduto);
-router.get("/procurarProdutoId/:id", authMiddleware , produtosControllers.procurarProdutoId);
-router.get("/imageProdutoId/:id", authMiddleware , produtosControllers.procurarVariaçãoProdutos);
+router.put("/editarProduto/:id", produtosControllers.editarProduto);
+router.delete("/deletarProduto/:id", produtosControllers.deletarProduto);
+router.get("/procurarProdutoId/:id", produtosControllers.procurarProdutoId);
+router.get("/imageProdutoId/:id", produtosControllers.procurarVariaçãoProdutos);
 router.delete(
-  "/deletarVariacaoProduto/:id", authMiddleware ,
+  "/deletarVariacaoProduto/:id",
   produtosControllers.deletarVariacaoProdutos
 );
 
 // Rotas de categorias
-router.post("/novaCategoria", authMiddleware , categoriasControllers.novaCategoria);
-router.get("/categorias", authMiddleware , categoriasControllers.listarCategorias);
-router.delete("/deletarCategorias/:id", authMiddleware , categoriasControllers.deletarCategoria);
+router.post("/novaCategoria", categoriasControllers.novaCategoria);
+router.get("/categorias", categoriasControllers.listarCategorias);
+router.delete("/deletarCategorias/:id", categoriasControllers.deletarCategoria);
 router.get(
-  "/procurarCategoriasId/:id", authMiddleware ,
+  "/procurarCategoriasId/:id",
   categoriasControllers.buscarCategoriaPorId
 );
-router.put("/editarCategorias/:id", authMiddleware , categoriasControllers.editarCategoria);
+router.put("/editarCategorias/:id", categoriasControllers.editarCategoria);
 
 // Rotas de vendas
-router.post("/novaVenda", authMiddleware , vendaControlles.NovaVenda);
-router.post("/novaVendaCrediario", authMiddleware , vendaControlles.NovaVendaCrediario);
-router.get("/listarVendas/:filtro?", authMiddleware , vendaControlles.listarVendas);
-router.get("/listarVendasCliente/:id", authMiddleware , vendaControlles.listarVendasCliente);
+router.post("/novaVenda", vendaControlles.NovaVenda);
+router.post("/novaVendaCrediario", vendaControlles.NovaVendaCrediario);
 router.get(
-  "/listarVendasFuncionario/:id", authMiddleware ,
+  "/listarVendas/:filtro?",
+  authMiddleware,
+  vendaControlles.listarVendas
+);
+router.get("/listarVendasCliente/:id", vendaControlles.listarVendasCliente);
+router.get(
+  "/listarVendasFuncionario/:id",
   vendaControlles.listarVendasFuncionario
 );
 router.get(
-  "/listarOrcamentoCliente/:id", authMiddleware ,
+  "/listarOrcamentoCliente/:id",
   vendaControlles.listarOrcamentoCliente
 );
 router.get(
-  "/listarVendasCrediarioVenda/:id", authMiddleware ,
+  "/listarVendasCrediarioVenda/:id",
   vendaControlles.listarVendasCrediarioVenda
 );
-router.put("/receberVendaCrediario/:id", authMiddleware , vendaControlles.receberVendaCrediario);
+router.put("/receberVendaCrediario/:id", vendaControlles.receberVendaCrediario);
 router.get(
-  "/listarOrcamentos/:filtro?/:pesquisa?", authMiddleware ,
+  "/listarOrcamentos/:filtro?/:pesquisa?",
   vendaControlles.listarOrcamentos
 );
 router.get(
-  "/listarVendasCrediario/:filtro?/:pesquisa?", authMiddleware ,
+  "/listarVendasCrediario/:filtro?/:pesquisa?",
   vendaControlles.listarVendasCrediario
 );
-router.get("/procurarVendaId/:id", authMiddleware , vendaControlles.produrarVendaId);
-router.get("/procurarProdutosVenda/:id", authMiddleware , vendaControlles.procurarProdutosVenda);
+router.get("/procurarVendaId/:id", vendaControlles.produrarVendaId);
+router.get("/procurarProdutosVenda/:id", vendaControlles.procurarProdutosVenda);
 router.get(
-  "/procurarPagamentoVenda/:id", authMiddleware ,
+  "/procurarPagamentoVenda/:id",
   vendaControlles.procurarPagamentoVenda
 );
-router.delete("/deletarVenda/:id", authMiddleware , vendaControlles.deletarVenda);
+router.delete("/deletarVenda/:id", vendaControlles.deletarVenda);
 
 //Rotas caixa
-router.get("/buscarCaixas", authMiddleware , caixaControlles.buscarCaixas);
-router.get("/buscarCaixasAbertos", authMiddleware , caixaControlles.buscarCaixasAbertos);
-router.post("/iniciarNovoCaixa", authMiddleware , caixaControlles.iniciarNovoCaixa);
+router.get("/buscarCaixas", caixaControlles.buscarCaixas);
+router.get("/buscarCaixasAbertos", caixaControlles.buscarCaixasAbertos);
+router.post("/iniciarNovoCaixa", caixaControlles.iniciarNovoCaixa);
 router.post(
-  "/adicionarMovimentacoes/:id", authMiddleware ,
+  "/adicionarMovimentacoes/:id",
   caixaControlles.adicionarMovimentações
 );
-router.get("/buscarMovimentacoes/:id", authMiddleware , caixaControlles.buscarMovimentações);
-router.put("/fecharCaixa/:id", authMiddleware , caixaControlles.fecharCaixa);
+router.get("/buscarMovimentacoes/:id", caixaControlles.buscarMovimentações);
+router.put("/fecharCaixa/:id", caixaControlles.fecharCaixa);
 
 //usuario
-router.get("/dadosEmpresa", authMiddleware , userController.getDados);
-router.post("/salvarDadosEmpresa", authMiddleware , userController.salvarDados);
+router.get("/dadosEmpresa", authMiddleware, userController.getDados);
+router.post("/salvarDadosEmpresa", authMiddleware, userController.salvarDados);
 
 //configuraçõpes
-router.get("/configuracoes", authMiddleware , configController.getDados);
-router.post("/salvarConfiguracoes", authMiddleware , configController.salvarDados);
+router.get("/configuracoes", configController.getDados);
+router.post("/salvarConfiguracoes", configController.salvarDados);
 
 // Outras rotas
-router.get("/restart", authMiddleware , services.restart);
+router.get("/restart", authMiddleware, services.restart);
 
-router.get("/faturamentoMes", authMiddleware , relatorios.calcularFaturamentoMensal);
+router.get(
+  "/faturamentoMes",
+  authMiddleware,
+  relatorios.calcularFaturamentoMensal
+);
 
-router.post("/EnviarMenssagemWhatsapp", authMiddleware , automacao.enviarMensagem);
-router.get("/qrCodeAutomacao", authMiddleware , automacao.qrCode);
+router.post("/EnviarMenssagemWhatsapp", automacao.enviarMensagem);
+router.get("/qrCodeAutomacao", automacao.qrCode);
 
-router.post("/login", services.login)
+router.get("/informacoesPlano" , services.informacoesPlano)
+router.get("/gerarBoleto" , services.gerarBoleto)
+
+router.post("/login", services.login);
 
 module.exports = router;

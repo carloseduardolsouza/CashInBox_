@@ -27,7 +27,7 @@ import { FaBoxOpen } from "react-icons/fa";
 
 function Home() {
   const [relatoriosBasicos, setRelatoriosBasicos] = useState({});
-  const { isDark, setIsDark, dadosLoja, setErroApi , setVencido } = useContext(AppContext);
+  const { isDark, setIsDark, dadosLoja, setErroApi , setVencido , setFazerLogin } = useContext(AppContext);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -48,6 +48,11 @@ function Home() {
       ) {
         setVencido(true);
         return;
+      }
+
+      if (response.message === "Erro ao ler credenciais.") {
+        setFazerLogin(true)
+        return
       }
 
       if (Array.isArray(response)) {
