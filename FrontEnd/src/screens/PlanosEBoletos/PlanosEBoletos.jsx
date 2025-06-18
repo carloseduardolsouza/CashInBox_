@@ -1,12 +1,15 @@
 import "./PlanosEBoletos.css";
 import { GoGear } from "react-icons/go";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import fetchapi from "../../api/fetchapi";
 import services from "../../services/services";
+import AppContext from "../../context/AppContext";
 
 function PlanosEBoletos() {
   const [infoPlanos, setInfoPlanos] = useState({});
+
+  const { dadosLoja } = useContext(AppContext);
 
   useEffect(() => {
     fetchapi.informacoesPlanos().then((response) => {
@@ -83,10 +86,10 @@ function PlanosEBoletos() {
         <div id="cardDadosDoEstabelecimentoPlanosEBoletos">
           <h2>Dados da conta</h2>
           <p>
-            <strong>Nome do estabelecimento: </strong> {"CashInBox - Dev"}
+            <strong>Nome do estabelecimento: </strong> {dadosLoja.nomeEstabelecimento}
           </p>
           <p>
-            <strong>Cnpj: </strong> {"8481000185485"}
+            <strong>Cnpj: </strong> {services.formatarCNPJ(dadosLoja.cnpj)}
           </p>
 
           <Link to={`/configurações`} id="EditarDadosPlanosEBoletos">

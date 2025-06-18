@@ -1,28 +1,91 @@
-#divSelectNovoFuncionario {
+.funcionario {
+  margin-left: 55px;
+}
+
+.funcionario__wrapper {
+  height: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
 }
 
-.SelectNovoFuncionario {
-  font-size: 16px;
-  padding: 10px;
-  margin: 10px;
-  border: solid var(--text-color) 1px;
-  border-radius: 10px;
+.funcionario__main {
+  display: flex;
+  gap: 40px;
 }
 
-.articleNovoFuncionario {
-  position: relative;
+.funcionario__avatar {
+  width: 270px;
+  height: 270px;
+  border: 1px solid var(--text-color);
+  border-radius: 50%;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+}
+
+.funcionario__form {
   background-color: var(--div-color);
   padding: 15px;
   border-radius: 10px;
-  z-index: 1;
+  position: relative;
+  max-width: 550px;
+  width: 100%;
 }
 
-.InputNovoFuncionarioValorComissão {
+.funcionario__input,
+.funcionario__select,
+.funcionario__date {
   font-size: 15px;
-  padding: 3px;
-  width: 20%;
-  margin-left: 10px;
+  padding: 5px;
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+
+.funcionario__select {
+  border: 1px solid var(--text-color);
+  font-size: 16px;
   border-radius: 10px;
+  margin: 10px 0;
+}
+
+.funcionario__commission-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.funcionario__commission-value {
+  font-size: 15px;
+  padding: 8px;
+  width: 100px;
+  border-radius: 10px;
+}
+
+.funcionario__select-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.funcionario__button {
+  padding: 10px;
+  width: 200px;
+  border-radius: 20px;
+  font-weight: 600;
+  background-color: #49db49;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.funcionario__button:hover {
+  background-color: #2abb2a;
 }

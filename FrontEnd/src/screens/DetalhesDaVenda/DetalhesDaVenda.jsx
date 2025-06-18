@@ -155,7 +155,7 @@ function DetalhesDaVenda() {
       if (venda.status === "orçamento") {
         return "orçamento"
       } else {
-        return "compra"
+        return "venda"
       }
     }
 

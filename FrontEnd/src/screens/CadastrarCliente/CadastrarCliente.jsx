@@ -1,180 +1,160 @@
 import "./CadastrarCliente.css";
-import { useState , useContext } from "react";
+import { useReducer, useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
-import Executando from "../../components/Executando/Executando"
-
-//icones
+import Executando from "../../components/Executando/Executando";
 import { FaUserAlt } from "react-icons/fa";
-
-//conexão com a api
 import fetchapi from "../../api/fetchapi";
 
+const initialState = {
+  nome: "",
+  numero: "",
+  endereco: "",
+  cpf: "",
+  email: "",
+  genero: "",
+  nascimento: "",
+};
+
+function formReducer(state, action) {
+  if (action.type === "RESET") return initialState;
+  return { ...state, [action.name]: action.value };
+}
+
 function CadastrarCliente() {
-  const {setErroApi} = useContext(AppContext)
-
-  const [nome, setNome] = useState("");
-  const [numero, setNumero] = useState("");
-  const [endereço, setEndereço] = useState("");
-  const [cpf, setCpf] = useState("");
-  const [email, setEmail] = useState("");
-  const [genero, setGenero] = useState("Selecione o Genero");
-  const [nascimento, setNascimento] = useState("");
-
+  const { setErroApi } = useContext(AppContext);
+  const [form, dispatch] = useReducer(formReducer, initialState);
   const [executando, setExecutando] = useState(false);
 
-  const Data = new Date();
-  const log = `${Data.getUTCDate()}/${
-    Data.getUTCMonth() + 1
-  }/${Data.getUTCFullYear()}`;
-
-  const escreverDados = (param, e) => {
-    if (param == "nome") {
-      setNome(e.target.value);
-    }
-
-    if (param == "numero") {
-      setNumero(e.target.value);
-    }
-
-    if (param == "Endereço") {
-      setEndereço(e.target.value);
-    }
-
-    if (param == "CPF") {
-      setCpf(e.target.value);
-    }
-
-    if (param == "Email") {
-      setEmail(e.target.value);
-    }
-
-    if (param == "Gênero") {
-      setGenero(e.target.value);
-    }
-
-    if (param == "Nascimento") {
-      setNascimento(e.target.value);
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    dispatch({ name, value });
   };
 
-  const cadastrarCliente = (e) => {
+  const cadastrarCliente = async (e) => {
     e.preventDefault();
-    setExecutando(true)
+    setExecutando(true);
 
-    let dados = {
-      nome: nome,
-      cpf_cnpj: cpf,
-      email: email,
-      genero: genero,
-      telefone: numero,
-      data_nascimento: nascimento,
-      endereco: endereço,
+    const dados = {
+      nome: form.nome,
+      cpf_cnpj: form.cpf,
+      email: form.email,
+      genero: form.genero,
+      telefone: form.numero,
+      data_nascimento: form.nascimento,
+      endereco: form.endereco,
     };
 
-    fetchapi
-      .NovoCliente(dados)
-      .then((resposta) => {
-        setCpf('')
-        setEmail('')
-        setEndereço('')
-        setGenero('')
-        setNome('')
-        setNumero('')
-        setNascimento('')
-        setExecutando(false)
-      })
-      .catch((erro) => {
-        setErroApi(true)
-      });
+    try {
+      await fetchapi.NovoCliente(dados);
+      dispatch({ type: "RESET" });
+    } catch (err) {
+      setErroApi(true);
+    } finally {
+      setExecutando(false);
+    }
   };
 
   return (
-    <div id="novoCliente">
-      {executando && <Executando/>}
+    <div className="cadastro-cliente">
+      {executando && <Executando />}
       <h2>Novo Cliente</h2>
-      <p>{log}</p>
-      <div id="CENTRALIZAR">
-        <main className="MainNovoCliente">
-          <div alt="Imagem User" className="ImageUser">
+      <p>{new Date().toLocaleDateString()}</p>
+
+      <div className="cadastro-cliente__centralizar">
+        <main className="cadastro-cliente__main">
+          <div className="cadastro-cliente__foto">
             <FaUserAlt />
           </div>
-          <form
-            className="articleNovoCliente"
-            onSubmit={(e) => cadastrarCliente(e)}
-          >
-            <p>
-              <strong>Nome: </strong>
-            </p>
-            <input
-              type="text"
-              className="InputNovoCliente"
-              onChange={(event) => escreverDados("nome", event)}
-              value={nome}
-              placeholder="Nome"
-              required
-            />
-            <p>
-              <strong>Numero: </strong>
-            </p>
-            <input
-              type="number"
-              className="InputNovoCliente"
-              onChange={(event) => escreverDados("numero", event)}
-              value={numero}
-              placeholder="Numero"
-              required
-            />
-            <p>
-              <strong>Endereço</strong>
-            </p>
-            <input
-              type="text"
-              className="InputNovoCliente"
-              onChange={(event) => escreverDados("Endereço", event)}
-              value={endereço}
-              placeholder="Endereço"
-            />
-            <p>
-              <strong>CPF</strong>
-            </p>
-            <input
-              type="number"
-              className="InputNovoCliente"
-              onChange={(event) => escreverDados("CPF", event)}
-              value={cpf}
-              placeholder="CPF"
-            />
-            <p>
-              <strong>Email</strong>
-            </p>
-            <input
-              type="text"
-              className="InputNovoCliente"
-              onChange={(event) => escreverDados("Email", event)}
-              value={email}
-              placeholder="Email"
-            />
-            <p>
-              <strong>Gênero</strong>
-            </p>
-            <select
-              className="SelectNovoCliente"
-              onChange={(event) => escreverDados("Gênero", event)}
-              value={genero}
-              required
-            >
-              <option value="">Selecione o Genero</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Feminino">Feminino</option>
-            </select>
-            <p>Nascimento: </p>
-            <input
-              type="date"
-              className="DataNovoCliente"
-              onChange={(event) => escreverDados("Nascimento", event)}
-              value={nascimento}
-            />
-            <button className="CadastrarNovoCliente" type="submit">
+          <form className="cadastro-cliente__form" onSubmit={cadastrarCliente}>
+            <label>
+              <strong>Nome:</strong>
+              <input
+                type="text"
+                name="nome"
+                className="cadastro-cliente__input"
+                value={form.nome}
+                onChange={handleChange}
+                placeholder="Nome"
+                required
+              />
+            </label>
+
+            <label>
+              <strong>Número:</strong>
+              <input
+                type="number"
+                name="numero"
+                className="cadastro-cliente__input"
+                value={form.numero}
+                onChange={handleChange}
+                placeholder="Número"
+                required
+              />
+            </label>
+
+            <label>
+              <strong>Endereço:</strong>
+              <input
+                type="text"
+                name="endereco"
+                className="cadastro-cliente__input"
+                value={form.endereco}
+                onChange={handleChange}
+                placeholder="Endereço"
+              />
+            </label>
+
+            <label>
+              <strong>CPF:</strong>
+              <input
+                type="number"
+                name="cpf"
+                className="cadastro-cliente__input"
+                value={form.cpf}
+                onChange={handleChange}
+                placeholder="CPF"
+              />
+            </label>
+
+            <label>
+              <strong>Email:</strong>
+              <input
+                type="email"
+                name="email"
+                className="cadastro-cliente__input"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email"
+              />
+            </label>
+
+            <label>
+              <strong>Gênero:</strong>
+              <select
+                name="genero"
+                className="cadastro-cliente__select"
+                value={form.genero}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Selecione o Gênero</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+              </select>
+            </label>
+
+            <label>
+              <strong>Nascimento:</strong>
+              <input
+                type="date"
+                name="nascimento"
+                className="cadastro-cliente__date"
+                value={form.nascimento}
+                onChange={handleChange}
+              />
+            </label>
+
+            <button className="cadastro-cliente__button" type="submit">
               Cadastrar
             </button>
           </form>

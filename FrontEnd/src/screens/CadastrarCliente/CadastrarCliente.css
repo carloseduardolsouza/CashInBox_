@@ -1,20 +1,24 @@
-#novoCliente {
+.cadastro-cliente {
   margin-left: 55px;
 }
 
-#CENTRALIZAR {
+.cadastro-cliente__centralizar {
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.ImageUser {
+.cadastro-cliente__main {
+  display: flex;
+  gap: 40px;
+}
+
+.cadastro-cliente__foto {
   width: 270px;
   height: 270px;
   border: 1px solid var(--text-color);
   border-radius: 50%;
-  margin-right: 100px;
   margin-top: 40px;
   display: flex;
   align-items: center;
@@ -22,51 +26,46 @@
   font-size: 80px;
 }
 
-.MainNovoCliente {
-  display: flex;
-}
-
-.articleNovoCliente {
-  position: relative;
+.cadastro-cliente__form {
   background-color: var(--div-color);
   padding: 15px;
-  width: 550px;
+  max-width: 550px;
   border-radius: 10px;
-  z-index: 1;
+  position: relative;
 }
 
-.InputNovoCliente {
+.cadastro-cliente__input,
+.cadastro-cliente__select,
+.cadastro-cliente__date {
+  width: 100%;
   font-size: 15px;
   padding: 3px;
-  width: 100%;
   border-radius: 5px;
-
+  margin-bottom: 5px;
+  box-sizing: border-box;
 }
 
-.CadastrarNovoCliente {
+.cadastro-cliente__select {
+  border: 1px solid black;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+.cadastro-cliente__date {
+  font-size: 16px;
+}
+
+.cadastro-cliente__button {
   padding: 10px;
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  border-radius: 4px;
-  background-color: #49db49;
-  cursor: pointer;
   width: 200px;
   border-radius: 20px;
   font-weight: 600;
+  background-color: #49db49;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
 }
 
-.CadastrarNovoCliente:hover {
-  transition: .3s;
+.cadastro-cliente__button:hover {
   background-color: #2abb2a;
-}
-
-.SelectNovoCliente {
-  font-size: 16px;
-  padding: 10px;
-  border: solid black 1px;
-  border-radius: 10px;
-}
-.DataNovoCliente {
-  font-size: 16px;
 }

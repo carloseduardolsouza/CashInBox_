@@ -1,11 +1,7 @@
 import "./CadastrarFuncionario.css";
 import { useState, useContext } from "react";
 import AppContext from "../../context/AppContext";
-
-//icones
 import { FaUserAlt } from "react-icons/fa";
-
-//conexão com a api
 import fetchapi from "../../api/fetchapi";
 
 function CadastrarFuncionario() {
@@ -23,208 +19,212 @@ function CadastrarFuncionario() {
   const [regime_contrato, setRegime_contrato] = useState("CLT");
   const [nascimento, setNascimento] = useState("");
 
-  const Data = new Date();
-  const log = `${Data.getUTCDate()}/${
-    Data.getUTCMonth() + 1
-  }/${Data.getUTCFullYear()}`;
+  const log = new Date().toLocaleDateString();
 
-  const cadastrarFuncionario = (e) => {
+  const cadastrarFuncionario = async (e) => {
     e.preventDefault();
-    let dados = {
-      nome: nome,
-      cpf: cpf,
+
+    const dados = {
+      nome,
+      cpf,
       telefone: numero,
-      email: email,
+      email,
       salario_base: Number(salario),
       data_nascimento: nascimento,
-      genero: genero,
+      genero,
       funcao: cargo,
-      endereco: endereco,
+      endereco,
       tipo_comissao: tipoComissao,
       valor_comissao: Number(valorComissao),
-      regime_contrato: regime_contrato,
+      regime_contrato,
     };
 
-    fetchapi
-      .NovoFuncionario(dados)
-      .then(() => {
-        setCpf("");
-        setSalario("");
-        setRegime_contrato("CLT");
-        setValorComissao("");
-        setTipoComissao("Não contabilizar comissão");
-        setCargo("");
-        setEmail("");
-        setEndereco("");
-        setGenero("");
-        setNome("");
-        setNumero("");
-        setNascimento("");
-      })
-      .catch(() => {
-        setErroApi(true);
-      });
+    try {
+      await fetchapi.NovoFuncionario(dados);
+      setCpf("");
+      setSalario("");
+      setRegime_contrato("CLT");
+      setValorComissao("");
+      setTipoComissao("Não contabilizar comissão");
+      setCargo("");
+      setEmail("");
+      setEndereco("");
+      setGenero("");
+      setNome("");
+      setNumero("");
+      setNascimento("");
+    } catch {
+      setErroApi(true);
+    }
   };
 
   return (
-    <div id="novoCliente">
-      <h2>Novo Funcionario</h2>
+    <div className="funcionario">
+      <h2>Novo Funcionário</h2>
       <p>{log}</p>
-      <div id="CENTRALIZAR">
-        <main className="MainNovoCliente">
-          <div alt="Imagem User" className="ImageUser">
+      <div className="funcionario__wrapper">
+        <main className="funcionario__main">
+          <div className="funcionario__avatar">
             <FaUserAlt />
           </div>
-          <form
-            className="articleNovoFuncionario"
-            onSubmit={(e) => cadastrarFuncionario(e)}
-          >
-            <p>
-              <strong>Nome: </strong>
-            </p>
-            <input
-              type="text"
-              className="InputNovoCliente"
-              onChange={(e) => setNome(e.target.value)}
-              placeholder="Nome"
-              value={nome}
-              required
-            />
-            <p>
-              <strong>Numero: </strong>
-            </p>
-            <input
-              type="number"
-              className="InputNovoCliente"
-              onChange={(e) => setNumero(e.target.value)}
-              placeholder="Numero"
-              value={numero}
-              required
-            />
-            <p>
-              <strong>Endereço</strong>
-            </p>
-            <input
-              type="text"
-              className="InputNovoCliente"
-              onChange={(e) => setEndereco(e.target.value)}
-              placeholder="Endereço"
-              value={endereco}
-              required
-            />
-            <p>
-              <strong>CPF</strong>
-            </p>
-            <input
-              type="number"
-              className="InputNovoCliente"
-              onChange={(e) => setCpf(e.target.value)}
-              placeholder="CPF"
-              value={cpf}
-              required
-            />
-            <p>
-              <strong>Email</strong>
-            </p>
-            <input
-              type="text"
-              className="InputNovoCliente"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              value={email}
-              required
-            />
+          <form className="funcionario__form" onSubmit={cadastrarFuncionario}>
+            <label>
+              <strong>Nome:</strong>
+              <input
+                type="text"
+                className="funcionario__input"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Nome"
+                required
+              />
+            </label>
 
-            <p>
-              <strong>Salario</strong>
-            </p>
-            <input
-              type="number"
-              className="InputNovoCliente"
-              onChange={(e) => setSalario(e.target.value)}
-              value={salario}
-              placeholder="Salario em R$"
-              required
-            />
-            <div>
+            <label>
+              <strong>Número:</strong>
+              <input
+                type="number"
+                className="funcionario__input"
+                value={numero}
+                onChange={(e) => setNumero(e.target.value)}
+                placeholder="Número"
+                required
+              />
+            </label>
+
+            <label>
+              <strong>Endereço:</strong>
+              <input
+                type="text"
+                className="funcionario__input"
+                value={endereco}
+                onChange={(e) => setEndereco(e.target.value)}
+                placeholder="Endereço"
+                required
+              />
+            </label>
+
+            <label>
+              <strong>CPF:</strong>
+              <input
+                type="number"
+                className="funcionario__input"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+                placeholder="CPF"
+                required
+              />
+            </label>
+
+            <label>
+              <strong>Email:</strong>
+              <input
+                type="email"
+                className="funcionario__input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required
+              />
+            </label>
+
+            <label>
+              <strong>Salário:</strong>
+              <input
+                type="number"
+                className="funcionario__input"
+                value={salario}
+                onChange={(e) => setSalario(e.target.value)}
+                placeholder="R$"
+                required
+              />
+            </label>
+
+            <div className="funcionario__commission-wrapper">
               <label>
                 <strong>Tipo de Comissão:</strong>
                 <select
-                  className="SelectNovoFuncionario"
-                  onChange={(e) => setTipoComissao(e.target.value)}
+                  className="funcionario__select"
                   value={tipoComissao}
+                  onChange={(e) => setTipoComissao(e.target.value)}
                 >
-                  <option value="fixa">fixa</option>
-                  <option value="percentual">percentual</option>
+                  <option value="fixa">Fixa</option>
+                  <option value="percentual">Percentual</option>
                 </select>
               </label>
 
               <label>
-                <strong>Valor Comissão:</strong>
+                <strong>Valor:</strong>
                 <input
                   type="number"
-                  placeholder={`5`}
-                  className="InputNovoFuncionarioValorComissão"
-                  onChange={(e) => setValorComissao(e.target.value)}
+                  className="funcionario__commission-value"
                   value={valorComissao}
+                  onChange={(e) => setValorComissao(e.target.value)}
+                  placeholder="5"
                   required
                 />
               </label>
             </div>
-            <div id="divSelectNovoFuncionario">
+
+            <div className="funcionario__select-group">
               <div>
-                <p>
-                  <strong>Gênero</strong>
-                </p>
-                <select
-                  className="SelectNovoFuncionario"
-                  value={genero}
-                  onChange={(e) => setGenero(e.target.value)}
-                >
-                  <option value="Masculino">Masculino</option>
-                  <option value="Feminino">Feminino</option>
-                </select>
+                <label>
+                  <strong>Gênero:</strong>
+                  <select
+                    className="funcionario__select"
+                    value={genero}
+                    onChange={(e) => setGenero(e.target.value)}
+                  >
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                  </select>
+                </label>
               </div>
 
               <div>
-                <p>
-                  <strong>Cargo</strong>
-                </p>
-                <select
-                  className="SelectNovoFuncionario"
-                  value={cargo}
-                  onChange={(e) => setCargo(e.target.value)}
-                >
-                  <option value="Vendedor">Vendedor</option>
-                  <option value="Gerente">Gerente</option>
-                  <option value="Entregador">Entregador</option>
-                  <option value="Caixa">Caixa</option>
-                </select>
+                <label>
+                  <strong>Cargo:</strong>
+                  <select
+                    className="funcionario__select"
+                    value={cargo}
+                    onChange={(e) => setCargo(e.target.value)}
+                  >
+                    <option value="Vendedor">Vendedor</option>
+                    <option value="Gerente">Gerente</option>
+                    <option value="Entregador">Entregador</option>
+                    <option value="Caixa">Caixa</option>
+                  </select>
+                </label>
               </div>
 
               <div>
-                <p>
-                  <strong>Regime de contrato</strong>
-                </p>
-                <select
-                  className="SelectNovoFuncionario"
-                  onChange={(e) => setRegime_contrato(e.target.value)}
-                  value={regime_contrato}
-                >
-                  <option value="CLT">CLT</option>
-                  <option value="Contrato">Contrato</option>
-                  <option value="Temporario">Temporario</option>
-                </select>
+                <label>
+                  <strong>Regime de Contrato:</strong>
+                  <select
+                    className="funcionario__select"
+                    value={regime_contrato}
+                    onChange={(e) => setRegime_contrato(e.target.value)}
+                  >
+                    <option value="CLT">CLT</option>
+                    <option value="Contrato">Contrato</option>
+                    <option value="Temporario">Temporário</option>
+                  </select>
+                </label>
               </div>
             </div>
-            <p>Nascimento: </p>
-            <input
-              type="date"
-              className="DataNovoCliente"
-              onChange={(e) => setNascimento(e.target.value)}
-              required
-            />
-            <button className="CadastrarNovoCliente" type="submit">
+
+            <label>
+              <strong>Nascimento:</strong>
+              <input
+                type="date"
+                className="funcionario__date"
+                value={nascimento}
+                onChange={(e) => setNascimento(e.target.value)}
+                required
+              />
+            </label>
+
+            <button type="submit" className="funcionario__button">
               Cadastrar
             </button>
           </form>

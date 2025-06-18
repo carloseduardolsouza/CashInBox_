@@ -3,7 +3,8 @@ import { useContext } from "react";
 import AppContext from "../../context/AppContext";
 
 function AssinaturaVencida() {
-  const {setFazerLogin} = useContext(AppContext)
+  const { setFazerLogin } = useContext(AppContext);
+
   return (
     <div className="blurModal">
       <div id="centralizarAssinaturaVencida">
@@ -25,19 +26,30 @@ function AssinaturaVencida() {
               </svg>
             </div>
             <div class="content">
-              <span class="title">Assinatura Vencida</span>
+              <span class="title">🚫 Assinatura Vencida</span>
               <p class="message">
-                Identificamos que a sua mensalidade da Cash In Box está em
-                atraso. Para evitar a suspensão dos serviços, entre em contato
-                com o nosso suporte e regularize sua situação o quanto antes. <br />
-                Estamos à disposição para te ajudar!
+                Oops! Detectamos que sua mensalidade da{" "}
+                <strong>Cash In Box</strong> está em atraso. 😕
+                <br />
+                <br />
+                Para recuperar o <strong>acesso os nossos serviços</strong>, entre em
+                contato com nosso suporte e regularize sua situação o quanto
+                antes.
+                <br />
+                <br />
+                📞 Estamos prontos para te ajudar — conte com a gente!
               </p>
             </div>
+
             <div class="actions">
               <button class="desactivate" type="button">
                 Suporte
               </button>
-              <button class="cancel" type="button" onClick={() => setFazerLogin(true)}>
+              <button
+                class="cancel"
+                type="button"
+                onClick={() => setFazerLogin(true)}
+              >
                 Mudar Login
               </button>
             </div>

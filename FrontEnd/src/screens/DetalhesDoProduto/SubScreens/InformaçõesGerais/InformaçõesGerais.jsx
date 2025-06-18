@@ -259,7 +259,7 @@ function InformaçõesGerais() {
               />
               <div>
                 <p>
-                  <strong>Cor:</strong> Vermelha
+                  {nomeProdutoEdit}
                 </p>
               </div>
 
