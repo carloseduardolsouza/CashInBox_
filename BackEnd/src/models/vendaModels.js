@@ -310,6 +310,28 @@ const listarVendasCrediario = async () => {
   return vendas;
 };
 
+const listarVendasCrediarioCliente = async (id) => {
+  const query = `
+    SELECT * 
+    FROM crediario_parcelas 
+    WHERE status != "pago" 
+    AND id_cliente = ?
+    ORDER BY data_vencimento ASC
+  `;
+
+  const vendas = await new Promise((resolve, reject) => {
+    connection.all(query, [id], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return vendas;
+};
+
 const listarVendasCliente = async (id) => {
   let query;
   let values = [];
@@ -386,11 +408,8 @@ const listarVendasFuncionario = async (id) => {
   return vendas.reverse();
 };
 
-const receberVendaCrediario = async (id , dados) => {
-  const {
-    data,
-    valor_pago
-  } = dados
+const receberVendaCrediario = async (id, dados) => {
+  const { data, valor_pago } = dados;
 
   const query = `
     UPDATE crediario_parcelas 
@@ -577,4 +596,5 @@ module.exports = {
   listarOrcamentos,
   procurarPagamentoVenda,
   listarVendasCrediarioVenda,
+  listarVendasCrediarioCliente,
 };

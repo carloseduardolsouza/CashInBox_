@@ -134,6 +134,10 @@ router.get(
   "/listarVendasCrediario/:filtro?/:pesquisa?",
   vendaControlles.listarVendasCrediario
 );
+router.get(
+  "/listarVendasCrediarioCliente/:id",
+  vendaControlles.listarVendasCrediarioCliente
+);
 router.get("/procurarVendaId/:id", vendaControlles.produrarVendaId);
 router.get("/procurarProdutosVenda/:id", vendaControlles.procurarProdutosVenda);
 router.get(

@@ -387,6 +387,18 @@ const listarVendasCrediario = async (filtro, pesquisa) => {
   }
 };
 
+const listarVendasCrediarioCliente = async (id) => {
+  const vendas = await fetch(`${API_URL}/listarVendasCrediarioCliente/${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const data = await vendas.json();
+  return data;
+};
+
 const listarVendasCliente = async (id) => {
   const vendas = await fetch(`${API_URL}/listarVendasCliente/${id}`)
     .then((response) => {
@@ -696,25 +708,25 @@ const cadastrarCredenciais = async (dados) => {
     throw new Error("Erro ao fazer login");
   }
 
-  return await response.json(); 
+  return await response.json();
 };
 
 const informacoesPlanos = async () => {
   const informacoesPlanos = await fetch(`${API_URL}/informacoesPlano`);
   const dados = await informacoesPlanos.json();
   return dados;
-}
+};
 
 const gerarBoleto = async () => {
   const boleto = await fetch(`${API_URL}/gerarBoleto`);
   const dados = await boleto.json();
   return dados;
-}
+};
 
 export default {
   restartApi,
   cadastrarCredenciais,
-  
+
   informacoesPlanos,
   gerarBoleto,
 
@@ -752,6 +764,7 @@ export default {
 
   listarVendas,
   listarVendasCrediario,
+  listarVendasCrediarioCliente,
   listarVendasCrediarioVenda,
   listarVendasCliente,
   listarVendasFuncionario,

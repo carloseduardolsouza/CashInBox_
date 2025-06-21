@@ -201,6 +201,25 @@ function Home() {
           </article>
         </div>
       </header>
+
+      <main>
+        <div id="InfoHomeDeash">
+          <div>
+            <span>{relatoriosBasicos.crediariosAtrasados}</span>
+            <p>Crediarios Atrasados</p>
+          </div>
+
+          <div>
+            <span>{relatoriosBasicos.totalOrcamentos}</span>
+            <p>Orçamentos</p>
+          </div>
+
+          <div>
+            <span>{relatoriosBasicos.produtosEstoqueMinimo}</span>
+            <p>Estoque minimo Atingido</p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
