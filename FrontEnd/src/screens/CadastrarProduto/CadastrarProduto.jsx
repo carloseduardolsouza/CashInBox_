@@ -105,7 +105,7 @@ function CadastrarProduto() {
   const CadastrarProduto = (e) => {
     e.preventDefault();
     let dados = {
-      nome: nomeProduto,
+      nome: nomeProduto.charAt(0).toUpperCase() + nomeProduto.slice(1).toLowerCase(),
       descricao: descrição,
       referencia: referencia,
       codigo_barras: "",
@@ -123,23 +123,23 @@ function CadastrarProduto() {
     fetchapi
       .novoProduto(dados, imageReq)
       .then((resposta) => {
-        setCategoria("")
-        setDescrição("")
-        setImageReq([])
-        setImages([])
-        setMarca("")
-        setMarkup("")
-        setNomeProduto("")
-        setPreçoCompra("")
-        setPreçoVenda("")
-        setOpenImagens(false)
+        setCategoria("");
+        setDescrição("");
+        setImageReq([]);
+        setImages([]);
+        setMarca("");
+        setMarkup("");
+        setNomeProduto("");
+        setPreçoCompra("");
+        setPreçoVenda("");
+        setOpenImagens(false);
       })
       .catch((erro) => {
         setErroApi(true);
       });
   };
 
-  const calculeValor = (campo , valor) => {
+  const calculeValor = (campo, valor) => {
     valor = parseFloat(valor) || 0;
 
     if (campo === "precoCompra") {
@@ -231,7 +231,7 @@ function CadastrarProduto() {
                 type="number"
                 placeholder="somente numeros"
                 value={preçoCompra}
-                onChange={(e) => calculeValor("precoCompra" , e.target.value)}
+                onChange={(e) => calculeValor("precoCompra", e.target.value)}
               />
             </la>
 
@@ -241,7 +241,7 @@ function CadastrarProduto() {
                 type="number"
                 placeholder="somente numeros"
                 value={markup}
-                onChange={(e) => calculeValor("margem" , e.target.value)}
+                onChange={(e) => calculeValor("margem", e.target.value)}
               />
             </la>
 
@@ -251,7 +251,7 @@ function CadastrarProduto() {
                 type="number"
                 value={preçoVenda}
                 placeholder="somente numeros"
-                onChange={(e) => calculeValor("precoVenda" , e.target.value)}
+                onChange={(e) => calculeValor("precoVenda", e.target.value)}
               />
             </la>
           </div>

@@ -3,7 +3,7 @@ const router = require("./router");
 const path = require("path");
 const os = require("os");
 
-const { verificarVencimentos } = require("./services/rotinas");
+
 
 const app = express();
 
@@ -28,9 +28,11 @@ app.use("/uploads", express.static(uploadPath));
 // === Middleware para JSON ===
 app.use(express.json());
 
-// === Rotas ===
+// === Rotas principais ===
 app.use(router);
 
-app.use(verificarVencimentos)
+// === Inicia rotinas agendadas e bot WhatsApp ===
+//require("./whatsapp/start");
+//require("./services/rotinas");
 
 module.exports = app;

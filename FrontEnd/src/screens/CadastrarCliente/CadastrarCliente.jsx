@@ -35,7 +35,7 @@ function CadastrarCliente() {
     setExecutando(true);
 
     const dados = {
-      nome: form.nome,
+      nome: form.nome.charAt(0).toUpperCase() + form.nome.slice(1).toLowerCase(),
       cpf_cnpj: form.cpf,
       email: form.email,
       genero: form.genero,

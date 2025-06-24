@@ -26,7 +26,7 @@ const NovaVenda = async (dados) => {
   const insertVendaQuery = `
     INSERT INTO vendas 
     (cliente_id, nome_cliente , funcionario_id, nome_funcionario , descontos, acrescimos, valor_total, total_bruto, status, observacoes, created_at, updated_at , data_venda)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ? , ? , ? , ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const vendaValues = [
@@ -46,11 +46,31 @@ const NovaVenda = async (dados) => {
   ];
 
   try {
-    // Insere a venda e espera o resultado
+    // Insere a venda
     await runAsync(insertVendaQuery, vendaValues);
+
+    // Pega o ID da venda recém-criada
     const vendaId = (await allAsync("SELECT last_insert_rowid() AS id"))[0].id;
 
-    // Buscar caixa aberto (função interna, sem fetch)
+    // Atualiza o total de compras do cliente, se for cliente identificado
+    if (cliente_id && cliente_id !== 0) {
+      const cliente = await allAsync(
+        "SELECT total_compras FROM clientes WHERE id = ?",
+        [cliente_id]
+      );
+
+      if (cliente.length > 0) {
+        const totalAtual = cliente[0].total_compras || 0;
+        const novoTotal = totalAtual + valor_total;
+
+        await runAsync("UPDATE clientes SET total_compras = ? WHERE id = ?", [
+          novoTotal,
+          cliente_id,
+        ]);
+      }
+    }
+
+    // Busca o caixa aberto (sem fetch)
     const caixaAberto = await caixaControlles.buscarCaixasAbertos();
 
     if (caixaAberto.length > 0) {
@@ -61,14 +81,13 @@ const NovaVenda = async (dados) => {
         valor: valor_total,
       };
 
-      // Aqui você tem que chamar a função que adiciona movimentação
       await caixaControlles.adicionarMovimentacaoHandler(
         caixaAberto[0].id,
         dadosMovimentacao
       );
     }
 
-    // Inserir produtos
+    // Inserir produtos da venda
     for (const produto of produtos) {
       const query = `
         INSERT INTO vendas_itens 
@@ -89,7 +108,7 @@ const NovaVenda = async (dados) => {
       await runAsync(query, values);
     }
 
-    // Inserir pagamentos
+    // Inserir pagamentos da venda
     for (const pagamento of pagamentos) {
       const query = `
         INSERT INTO pagamentos 
@@ -535,50 +554,51 @@ const procurarPagamentoVenda = async (id) => {
 };
 
 const deletarVenda = async (id) => {
-  const query = `DELETE FROM vendas WHERE id = ${id}`;
+  try {
+    // Buscar cliente_id e valor_total da venda antes de deletar
+    const vendaInfo = await allAsync(
+      "SELECT cliente_id, valor_total FROM vendas WHERE id = ?",
+      [id]
+    );
 
-  await new Promise((resolve, reject) => {
-    connection.run(query, function (err) {
-      if (err) {
-        reject(err); // Caso ocorra algum erro
-      } else {
-        resolve(this.lastID);
-      }
-    });
-  });
+    let cliente_id = null;
+    let valor_total = 0;
 
-  const queryDeleteItens = `DELETE FROM vendas_itens WHERE venda_id = ${id}`;
-  await new Promise((resolve, reject) => {
-    connection.run(queryDeleteItens, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
-      }
-    });
-  });
+    if (vendaInfo.length > 0) {
+      cliente_id = vendaInfo[0].cliente_id;
+      valor_total = vendaInfo[0].valor_total;
+    }
 
-  const queryFormaPagamento = `DELETE FROM pagamentos WHERE venda_id = ${id}`;
-  new Promise((resolve, reject) => {
-    connection.run(queryDeleteItens, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
-      }
-    });
-  });
+    // Deleta os itens relacionados primeiro (ordem importa)
+    await runAsync("DELETE FROM vendas_itens WHERE venda_id = ?", [id]);
+    await runAsync("DELETE FROM pagamentos WHERE venda_id = ?", [id]);
+    await runAsync("DELETE FROM crediario_parcelas WHERE id_venda = ?", [id]);
 
-  const queryParcelasCrediario = `DELETE FROM crediario_parcelas WHERE id_venda = ${id}`;
-  return new Promise((resolve, reject) => {
-    connection.run(queryParcelasCrediario, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
+    // Deleta a venda
+    await runAsync("DELETE FROM vendas WHERE id = ?", [id]);
+
+    // Atualiza o total_compras do cliente
+    if (cliente_id && cliente_id !== 0) {
+      const cliente = await allAsync(
+        "SELECT total_compras FROM clientes WHERE id = ?",
+        [cliente_id]
+      );
+
+      if (cliente.length > 0) {
+        const totalAtual = cliente[0].total_compras || 0;
+        const novoTotal = Math.max(0, totalAtual - valor_total); // nunca deixar negativo
+
+        await runAsync("UPDATE clientes SET total_compras = ? WHERE id = ?", [
+          novoTotal,
+          cliente_id,
+        ]);
       }
-    });
-  });
+    }
+
+    return { success: true };
+  } catch (err) {
+    throw err;
+  }
 };
 
 module.exports = {

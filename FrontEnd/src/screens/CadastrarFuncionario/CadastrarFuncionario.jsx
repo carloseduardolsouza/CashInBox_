@@ -25,7 +25,7 @@ function CadastrarFuncionario() {
     e.preventDefault();
 
     const dados = {
-      nome,
+      nome : nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase(),
       cpf,
       telefone: numero,
       email,

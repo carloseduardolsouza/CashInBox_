@@ -110,7 +110,7 @@ function InformaçõesGerais() {
     e.preventDefault();
     let dados = {
       id: id,
-      nome: nomeProdutoEdit,
+      nome: nomeProdutoEdit.charAt(0).toUpperCase() + nomeProdutoEdit.slice(1).toLowerCase(),
       descricao: descricaoEdit,
       codigo_barras: codBarrasEdit,
       preco_venda: preco_vendaEdit,

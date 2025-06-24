@@ -39,7 +39,7 @@ const vendaControlles = require("./controllers/vendaControllers");
 const userController = require("./controllers/userController");
 const caixaControlles = require("./controllers/caixaControlles");
 const services = require("./services/services");
-const automacao = require("./services/automacao");
+const whatsapp = require("./whatsapp/controller");
 const relatorios = require("./services/relatorios");
 const configController = require("./controllers/configController");
 
@@ -174,11 +174,11 @@ router.get(
   relatorios.calcularFaturamentoMensal
 );
 
-router.post("/EnviarMenssagemWhatsapp", automacao.enviarMensagem);
-router.get("/qrCodeAutomacao", automacao.qrCode);
+router.post("/EnviarMenssagemWhatsapp", whatsapp.enviarMensagem);
+router.get("/qrCodeAutomacao", whatsapp.qrCode);
 
-router.get("/informacoesPlano" , services.informacoesPlano)
-router.get("/gerarBoleto" , services.gerarBoleto)
+router.get("/informacoesPlano", services.informacoesPlano);
+router.get("/gerarBoleto", services.gerarBoleto);
 
 router.post("/login", services.login);
 
