@@ -1,12 +1,21 @@
 import "./AutomacaoWhats.css";
 import { useState, useEffect } from "react";
 import fetchapi from "../../../../api/fetchapi";
-
 import { FaRobot } from "react-icons/fa";
 
 function AutomacaoWhats() {
   const [dadosBot, setDadosBot] = useState({});
   const [erro, setErro] = useState(false);
+
+  const [automaAniversario, setAutomaAniversario] = useState(false);
+  const [automaNotificacao, setAutomaNotificacao] = useState(false);
+  const [automaInatividade , setAutomaInatividade] = useState(false)
+
+  const [horaAniversario, setHoraAniversario] = useState("09:00");
+  const [mensagemAniversario, setMensagemAniversario] = useState(
+    "🎉 Feliz aniversário! Você ganhou 10% de desconto hoje!"
+  );
+  const [numeroNotificacao, setNumeroNotificacao] = useState("");
 
   const [clickRobo, setClickRobo] = useState(false);
 
@@ -22,26 +31,19 @@ function AutomacaoWhats() {
   };
 
   useEffect(() => {
-    fetchQrCode(); // Já chama logo de cara
+    fetchQrCode();
     const interval = setInterval(() => {
       fetchQrCode();
-    }, 1000); // 1 segundo
-
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
   const statusColor = dadosBot.status_bot === "online" ? "green" : "red";
 
+
   return (
     <div id="AutomacaoWhats">
-      <div
-        id="divStatusRobo"
-        onClick={() => {
-          if (clickRobo === false) {
-            setClickRobo(true);
-          } else setClickRobo(false);
-        }}
-      >
+      <div id="divStatusRobo" onClick={() => setClickRobo(!clickRobo)}>
         <div id="divSpanConectado">
           <div
             id="spanConectadoOrNo"
@@ -65,6 +67,100 @@ function AutomacaoWhats() {
             )}
           </div>
         )}
+      </div>
+
+      <div>
+        <div className="CardOptions">
+          <div className="inputCardOptions">
+            <p>Mensagem de aniversário 🎉</p>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={automaAniversario}
+                onChange={() => setAutomaAniversario(!automaAniversario)}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+          {automaAniversario && (
+            <div>
+              <label>
+                <p>Horário da mensagem:</p>
+                <input
+                  type="time"
+                  value={horaAniversario}
+                  onChange={(e) => setHoraAniversario(e.target.value)}
+                />
+              </label>
+
+              <label>
+                <p>Mensagem:</p>
+                <textarea
+                  value={mensagemAniversario}
+                  onChange={(e) => setMensagemAniversario(e.target.value)}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
+        <div className="CardOptions">
+          <div className="inputCardOptions">
+            <p>Mensagem de inatividade 💤</p>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={automaInatividade}
+                onChange={() => setAutomaInatividade(!automaInatividade)}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+          {automaInatividade && (
+            <div>
+              <label>
+                <p>Período sem comprar (em dias):</p>
+                <input
+                  type="number"
+                  min={1}
+                />
+              </label>
+
+              <label>
+                <p>Mensagem:</p>
+                <textarea
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
+        <div className="CardOptions">
+          <div className="inputCardOptions">
+            <p>Notificações no celular 📱</p>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={automaNotificacao}
+                onChange={() => setAutomaNotificacao(!automaNotificacao)}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+          {automaNotificacao && (
+            <div>
+              <label>
+                <p>Número WhatsApp:</p>
+                <input
+                  type="number"
+                  value={numeroNotificacao}
+                  onChange={(e) => setNumeroNotificacao(e.target.value)}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

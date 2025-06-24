@@ -53,20 +53,22 @@ const NovaVenda = async (dados) => {
     const vendaId = (await allAsync("SELECT last_insert_rowid() AS id"))[0].id;
 
     // Atualiza o total de compras do cliente, se for cliente identificado
-    if (cliente_id && cliente_id !== 0) {
-      const cliente = await allAsync(
-        "SELECT total_compras FROM clientes WHERE id = ?",
-        [cliente_id]
-      );
+    if (status != "orçamento") {
+      if (cliente_id && cliente_id !== 0) {
+        const cliente = await allAsync(
+          "SELECT total_compras FROM clientes WHERE id = ?",
+          [cliente_id]
+        );
 
-      if (cliente.length > 0) {
-        const totalAtual = cliente[0].total_compras || 0;
-        const novoTotal = totalAtual + valor_total;
+        if (cliente.length > 0) {
+          const totalAtual = cliente[0].total_compras || 0;
+          const novoTotal = totalAtual + valor_total;
 
-        await runAsync("UPDATE clientes SET total_compras = ? WHERE id = ?", [
-          novoTotal,
-          cliente_id,
-        ]);
+          await runAsync("UPDATE clientes SET total_compras = ? WHERE id = ?", [
+            novoTotal,
+            cliente_id,
+          ]);
+        }
       }
     }
 
@@ -561,13 +563,18 @@ const deletarVenda = async (id) => {
       [id]
     );
 
-    let cliente_id = null;
-    let valor_total = 0;
-
-    if (vendaInfo.length > 0) {
-      cliente_id = vendaInfo[0].cliente_id;
-      valor_total = vendaInfo[0].valor_total;
+    if (vendaInfo.length === 0) {
+      throw new Error("Venda não encontrada.");
     }
+
+    const cliente_id = vendaInfo[0].cliente_id;
+    const valor_total = vendaInfo[0].valor_total;
+
+    // Buscar status da venda ANTES de deletar ela
+    const statusRes = await allAsync("SELECT status FROM vendas WHERE id = ?", [
+      id,
+    ]);
+    const statusVenda = statusRes.length > 0 ? statusRes[0].status : null;
 
     // Deleta os itens relacionados primeiro (ordem importa)
     await runAsync("DELETE FROM vendas_itens WHERE venda_id = ?", [id]);
@@ -577,8 +584,8 @@ const deletarVenda = async (id) => {
     // Deleta a venda
     await runAsync("DELETE FROM vendas WHERE id = ?", [id]);
 
-    // Atualiza o total_compras do cliente
-    if (cliente_id && cliente_id !== 0) {
+    // Atualiza o total_compras do cliente se não for orçamento
+    if (statusVenda !== "orçamento" && cliente_id && cliente_id !== 0) {
       const cliente = await allAsync(
         "SELECT total_compras FROM clientes WHERE id = ?",
         [cliente_id]
@@ -586,7 +593,7 @@ const deletarVenda = async (id) => {
 
       if (cliente.length > 0) {
         const totalAtual = cliente[0].total_compras || 0;
-        const novoTotal = Math.max(0, totalAtual - valor_total); // nunca deixar negativo
+        const novoTotal = Math.max(0, totalAtual - valor_total);
 
         await runAsync("UPDATE clientes SET total_compras = ? WHERE id = ?", [
           novoTotal,
@@ -597,6 +604,7 @@ const deletarVenda = async (id) => {
 
     return { success: true };
   } catch (err) {
+    console.error("Erro ao deletar venda:", err.message);
     throw err;
   }
 };
