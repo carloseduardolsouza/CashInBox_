@@ -1,4 +1,5 @@
 node_modules
+restart.flag
 .env
 *.sqlite
 uploads/
