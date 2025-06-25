@@ -35,6 +35,12 @@
   border-radius: 5px;
 }
 
+.divValorNDocumento select {
+  padding: 5px;
+  border-radius: 5px;
+  border: solid black 1px;
+}
+
 .divValorNDocumento label {
   flex: 1;
   display: flex;

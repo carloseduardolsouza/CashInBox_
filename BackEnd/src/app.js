@@ -11,6 +11,7 @@ const produtoRoute = require("./routers/produtoRoute")
 const relatorioRoute = require("./routers/relatorioRoute")
 const whatsappRoute = require("./routers/whatsappRoute")
 const userEditRoute = require("./routers/userEditRoute")
+const contasRoute = require("./routers/contasRoute")
 
 const app = express();
 
@@ -55,5 +56,6 @@ app.use("/categorias", categoriaRoute);
 app.use("/relatorios", relatorioRoute);
 app.use("/whatsapp", whatsappRoute);
 app.use("/user", userEditRoute);
+app.use("/contas", contasRoute);
 
 module.exports = app;
