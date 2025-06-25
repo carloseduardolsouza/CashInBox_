@@ -89,7 +89,7 @@ async function verificarVencimentos() {
 }
 
 // === Enviar Mensagem WhatsApp ===
-async function enviarMensagem(numero, nomeCli) {
+async function enviarMensagem(numero, mensagemFormatada) {
   try {
     const online = await temConexaoInternet();
     if (!online) {
@@ -120,12 +120,6 @@ async function enviarMensagem(numero, nomeCli) {
       console.log("⚠️ Número não está registrado no WhatsApp:", chatId);
       return;
     }
-
-    const mensagemFormatada = `🎉 Olá ${nomeCli}! Em comemoração a esta data muito especial, a equipe da *CashInBox* deseja um *feliz aniversário*! 🎂🎈
-
-Pra celebrar com estilo, você ganha *10% de desconto em todos os itens da loja*, só hoje! 🛍️🎁
-
-Aproveite e faça seu dia ainda melhor! 🥳`;
 
     await client.sendMessage(chatId, mensagemFormatada);
 
@@ -160,14 +154,75 @@ async function verificarAniversariantes() {
         } else {
           console.log("🎂 Aniversariantes do dia:");
           for (const cli of aniversariantes) {
+            const mensagemFormatada = `🎉 Olá ${cli.nome}! Em comemoração a esta data muito especial, a equipe da *CashInBox* deseja um *feliz aniversário*! 🎂🎈
+
+Pra celebrar com estilo, você ganha *10% de desconto em todos os itens da loja*, só hoje! 🛍️🎁
+
+Aproveite e faça seu dia ainda melhor! 🥳`;
             console.log(`🎈 ${cli.nome} - 📞 ${cli.telefone}`);
-            await enviarMensagem(cli.telefone, cli.nome);
+            await enviarMensagem(cli.telefone, mensagemFormatada);
           }
         }
 
         resolve();
       }
     );
+  });
+}
+
+// === ROTINA 3 - Verificar Pendências ===
+async function cobrarPendencias() {
+  return new Promise((resolve) => {
+    const query = `
+      SELECT 
+        cp.valor_parcela,
+        cp.data_vencimento,
+        cp.id_cliente,
+        c.nome,
+        c.telefone
+      FROM crediario_parcelas cp
+      JOIN clientes c ON cp.id_cliente = c.id
+      WHERE cp.status = 'vencido'
+    `;
+
+    db.all(query, [], async (err, rows) => {
+      if (err) {
+        console.error("❌ Erro ao buscar pendências:", err.message);
+        return resolve();
+      }
+
+      if (rows.length === 0) {
+        console.log("✅ Nenhuma pendência vencida encontrada.");
+      } else {
+        console.log("📌 Pendências vencidas:");
+        for (const row of rows) {
+          const { nome, telefone, valor_parcela, data_vencimento } = row;
+
+          const valorFormatado = Number(valor_parcela)
+            .toFixed(2)
+            .replace(".", ",");
+          const vencimentoFormatado =
+            dayjs(data_vencimento).format("DD/MM/YYYY");
+
+          const mensagemFormatada = `Olá, ${nome}! 👋
+
+Verificamos que você possui uma pendência em aberto referente ao crediário na nossa loja.
+
+💰 *Valor da parcela:* R$ ${valorFormatado}
+📅 *Vencimento:* ${vencimentoFormatado}
+
+Pedimos que regularize o pagamento o quanto antes para evitar restrições no seu CPF e manter seu nome limpo. Qualquer dúvida estamos à disposição! 🤝
+
+Atenciosamente,
+Equipe CashInBox 💼`;
+
+          console.log(`📞 Enviando cobrança para: ${nome} - ${telefone}`);
+          await enviarMensagem(telefone, mensagemFormatada);
+        }
+      }
+
+      resolve();
+    });
   });
 }
 
@@ -182,6 +237,7 @@ async function executarRotinasDiarias() {
 
   await verificarVencimentos();
   await verificarAniversariantes();
+  await cobrarPendencias()
 
   const hoje = dayjs().format("YYYY-MM-DD");
   salvarStatusRotinas(hoje);
@@ -202,5 +258,6 @@ module.exports = {
   executarRotinasDiarias,
   verificarVencimentos,
   verificarAniversariantes,
+  cobrarPendencias,
   enviarMensagem,
 };

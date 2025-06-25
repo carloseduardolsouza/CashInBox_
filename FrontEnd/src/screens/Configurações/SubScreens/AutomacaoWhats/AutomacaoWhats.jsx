@@ -161,6 +161,20 @@ function AutomacaoWhats() {
           )}
         </div>
 
+        <div className="CardOptions">
+          <div className="inputCardOptions">
+            <p>Mensagem de cobrança ⚠️</p>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={automaNotificacao}
+                onChange={() => setAutomaNotificacao(!automaNotificacao)}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+        </div>
+
       </div>
     </div>
   );
