@@ -3,10 +3,6 @@ const API_URL = "http://localhost:3322";
 const fetchJson = async (url, options = {}) => {
   try {
     const res = await fetch(url, options);
-    if (!res.ok) {
-      const errorBody = await res.text();
-      throw new Error(`HTTP ${res.status}: ${errorBody}`);
-    }
     return await res.json();
   } catch (err) {
     console.error("Fetch error:", err);

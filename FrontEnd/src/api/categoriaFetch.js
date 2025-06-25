@@ -38,7 +38,25 @@ const listarCategorias = async () => {
   }
 };
 
+const deletarCategoria = async (id) => {
+  try {
+    const res = await fetch(`${API_URL}/categorias/${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      const errorBody = await res.text();
+      throw new Error(`Falha ao excluir categoria: HTTP ${res.status} - ${errorBody}`);
+    }
+    console.log("categoria excluído com sucesso");
+    return true;
+  } catch (error) {
+    console.error("Erro ao deletar categoria:", error.message);
+    throw error;
+  }
+}
+
 export default {
   novaCategoria,
   listarCategorias,
+  deletarCategoria
 };

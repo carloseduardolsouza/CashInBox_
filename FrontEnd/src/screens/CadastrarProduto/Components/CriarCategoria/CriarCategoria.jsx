@@ -22,6 +22,22 @@ function CriarCategoria({ fechar }) {
       .catch(() => setErroApi(true));
   }, []);
 
+  const deletarCategoria = async (id) => {
+    await categoriaFetch
+      .deletarCategoria(id)
+      .then(() => {
+        categoriaFetch
+          .listarCategorias()
+          .then((response) => {
+            setCategorias(response);
+          })
+          .catch(() => setErroApi(true));
+      })
+      .catch(() => {
+        setErroApi(true);
+      });
+  };
+
   const criarCategoria = (e) => {
     const dados = {
       nome:
@@ -78,7 +94,10 @@ function CriarCategoria({ fechar }) {
               <span>
                 {" "}
                 <p>{dados.nome}</p>{" "}
-                <button id="deletarCategoria">
+                <button
+                  id="deletarCategoria"
+                  onClick={() => deletarCategoria(dados.id)}
+                >
                   <MdDelete />
                 </button>
               </span>

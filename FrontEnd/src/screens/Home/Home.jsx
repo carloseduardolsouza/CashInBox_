@@ -23,12 +23,21 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { MdAttachMoney } from "react-icons/md";
 import { FaComputer } from "react-icons/fa6";
 import { IoMdArrowDropup } from "react-icons/io";
-import { FaBoxOpen } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Home() {
   const [relatoriosBasicos, setRelatoriosBasicos] = useState({});
-  const { isDark, setIsDark, dadosLoja, setErroApi , setVencido , setFazerLogin } = useContext(AppContext);
+  const {
+    isDark,
+    setIsDark,
+    dadosLoja,
+    setErroApi,
+    setVencido,
+    setFazerLogin,
+  } = useContext(AppContext);
   const [data, setData] = useState([]);
+
+  const [mostrarInfo, setMostrarInfo] = useState(false);
 
   useEffect(() => {
     if (isDark) {
@@ -43,24 +52,24 @@ function Home() {
       .buscarRelatoriosBasicos()
       .then((response) => {
         if (
-        response.message ===
-        "Assinatura vencida. Por favor, renove sua assinatura."
-      ) {
-        setVencido(true);
-        return;
-      }
+          response.message ===
+          "Assinatura vencida. Por favor, renove sua assinatura."
+        ) {
+          setVencido(true);
+          return;
+        }
 
-      if (response.message === "Erro ao ler credenciais.") {
-        setFazerLogin(true)
-        return
-      }
+        if (response.message === "Erro ao ler credenciais.") {
+          setFazerLogin(true);
+          return;
+        }
 
-      if (Array.isArray(response)) {
-        setRelatoriosBasicos(response);
-      } else {
-        setRelatoriosBasicos([]); // Evita o erro
-        console.warn("Resposta inesperada:", response);
-      }
+        if (Array.isArray(response)) {
+          setRelatoriosBasicos(response);
+        } else {
+          setRelatoriosBasicos([]); // Evita o erro
+          console.warn("Resposta inesperada:", response);
+        }
 
         setRelatoriosBasicos(response);
 
@@ -76,12 +85,12 @@ function Home() {
         const newData = [];
         for (let i = 0; i < 7; i++) {
           newData.push({
-          name: "Mês",
-          Despesas: 10,
-          Receitas: 40,
-        })
+            name: "Mês",
+            Despesas: 10,
+            Receitas: 40,
+          });
         }
-        setData(newData)
+        setData(newData);
         setErroApi(true);
       });
   }, []);
@@ -99,6 +108,21 @@ function Home() {
   return (
     <div id="Homescreen">
       <div className="NotificationHomeScreen">
+        <button
+          id="ButtonDarkMode"
+          onClick={() => setMostrarInfo(!mostrarInfo)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "20px",
+          }}
+          aria-label={
+            mostrarInfo ? "Esconder informações" : "Mostrar informações"
+          }
+        >
+          {mostrarInfo ? <FaEye /> : <FaEyeSlash />}
+        </button>
         <button id="ButtonDarkMode" onClick={() => setIsDark(!isDark)}>
           {isDark ? "☀️" : "🌙"}
         </button>
@@ -182,13 +206,19 @@ function Home() {
 
           <article className="cardMétricasBox orange">
             <h2>Faturamento Mês</h2>
-            <h1>{services.formatarCurrency(faturamentoAtual || 0)}</h1>
+            <h1>
+              {mostrarInfo
+                ? services.formatarCurrency(faturamentoAtual || 0)
+                : "••••••"}
+            </h1>
             <div className="linha" />
             <div className="displayFlex">
               <div>
                 <p>Último mês</p>
                 <strong>
-                  {services.formatarCurrency(faturamentoAnterior || 0)}
+                  {mostrarInfo
+                    ? services.formatarCurrency(faturamentoAnterior || 0)
+                    : "••••••"}
                 </strong>
               </div>
               <div>

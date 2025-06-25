@@ -3,12 +3,6 @@ const API_URL = "http://localhost:3322";
 async function handleFetch(url, options) {
   try {
     const response = await fetch(url, options);
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Erro ${response.status}: ${errorText || response.statusText}`
-      );
-    }
     return response.json();
   } catch (error) {
     console.error("Fetch error:", error);
@@ -21,7 +15,7 @@ const listarVendas = (filtro) =>
 
 const listarVendasCrediario = (filtro, pesquisa) => {
   if (filtro === undefined && pesquisa === undefined) {
-    return handleFetch(`${API_URL}/vendas/crediario/todas` , {method: "GET",});
+    return handleFetch(`${API_URL}/vendas/crediario/todas`, { method: "GET" });
   }
   // Se quiser lógica para outros casos, bota aqui
   return Promise.resolve([]); // Ou qualquer retorno padrão

@@ -63,7 +63,7 @@ const procurarProdutos = async (p = "") => {
     : `/produtos/${encodeURIComponent(p)}`;
 
   const response = await fetch(API_URL + endpoint);
-  return handleResponse(response);
+  return response.json();
 };
 
 const procurarProdutoId = async (id) => {
