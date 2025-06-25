@@ -7,7 +7,7 @@ import services from "../../../../services/services";
 import ModalFaturar from "./components/ModalFaturar/ModalFaturar";
 
 //conexão com a api
-import fetchapi from "../../../../api/fetchapi";
+import vendaFetch from "../../../../api/vendaFetch";
 
 function VendasAReceber() {
   const { setErroApi } = useContext(AppContext);
@@ -18,7 +18,7 @@ function VendasAReceber() {
 
   const carregarVendasCrediario = async () => {
     try {
-      const response = await fetchapi.listarVendasCrediario();
+      const response = await vendaFetch.listarVendasCrediario();
       setResultadosVendas(response);
     } catch (error) {
       setErroApi(true);

@@ -1,7 +1,7 @@
 import "./Orçamentos.css";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import fetchapi from "../../../../api/fetchapi";
+import vendaFetch from "../../../../api/vendaFetch";
 import services from "../../../../services/services";
 
 function Orçamentos() {
@@ -10,7 +10,7 @@ function Orçamentos() {
   const [arrayOrcamento, setArrayOrcamento] = useState([]);
 
   useEffect(() => {
-    fetchapi.listarOrcamentoCliente(id).then((response) => {
+    vendaFetch.listarOrcamentoCliente(id).then((response) => {
       setArrayOrcamento(response);
     });
   }, []);

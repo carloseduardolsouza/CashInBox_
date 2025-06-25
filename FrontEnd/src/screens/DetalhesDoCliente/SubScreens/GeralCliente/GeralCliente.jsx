@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 //conexão com a api
-import fetchapi from "../../../../api/fetchapi";
+import clientesFetch from "../../../../api/clientesFetch";
 
 //serviços
 import services from "../../../../services/services";
@@ -69,12 +69,12 @@ function GeralCliente({ infoCliente }) {
       endereco: enderecoEdit,
     };
 
-    fetchapi.AtualizarCliente(dados);
+    clientesFetch.atualizarCliente(dados);
     setEditar(false);
   };
 
   const deletarCliente = () => {
-    fetchapi.DeletarCliente(id);
+    clientesFetch.deletarCliente(id);
     navigate("/clientes");
   };
 

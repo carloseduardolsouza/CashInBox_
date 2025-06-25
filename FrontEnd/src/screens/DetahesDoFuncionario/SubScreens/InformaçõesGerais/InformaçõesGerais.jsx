@@ -10,7 +10,7 @@ import { FaEdit, FaCheckCircle, FaUserAlt } from "react-icons/fa";
 import services from "../../../../services/services";
 
 // Conexão com a API
-import fetchapi from "../../../../api/fetchapi";
+import funcionarioFetch from "../../../../api/funcionarioFetch";
 
 // Componentes
 import Loading from "../../../../components/Loading/Loading";
@@ -79,7 +79,7 @@ function InformaçõesGerais({ infoFuncionario }) {
     };
 
     try {
-      await fetchapi.AtualizarFuncionario(dados);
+      await funcionarioFetch.atualizarFuncionario(dados);
       setEditar(false);
     } catch (error) {
       console.error("Erro ao atualizar funcionário:", error);
@@ -88,7 +88,7 @@ function InformaçõesGerais({ infoFuncionario }) {
 
   const deletarFuncionario = async () => {
     try {
-      await fetchapi.DeletarFuncionario(id);
+      await funcionarioFetch.deletarFuncionario(id);
       navigate("/funcionarios");
     } catch (error) {
       console.error("Erro ao deletar funcionário:", error);

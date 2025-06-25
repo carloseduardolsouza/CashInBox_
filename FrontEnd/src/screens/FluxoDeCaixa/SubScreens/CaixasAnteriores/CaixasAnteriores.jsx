@@ -1,6 +1,6 @@
 import "./CaixasAnteriores.css";
 import { useEffect, useState, useContext } from "react";
-import fetchapi from "../../../../api/fetchapi";
+import caixaFetch from "../../../../api/caixaFetch";
 import services from "../../../../services/services";
 import AppContext from "../../../../context/AppContext";
 
@@ -15,8 +15,8 @@ function CaixasAnteriores() {
   const [dadosModal, setDadosModal] = useState(null);
 
   useEffect(() => {
-    fetchapi
-      .BuscarCaixas()
+    caixaFetch
+      .buscarCaixas()
       .then((response) => {
         setCaixasAnteriores(response);
       })

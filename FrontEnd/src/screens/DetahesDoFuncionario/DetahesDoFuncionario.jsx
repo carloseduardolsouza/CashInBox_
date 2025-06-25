@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 //conexão api
-import fetchapi from "../../api/fetchapi";
+import funcionarioFetch from "../../api/funcionarioFetch";
 
 //componentes
 import Loading from "../../components/Loading/Loading";
@@ -20,7 +20,7 @@ function DetahesDoFuncionario() {
   const renderConteudo = () => {
     switch (abaAtiva) {
       case "InformaçõesGerais":
-        return <InformaçõesGerais infoFuncionario={infoFuncionario[0]} />;
+        return <InformaçõesGerais infoFuncionario={infoFuncionario} />;
       case "Vendas":
         return <Vendas />;
       default:
@@ -31,8 +31,9 @@ function DetahesDoFuncionario() {
   useEffect(() => {
     const buscarFuncionario = async () => {
       try {
-        const resultado = await fetchapi.ProcurarFuncionarioId(id);
+        const resultado = await funcionarioFetch.procurarFuncionarioId(id);
         setInfoFuncionario(resultado);
+        console.log(resultado)
       } catch (err) {
         console.error("Erro ao buscar Funcionario:", err);
       }

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import services from "../../../../services/services";
 
 //conexão com a api
-import fetchapi from "../../../../api/fetchapi";
+import vendaFetch from "../../../../api/vendaFetch";
 
 import { FaFilter } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
@@ -20,7 +20,7 @@ function HistoricoVendas() {
 
   const carregarVendas = async () => {
     try {
-      const response = await fetchapi.listarVendas(filtroData);
+      const response = await vendaFetch.listarVendas(filtroData);
 
       if (
         response.message ===
@@ -60,7 +60,7 @@ function HistoricoVendas() {
       return;
     }
 
-    await Promise.all(arraySelect.map((id) => fetchapi.deletarVenda(id)));
+    await Promise.all(arraySelect.map((id) => vendaFetch.deletarVenda(id)));
     await carregarVendas();
     setArraySelect([]);
   };

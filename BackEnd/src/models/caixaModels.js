@@ -1,184 +1,169 @@
 const connection = require("./db");
 
+/**
+ * Inicia um novo caixa com os dados recebidos
+ * Define data de abertura, valor inicial e status como "aberto"
+ */
 const iniciarNovoCaixa = async (dados) => {
   const { valor_abertura } = dados;
-
   const created_at = new Date().toISOString();
 
   const query = `
-    INSERT INTO caixas (data_abertura , valor_abertura , valor_esperado , status)
-    VALUES (? , ? , ? , ?)
+    INSERT INTO caixas (data_abertura, valor_abertura, valor_esperado, status)
+    VALUES (?, ?, ?, ?)
   `;
 
   const values = [created_at, valor_abertura, valor_abertura, "aberto"];
 
   return new Promise((resolve, reject) => {
     connection.run(query, values, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID);
-      }
+      if (err) return reject(err);
+      resolve(this.lastID); // Retorna o ID do novo caixa criado
     });
   });
 };
 
+/**
+ * Retorna todos os caixas registrados
+ */
 const buscarCaixas = async () => {
   const query = `SELECT * FROM caixas`;
 
   return new Promise((resolve, reject) => {
     connection.all(query, [], (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
+      if (err) return reject(err);
+      resolve(rows);
     });
   });
 };
 
+/**
+ * Retorna todos os caixas com status "aberto"
+ */
 const buscarCaixasAbertos = async () => {
-  const query = `SELECT * FROM caixas WHERE status = "aberto" `;
+  const query = `SELECT * FROM caixas WHERE status = "aberto"`;
 
   return new Promise((resolve, reject) => {
     connection.all(query, [], (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
+      if (err) return reject(err);
+      resolve(rows);
     });
   });
 };
 
-const adicionarMovimentações = async (id, dados) => {
+/**
+ * Adiciona uma movimentação (entrada ou saída) a um caixa
+ * Atualiza o caixa com os valores corretos, dependendo do tipo da movimentação
+ */
+const adicionarMovimentacoes = async (id, dados) => {
   const { descricao, tipo, valor } = dados;
   const created_at = new Date().toISOString();
 
-  const queryInsert = `
-    INSERT INTO movimentacoes (caixa_id , data , descricao , tipo , valor)
+  const insertQuery = `
+    INSERT INTO movimentacoes (caixa_id, data, descricao, tipo, valor)
     VALUES (?, ?, ?, ?, ?)
   `;
   const values = [id, created_at, descricao, tipo, valor];
 
   try {
+    // Busca o caixa aberto
+    const caixas = await buscarCaixasAbertos();
+    if (!caixas || caixas.length === 0)
+      throw new Error("Nenhum caixa aberto encontrado.");
+
+    const caixa = caixas[0];
+
+    // Atualiza os valores do caixa dependendo do tipo
     if (tipo === "entrada") {
-      const caixas = await new Promise((resolve, reject) => {
-        connection.all(
-          `SELECT * FROM caixas WHERE status = "aberto"`,
-          [],
-          (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows);
-          }
-        );
-      });
-
-      if (!caixas || caixas.length === 0)
-        throw new Error("Nenhum caixa aberto encontrado.");
-
-      const caixa = caixas[0];
-      const novoSaldo = (caixa.saldo_adicionado += Number(valor));
-      const novoSaldoRecebido = (caixa.total_recebido += Number(valor));
-      const novoSaldoEsperado = (caixa.valor_esperado += Number(valor));
+      const novoSaldoAdicionado = (caixa.saldo_adicionado || 0) + Number(valor);
+      const novoTotalRecebido = (caixa.total_recebido || 0) + Number(valor);
+      const novoValorEsperado = (caixa.valor_esperado || 0) + Number(valor);
 
       await new Promise((resolve, reject) => {
         connection.run(
-          `UPDATE caixas SET saldo_adicionado = ?, total_recebido = ? , valor_esperado = ? WHERE id = ?`,
-          [novoSaldo, novoSaldoRecebido, novoSaldoEsperado, caixa.id],
+          `UPDATE caixas SET saldo_adicionado = ?, total_recebido = ?, valor_esperado = ? WHERE id = ?`,
+          [novoSaldoAdicionado, novoTotalRecebido, novoValorEsperado, caixa.id],
           function (err) {
-            if (err) reject(err);
-            else resolve(this.changes);
+            if (err) return reject(err);
+            resolve(this.changes);
           }
         );
       });
-    }
-    if (tipo === "saida") {
-      const caixas = await new Promise((resolve, reject) => {
-        connection.all(
-          `SELECT * FROM caixas WHERE status = "aberto"`,
-          [],
-          (err, rows) => {
-            if (err) reject(err);
-            else resolve(rows);
-          }
-        );
-      });
-
-      if (!caixas || caixas.length === 0)
-        throw new Error("Nenhum caixa aberto encontrado.");
-
-      const caixa = caixas[0];
-      const novoSaldo = (caixa.saldo_retirada += Number(valor));
-      const novoSaldoEsperado = caixa.valor_esperado - Number(valor);
+    } else if (tipo === "saida") {
+      const novoSaldoRetirada = (caixa.saldo_retirada || 0) + Number(valor);
+      const novoValorEsperado = (caixa.valor_esperado || 0) - Number(valor);
 
       await new Promise((resolve, reject) => {
         connection.run(
-          `UPDATE caixas SET saldo_retirada = ? , valor_esperado = ? WHERE id = ?`,
-          [novoSaldo, novoSaldoEsperado, caixa.id],
+          `UPDATE caixas SET saldo_retirada = ?, valor_esperado = ? WHERE id = ?`,
+          [novoSaldoRetirada, novoValorEsperado, caixa.id],
           function (err) {
-            if (err) reject(err);
-            else resolve(this.changes);
+            if (err) return reject(err);
+            resolve(this.changes);
           }
         );
       });
     }
 
-    const result = await new Promise((resolve, reject) => {
-      connection.run(queryInsert, values, function (err) {
-        if (err) reject(err);
-        else resolve(this.lastID);
+    // Registra a movimentação
+    return await new Promise((resolve, reject) => {
+      connection.run(insertQuery, values, function (err) {
+        if (err) return reject(err);
+        resolve(this.lastID); // Retorna o ID da movimentação
       });
     });
-
-    return result;
   } catch (error) {
     console.error("Erro ao adicionar movimentação:", error);
     throw error;
   }
 };
 
-const buscarMovimentações = async (id) => {
-  const query = `SELECT * FROM movimentacoes WHERE caixa_id = ${id}`;
+/**
+ * Busca todas as movimentações de um caixa específico
+ */
+const buscarMovimentacoes = async (id) => {
+  const query = `SELECT * FROM movimentacoes WHERE caixa_id = ?`;
 
   return new Promise((resolve, reject) => {
-    connection.all(query, [], (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
+    connection.all(query, [id], (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows);
     });
   });
 };
 
+/**
+ * Fecha um caixa específico, atualizando status, valor de fechamento e data
+ */
 const fecharCaixa = async (id, dados) => {
   const { valor_fechamento } = dados;
+  const updatedAt = new Date().toISOString();
 
   const query = `
-      UPDATE caixas
-      SET status = ?,
-      data_fechamento = ?,
-      valor_fechamento = ?
-      WHERE id = ?
-    `;
-
-  const updatedAt = new Date().toISOString();
+    UPDATE caixas
+    SET status = ?, data_fechamento = ?, valor_fechamento = ?
+    WHERE id = ?
+  `;
 
   return new Promise((resolve, reject) => {
     connection.run(
       query,
       ["fechado", updatedAt, valor_fechamento, id],
-
       function (err) {
-        if (err) {
-          reject(err);
-        } else if (this.changes === 0) {
-          resolve(null); // Nenhuma linha foi atualizada (ID pode não existir)
-        } else {
-          resolve(this.changes); // Quantidade de linhas alteradas
-        }
+        if (err) return reject(err);
+        if (this.changes === 0) return resolve(null); // Nenhum caixa encontrado com esse ID
+        resolve(this.changes); // Quantidade de linhas afetadas
       }
     );
   });
 };
 
+// Exporta todas as funções
 module.exports = {
   buscarCaixas,
   buscarCaixasAbertos,
-  adicionarMovimentações,
+  adicionarMovimentacoes,
   iniciarNovoCaixa,
-  buscarMovimentações,
+  buscarMovimentacoes,
   fecharCaixa,
 };

@@ -1,5 +1,5 @@
 import "./FecharCaixa.css";
-import fetchapi from "../../../../../../api/fetchapi";
+import caixaFetch from "../../../../../../api/caixaFetch";
 import { useState, useContext } from "react";
 import AppContext from "../../../../../../context/AppContext";
 
@@ -13,8 +13,8 @@ function FecharCaixa({ atualizar, fecharAba, statusCaixa , id}) {
       valor_fechamento: valorFinal || 0,
     };
 
-    await fetchapi
-      .FecharCaixa(dataCaixa , id)
+    await caixaFetch
+      .fecharCaixa(dataCaixa , id)
       .then(() => {
         statusCaixa("Fechado");
         atualizar();

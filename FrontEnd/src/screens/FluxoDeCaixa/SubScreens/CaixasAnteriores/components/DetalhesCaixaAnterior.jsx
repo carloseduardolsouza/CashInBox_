@@ -1,7 +1,7 @@
 import "./DetalhesCaixaAnterior.css";
 
 import { useState, useEffect } from "react";
-import fetchapi from "../../../../../api/fetchapi";
+import caixaFetch from "../../../../../api/caixaFetch";
 
 import services from "../../../../../services/services";
 
@@ -12,7 +12,7 @@ function DetalhesCaixaAnterior({ dados, fechar }) {
   const [movimentacoes, setMovimentacoes] = useState([]);
 
   const buscarMovimentações = async () => {
-    await fetchapi.BuscarMovimentacao(dados.id).then((response) => {
+    await caixaFetch.buscarMovimentacao(dados.id).then((response) => {
       setMovimentacoes(response);
       console.log(response);
     });

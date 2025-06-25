@@ -8,20 +8,17 @@ const listarFuncionario = async (p) => {
     query = `SELECT * FROM funcionarios`;
   } else {
     query = `SELECT * FROM funcionarios WHERE nome LIKE ?`;
-    values.push(`%${p}%`); // Isso garante aspas e evita SQL injection
+    values.push(`%${p}%`); // protege contra SQL injection
   }
 
-  const users = await new Promise((resolve, reject) => {
+  const funcionarios = await new Promise((resolve, reject) => {
     connection.all(query, values, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+      if (err) return reject(err);
+      resolve(rows);
     });
   });
 
-  return users.reverse();
+  return funcionarios.reverse(); // Mostrar do mais recente pro antigo, pode mudar se quiser
 };
 
 const novoFuncionario = async (dados) => {
@@ -41,10 +38,8 @@ const novoFuncionario = async (dados) => {
     status = "ativo",
   } = dados;
 
-  const data_admissao = new Date().toISOString(); 
-  const created_at = new Date().toISOString();
+  const agora = new Date().toISOString();
 
-  // garante que o status esteja no formato correto
   const statusFormatado =
     status.toLowerCase() === "inativo" ? "inativo" : "ativo";
 
@@ -68,8 +63,8 @@ const novoFuncionario = async (dados) => {
     valor_comissao,
     regime_contrato,
     statusFormatado,
-    data_admissao,
-    created_at,
+    agora, // data_admissao
+    agora, // created_at
   ];
 
   return new Promise((resolve, reject) => {
@@ -79,7 +74,7 @@ const novoFuncionario = async (dados) => {
           return reject({
             code: 400,
             message:
-              "Erro de restrição: verifique CPF duplicado ou campos inválidos.",
+              "Erro de restrição: CPF duplicado ou campos inválidos.",
           });
         }
         return reject(err);
@@ -90,15 +85,13 @@ const novoFuncionario = async (dados) => {
 };
 
 const deletarFuncionario = async (id) => {
-  const query = `DELETE FROM funcionarios WHERE id = ${id}`;
+  const query = `DELETE FROM funcionarios WHERE id = ?`;
 
-  await new Promise((resolve, reject) => {
-    connection.run(query, function (err) {
-      if (err) {
-        reject(err); // Caso ocorra algum erro
-      } else {
-        resolve(this.lastID); // Retorna o ID do funcionario inserido
-      }
+  return new Promise((resolve, reject) => {
+    connection.run(query, [id], function (err) {
+      if (err) return reject(err);
+      if (this.changes === 0) return resolve(null); // Não achou para deletar
+      resolve(this.changes); // Número de linhas deletadas
     });
   });
 };
@@ -113,7 +106,7 @@ const editarFuncionario = async (id, dados) => {
     salario_base,
     tipo_comissao,
     valor_comissao,
-    status,
+    status = "ativo",
   } = dados;
 
   const updated_at = new Date().toISOString();
@@ -134,40 +127,29 @@ const editarFuncionario = async (id, dados) => {
     salario_base,
     tipo_comissao,
     valor_comissao,
-    status || "ativo",
+    status,
     updated_at,
     id,
   ];
 
   return new Promise((resolve, reject) => {
     connection.run(query, values, function (err) {
-      if (err) {
-        reject(err);
-      } else if (this.changes === 0) {
-        resolve(null); // Nenhuma linha foi alterada
-      } else {
-        resolve(this.changes); // Retorna o número de linhas alteradas
-      }
+      if (err) return reject(err);
+      if (this.changes === 0) return resolve(null);
+      resolve(this.changes);
     });
   });
 };
 
 const procurarFuncionarioId = async (id) => {
-  const query = `SELECT * FROM funcionarios WHERE id = ${id}`;
+  const query = `SELECT * FROM funcionarios WHERE id = ?`;
 
-  // Use o método `all` para retornar todos os resultados da consulta
-  const users = await new Promise((resolve, reject) => {
-    connection.all(query, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+  return new Promise((resolve, reject) => {
+    connection.get(query, [id], (err, row) => {
+      if (err) return reject(err);
+      resolve(row);
     });
   });
-
-  // Retorna os usuários (ou Funcionarios) invertidos
-  return users;
 };
 
 module.exports = {

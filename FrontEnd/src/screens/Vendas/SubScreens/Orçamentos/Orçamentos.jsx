@@ -5,7 +5,7 @@ import AppContext from "../../../../context/AppContext";
 
 import services from "../../../../services/services";
 
-import fetchapi from "../../../../api/fetchapi";
+import vendaFetch from "../../../../api/vendaFetch";
 
 
 function Orçamentos() {
@@ -15,7 +15,7 @@ function Orçamentos() {
 
   const carregarOrçamentos = async () => {
     try {
-      const response = await fetchapi.listarOrcamentos();
+      const response = await vendaFetch.listarOrcamentos();
       setResultadosOrçamentos(response);
     } catch (error) {
       setErroApi(true);
@@ -39,7 +39,7 @@ function Orçamentos() {
       return;
     }
 
-    await Promise.all(arraySelect.map((id) => fetchapi.deletarVenda(id)));
+    await Promise.all(arraySelect.map((id) => vendaFetch.deletarVenda(id)));
     await carregarOrçamentos();
     setArraySelect([]);
   };

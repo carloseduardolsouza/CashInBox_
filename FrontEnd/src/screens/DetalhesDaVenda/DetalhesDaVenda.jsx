@@ -14,7 +14,9 @@ import { FaRegUser } from "react-icons/fa6";
 import CarnePagamento from "../../components/NotaCarné/NotaCarne";
 import NotaGrandeDetalhesVenda from "../../components/NotaGrandeDetalhesVenda/NotaGrandeDetalhesVenda";
 
-import fetchapi from "../../api/fetchapi";
+import vendaFetch from "../../api/vendaFetch";
+import clientesFetch from "../../api/clientesFetch";
+import whatsappFetch from "../../api/whatsappFetch";
 
 function DetalhesDaVenda() {
   const { id } = useParams();
@@ -34,22 +36,24 @@ function DetalhesDaVenda() {
 
   const carregarDados = async () => {
     try {
-      const vendaResponse = await fetchapi.produrarVendaId(id);
+      const vendaResponse = await vendaFetch.procurarVendaId(id);
+      console.log(vendaResponse);
       setVenda(vendaResponse[0]);
 
-      const clienteResponse = await fetchapi.ProcurarClienteId(
+      const clienteResponse = await clientesFetch.procurarClienteId(
         vendaResponse[0].cliente_id
       );
+
       setCliente(clienteResponse[0]);
 
-      const produtosResponse = await fetchapi.procurarProdutosVenda(id);
+      const produtosResponse = await vendaFetch.procurarProdutosVenda(id);
       setProdutos(produtosResponse);
 
-      const pagamentosResponse = await fetchapi.procurarPagamentoVenda(id);
+      const pagamentosResponse = await vendaFetch.procurarPagamentoVenda(id);
       setPagamentos(pagamentosResponse);
 
       if (vendaResponse[0].status === "Crediario pendente") {
-        const parcelasResponse = await fetchapi.listarVendasCrediarioVenda(id);
+        const parcelasResponse = await vendaFetch.listarVendasCrediarioVenda(id);
         setParcelas(parcelasResponse);
       }
     } catch (error) {
@@ -60,11 +64,11 @@ function DetalhesDaVenda() {
 
   useEffect(() => {
     carregarDados();
-  }, [id, setErroApi]);
+  }, []);
 
   const cancelarVenda = async () => {
     try {
-      await fetchapi.deletarVenda(id);
+      await vendaFetch.deletarVenda(id);
       navigate("/vendas");
     } catch (error) {
       console.error("Erro ao cancelar venda:", error);
@@ -153,11 +157,11 @@ function DetalhesDaVenda() {
 
     const typeCompra = () => {
       if (venda.status === "orçamento") {
-        return "orçamento"
+        return "orçamento";
       } else {
-        return "venda"
+        return "venda";
       }
-    }
+    };
 
     const dados = {
       tipo: typeCompra(),
@@ -176,7 +180,7 @@ function DetalhesDaVenda() {
     };
 
     try {
-      await fetchapi.enviarMensagem(dados);
+      await whatsappFetch.enviarMensagem(dados);
     } catch (error) {
       console.error("Erro ao enviar mensagem no WhatsApp:", error);
       setErroApi(true);

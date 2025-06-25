@@ -2,7 +2,7 @@ import "./ItemProduto.css";
 import { useState, useEffect } from "react";
 
 //conexão com a api
-import fetchapi from "../../../../api/fetchapi";
+import produtoFetch from "../../../../api/produtoFetch";
 
 import services from "../../../../services/services";
 
@@ -15,7 +15,7 @@ function ItemProduto({ dado }) {
   useEffect(() => {
     async function carregarImagem() {
       try {
-        const imagens = await fetchapi.listarImagens(id);
+        const imagens = await produtoFetch.listarImagens(id);
         if (imagens && imagens.length > 0) {
           setImage(imagens[0].imagem_path);
         }

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 //conexão api
-import fetchapi from "../../api/fetchapi";
+import clientesFetch from "../../api/clientesFetch";
 
 // Subtelas
 import GeralCliente from "./SubScreens/GeralCliente/GeralCliente";
@@ -22,7 +22,7 @@ function DetalhesDoCliente() {
   useEffect(() => {
     const buscarClientes = async () => {
       try {
-        const resultado = await fetchapi.ProcurarClienteId(id);
+        const resultado = await clientesFetch.procurarClienteId(id);
         setInfoCliente(resultado);
       } catch (err) {
         console.error("Erro ao buscar clientes:", err);

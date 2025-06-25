@@ -1,6 +1,6 @@
 import "./ModalFaturar.css";
 
-import fetchapi from "../../../../../../api/fetchapi";
+import vendaFetch from "../../../../../../api/vendaFetch";
 import { useState } from "react";
 
 function ModalFaturar({ fechar, dados, atualizarVendas }) {
@@ -16,7 +16,7 @@ function ModalFaturar({ fechar, dados, atualizarVendas }) {
       valor_pago: valorPago,
     };
 
-    const pago = fetchapi
+    const pago = vendaFetch
       .receberPagamentoParcela(dados.id, corpoJson)
       .then(() => {
         atualizarVendas();

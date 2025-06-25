@@ -1,74 +1,67 @@
 const connection = require("./db");
 
-const novaCategoria = async (dados) => {
-  const { nome } = dados;
+const novaCategoria = async ({ nome }) => {
+  if (!nome || !nome.trim()) {
+    throw new Error("Nome da categoria é obrigatório");
+  }
 
-  const query = `
-    INSERT INTO categorias (nome)
-    VALUES (?)
-  `;
-
-  const values = [nome];
+  const query = `INSERT INTO categorias (nome) VALUES (?)`;
+  const values = [nome.trim()];
 
   return new Promise((resolve, reject) => {
     connection.run(query, values, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID); // ID da categoria recém-inserida
-      }
+      if (err) return reject(err);
+      resolve(this.lastID);
     });
   });
 };
 
 const listarCategorias = () => {
-  const query = `SELECT * FROM categorias`;
-
+  const query = `SELECT * FROM categorias ORDER BY nome ASC`;
   return new Promise((resolve, reject) => {
     connection.all(query, [], (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
+      if (err) return reject(err);
+      resolve(rows);
     });
   });
 };
 
 const buscarCategoriaPorId = (id) => {
-  const query = `SELECT * FROM categorias WHERE id = ?`;
+  if (!id) return Promise.reject(new Error("ID da categoria é obrigatório"));
 
+  const query = `SELECT * FROM categorias WHERE id = ? LIMIT 1`;
   return new Promise((resolve, reject) => {
     connection.get(query, [id], (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
+      if (err) return reject(err);
+      resolve(row || null);
     });
   });
 };
 
-const editarCategoria = async (id, dados) => {
-  const { nome } = dados;
+const editarCategoria = async (id, { nome }) => {
+  if (!id) throw new Error("ID da categoria é obrigatório");
+  if (!nome || !nome.trim()) throw new Error("Nome da categoria é obrigatório");
 
-  const query = `
-    UPDATE categorias
-    SET nome = ?
-    WHERE id = ?
-  `;
-
-  const values = [nome, id];
+  const query = `UPDATE categorias SET nome = ? WHERE id = ?`;
+  const values = [nome.trim(), id];
 
   return new Promise((resolve, reject) => {
     connection.run(query, values, function (err) {
-      if (err) reject(err);
-      else resolve(this.changes > 0);
+      if (err) return reject(err);
+      resolve(this.changes > 0);
     });
   });
 };
 
 const deletarCategoria = (id) => {
+  if (!id) return Promise.reject(new Error("ID da categoria é obrigatório"));
+
   const query = `DELETE FROM categorias WHERE id = ?`;
 
   return new Promise((resolve, reject) => {
     connection.run(query, [id], function (err) {
-      if (err) reject(err);
-      else resolve(this.changes > 0);
+      if (err) return reject(err);
+      resolve(this.changes > 0);
     });
   });
 };

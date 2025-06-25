@@ -6,7 +6,7 @@ import AppContext from "../../context/AppContext.js";
 import { FaTrash } from "react-icons/fa6";
 
 //Servicos
-import fetchapi from "../../api/fetchapi.js";
+import produtoFetch from "../../api/produtoFetch.js";
 import services from "../../services/services.js";
 
 //Componentes
@@ -37,8 +37,8 @@ function PontoDeVenda() {
   const [valorTotal, setValorTotal] = useState(0);
 
   useEffect(() => {
-    fetchapi
-      .ProcurarProdutos("all")
+    produtoFetch
+      .procurarProdutos("all")
       .then((response) => {
         setResultadoProdutos(response);
       })

@@ -1,5 +1,5 @@
 import "./SaldoInicial.css";
-import fetchapi from "../../../../../../api/fetchapi";
+import caixaFetch from "../../../../../../api/caixaFetch";
 import { useState , useContext } from "react";
 import AppContext from "../../../../../../context/AppContext"
 
@@ -13,7 +13,7 @@ function SaldoInicial({atualizar , fecharAba, statusCaixa }) {
       valor_abertura: valorInicial || 0,
     };
 
-    await fetchapi.AbrirCaixa(dataCaixa).then(() => {
+    await caixaFetch.abrirCaixa(dataCaixa).then(() => {
       statusCaixa("Aberto");
       atualizar()
       fecharAba(null);

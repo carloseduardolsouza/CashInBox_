@@ -4,15 +4,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect, useRef } from "react";
 import AppContext from "../../../../context/AppContext";
 
-import fetchapi from "../../../../api/fetchapi";
+import produtoFetch from "../../../../api/produtoFetch";
+import categoriaFetch from "../../../../api/categoriaFetch";
 //icones
 import { FaRegTrashAlt } from "react-icons/fa";
 
-function InformaçõesGerais() {
+function InformaçõesGerais({ id }) {
   const { setErroApi } = useContext(AppContext);
 
   const navigate = useNavigate();
-  const { id } = useParams();
+
   const [categoriaEdit, setCategoriaEdit] = useState("");
   const [categoria_idEdit, setCategoria_idEdit] = useState("");
   const [resultCategorias, setResultCategorias] = useState([]);
@@ -30,7 +31,7 @@ function InformaçõesGerais() {
 
   const buscarCategorias = async () => {
     try {
-      const resultado = await fetchapi.listarCategorias();
+      const resultado = await categoriaFetch.listarCategorias();
       setResultCategorias(resultado);
     } catch (err) {
       setErroApi(true);
@@ -47,33 +48,33 @@ function InformaçõesGerais() {
   }));
 
   const buscarImagens = async () => {
-    const dadosImage = await fetchapi.listarImagens(id).then((response) => {
+    const dadosImage = await produtoFetch.listarImagens(id).then((response) => {
       setImagensProdutosEdit(response);
     });
   };
+  const buscarProduto = async () => {
+    const dadosProduto = await produtoFetch.procurarProdutoId(id);
+    setNomeProdutoEdit(dadosProduto.nome);
+    setDescricaoEdit(dadosProduto.descricao);
+    setEstoque_atualEdit(dadosProduto.estoque_atual);
+    setEstoque_minimoEdit(dadosProduto.estoque_minimo);
+    setPreco_custoEdit(dadosProduto.preco_custo);
+    setMarkupEdit(dadosProduto.markup);
+    setPreco_vendaEdit(dadosProduto.preco_venda);
+    setcodBarrasEdit(dadosProduto.codigo_barras);
+    setCategoriaEdit(dadosProduto.categoria);
+  };
 
   useEffect(() => {
-    const buscarProduto = async () => {
-      const dadosProduto = await fetchapi.ProcurarProdutoId(id);
-      setNomeProdutoEdit(dadosProduto[0].nome);
-      setDescricaoEdit(dadosProduto[0].descricao);
-      setEstoque_atualEdit(dadosProduto[0].estoque_atual);
-      setEstoque_minimoEdit(dadosProduto[0].estoque_minimo);
-      setPreco_custoEdit(dadosProduto[0].preco_custo);
-      setMarkupEdit(dadosProduto[0].markup);
-      setPreco_vendaEdit(dadosProduto[0].preco_venda);
-      setcodBarrasEdit(dadosProduto[0].codigo_barras);
-      setCategoriaEdit(dadosProduto[0].categoria);
-    };
     buscarProduto();
     buscarImagens();
   }, [id]);
 
   const deletarVariacao = async (id) => {
     try {
-      await fetchapi.deletarVariacaoProduto(id);
+      await produtoFetch.deletarVariacaoProduto(id);
 
-      const dadosImage = await fetchapi.listarImagens(id);
+      const dadosImage = await produtoFetch.listarImagens(id);
       setImagensProdutosEdit(dadosImage);
     } catch (error) {
       console.error("Erro ao deletar variação:", error);
@@ -82,7 +83,7 @@ function InformaçõesGerais() {
 
   const DeletarProduto = async (id) => {
     try {
-      await fetchapi.DeletarProduto(id).then(() => {
+      await produtoFetch.deletarProduto(id).then(() => {
         navigate("/estoque");
       });
     } catch {}
@@ -110,7 +111,9 @@ function InformaçõesGerais() {
     e.preventDefault();
     let dados = {
       id: id,
-      nome: nomeProdutoEdit.charAt(0).toUpperCase() + nomeProdutoEdit.slice(1).toLowerCase(),
+      nome:
+        nomeProdutoEdit.charAt(0).toUpperCase() +
+        nomeProdutoEdit.slice(1).toLowerCase(),
       descricao: descricaoEdit,
       codigo_barras: codBarrasEdit,
       preco_venda: preco_vendaEdit,
@@ -124,8 +127,8 @@ function InformaçõesGerais() {
       ativo: "",
     };
 
-    fetchapi
-      .AtualizarProduto(dados)
+    produtoFetch
+      .atualizarProduto(dados)
       .then((resposta) => {})
       .catch((erro) => {
         setErroApi(true);
@@ -135,7 +138,7 @@ function InformaçõesGerais() {
   const HandleImageChange = (e) => {
     const files = Array.from(e.target.files);
 
-    fetchapi.novaImagemProduto(id, files).then(() => {
+    produtoFetch.novaImagemProduto(id, files).then(() => {
       buscarImagens();
     });
   };
@@ -258,9 +261,7 @@ function InformaçõesGerais() {
                 }}
               />
               <div>
-                <p>
-                  {nomeProdutoEdit}
-                </p>
+                <p>{nomeProdutoEdit}</p>
               </div>
 
               <button onClick={() => deletarVariacao(dados.id)}>

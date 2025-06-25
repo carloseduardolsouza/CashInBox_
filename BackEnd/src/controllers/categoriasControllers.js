@@ -10,7 +10,7 @@ const novaCategoria = async (req, res) => {
   }
 };
 
-const listarCategorias = async (req, res) => {
+const listarCategorias = async (_, res) => {
   try {
     const categorias = await categoriasModels.listarCategorias();
     return res.status(200).json(categorias);
@@ -24,10 +24,8 @@ const buscarCategoriaPorId = async (req, res) => {
   try {
     const { id } = req.params;
     const categoria = await categoriasModels.buscarCategoriaPorId(id);
-    
-    if (!categoria) {
-      return res.status(404).json({ erro: "Categoria não encontrada" });
-    }
+
+    if (!categoria) return res.status(404).json({ erro: "Categoria não encontrada" });
 
     return res.status(200).json(categoria);
   } catch (error) {
@@ -41,9 +39,7 @@ const editarCategoria = async (req, res) => {
     const { id } = req.params;
     const atualizada = await categoriasModels.editarCategoria(id, req.body);
 
-    if (!atualizada) {
-      return res.status(404).json({ erro: "Categoria não encontrada para edição" });
-    }
+    if (!atualizada) return res.status(404).json({ erro: "Categoria não encontrada para edição" });
 
     return res.status(200).json({ id, ...req.body });
   } catch (error) {
@@ -57,11 +53,9 @@ const deletarCategoria = async (req, res) => {
     const { id } = req.params;
     const deletada = await categoriasModels.deletarCategoria(id);
 
-    if (!deletada) {
-      return res.status(404).json({ erro: "Categoria não encontrada para exclusão" });
-    }
+    if (!deletada) return res.status(404).json({ erro: "Categoria não encontrada para exclusão" });
 
-    return res.status(204).send(); // No Content
+    return res.status(204).send();
   } catch (error) {
     console.error("Erro ao deletar categoria:", error);
     return res.status(500).json({ erro: "Erro ao deletar categoria" });

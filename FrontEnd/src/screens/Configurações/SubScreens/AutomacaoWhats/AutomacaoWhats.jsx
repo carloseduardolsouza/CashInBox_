@@ -1,6 +1,6 @@
 import "./AutomacaoWhats.css";
 import { useState, useEffect } from "react";
-import fetchapi from "../../../../api/fetchapi";
+import whatsappFetch from "../../../../api/whatsappFetch";
 import { FaRobot } from "react-icons/fa";
 
 function AutomacaoWhats() {
@@ -21,7 +21,7 @@ function AutomacaoWhats() {
 
   const fetchQrCode = async () => {
     try {
-      const response = await fetchapi.pegarQrCode();
+      const response = await whatsappFetch.pegarQrCode();
       setDadosBot(response);
       setErro(false);
     } catch (error) {

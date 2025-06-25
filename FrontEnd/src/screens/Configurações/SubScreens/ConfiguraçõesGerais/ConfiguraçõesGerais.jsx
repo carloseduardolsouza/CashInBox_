@@ -6,7 +6,7 @@ import CardLogin from "../../../../components/CardLogin/CardLogin";
 
 //icones
 import { MdAddPhotoAlternate } from "react-icons/md";
-import fetchapi from "../../../../api/fetchapi";
+import userFetch from "../../../../api/userFetch";
 
 function ConfiguraçõesGerais() {
   const [nomeEstabelecimento, setNomeEstabelecimento] = useState("");
@@ -20,7 +20,7 @@ function ConfiguraçõesGerais() {
   const [bttDisabled, setBttDisabled] = useState(true);
 
   useEffect(() => {
-    fetchapi.dadosEmpresa().then((response) => {
+    userFetch.dadosEmpresa().then((response) => {
       setNomeEstabelecimento(response.nomeEstabelecimento);
       setCnpj(response.cnpj);
       setEndereco(response.endereco);
@@ -39,7 +39,7 @@ function ConfiguraçõesGerais() {
       endereco: endereco,
       InscriçãoEstadual: InscriçãoEstadual,
     };
-    await fetchapi.EditarDadosEmpresa(dadosEmpresa).then().catch();
+    await userFetch.editarDadosEmpresa(dadosEmpresa).then().catch();
   };
 
   return (

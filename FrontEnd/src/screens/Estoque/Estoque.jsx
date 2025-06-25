@@ -6,7 +6,7 @@ import services from "../../services/services";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
-import fetchapi from "../../api/fetchapi";
+import produtoFetch from "../../api/produtoFetch";
 
 function Estoque() {
   const { setErroApi , setVencido } = useContext(AppContext);
@@ -19,7 +19,7 @@ function Estoque() {
   useEffect(() => {
     const buscarProdutos = async () => {
       try {
-        const resultado = await fetchapi.ProcurarProdutos(pesquisa);
+        const resultado = await produtoFetch.procurarProdutos(pesquisa);
         if (
           resultado.message ===
           "Assinatura vencida. Por favor, renove sua assinatura."
@@ -46,7 +46,7 @@ function Estoque() {
 
   const renderProdutos = async (e) => {
     e.preventDefault();
-    const resultado = await fetchapi.ProcurarProdutos(pesquisa);
+    const resultado = await produtoFetch.procurarProdutos(pesquisa);
     setResultProdutos(resultado);
   };
 

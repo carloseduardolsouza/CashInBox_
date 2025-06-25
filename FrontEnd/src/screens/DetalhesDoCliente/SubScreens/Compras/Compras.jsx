@@ -1,7 +1,7 @@
 import "./Compras.css";
 import { useState, useEffect } from "react";
 import { useParams , Link } from "react-router-dom";
-import fetchapi from "../../../../api/fetchapi";
+import vendaFetch from "../../../../api/vendaFetch";
 import services from "../../../../services/services"
 
 function Compras() {
@@ -10,7 +10,7 @@ function Compras() {
   const [arrayVenda, setArrayVenda] = useState([]);
 
   useEffect(() => {
-    fetchapi.listarVendasCliente(id).then((response) => {
+    vendaFetch.listarVendasCliente(id).then((response) => {
       setArrayVenda(response);
     });
   }, []);

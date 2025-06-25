@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import fetchapi from "../api/fetchapi";
+import whatsappFetch from "../api/whatsappFetch";
+import userFetch from "../api/userFetch";
 import AppContext from "./AppContext";
 import PropTypes from "prop-types";
 
@@ -17,7 +18,7 @@ export function AppProvider({ children }) {
 
   const fetchStatus = async () => {
     try {
-      const response = await fetchapi.pegarQrCode().then((response) => {
+      const response = await whatsappFetch.pegarQrCode().then((response) => {
         if (response.status_bot === "online") {
           setWhastsapp(true);
         } else {
@@ -32,7 +33,7 @@ export function AppProvider({ children }) {
   useEffect(() => {
     const fetchDadosEmpresa = async () => {
       try {
-        const response = await fetchapi.dadosEmpresa();
+        const response = await userFetch.dadosEmpresa();
         setDadosLoja(response);
       } catch {
         setErroApi(true);

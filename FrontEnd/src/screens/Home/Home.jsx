@@ -4,7 +4,7 @@ import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
 
 import services from "../../services/services";
-import fetchapi from "../../api/fetchapi";
+import relatorioFetch from "../../api/relatorioFetch";
 
 //Biblioteca de Gráficos
 import {
@@ -39,7 +39,7 @@ function Home() {
   }, [isDark]);
 
   useEffect(() => {
-    fetchapi
+    relatorioFetch
       .buscarRelatoriosBasicos()
       .then((response) => {
         if (

@@ -20,7 +20,7 @@ import RetirarSaldo from "./components/RetirarSaldo/RetirarSaldo";
 import SaldoInicial from "./components/SaldoInicial/SaldoInicial";
 import FecharCaixa from "./components/FecharCaixa/FecharCaixa";
 
-import fetchapi from "../../../../api/fetchapi";
+import caixaFetch from "../../../../api/caixaFetch";
 
 function CaixaAtual() {
   const {setErroApi} = useContext(AppContext)
@@ -38,7 +38,7 @@ function CaixaAtual() {
   const [movimentacoes, setMovimentacoes] = useState([]);
 
   const BuscarCaixasAbertosPage = async () => {
-    const response = await fetchapi.BuscarCaixasAbertos().catch(() => setErroApi(true));
+    const response = await caixaFetch.buscarCaixasAbertos().catch(() => setErroApi(true));
     const caixa = response[0];
     setIdCaixa(caixa.id || 0);
     setSaldo_inicial(caixa.valor_abertura);
@@ -54,7 +54,7 @@ function CaixaAtual() {
     }
 
     if (response.length > 0) {
-      const movimentacoess = await fetchapi.BuscarMovimentacao(caixa.id);
+      const movimentacoess = await caixaFetch.buscarMovimentacao(caixa.id);
       setMovimentacoes(movimentacoess);
       setStatusCaixa("Aberto");
     }

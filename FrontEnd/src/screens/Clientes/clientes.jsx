@@ -7,7 +7,7 @@ import AppContext from "../../context/AppContext";
 import { FaSearch } from "react-icons/fa";
 
 //Conexão com api
-import fetchapi from "../../api/fetchapi";
+import clientesFetch from "../../api/clientesFetch";
 
 //serviços
 import services from "../../services/services";
@@ -28,7 +28,7 @@ function Clientes() {
 
   const buscarClientes = async () => {
     try {
-      const resultado = await fetchapi.ProcurarCliente(pesquisar);
+      const resultado = await clientesFetch.procurarCliente(pesquisar);
 
       if (
         resultado.message ===

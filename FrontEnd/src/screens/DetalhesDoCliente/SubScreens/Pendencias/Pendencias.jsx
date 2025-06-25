@@ -1,7 +1,7 @@
 import "./Pendencias.css";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import fetchapi from "../../../../api/fetchapi";
+import vendaFetch from "../../../../api/vendaFetch";
 import services from "../../../../services/services";
 
 import ModalFaturar from "../../../Vendas/SubScreens/VendasAReceber/components/ModalFaturar/ModalFaturar";
@@ -34,7 +34,7 @@ function Pendencias() {
   };
 
   const carregarVendasCrediario = async () => {
-    fetchapi.listarVendasCrediarioCliente(id).then((response) => {
+    vendaFetch.listarVendasCrediarioCliente(id).then((response) => {
       setArrayOrcamento(response);
     });
   };

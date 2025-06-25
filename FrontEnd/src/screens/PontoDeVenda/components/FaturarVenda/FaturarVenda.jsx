@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import services from "../../../../services/services";
 import "./FaturarVenda.css";
 import Select from "react-select";
-import fetchapi from "../../../../api/fetchapi";
+
+import clientesFetch from "../../../../api/clientesFetch";
+import funcionarioFetch from "../../../../api/funcionarioFetch";
+import vendaFetch from "../../../../api/vendaFetch";
 
 import Concluindo from "../../../../components/Concluindo/Concluindo";
 
@@ -73,15 +76,15 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [alertaFormaPagamento, setAlertaFormaPagamento] = useState(false);
 
   useEffect(() => {
-    fetchapi
-      .ProcurarCliente("")
+    clientesFetch
+      .procurarCliente("")
       .then((data) => {
         setResultadoClientes(data);
       })
       .catch(() => {});
 
-    fetchapi
-      .ProcurarFuncionario("")
+    funcionarioFetch
+      .procurarFuncionario("")
       .then((data) => {
         setResultadoFuncionarios(data);
       })
@@ -225,12 +228,12 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
     if (formaPagementoAtual === "Crediario Propio" && status === "concluida") {
       const dados = {
         ...dadosComuns,
-        status: "pendente",
+        status: "Crediario pendente",
         parcelas: parcelasGeradas,
       };
 
-      fetchapi
-        .NovaVendaCrediario(dados)
+      vendaFetch
+        .novaVendaCrediario(dados)
         .then(() => {
           setTimeout(() => {
             setConcluindo(false);
@@ -249,8 +252,8 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
         pagamentos: formaPagemento,
       };
 
-      fetchapi
-        .NovaVendaEmBloco(dados)
+      vendaFetch
+        .novaVendaEmBloco(dados)
         .then(() => {
           setTimeout(() => {
             setConcluindo(false);

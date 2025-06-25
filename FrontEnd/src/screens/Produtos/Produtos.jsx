@@ -7,7 +7,7 @@ import ItemProduto from "./components/ItemProduto/ItemProduto";
 //import Loading from "../../components/AçãoRealizada/AçãoRealizada";
 
 //Controlador da api
-import fetchapi from "../../api/fetchapi";
+import produtoFetch from "../../api/produtoFetch";
 
 //icones
 import { FaSearch } from "react-icons/fa";
@@ -26,7 +26,7 @@ function Produtos() {
 
   const buscarProdutos = async () => {
     try {
-      const resultado = await fetchapi.ProcurarProdutos(pesquisar);
+      const resultado = await produtoFetch.procurarProdutos(pesquisar);
 
       if (
         resultado.message ===

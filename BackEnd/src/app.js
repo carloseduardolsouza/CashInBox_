@@ -1,38 +1,59 @@
 const express = require("express");
-const router = require("./router");
 const path = require("path");
 const os = require("os");
 
-
+const caixaRoute = require("./routers/caixaRoute");
+const clientesRoute = require("./routers/clientesRoute")
+const funcionarioRoute = require("./routers/funcionarioRoute")
+const vendaRoute = require("./routers/vendaRoute")
+const categoriaRoute = require("./routers/categoriaRoute")
+const produtoRoute = require("./routers/produtoRoute")
+const relatorioRoute = require("./routers/relatorioRoute")
+const whatsappRoute = require("./routers/whatsappRoute")
+const userEditRoute = require("./routers/userEditRoute")
 
 const app = express();
 
-// === Middleware CORS ===
+/* ===========================================
+ * 🌐 Middleware CORS – Libera acesso externo
+ * =========================================== */
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header(
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
   next();
 });
 
-// === Caminho absoluto da pasta persistente de uploads ===
+/* ========================================================
+ * 📁 Configuração do caminho de uploads (pasta persistente)
+ * ======================================================== */
 const userDataPath = path.join(os.homedir(), "AppData", "Roaming", "CashInBox");
 const uploadPath = path.join(userDataPath, "uploads");
 
-// === Servir imagens públicas via /uploads ===
+/* ========================================
+ * 🖼️ Servir arquivos estáticos de uploads
+ * ======================================== */
 app.use("/uploads", express.static(uploadPath));
 
-// === Middleware para JSON ===
+/* =========================
+ * 🧠 Middleware Body Parser
+ * ========================= */
 app.use(express.json());
 
-// === Rotas principais ===
-app.use(router);
-
-// === Inicia rotinas agendadas e bot WhatsApp ===
-//require("./whatsapp/start");
-//require("./services/rotinas");
+/* ===============
+ * 🔁 Rotas da API
+ * =============== */
+app.use("/caixa", caixaRoute);
+app.use("/clientes", clientesRoute);
+app.use("/funcionarios", funcionarioRoute);
+app.use("/vendas", vendaRoute);
+app.use("/produtos", produtoRoute);
+app.use("/categorias", categoriaRoute);
+app.use("/relatorios", relatorioRoute);
+app.use("/whatsapp", whatsappRoute);
+app.use("/user", userEditRoute);
 
 module.exports = app;

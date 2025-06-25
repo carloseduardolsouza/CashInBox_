@@ -1,5 +1,9 @@
 const connection = require("./db");
 
+/**
+ * 🔍 Lista todos os clientes ou filtra por nome usando LIKE
+ * @param {string} p - "all" para todos ou parte do nome para buscar
+ */
 const listarCliente = async (p) => {
   let query;
   let values = [];
@@ -8,33 +12,38 @@ const listarCliente = async (p) => {
     query = `SELECT * FROM clientes`;
   } else {
     query = `SELECT * FROM clientes WHERE nome LIKE ?`;
-    values.push(`%${p}%`); // Isso garante aspas e evita SQL injection
+    values.push(`%${p}%`); // Protege contra SQL injection
   }
 
-  const users = await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     connection.all(query, values, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+      if (err) return reject(err);
+      resolve(rows.reverse()); // Retorna os mais recentes no topo
     });
   });
-
-  return users.reverse();
 };
 
-
+/**
+ * 🆕 Cria um novo cliente no banco de dados
+ */
 const novoCliente = async (dados) => {
-  const { nome, cpf_cnpj, email, telefone, data_nascimento, endereco , genero } = dados;
+  const {
+    nome,
+    cpf_cnpj,
+    email,
+    telefone,
+    data_nascimento,
+    endereco,
+    genero,
+  } = dados;
 
   const created_at = new Date().toISOString();
 
   const query = `
-      INSERT INTO clientes 
-      (nome, cpf_cnpj, email, genero , telefone, data_nascimento, endereco, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ? , ?)
-    `;
+    INSERT INTO clientes 
+    (nome, cpf_cnpj, email, genero, telefone, data_nascimento, endereco, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
   const values = [
     nome,
@@ -49,83 +58,82 @@ const novoCliente = async (dados) => {
 
   return new Promise((resolve, reject) => {
     connection.run(query, values, function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(this.lastID); // ID do cliente recém-inserido
-      }
+      if (err) return reject(err);
+      resolve(this.lastID); // ID do novo cliente
     });
   });
 };
 
+/**
+ * 🗑️ Deleta um cliente com base no ID
+ */
 const deletarCliente = async (id) => {
-  const query = `DELETE FROM clientes WHERE id = ${id}`;
+  const query = `DELETE FROM clientes WHERE id = ?`;
 
-  await new Promise((resolve, reject) => {
-    connection.run(query, function (err) {
-      if (err) {
-        reject(err); // Caso ocorra algum erro
-      } else {
-        resolve(this.lastID); // Retorna o ID do cliente inserido
-      }
+  return new Promise((resolve, reject) => {
+    connection.run(query, [id], function (err) {
+      if (err) return reject(err);
+      resolve(this.changes); // Número de registros deletados
     });
   });
 };
 
+/**
+ * ✏️ Edita os dados de um cliente existente
+ */
 const editarCliente = async (id, dados) => {
-  const { nome, cpf_cnpj, email, genero , telefone, data_nascimento, endereco } = dados;
-
-  const query = `
-      UPDATE clientes
-      SET nome = ?, cpf_cnpj = ?, email = ?, genero = ? , telefone = ?, data_nascimento = ?, endereco = ?, updated_at = ?
-      WHERE id = ?
-    `;
+  const {
+    nome,
+    cpf_cnpj,
+    email,
+    genero,
+    telefone,
+    data_nascimento,
+    endereco,
+  } = dados;
 
   const updatedAt = new Date().toISOString();
 
+  const query = `
+    UPDATE clientes
+    SET nome = ?, cpf_cnpj = ?, email = ?, genero = ?, 
+        telefone = ?, data_nascimento = ?, endereco = ?, updated_at = ?
+    WHERE id = ?
+  `;
+
+  const values = [
+    nome,
+    cpf_cnpj,
+    email,
+    genero,
+    telefone,
+    data_nascimento,
+    endereco,
+    updatedAt,
+    id,
+  ];
+
   return new Promise((resolve, reject) => {
-    connection.run(
-      query,
-      [
-        nome,
-        cpf_cnpj,
-        email,
-        genero,
-        telefone,
-        data_nascimento,
-        endereco,
-        updatedAt,
-        id,
-      ],
-      function (err) {
-        if (err) {
-          reject(err);
-        } else if (this.changes === 0) {
-          resolve(null); // Nenhuma linha foi atualizada (ID pode não existir)
-        } else {
-          resolve(this.changes); // Quantidade de linhas alteradas
-        }
-      }
-    );
+    connection.run(query, values, function (err) {
+      if (err) return reject(err);
+      if (this.changes === 0) return resolve(null); // Nenhuma linha atualizada
+      resolve(this.changes); // Quantas linhas foram alteradas
+    });
   });
 };
 
+/**
+ * 🔎 Busca um cliente específico pelo ID
+ */
 const procurarClienteId = async (id) => {
-  const query = `SELECT * FROM clientes WHERE id = ${id}`;
+  const query = `SELECT * FROM clientes WHERE id = ?`;
 
-  // Use o método `all` para retornar todos os resultados da consulta
-  const users = await new Promise((resolve, reject) => {
-    connection.all(query, (err, rows) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(rows);
-      }
+  return new Promise((resolve, reject) => {
+    connection.all(query, [id], (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows); // Pode retornar [] se não encontrar
     });
   });
-
-  // Retorna os usuários (ou clientes) invertidos
-  return users;
 };
 
 module.exports = {

@@ -2,7 +2,7 @@ import "./CadastrarFuncionario.css";
 import { useState, useContext } from "react";
 import AppContext from "../../context/AppContext";
 import { FaUserAlt } from "react-icons/fa";
-import fetchapi from "../../api/fetchapi";
+import funcionarioFetch from "../../api/funcionarioFetch";
 
 function CadastrarFuncionario() {
   const { setErroApi } = useContext(AppContext);
@@ -40,7 +40,7 @@ function CadastrarFuncionario() {
     };
 
     try {
-      await fetchapi.NovoFuncionario(dados);
+      await funcionarioFetch.novoFuncionario(dados);
       setCpf("");
       setSalario("");
       setRegime_contrato("CLT");

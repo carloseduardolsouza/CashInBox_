@@ -1,8 +1,6 @@
 const produtosModels = require("../models/produtosModels");
-const variacaoProdutoModels = require("../models/variacaoProdutoModels"); // Correção da importação
+const variacaoProdutoModels = require("../models/variacaoProdutoModels");
 const services = require("../services/services");
-const fs = require("fs");
-const path = require("path");
 
 // Função para listar os produtos
 const procurarProduto = async (req, res) => {
@@ -18,31 +16,24 @@ const procurarProduto = async (req, res) => {
 
 const novoProduto = async (req, res) => {
   try {
-    // Parse dos dados JSON vindos do formData
     const dados = JSON.parse(req.body.dados);
 
-    // Criação do produto principal no banco de dados
     const produto = await produtosModels.novoProduto(dados);
 
     if (!produto) {
       return res.status(400).json({ erro: "Não foi possível criar o produto" });
     }
 
-    // Inicializa listas de variações e imagens simples
     const arquivos = req.files || [];
-    const variacoes = [];
-    const imagensSimples = [];
 
-    // Assumindo que os arquivos vêm na mesma ordem que dados.imagens
-    arquivos.map(async (image) => {
+    // Use for...of pra garantir await funcionando direito
+    for (const image of arquivos) {
       await variacaoProdutoModels.criarVariacao(image, produto);
-    });
+    }
 
     return res.status(201).json({
       sucesso: true,
       produto,
-      variacoes,
-      imagensSimples,
     });
   } catch (err) {
     console.error("Erro ao criar produto:", err);
@@ -51,25 +42,30 @@ const novoProduto = async (req, res) => {
 };
 
 const novaImagemProduto = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    const arquivos = req.files || [];
 
-  const arquivos = req.files || [];
+    for (const image of arquivos) {
+      await variacaoProdutoModels.criarVariacao(image, id);
+    }
 
-  // Assumindo que os arquivos vêm na mesma ordem que dados.imagens
-  arquivos.map(async (image) => {
-    await variacaoProdutoModels.criarVariacao(image, id);
-  });
-
-  return res.status(201).json({
-    sucesso: true,
-  });
+    return res.status(201).json({ sucesso: true });
+  } catch (err) {
+    console.error("Erro ao adicionar imagem:", err);
+    return res.status(500).json({ erro: "Erro ao adicionar imagem" });
+  }
 };
 
-// Função para editar um produto
 const editarProduto = async (req, res) => {
   const { id } = req.params;
   try {
-    await produtosModels.editarProduto(id, req.body);
+    const atualizado = await produtosModels.editarProduto(id, req.body);
+
+    if (!atualizado) {
+      return res.status(404).json({ error: "Produto não encontrado para edição" });
+    }
+
     return res.status(200).json({ message: "Produto editado com sucesso!" });
   } catch (err) {
     console.error(err);
@@ -77,37 +73,39 @@ const editarProduto = async (req, res) => {
   }
 };
 
-// Função para deletar um produto e as imagens associadas
 const deletarProduto = async (req, res) => {
   const { id } = req.params;
   try {
-    // Busca as variações do produto para deletar as imagens
     const variacoes = await produtosModels.getVariacoesPorProduto(id);
 
-    // Deleta as imagens do servidor
-    variacoes.map((arquivo) => {
-      console.log(arquivo.imagem_path);
-      services.deletarImagem(arquivo.imagem_path);
-    });
+    // Deletar as imagens associadas (garantindo await)
+    for (const arquivo of variacoes) {
+      await services.deletarImagem(arquivo.imagem_path);
+    }
 
-    // Deleta as variações e o produto
     await produtosModels.deletarVVariacoesDoProduto(id);
-    await produtosModels.deletarProduto(id);
+    const deletado = await produtosModels.deletarProduto(id);
 
-    return res
-      .status(200)
-      .json({ message: "Produto e imagens excluídos com sucesso!" });
+    if (!deletado) {
+      return res.status(404).json({ error: "Produto não encontrado para exclusão" });
+    }
+
+    return res.status(200).json({ message: "Produto e imagens excluídos com sucesso!" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Erro ao deletar produto" });
   }
 };
 
-// Função para procurar um produto pelo id
 const procurarProdutoId = async (req, res) => {
   const { id } = req.params;
   try {
     const produto = await produtosModels.procurarProdutoId(id);
+
+    if (!produto) {
+      return res.status(404).json({ error: "Produto não encontrado" });
+    }
+
     return res.status(200).json(produto);
   } catch (err) {
     console.error(err);
@@ -115,31 +113,30 @@ const procurarProdutoId = async (req, res) => {
   }
 };
 
-const procurarVariaçãoProdutos = async (req, res) => {
+const procurarVariacoesProduto = async (req, res) => {
   try {
     const { id } = req.params;
-    const produto = await variacaoProdutoModels.listarVariacoesPorProduto(id);
-    return res.status(200).json(produto);
+    const variacoes = await variacaoProdutoModels.listarVariacoesPorProduto(id);
+
+    return res.status(200).json(variacoes);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Erro ao buscar produto" });
+    return res.status(500).json({ error: "Erro ao buscar variações" });
   }
 };
 
-const deletarVariacaoProdutos = async (req, res) => {
+const deletarVariacaoProduto = async (req, res) => {
   try {
     const { id } = req.params;
-    const variacoes = await variacaoProdutoModels.listarVariacoesPorProdutoId(
-      id
-    );
-    variacoes.map((arquivo) => {
-      console.log(arquivo.imagem_path);
-      services.deletarImagem(arquivo.imagem_path);
-    });
+    const variacoes = await variacaoProdutoModels.listarVariacoesPorProdutoId(id);
+
+    for (const arquivo of variacoes) {
+      await services.deletarImagem(arquivo.imagem_path);
+    }
 
     const resultado = await variacaoProdutoModels.deletarVariacao(id);
 
-    if (resultado.affectedRows === 0) {
+    if (!resultado || resultado.affectedRows === 0) {
       return res.status(404).json({ error: "Variação não encontrada" });
     }
 
@@ -157,7 +154,6 @@ module.exports = {
   editarProduto,
   deletarProduto,
   procurarProdutoId,
-
-  procurarVariaçãoProdutos,
-  deletarVariacaoProdutos,
+  procurarVariacoesProduto,
+  deletarVariacaoProduto,
 };

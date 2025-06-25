@@ -2,7 +2,7 @@ import "./AdicionarSaldo.css";
 import { useState , useContext } from "react";
 import AppContext from "../../../../../../context/AppContext";
 
-import fetchapi from "../../../../../../api/fetchapi";
+import caixaFetch from "../../../../../../api/caixaFetch";
 
 function AdicionarSaldo({ fecharAba, idCaixa, atualizar }) {
   const {setErroApi} = useContext(AppContext)
@@ -17,7 +17,7 @@ function AdicionarSaldo({ fecharAba, idCaixa, atualizar }) {
       valor: value,
     };
 
-    await fetchapi.NovaMovimentacao(idCaixa, dados).then(() => {
+    await caixaFetch.novaMovimentacao(idCaixa, dados).then(() => {
       atualizar();
       fecharAba(null);
     }).catch(() => {

@@ -3,7 +3,7 @@ import { useReducer, useContext, useState } from "react";
 import AppContext from "../../context/AppContext";
 import Executando from "../../components/Executando/Executando";
 import { FaUserAlt } from "react-icons/fa";
-import fetchapi from "../../api/fetchapi";
+import clientesFetch from "../../api/clientesFetch";
 
 const initialState = {
   nome: "",
@@ -45,7 +45,7 @@ function CadastrarCliente() {
     };
 
     try {
-      await fetchapi.NovoCliente(dados);
+      await clientesFetch.novoCliente(dados);
       dispatch({ type: "RESET" });
     } catch (err) {
       setErroApi(true);

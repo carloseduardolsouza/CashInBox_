@@ -3,7 +3,8 @@ import { useState, useRef, useEffect, useContext } from "react";
 import AppContext from "../../context/AppContext";
 
 //Conexão com a api
-import fetchapi from "../../api/fetchapi";
+import produtoFetch from "../../api/produtoFetch";
+import categoriaFetch from "../../api/categoriaFetch";
 
 //Icones
 import { FaCamera } from "react-icons/fa";
@@ -44,7 +45,7 @@ function CadastrarProduto() {
 
   const buscarCategorias = async () => {
     try {
-      const resultado = await fetchapi.listarCategorias();
+      const resultado = await categoriaFetch.listarCategorias();
       setResultCategorias(resultado);
     } catch (err) {
       setErroApi(true);
@@ -120,7 +121,7 @@ function CadastrarProduto() {
       ativo: true,
     };
 
-    fetchapi
+    produtoFetch
       .novoProduto(dados, imageReq)
       .then((resposta) => {
         setCategoria("");

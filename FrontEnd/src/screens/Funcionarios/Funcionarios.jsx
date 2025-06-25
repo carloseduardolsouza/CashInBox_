@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 
 //conexão com a api
-import fetchapi from "../../api/fetchapi";
+import funcionarioFetch from "../../api/funcionarioFetch";
 
 //servissos
 import services from "../../services/services";
@@ -21,7 +21,7 @@ function Funcionarios() {
   useEffect(() => {
     const buscarClientes = async () => {
       try {
-        const resultado = await fetchapi.ProcurarFuncionario(
+        const resultado = await funcionarioFetch.procurarFuncionario(
           pesquisaFuncionario
         );
         setResultFuncionario(resultado); 
@@ -35,7 +35,7 @@ function Funcionarios() {
 
   const renderFuncionario = async (e) => {
     e.preventDefault();
-    const resultado = await fetchapi.ProcurarFuncionario(pesquisaFuncionario).then((response) => setResultFuncionario(response)).catch((erro) => setErroApi(true));
+    const resultado = await funcionarioFetch.procurarFuncionario(pesquisaFuncionario).then((response) => setResultFuncionario(response)).catch((erro) => setErroApi(true));
   };
 
   const navigate = useNavigate();
