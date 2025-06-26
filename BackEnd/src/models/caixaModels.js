@@ -41,12 +41,52 @@ const buscarCaixas = async () => {
  * Retorna todos os caixas com status "aberto"
  */
 const buscarCaixasAbertos = async () => {
-  const query = `SELECT * FROM caixas WHERE status = "aberto"`;
+  const queryCaixa = `SELECT * FROM caixas WHERE status = "aberto"`;
 
   return new Promise((resolve, reject) => {
-    connection.all(query, [], (err, rows) => {
+    connection.all(queryCaixa, [], async (err, caixas) => {
       if (err) return reject(err);
-      resolve(rows);
+
+      if (!caixas.length) return resolve([]);
+
+      const caixa = caixas[0];
+      const caixaId = caixa.id;
+
+      const queryMovimentacoes = `
+        SELECT tipo_pagamento, SUM(valor) AS total
+        FROM movimentacoes
+        WHERE caixa_id = ?
+        GROUP BY tipo_pagamento
+      `;
+
+      connection.all(queryMovimentacoes, [caixaId], (err, resumoRows) => {
+        if (err) return reject(err);
+
+        // Inicializa com todos os tipos de pagamento zerados
+        const meiosPagamento = [
+          "pix",
+          "cartão de credito",
+          "cartão de debito",
+          "crediario propio",
+          "dinheiro",
+          "cheque",
+        ];
+
+        const resumo_caixa = {};
+        meiosPagamento.forEach((tipo) => {
+          resumo_caixa[tipo] = 0;
+        });
+
+        // Preenche os que realmente tem valor
+        resumoRows.forEach(({ tipo_pagamento, total }) => {
+          resumo_caixa[tipo_pagamento] = parseFloat(total);
+        });
+
+        resolve({
+          ...caixa,
+          resumo_caixa,
+        });
+      });
     });
   });
 };
@@ -55,23 +95,23 @@ const buscarCaixasAbertos = async () => {
  * Adiciona uma movimentação (entrada ou saída) a um caixa
  * Atualiza o caixa com os valores corretos, dependendo do tipo da movimentação
  */
-const adicionarMovimentacoes = async (id, dados) => {
-  const { descricao, tipo, valor } = dados;
+const adicionarMovimentacoes = async (idCaixaParam, dados) => {
+  const { descricao, tipo, valor, tipo_pagamento = "dinheiro" } = dados;
   const created_at = new Date().toISOString();
 
   const insertQuery = `
-    INSERT INTO movimentacoes (caixa_id, data, descricao, tipo, valor)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO movimentacoes (caixa_id, data, descricao, tipo, valor , tipo_pagamento)
+    VALUES (?, ?, ?, ?, ? , ?)
   `;
-  const values = [id, created_at, descricao, tipo, valor];
 
   try {
-    // Busca o caixa aberto
-    const caixas = await buscarCaixasAbertos();
-    if (!caixas || caixas.length === 0)
-      throw new Error("Nenhum caixa aberto encontrado.");
+    // Busca o caixa aberto (objeto ou null)
+    const caixa = await buscarCaixasAbertos();
 
-    const caixa = caixas[0];
+    if (!caixa || !caixa.id) throw new Error("Nenhum caixa aberto encontrado.");
+
+    // Usa o caixa encontrado para atualizar e inserir
+    const caixaId = caixa.id;
 
     // Atualiza os valores do caixa dependendo do tipo
     if (tipo === "entrada") {
@@ -82,7 +122,7 @@ const adicionarMovimentacoes = async (id, dados) => {
       await new Promise((resolve, reject) => {
         connection.run(
           `UPDATE caixas SET saldo_adicionado = ?, total_recebido = ?, valor_esperado = ? WHERE id = ?`,
-          [novoSaldoAdicionado, novoTotalRecebido, novoValorEsperado, caixa.id],
+          [novoSaldoAdicionado, novoTotalRecebido, novoValorEsperado, caixaId],
           function (err) {
             if (err) return reject(err);
             resolve(this.changes);
@@ -96,7 +136,7 @@ const adicionarMovimentacoes = async (id, dados) => {
       await new Promise((resolve, reject) => {
         connection.run(
           `UPDATE caixas SET saldo_retirada = ?, valor_esperado = ? WHERE id = ?`,
-          [novoSaldoRetirada, novoValorEsperado, caixa.id],
+          [novoSaldoRetirada, novoValorEsperado, caixaId],
           function (err) {
             if (err) return reject(err);
             resolve(this.changes);
@@ -105,7 +145,16 @@ const adicionarMovimentacoes = async (id, dados) => {
       });
     }
 
-    // Registra a movimentação
+    // Registra a movimentação usando o id do caixa aberto
+    const values = [
+      caixaId,
+      created_at,
+      descricao,
+      tipo,
+      valor,
+      tipo_pagamento,
+    ];
+
     return await new Promise((resolve, reject) => {
       connection.run(insertQuery, values, function (err) {
         if (err) return reject(err);

@@ -91,7 +91,7 @@ function ContasAPagar() {
                 <td>{services.formatarCurrency(dados.valor_total)}</td>
                 <td>{dados.categoria}</td>
                 <td>
-                  <button>Pago</button>
+                  <button className="buttonPagarContasPagar">Pagar</button>
                 </td>
               </tr>
             );

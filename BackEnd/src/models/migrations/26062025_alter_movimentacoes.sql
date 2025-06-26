@@ -1,0 +1,1 @@
+ALTER TABLE movimentacoes ADD COLUMN tipo_pagamento TEXT;

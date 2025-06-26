@@ -1,5 +1,5 @@
 import "./CaixaAtual.css";
-import { useState, useEffect , useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import AppContext from "../../../../context/AppContext";
 
 import services from "../../../../services/services";
@@ -23,7 +23,7 @@ import FecharCaixa from "./components/FecharCaixa/FecharCaixa";
 import caixaFetch from "../../../../api/caixaFetch";
 
 function CaixaAtual() {
-  const {setErroApi} = useContext(AppContext)
+  const { setErroApi } = useContext(AppContext);
 
   const [abaSobreposta, setAbaSobreposta] = useState(null);
   const [statusCaixa, setStatusCaixa] = useState("Fechado");
@@ -33,27 +33,33 @@ function CaixaAtual() {
   const [valor_esperado, setValor_esperado] = useState(0);
   const [saldo_adicionado, setSaldo_adicionado] = useState(0);
   const [saldo_retirada, setSaldo_retirada] = useState(0);
+
+  const [valoresCaixa , setValoresCaixa] = useState({})
   const [idCaixa, setIdCaixa] = useState(0);
 
   const [movimentacoes, setMovimentacoes] = useState([]);
 
   const BuscarCaixasAbertosPage = async () => {
-    const response = await caixaFetch.buscarCaixasAbertos().catch(() => setErroApi(true));
-    const caixa = response[0];
+    const response = await caixaFetch
+      .buscarCaixasAbertos()
+      .catch(() => setErroApi(true));
+    const caixa = response;
     setIdCaixa(caixa.id || 0);
     setSaldo_inicial(caixa.valor_abertura);
     setValor_esperado(caixa.valor_esperado);
     setSaldo_adicionado(caixa.saldo_adicionado);
     setSaldo_retirada(caixa.saldo_retirada);
     setData_abertura(caixa.data_abertura);
+    setValoresCaixa(caixa.resumo_caixa)
+    console.log(caixa.resumo_caixa)
 
-    if (response.length === 0) {
+    if (Array.isArray(response) && response.length === 0) {
       setStatusCaixa("Fechado");
       setMovimentacoes([]);
       return;
     }
 
-    if (response.length > 0) {
+    if (response) {
       const movimentacoess = await caixaFetch.buscarMovimentacao(caixa.id);
       setMovimentacoes(movimentacoess);
       setStatusCaixa("Aberto");
@@ -128,7 +134,10 @@ function CaixaAtual() {
         <div>
           <div className="Resumodecaixa">
             <div>
-              <h3>Resumo de Caixa # {services.formatarData(data_abertura)}</h3>
+              <h3>
+                Resumo de Caixa #{" "}
+                {data_abertura ? services.formatarData(data_abertura) : " - "}
+              </h3>
               <p id="dataAberturaCaixa">
                 Aberto hoje ({services.formatarHorario(data_abertura)})
               </p>
@@ -178,32 +187,32 @@ function CaixaAtual() {
               <div className="formasDePagamentoCaixa">
                 <FaMoneyBill1 />
                 <strong>Dinheiro</strong>
-                <p>{"R$ 200,00"}</p>
+                <p>{services.formatarCurrency(valoresCaixa.dinheiro)}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaCcMastercard />
                 <strong>Cartão de credito</strong>
-                <p>{"R$ 200,00"}</p>
+                <p>{services.formatarCurrency(valoresCaixa["cartão de credito"])}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaCreditCard />
                 <strong>Cartão de debito</strong>
-                <p>{"R$ 200,00"}</p>
+                <p>{services.formatarCurrency(valoresCaixa["cartão de debito"])}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaMoneyCheckAlt />
                 <strong>Cheque</strong>
-                <p>{"R$ 200,00"}</p>
+                <p>{services.formatarCurrency(valoresCaixa.cheque)}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaPix />
                 <strong>Pix</strong>
-                <p>{"R$ 200,00"}</p>
+                <p>{services.formatarCurrency(valoresCaixa.pix)}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <BsFillCreditCard2FrontFill />
                 <strong>Crediario</strong>
-                <p>{"R$ 200,00"}</p>
+                <p>{services.formatarCurrency(valoresCaixa["crediario propio"])}</p>
               </div>
             </div>
           ) : (

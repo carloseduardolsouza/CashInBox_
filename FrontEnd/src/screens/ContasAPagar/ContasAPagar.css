@@ -16,3 +16,13 @@
     border: solid var(--button-color) 1px;
     transition: .3s;
 }
+
+.buttonPagarContasPagar {
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--text-color);
+    border: solid var(--text-color) 1px;
+    width: 100%;
+    font-weight: bold;
+    background-color: #00ff0042;
+}

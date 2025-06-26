@@ -1,0 +1,56 @@
+#ModalImages {
+  background-color: var(--div-color);
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  width: 600px;
+  height: 500px;
+  transform: translate(50%, -50%);
+
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+#closeModalImages {
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+#centralizarImagemModalImages {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#bigImageModalImage {
+  width: 300px;
+  height: 300px;
+  background-size: cover;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#divSmallImages {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.smallImage {
+  width: 100px;
+  cursor: pointer;
+  height: 100px;
+  background-size: cover;
+}
