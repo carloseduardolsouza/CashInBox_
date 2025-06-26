@@ -1,6 +1,11 @@
+import { useState } from "react";
 import "./EditarConta.css";
 
-function EditarConta({fecharAba}) {
+function EditarConta({fecharAba , dadosConta}) {
+  const [valor , setValor] = useState(dadosConta.valor_total)
+  const [Vencimento , setVencimento] = useState(dadosConta.data_vencimento)
+  const [referencia , setReferencia] = useState(dadosConta.categoria)
+  console.log(dadosConta)
   return (
     <div className="blurModal">
       <div id="EditarConta">
@@ -8,27 +13,22 @@ function EditarConta({fecharAba}) {
         <form>
           <label>
             <strong>Numero do documento:</strong>
-            <span>516515641 1515151 515151 5151</span>
+            <span>{dadosConta.descricao}</span>
           </label>
 
           <label>
             <strong>Valor:</strong>
-            <input type="text" />
+            <input type="text" value={valor}/>
           </label>
 
           <label>
             <strong>Vencimento:</strong>
-            <input type="date" />
+            <input type="date" value={Vencimento}/>
           </label>
 
           <label>
             <strong>Referente a:</strong>
-            <input type="text" />
-          </label>
-
-          <label>
-            <strong>Valor Pago:</strong>
-            <input type="text" />
+            <input type="text" value={referencia}/>
           </label>
 
           <div>

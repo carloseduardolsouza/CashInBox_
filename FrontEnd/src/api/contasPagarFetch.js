@@ -28,7 +28,7 @@ const editarConta = async (dados, id) => {
 
 const pagarConta = async (id, dataPagamento) => {
   const res = await fetch(`${API_URL}/${id}/pagar`, {
-    method: "PATCH",
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ data_pagamento: dataPagamento }),
   });

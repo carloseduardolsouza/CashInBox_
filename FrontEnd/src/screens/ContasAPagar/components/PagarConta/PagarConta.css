@@ -1,0 +1,49 @@
+#PagarConta {
+  position: absolute;
+  transform: translate(50%, -50%);
+  top: 50%;
+  right: 50%;
+  padding: 10px;
+  width: 500px;
+
+  background: var(--div-color);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+}
+
+.labelPagarConta {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5px;
+}
+
+.labelPagarConta input {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#divButtonPagarConta {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+#divButtonPagarConta #buttonPagar {
+    background-color: var(--button-color);
+    color: white;
+}
+
+#divButtonPagarConta button {
+    padding: 5px;
+    border-radius: 5px;
+    width: 45%;
+    font-weight: bold;
+
+}

@@ -48,7 +48,7 @@ const novaConta = async (dados) => {
 
 // 🔍 Listar todas as contas
 const contasAll = async () => {
-  const query = `SELECT * FROM contas_a_pagar ORDER BY data_vencimento ASC`;
+  const query = `SELECT * FROM contas_a_pagar WHERE status != 'pago' ORDER BY data_vencimento ASC`;
 
   return new Promise((resolve, reject) => {
     connection.all(query, [], (err, rows) => {

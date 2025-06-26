@@ -53,7 +53,11 @@ function NovaConta({ fecharAba, atualizar }) {
                 id="valor"
                 type="number"
                 min={1}
-                onChange={(e) => setValor(e.target.value)}
+                step="0.01"
+                onChange={(e) => {
+                  const valor = e.target.value.replace(",", ".");
+                  setValor(parseFloat(valor));
+                }}
               />
             </div>
             <div>
@@ -121,36 +125,6 @@ function NovaConta({ fecharAba, atualizar }) {
               id="Observação"
               onChange={(e) => setObs(e.target.value)}
             />
-          </div>
-
-          <div>
-            <div id="divRepetirPagamento">
-              <div>
-                <input type="checkbox" />
-                <span>Repetir esse lançamento por</span>
-              </div>
-              <div>
-                <input type="number" />
-                <span>mêses</span>
-              </div>
-            </div>
-
-            <table className="TableNovaConta">
-              <thead>
-                <tr>
-                  <th>Num. Doc</th>
-                  <th>Vencimento</th>
-                  <th>Valor</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1010</td>
-                  <td>10/10/2005</td>
-                  <td>R$ 200,00</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
 
           <div id="divButoesNovaConta">
