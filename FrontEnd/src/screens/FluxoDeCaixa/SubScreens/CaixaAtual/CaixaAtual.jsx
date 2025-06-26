@@ -187,32 +187,32 @@ function CaixaAtual() {
               <div className="formasDePagamentoCaixa">
                 <FaMoneyBill1 />
                 <strong>Dinheiro</strong>
-                <p>{services.formatarCurrency(valoresCaixa.dinheiro)}</p>
+                <p>{services.formatarCurrency(valoresCaixa?.dinheiro)}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaCcMastercard />
                 <strong>Cartão de credito</strong>
-                <p>{services.formatarCurrency(valoresCaixa["cartão de credito"])}</p>
+                <p>{services.formatarCurrency(valoresCaixa?.["cartão de credito"])}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaCreditCard />
                 <strong>Cartão de debito</strong>
-                <p>{services.formatarCurrency(valoresCaixa["cartão de debito"])}</p>
+                <p>{services.formatarCurrency(valoresCaixa?.["cartão de debito"])}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaMoneyCheckAlt />
                 <strong>Cheque</strong>
-                <p>{services.formatarCurrency(valoresCaixa.cheque)}</p>
+                <p>{services.formatarCurrency(valoresCaixa?.cheque)}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <FaPix />
                 <strong>Pix</strong>
-                <p>{services.formatarCurrency(valoresCaixa.pix)}</p>
+                <p>{services.formatarCurrency(valoresCaixa?.pix)}</p>
               </div>
               <div className="formasDePagamentoCaixa">
                 <BsFillCreditCard2FrontFill />
                 <strong>Crediario</strong>
-                <p>{services.formatarCurrency(valoresCaixa["crediario propio"])}</p>
+                <p>{services.formatarCurrency(valoresCaixa?.["crediario propio"])}</p>
               </div>
             </div>
           ) : (

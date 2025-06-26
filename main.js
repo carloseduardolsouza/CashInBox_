@@ -49,6 +49,7 @@ function createWindow() {
     alwaysOnTop: false,
     show: false,
     webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false, // ⚠️ atenção aos riscos!
@@ -153,6 +154,11 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+});
+
+ipcMain.on("reiniciar-app", () => {
+  app.relaunch();
+  app.exit();
 });
 
 app.on("window-all-closed", () => {

@@ -1,19 +1,17 @@
 import "./ApiDesconectada.css";
 import { useContext } from "react";
 import AppContext from "../../context/AppContext";
-//coxexão com a api
-import fetchapi from "../../api/fetchapi";
 
 function ApiDesconectada() {
   const { setErroApi } = useContext(AppContext);
 
-  const reiniciarApi = () => {
-    fetchapi.restartApi();
-    setErroApi(false);
+  const reiniciarAplicacao = () => {
+    window.electronAPI.reiniciarApp();
   };
+
   const fecharModal = () => {
     setErroApi(false);
-  }
+  };
 
   return (
     <div id="ApiDesconectada">
@@ -34,15 +32,17 @@ function ApiDesconectada() {
         <p className="cookieHeading">Falha na conecxão</p>
         <p className="cookieDescription">
           detectamos um erro ao ascessar nosso banco de dados, por favor
-          reinicie a api ou entre em contato com o suporte <br />
+          reinicie o programa ou entre em contato com o suporte <br />
           <a href="#">Entre em contato com o suporte</a>.
         </p>
 
         <div className="buttonContainer">
-          <button className="acceptButton" onClick={() => reiniciarApi()}>
+          <button className="acceptButton" onClick={() => reiniciarAplicacao()}>
             Reiniciar
           </button>
-          <button className="declineButton" onClick={() => fecharModal()}>Fechar</button>
+          <button className="declineButton" onClick={() => fecharModal()}>
+            Fechar
+          </button>
         </div>
       </div>
     </div>

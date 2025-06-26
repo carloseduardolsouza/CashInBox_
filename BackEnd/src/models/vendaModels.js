@@ -77,18 +77,21 @@ const novaVenda = async (dados) => {
     // Busca caixa aberto para registrar movimentação
     const caixaAberto = await caixaControlles.buscarCaixasAbertos();
 
-    if (caixaAberto.length > 0) {
-      const movimentacao = {
-        id: caixaAberto[0].id,
-        descricao: `Venda #${vendaId}`,
-        tipo: "entrada",
-        valor: valor_total,
-      };
+    if (caixaAberto && caixaAberto.id) {
+      for (const pagamento of pagamentos) {
+        const movimentacao = {
+          id: caixaAberto.id,
+          descricao: `Venda #${vendaId}`,
+          tipo: "entrada",
+          valor: pagamento.valor,
+          tipo_pagamento: pagamento.tipo_pagamento.toLowerCase(),
+        };
 
-      await caixaControlles.adicionarMovimentacaoHandler(
-        caixaAberto[0].id,
-        movimentacao
-      );
+        await caixaControlles.adicionarMovimentacaoHandler(
+          caixaAberto.id,
+          movimentacao
+        );
+      }
     }
 
     // Insere os produtos da venda
@@ -510,15 +513,52 @@ const deletarVenda = async (id) => {
 
     const { cliente_id, valor_total, status } = vendaInfo[0];
 
-    // Deleta itens relacionados (ordem importante)
+    // Buscar movimentação correspondente à venda
+    const movimentacao = await allAsync(
+      "SELECT caixa_id FROM movimentacoes WHERE descricao = ?",
+      [`Venda #${id}`]
+    );
+
+    if (movimentacao.length > 0) {
+      const caixaId = movimentacao[0].caixa_id;
+
+      // Buscar dados do caixa
+      const caixaInfo = await allAsync(
+        "SELECT saldo_retirada, valor_esperado FROM caixas WHERE id = ?",
+        [caixaId]
+      );
+
+      if (caixaInfo.length > 0) {
+        const caixa = caixaInfo[0];
+
+        const novoSaldoRetirada =
+          (caixa.saldo_retirada || 0) + Number(valor_total);
+        const novoValorEsperado =
+          (caixa.valor_esperado || 0) - Number(valor_total);
+
+        await new Promise((resolve, reject) => {
+          connection.run(
+            `UPDATE caixas SET saldo_retirada = ?, valor_esperado = ? WHERE id = ?`,
+            [novoSaldoRetirada, novoValorEsperado, caixaId],
+            function (err) {
+              if (err) return reject(err);
+              resolve(this.changes);
+            }
+          );
+        });
+      }
+    }
+
+    // Deleta os dados relacionados
     await runAsync("DELETE FROM vendas_itens WHERE venda_id = ?", [id]);
     await runAsync("DELETE FROM pagamentos WHERE venda_id = ?", [id]);
     await runAsync("DELETE FROM crediario_parcelas WHERE id_venda = ?", [id]);
-
-    // Deleta a venda
+    await runAsync("DELETE FROM movimentacoes WHERE descricao = ?", [
+      `Venda #${id}`,
+    ]);
     await runAsync("DELETE FROM vendas WHERE id = ?", [id]);
 
-    // Atualiza total_compras do cliente, se aplicável
+    // Atualiza total_compras do cliente
     if (status !== "orçamento" && cliente_id && cliente_id !== 0) {
       const cliente = await allAsync(
         "SELECT total_compras FROM clientes WHERE id = ?",
