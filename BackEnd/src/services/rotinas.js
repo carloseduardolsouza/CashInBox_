@@ -3,12 +3,31 @@ const dayjs = require("dayjs");
 const fs = require("fs");
 const path = require("path");
 const cron = require("node-cron");
+const os = require("os");
 
-const {
-  sanitizarNumero,
-  temConexaoInternet,
-  gerarMensagemCompra,
-} = require("../whatsapp/utils");
+function carregarUserConfigs() {
+  const configPath = path.join(
+    os.homedir(),
+    "AppData",
+    "Roaming",
+    "CashInBox",
+    "userConfigs.json"
+  );
+  if (!fs.existsSync(configPath)) {
+    console.warn("⚠️ Arquivo userConfigs.json não encontrado.");
+    return null;
+  }
+
+  try {
+    const dados = fs.readFileSync(configPath, "utf-8");
+    return JSON.parse(dados);
+  } catch (error) {
+    console.error("❌ Erro ao carregar userConfigs:", error.message);
+    return null;
+  }
+}
+
+const { sanitizarNumero, temConexaoInternet } = require("../whatsapp/utils");
 
 const {
   client,
@@ -226,6 +245,77 @@ Equipe CashInBox 💼`;
   });
 }
 
+// === ROTINA 4 - Verificar Contas a Pagar ===
+async function verificarContasPagar(numeroDestino) {
+  const hoje = dayjs().format("YYYY-MM-DD");
+  console.log("📌 Verificando contas a pagar para:", hoje);
+
+  db.all(
+    "SELECT id, categoria, valor_total, data_vencimento FROM contas_a_pagar WHERE data_vencimento <= ? AND status = 'pendente'",
+    [hoje],
+    async (err, rows) => {
+      if (err) {
+        console.error("❌ Erro ao buscar contas a pagar:", err.message);
+        return;
+      }
+
+      if (rows.length === 0) {
+        console.log("✅ Nenhuma conta a pagar encontrada.");
+        return;
+      }
+
+      for (const conta of rows) {
+        const { id, categoria, data_vencimento, valor_total } = conta;
+        const dataFormatada = dayjs(data_vencimento).format("DD/MM/YYYY");
+
+        let mensagem = "";
+
+        if (data_vencimento === hoje) {
+          mensagem = `⚠️ *Lembrete de Vencimento* ⚠️
+
+💼 Categoria: *${categoria}*  
+💰 Valor: *R$ ${Number(valor_total).toFixed(2).replace(".", ",")}*  
+📅 *Vencimento: Hoje*
+
+Não se esqueça de realizar o pagamento *ainda hoje* para evitar multas, juros ou possíveis transtornos. 🚫💸
+
+Qualquer dúvida, estamos à disposição! 🤝`;
+        } else {
+          mensagem = `🚨 *Conta em Atraso* 🚨
+
+💼 Categoria: *${categoria}*  
+📅 Vencimento: *${dataFormatada}*  
+💰 Valor: *R$ ${Number(valor_total).toFixed(2).replace(".", ",")}*
+
+Identificamos que essa conta ainda *não foi paga*. 😕
+
+Pedimos que regularize o quanto antes para evitar multas, restrições ou interrupções no serviço. 💸`;
+
+          // Atualizar status para "vencida"
+          db.run(
+            "UPDATE contas_a_pagar SET status = 'vencida' WHERE id = ?",
+            [id],
+            (updateErr) => {
+              if (updateErr) {
+                console.error(
+                  `❌ Erro ao atualizar status da conta ID ${id}:`,
+                  updateErr.message
+                );
+              } else {
+                console.log(`✔️ Conta ID ${id} marcada como 'vencida'.`);
+              }
+            }
+          );
+        }
+
+        await enviarMensagem(numeroDestino, mensagem);
+      }
+
+      console.log("📨 Todas as mensagens de contas a pagar foram enviadas.");
+    }
+  );
+}
+
 // === Execução completa ===
 async function executarRotinasDiarias() {
   if (jaExecutouHoje()) {
@@ -233,11 +323,35 @@ async function executarRotinasDiarias() {
     return;
   }
 
-  console.log("🟡 Executando rotinas diárias...");
+  const config = carregarUserConfigs();
+  if (!config) {
+    console.log(
+      "❌ Configurações não carregadas. Cancelando execução das rotinas."
+    );
+    return;
+  }
+
+  console.log("🟡 Executando rotinas diárias com config:", config);
 
   await verificarVencimentos();
-  await verificarAniversariantes();
-  await cobrarPendencias()
+
+  if (config.msg_aniversario) {
+    await verificarAniversariantes();
+  } else {
+    console.log("🎂 Mensagem de aniversário desativada por config.");
+  }
+
+  if (config.msg_notificacao) {
+    await verificarContasPagar(config.numero_msg_notificacao);
+  } else {
+    console.log("🔕 Notificações de contas desativadas por config.");
+  }
+
+  if (config.msg_cobranca) {
+    await cobrarPendencias();
+  } else {
+    console.log("💸 Mensagem de cobrança desativada por config.");
+  }
 
   const hoje = dayjs().format("YYYY-MM-DD");
   salvarStatusRotinas(hoje);
@@ -256,6 +370,7 @@ cron.schedule("0 8 * * *", () => {
 // === Exportações ===
 module.exports = {
   executarRotinasDiarias,
+  verificarContasPagar,
   verificarVencimentos,
   verificarAniversariantes,
   cobrarPendencias,

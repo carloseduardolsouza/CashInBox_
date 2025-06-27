@@ -13,7 +13,21 @@ const salvarDados = (req, res) => {
   res.json({ success: true });
 };
 
+const verConfigAutomacao = (req, res) => {
+  const data = userData.verConfigAutomacao();
+  if (!data) return res.status(404).json({ error: 'Nenhum dado encontrado' });
+  res.json(data);
+};
+
+const editarConfigAutomacao = (req, res) => {
+  const sucesso = userData.editarConfigAutomacao(req.body);
+  if (!sucesso) return res.status(500).json({ error: 'Erro ao salvar dados' });
+  res.json({ success: true });
+};
+
 module.exports = {
   getDados,
-  salvarDados
+  salvarDados,
+  verConfigAutomacao,
+  editarConfigAutomacao
 };

@@ -121,7 +121,7 @@ function DetalhesDoProduto() {
       preco_custo: preco_custoEdit,
       estoque_atual: estoque_atualEdit,
       estoque_minimo: estoque_minimoEdit,
-      markup: markupEdit,
+      markup: markupEdit.toFixed(2) || 0,
       categoria: categoriaEdit,
       categoria_id: categoria_idEdit,
       unidade_medida: "",

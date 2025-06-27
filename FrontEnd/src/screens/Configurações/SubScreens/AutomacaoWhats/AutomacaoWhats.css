@@ -121,3 +121,13 @@
 .inputCardOptions p {
   font-weight: bold;
 }
+
+#buttonSalvarConfigs {
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 15px;
+  width: 52%;
+  background-color: var(--button-color);
+  color: white;
+}

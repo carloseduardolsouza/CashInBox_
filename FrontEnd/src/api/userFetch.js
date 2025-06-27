@@ -32,6 +32,38 @@ const editarDadosEmpresa = async (data) => {
   return dados;
 };
 
+const verConfigAutomacao = async () => {
+  const produtos = await fetch(`${API_URL}/user/config/automacao`)
+    .then((response) => {
+      return response;
+    })
+    .catch((erro) => {
+      return erro;
+    });
+
+  const dados = await produtos.json();
+  return dados;
+};
+
+const editarConfigAutomacao = async (data) => {
+  const produtos = await fetch(`${API_URL}/user/config/automacao`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      return response;
+    })
+    .catch((erro) => {
+      return erro;
+    });
+
+  const dados = await produtos.json();
+  return dados;
+};
+
 const cadastrarCredenciais = async (dados) => {
   const response = await fetch(`${API_URL}/user/login`, {
     method: "POST",
@@ -49,7 +81,9 @@ const cadastrarCredenciais = async (dados) => {
 };
 
 export default {
-    editarDadosEmpresa,
-    cadastrarCredenciais,
-    dadosEmpresa
-}
+  editarDadosEmpresa,
+  cadastrarCredenciais,
+  editarConfigAutomacao,
+  verConfigAutomacao,
+  dadosEmpresa,
+};
