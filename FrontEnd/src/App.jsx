@@ -113,6 +113,7 @@ function App() {
       {erroApi && <ApiDesconectada />}
       {vencido && <AssinaturaVencida />}
       {fazerLogin && <CardLogin/>}
+      {<Aviso/>}
       <Router>
         <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>
           <div className="MenuLateralBox Outline" onClick={VerificarStatusMenu}>

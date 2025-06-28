@@ -1,117 +1,149 @@
 import "./CadastrarProduto.css";
-import { useState, useRef, useEffect, useContext } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import AppContext from "../../context/AppContext";
 
-//Conexão com a api
+// Conexão com a API
 import produtoFetch from "../../api/produtoFetch";
 import categoriaFetch from "../../api/categoriaFetch";
 
-//Icones
+// Ícones
 import { FaCamera } from "react-icons/fa";
 import { GrUpdate } from "react-icons/gr";
 
-//componentes
+// Componentes
 import CriarCategoria from "./Components/CriarCategoria/CriarCategoria";
 
-//Biblioteca
+// Bibliotecas
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Select from "react-select";
 
 function CadastrarProduto() {
-  const { setErroApi } = useContext(AppContext);
-  const [resulCategoria, setResultCategorias] = useState([]);
+  const { setErroApi, adicionarAviso } = useContext(AppContext);
 
   const fileInputRef = useRef(null);
-  const [modal, setModal] = useState(null);
 
+  const [resulCategoria, setResultCategorias] = useState([]);
+  const [modal, setModal] = useState(null);
   const [images, setImages] = useState([]);
   const [openImagens, setOpenImagens] = useState(false);
   const [ref, setRef] = useState(true);
-
-  const [imageReq, setImageReq] = useState();
+  const [imageReq, setImageReq] = useState([]);
 
   const [nomeProduto, setNomeProduto] = useState("");
   const [marca, setMarca] = useState();
-  const [descrição, setDescrição] = useState();
-  const [preçoCompra, setPreçoCompra] = useState("");
-  const [preçoVenda, setPreçoVenda] = useState("");
+  const [descricao, setDescricao] = useState();
+  const [precoCompra, setPrecoCompra] = useState("");
+  const [precoVenda, setPrecoVenda] = useState("");
   const [markup, setMarkup] = useState(0);
   const [categoria, setCategoria] = useState("");
   const [referencia, setReferencia] = useState("");
 
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const buscarCategorias = async () => {
+  const categorias = useMemo(() => {
+    return resulCategoria.map((c) => ({
+      value: c.id,
+      label: c.nome,
+    }));
+  }, [resulCategoria]);
+
+  const customStyles = useMemo(
+    () => ({
+      control: (base, state) => ({
+        ...base,
+        border: state.isFocused ? "2px solid black" : "2px solid #ccc",
+        boxShadow: state.isFocused
+          ? "0 0 0 2px rgba(0, 123, 255, 0.2)"
+          : "none",
+        "&:hover": {
+          borderColor: state.isFocused ? "black" : "#888",
+        },
+        borderRadius: "8px",
+        padding: "0px",
+      }),
+    }),
+    []
+  );
+
+  const buscarCategorias = useCallback(async () => {
     try {
       const resultado = await categoriaFetch.listarCategorias();
       setResultCategorias(resultado);
-    } catch (err) {
+    } catch {
       setErroApi(true);
     }
-  };
+  }, [setErroApi]);
 
   useEffect(() => {
     buscarCategorias();
-  }, []);
+  }, [buscarCategorias]);
 
-  const categorias = resulCategoria.map((categoria) => ({
-    value: categoria.id,
-    label: categoria.nome,
-  }));
-
-  const customStyles = {
-    control: (base, state) => ({
-      ...base,
-      border: state.isFocused ? "2px solid black" : "2px solid #ccc",
-      boxShadow: state.isFocused ? "0 0 0 2px rgba(0, 123, 255, 0.2)" : "none",
-      "&:hover": {
-        borderColor: state.isFocused ? "black" : "#888",
-      },
-      borderRadius: "8px",
-      padding: "0px",
-    }),
-  };
-
-  const renderModal = () => {
-    switch (modal) {
-      case "criarCategoria":
-        return <CriarCategoria fechar={setModal} />;
-      case null:
-        return null;
-    }
-  };
-
-  const HandleImageChange = (e) => {
+  const handleImageChange = useCallback((e) => {
     const files = Array.from(e.target.files);
     setImageReq(files);
-
-    const imagesArray = files.map((file) => {
-      return URL.createObjectURL(file);
-    });
-
+    const imagesArray = files.map((file) => URL.createObjectURL(file));
     setImages((prevImages) => [...prevImages, ...imagesArray]);
     setOpenImagens(true);
+  }, []);
+
+  const calculeValor = useCallback(
+    (campo, valor) => {
+      valor = parseFloat(valor) || 0;
+
+      if (campo === "precoCompra") {
+        setPrecoCompra(valor);
+        setPrecoVenda(valor + (valor * markup) / 100);
+      } else if (campo === "margem") {
+        setMarkup(valor);
+        setPrecoVenda(precoCompra + (precoCompra * valor) / 100);
+      } else if (campo === "precoVenda") {
+        setPrecoVenda(valor);
+        setMarkup(((valor - precoCompra) / precoCompra) * 100);
+      }
+    },
+    [precoCompra, markup]
+  );
+
+  const renderModal = () => {
+    if (modal === "criarCategoria") return <CriarCategoria fechar={setModal} />;
+    return null;
   };
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+  const resetForm = () => {
+    setNomeProduto("");
+    setMarca("");
+    setDescricao("");
+    setPrecoCompra("");
+    setPrecoVenda("");
+    setMarkup(0);
+    setCategoria("");
+    setReferencia("");
+    setImageReq([]);
+    setImages([]);
+    setOpenImagens(false);
   };
 
-  const CadastrarProduto = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let dados = {
-      nome: nomeProduto.charAt(0).toUpperCase() + nomeProduto.slice(1).toLowerCase(),
-      descricao: descrição,
-      referencia: referencia,
+
+    const dados = {
+      nome:
+        nomeProduto.charAt(0).toUpperCase() +
+        nomeProduto.slice(1).toLowerCase(),
+      descricao,
+      referencia,
       codigo_barras: "",
-      preco_venda: preçoVenda || 0,
-      preco_custo: preçoCompra,
+      preco_venda: precoVenda || 0,
+      preco_custo: precoCompra,
       estoque_atual: 0,
       estoque_minimo: 0,
       markup: markup.toFixed(2) || 0,
@@ -121,52 +153,32 @@ function CadastrarProduto() {
       ativo: true,
     };
 
-    produtoFetch
-      .novoProduto(dados, imageReq)
-      .then((resposta) => {
-        setCategoria("");
-        setDescrição("");
-        setImageReq([]);
-        setImages([]);
-        setMarca("");
-        setMarkup("");
-        setNomeProduto("");
-        setPreçoCompra("");
-        setPreçoVenda("");
-        setOpenImagens(false);
-      })
-      .catch((erro) => {
-        setErroApi(true);
-      });
-  };
-
-  const calculeValor = (campo, valor) => {
-    valor = parseFloat(valor) || 0;
-
-    if (campo === "precoCompra") {
-      setPreçoCompra(valor);
-      const novoPrecoVenda = valor + (valor * markup) / 100;
-      setPreçoVenda(novoPrecoVenda);
-    } else if (campo === "margem") {
-      setMarkup(valor);
-      const novoPrecoVenda = preçoCompra + (preçoCompra * valor) / 100;
-      setPreçoVenda(novoPrecoVenda);
-    } else if (campo === "precoVenda") {
-      setPreçoVenda(valor);
-      const novaMargem = ((valor - preçoCompra) / preçoCompra) * 100;
-      setMarkup(novaMargem);
+    try {
+      await produtoFetch.novoProduto(dados, imageReq);
+      adicionarAviso("sucesso", "SUCESSO - produto cadastrado com sucesso!");
+      resetForm();
+    } catch {
+      setErroApi(true);
     }
   };
+
+  const sliderSettings = useMemo(
+    () => ({
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+    }),
+    []
+  );
 
   return (
     <div id="cadastrarProduto">
       {renderModal()}
       <h2>Cadastro de Produtos</h2>
       <div id="CadastroProdutos">
-        <form
-          className="AreaInputsNovoProduto"
-          onSubmit={(e) => CadastrarProduto(e)}
-        >
+        <form className="AreaInputsNovoProduto" onSubmit={handleSubmit}>
           <la>
             <p>Nome: </p>
             <input
@@ -202,7 +214,7 @@ function CadastrarProduto() {
             <button
               id="AtualizarCategoria"
               type="button"
-              onClick={(e) => buscarCategorias(e)}
+              onClick={buscarCategorias}
             >
               <GrUpdate />
             </button>
@@ -231,7 +243,7 @@ function CadastrarProduto() {
               <input
                 type="number"
                 placeholder="somente numeros"
-                value={preçoCompra}
+                value={precoCompra}
                 onChange={(e) => calculeValor("precoCompra", e.target.value)}
               />
             </la>
@@ -250,7 +262,7 @@ function CadastrarProduto() {
               <p>Preço De Venda:</p>
               <input
                 type="number"
-                value={preçoVenda}
+                value={precoVenda}
                 placeholder="somente numeros"
                 onChange={(e) => calculeValor("precoVenda", e.target.value)}
               />
@@ -263,8 +275,8 @@ function CadastrarProduto() {
               id="texto"
               rows="4"
               cols="50"
-              onChange={(e) => setDescrição(e.target.value)}
-              value={descrição}
+              onChange={(e) => setDescricao(e.target.value)}
+              value={descricao}
               placeholder="descrição do produto..."
             />
           </la>
@@ -277,7 +289,7 @@ function CadastrarProduto() {
               className="imageProduto"
               id="inputImageProduto"
               ref={fileInputRef}
-              onChange={HandleImageChange}
+              onChange={handleImageChange}
             />
           </la>
 
@@ -291,12 +303,12 @@ function CadastrarProduto() {
           </button>
         </form>
 
-        {(openImagens && (
+        {openImagens ? (
           <div className="imageProdutoOpen">
             <div>
-              <Slider {...settings}>
-                {images.map((image) => (
-                  <div>
+              <Slider {...sliderSettings}>
+                {images.map((image, index) => (
+                  <div key={index}>
                     <img
                       src={image}
                       style={{
@@ -305,13 +317,14 @@ function CadastrarProduto() {
                         margin: "auto",
                       }}
                       className="zindex"
+                      alt="Preview"
                     />
                   </div>
                 ))}
               </Slider>
             </div>
           </div>
-        )) || (
+        ) : (
           <div className="imageProduto">
             <div>
               <FaCamera />

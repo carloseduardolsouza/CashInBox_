@@ -9,11 +9,11 @@ function componenteAviso({ tipo, aviso }) {
           tipo === "aviso"
             ? "#5b67ef"
             : tipo === "atenção"
-            ? "#efb15b"
-            : tipo === "suscesso"
-            ? "#6aef5b"
+            ? "#C9C707"
+            : tipo === "sucesso"
+            ? "#0DA800"
             : tipo === "erro"
-            ? "#ef665b"
+            ? "#C90000"
             : ""
         }`,
       }}

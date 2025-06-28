@@ -5,7 +5,7 @@ import { FaUserAlt } from "react-icons/fa";
 import funcionarioFetch from "../../api/funcionarioFetch";
 
 function CadastrarFuncionario() {
-  const { setErroApi } = useContext(AppContext);
+  const { setErroApi , adicionarAviso } = useContext(AppContext);
   const [nome, setNome] = useState("");
   const [numero, setNumero] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -53,6 +53,7 @@ function CadastrarFuncionario() {
       setNome("");
       setNumero("");
       setNascimento("");
+      adicionarAviso("sucesso" , "SUCESSO - Funcionário cadastrado com sucesso !")
     } catch {
       setErroApi(true);
     }

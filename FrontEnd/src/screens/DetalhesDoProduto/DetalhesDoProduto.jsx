@@ -12,7 +12,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 function DetalhesDoProduto() {
   const { id } = useParams();
-  const { setErroApi } = useContext(AppContext);
+  const { setErroApi , adicionarAviso } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [categoriaEdit, setCategoriaEdit] = useState("");
@@ -130,7 +130,9 @@ function DetalhesDoProduto() {
 
     produtoFetch
       .atualizarProduto(dados)
-      .then((resposta) => {})
+      .then((resposta) => {
+        adicionarAviso("sucesso" , "SUCESSO - Dados do produto editado com sucesso !")
+      })
       .catch((erro) => {
         setErroApi(true);
       });

@@ -1,5 +1,6 @@
 import "./AutomacaoWhats.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../../context/AppContext";
 import whatsappFetch from "../../../../api/whatsappFetch";
 import userFetch from "../../../../api/userFetch";
 import { FaRobot } from "react-icons/fa";
@@ -9,6 +10,8 @@ function AutomacaoWhats() {
   const [dadosBot, setDadosBot] = useState({});
   const [dadosAutomacao, setDadosAutomacao] = useState({});
   const [erro, setErro] = useState(false);
+
+  const { setErroApi, adicionarAviso } = useContext(AppContext);
 
   const [msg_aniversario, setMsg_aniversario] = useState(false);
   const [time_msg_aniversario, setTime_msg_aniversario] = useState("");
@@ -64,11 +67,14 @@ function AutomacaoWhats() {
     await userFetch
       .editarConfigAutomacao(dados)
       .then(() => {
-        fetchDadosAutomacao()
-
+        fetchDadosAutomacao();
+        adicionarAviso(
+          "sucesso",
+          "SUCESSO - Dados da automação editado com sucesso !"
+        );
       })
       .catch(() => {
-
+        setErroApi(true);
       });
   };
 
@@ -212,8 +218,9 @@ function AutomacaoWhats() {
             </label>
           </div>
         </div>
-        <button onClick={() => salvarDadosAutomacao()} id="buttonSalvarConfigs"><FaCheckCircle /> Salvar</button>
-
+        <button onClick={() => salvarDadosAutomacao()} id="buttonSalvarConfigs">
+          <FaCheckCircle /> Salvar
+        </button>
       </div>
     </div>
   );

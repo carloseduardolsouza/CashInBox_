@@ -21,7 +21,7 @@ function formReducer(state, action) {
 }
 
 function CadastrarCliente() {
-  const { setErroApi } = useContext(AppContext);
+  const { setErroApi, adicionarAviso } = useContext(AppContext);
   const [form, dispatch] = useReducer(formReducer, initialState);
   const [executando, setExecutando] = useState(false);
 
@@ -35,7 +35,8 @@ function CadastrarCliente() {
     setExecutando(true);
 
     const dados = {
-      nome: form.nome.charAt(0).toUpperCase() + form.nome.slice(1).toLowerCase(),
+      nome:
+        form.nome.charAt(0).toUpperCase() + form.nome.slice(1).toLowerCase(),
       cpf_cnpj: form.cpf,
       email: form.email,
       genero: form.genero,
@@ -47,6 +48,7 @@ function CadastrarCliente() {
     try {
       await clientesFetch.novoCliente(dados);
       dispatch({ type: "RESET" });
+      adicionarAviso("sucesso" , "SUCESSO - Cliente cadastrado com sucesso !")
     } catch (err) {
       setErroApi(true);
     } finally {

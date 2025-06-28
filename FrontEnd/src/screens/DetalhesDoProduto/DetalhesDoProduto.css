@@ -251,6 +251,7 @@
   height: 50px;
   border: solid var(--text-color) 1px;
   background-size: cover;
+  background-position: center;
 }
 
 #InputFileInfoProdutos {

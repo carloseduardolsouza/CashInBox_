@@ -12,6 +12,7 @@
   min-width: 200px;
   min-height: 200px;
   background-size: cover;
+  background-position: center;
   margin-right: 10px;
   cursor: pointer;
   border-radius: 10px;

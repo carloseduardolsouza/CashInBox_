@@ -10,11 +10,28 @@ export function AppProvider({ children }) {
 
   const [erroApi, setErroApi] = useState(false);
 
-  const [fazerLogin , setFazerLogin] = useState(false)
+  const [fazerLogin, setFazerLogin] = useState(false);
 
-  const [vencido , setVencido] = useState(false)
+  const [vencido, setVencido] = useState(false);
 
   const [Whastsapp, setWhastsapp] = useState(false);
+
+  const [avisos, setAvisos] = useState([]);
+
+  // Função para adicionar um aviso
+  const adicionarAviso = (tipo, texto) => {
+    const novoAviso = {
+      id: Date.now(), // ID único
+      tipo,
+      texto,
+    };
+    setAvisos((prev) => [...prev, novoAviso]);
+
+    // Remover automaticamente depois de 5 segundos (opcional)
+    setTimeout(() => {
+      setAvisos((prev) => prev.filter((a) => a.id !== novoAviso.id));
+    }, 5000);
+  };
 
   const fetchStatus = async () => {
     try {
@@ -50,6 +67,9 @@ export function AppProvider({ children }) {
   }, []);
 
   const valores = {
+    adicionarAviso,
+    avisos,
+
     erroApi,
     setErroApi,
     isDark,
@@ -61,7 +81,7 @@ export function AppProvider({ children }) {
     vencido,
     setVencido,
     fazerLogin,
-    setFazerLogin
+    setFazerLogin,
   };
 
   return <AppContext.Provider value={valores}>{children}</AppContext.Provider>;

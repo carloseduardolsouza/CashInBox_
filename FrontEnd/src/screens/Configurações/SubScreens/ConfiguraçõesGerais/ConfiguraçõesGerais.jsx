@@ -1,6 +1,6 @@
 import "./ConfiguraçõesGerais.css";
-import { useState, useEffect , useContext } from "react";
-import AppContext from "../../../../context/AppContext"
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../../context/AppContext";
 
 import CardLogin from "../../../../components/CardLogin/CardLogin";
 
@@ -15,23 +15,26 @@ function ConfiguraçõesGerais() {
   const [endereco, setEndereco] = useState("");
   const [InscriçãoEstadual, setInscriçãoEstadual] = useState("");
 
-  const {setErroApi , fazerLogin , setFazerLogin} = useContext(AppContext)
+  const { setErroApi, fazerLogin, setFazerLogin , adicionarAviso } = useContext(AppContext);
 
   const [bttDisabled, setBttDisabled] = useState(true);
 
   useEffect(() => {
-    userFetch.dadosEmpresa().then((response) => {
-      setNomeEstabelecimento(response.nomeEstabelecimento);
-      setCnpj(response.cnpj);
-      setEndereco(response.endereco);
-      setInscriçãoEstadual(response.InscriçãoEstadual);
-      setTelefone(response.telefone);
-    }).catch(() => setErroApi(true));
+    userFetch
+      .dadosEmpresa()
+      .then((response) => {
+        setNomeEstabelecimento(response.nomeEstabelecimento);
+        setCnpj(response.cnpj);
+        setEndereco(response.endereco);
+        setInscriçãoEstadual(response.InscriçãoEstadual);
+        setTelefone(response.telefone);
+      })
+      .catch(() => setErroApi(true));
   }, []);
 
   const alterarDadosDaEmpresa = async (e) => {
     e.preventDefault();
-    
+
     let dadosEmpresa = {
       nomeEstabelecimento: nomeEstabelecimento,
       cnpj: cnpj,
@@ -39,13 +42,19 @@ function ConfiguraçõesGerais() {
       endereco: endereco,
       InscriçãoEstadual: InscriçãoEstadual,
     };
-    await userFetch.editarDadosEmpresa(dadosEmpresa).then().catch();
+    await userFetch.editarDadosEmpresa(dadosEmpresa).then(() => {
+      adicionarAviso("sucesso" , "SUCESSO - Dados da empresa editado com sucesso !")
+    }).catch(() => {
+      setErroApi(true)
+    });
   };
 
   return (
     <div id="ConfiguraçõesGerais">
-      {fazerLogin && <CardLogin fechar={setFazerLogin}/>}
-      <button id="MudarCredenciais" onClick={() => setFazerLogin(true)}>Mudar Credenciais</button>
+      {fazerLogin && <CardLogin fechar={setFazerLogin} />}
+      <button id="MudarCredenciais" onClick={() => setFazerLogin(true)}>
+        Mudar Credenciais
+      </button>
       <main id="mainConfiguraçõesGerais">
         <div id="LogoDaEmpresaConfiguraçõesGerais">
           <MdAddPhotoAlternate id="MdAddPhotoAlternate" />
