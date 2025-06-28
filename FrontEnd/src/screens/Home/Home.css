@@ -115,15 +115,15 @@
 }
 
 .green {
-  background-color: #31c331;
+  background-image: linear-gradient(45deg ,#008000 , #00ae00);
 }
 
 .red {
-  background-color: #de2727;
+  background-image: linear-gradient(45deg ,#de2727 , #c54848);
 }
 
 .orange {
-  background-color: #ffb11f;
+  background-image: linear-gradient(45deg ,#ffb11f , #c59234);
 }
 
 .cardMétricasBox > h1 {
@@ -204,22 +204,63 @@
   margin-top: 15px;
 }
 
-#InfoHomeDeash div {
-  width: 30%;
+#InfoHomeDeash > div {
+  width: 23%;
+  height: 90px;
   border-radius: 7px;
   padding: 10px;
   display: flex;
+  justify-content: space-between;
   background-color: var(--div-color);
   color: var(--text-color);
   font-weight: bold;
+}
+
+#ShoppingBasket {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: #5f5f00;
+  color: #d3d300;
+  margin-right: 10px;
+  padding: 5px;
+}
+
+#UserRound {
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background-color: #00055f;
+  color: #5961ff;
+  margin-right: 10px;
+  padding: 5px;
+}
+
+#InfoHomeDeash > #div-sphoping-bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+#InfoHomeDeash > #div-sphoping-bottom > div {
+  display: flex;
   align-items: center;
 }
 
+#InfoHomeDeash > #div-sphoping-bottom > span {
+  background: none;
+  color: black;
+  font-size: 20px;
+}
+
+#InfoHomeDeash > div > div {
+  display: flex;
+}
+
 #InfoHomeDeash span {
-  background-color: var(--text-color);
+  background-image: linear-gradient(45deg ,#000000b8 , #00000055);
   width: 30px;
   height: 30px;
-  border-radius: 50%;
+  border-radius: 10px;
   justify-content: center;
   align-items: center;
   display: flex;

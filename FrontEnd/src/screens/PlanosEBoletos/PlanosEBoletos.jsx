@@ -2,23 +2,26 @@ import "./PlanosEBoletos.css";
 import { GoGear } from "react-icons/go";
 import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
-import fetchapi from "../../api/fetchapi";
+import userFetch from "../../api/userFetch";
 import services from "../../services/services";
 import AppContext from "../../context/AppContext";
 
 function PlanosEBoletos() {
   const [infoPlanos, setInfoPlanos] = useState({});
 
-  const { dadosLoja } = useContext(AppContext);
+  const { dadosLoja , setErroApi } = useContext(AppContext);
 
   useEffect(() => {
-    fetchapi.informacoesPlanos().then((response) => {
+    userFetch.informacoesPlanos().then((response) => {
+      console.log(response)
       setInfoPlanos(response);
+    }).catch(() => {
+      setErroApi(true)
     });
   }, []);
 
   const pegarBoleto = () => {
-    fetchapi
+    userFetch
       .gerarBoleto()
       .then((response) => {
         window.open(response[0].url, "_blank"); // Abre no navegador padrão

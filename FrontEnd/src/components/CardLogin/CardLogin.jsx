@@ -1,13 +1,13 @@
 import "./CardLogin.css";
-import { useState , useContext } from "react";
+import { useState, useContext } from "react";
 import AppContext from "../../context/AppContext";
-import fetchapi from "../../api/fetchapi";
+import userFetch from "../../api/userFetch";
 
 function CardLogin() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const {setFazerLogin} = useContext(AppContext)
+  const { setFazerLogin } = useContext(AppContext);
 
   const fazerLogin = async (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ function CardLogin() {
       senha: senha,
     };
 
-    await fetchapi.cadastrarCredenciais(dados).then(() => {
+    await userFetch.cadastrarCredenciais(dados).then(() => {
       setFazerLogin(false);
     });
   };

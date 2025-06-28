@@ -1,18 +1,98 @@
 #VendasECaixa {
-  background-color: var(--div-color);
-  padding: 10px;
-  border-radius: 10px;
+  background: var(--div-color);
+  border-radius: 12px;
+  padding: 30px;
+  width: 700px;
+  margin: 20px auto;
+  box-shadow: 0 0 12px #00000015;
 }
 
-.labelVendasECaixa {
+.section {
+  margin-bottom: 30px;
+}
+
+.section h3 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.toggle,
+.field {
   display: flex;
-  font-size: 18px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
-.labelVendasECaixa > input {
+.toggle input[type="checkbox"] {
   width: 20px;
+  height: 20px;
 }
 
-.labelVendasECaixa p {
-  width: 650px;
+.field select,
+.field input[type="number"] {
+  width: 200px;
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.salvarBtn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  float: right;
+  margin-top: 20px;
+}
+
+.salvarBtn:hover {
+  background-color: #0056b3;
+}
+
+.lista-formas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.forma-item {
+  background-color: #e8f0fe;
+  border: 1px solid #90caf9;
+  color: #0d47a1;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.forma-item:hover {
+  background-color: #d2e3fc;
+}
+
+.forma-item button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c62828;
+  font-size: 16px;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.forma-item button:hover {
+  color: #b71c1c;
 }

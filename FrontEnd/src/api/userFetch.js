@@ -80,7 +80,21 @@ const cadastrarCredenciais = async (dados) => {
   return await response.json();
 };
 
+const informacoesPlanos = async () => {
+  const informacoesPlanos = await fetch(`${API_URL}/user/informacoesPlano`);
+  const dados = await informacoesPlanos.json();
+  return dados;
+};
+
+const gerarBoleto = async () => {
+  const boleto = await fetch(`${API_URL}/user/gerarBoleto`);
+  const dados = await boleto.json();
+  return dados;
+};
+
 export default {
+  informacoesPlanos,
+  gerarBoleto,
   editarDadosEmpresa,
   cadastrarCredenciais,
   editarConfigAutomacao,

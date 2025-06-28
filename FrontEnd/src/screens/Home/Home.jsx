@@ -2,7 +2,7 @@ import "./Home.css";
 import { useState, useContext, useEffect } from "react";
 import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
-
+import { ShoppingBasket , UserRound  } from "lucide-react";
 import services from "../../services/services";
 import relatorioFetch from "../../api/relatorioFetch";
 
@@ -235,18 +235,29 @@ function Home() {
       <main>
         <div id="InfoHomeDeash">
           <div>
-            <span>{relatoriosBasicos.crediariosAtrasados}</span>
             <p>Crediarios Atrasados</p>
+            <span>{relatoriosBasicos.crediariosAtrasados}</span>
           </div>
 
           <div>
-            <span>{relatoriosBasicos.totalOrcamentos}</span>
             <p>Orçamentos</p>
+            <span>{relatoriosBasicos.totalOrcamentos}</span>
           </div>
 
-          <div>
+          <div id="div-sphoping-bottom">
+            <div>
+              <UserRound id="UserRound"/>
+              <p>Clientes ativos</p>
+            </div>
+            <span>{relatoriosBasicos.crediariosAtrasados}</span>
+          </div>
+
+          <div id="div-sphoping-bottom">
+            <div>
+              <ShoppingBasket id="ShoppingBasket" />
+              <p>Alerta de estoque</p>
+            </div>
             <span>{relatoriosBasicos.produtosEstoqueMinimo}</span>
-            <p>Estoque minimo Atingido</p>
           </div>
         </div>
       </main>
