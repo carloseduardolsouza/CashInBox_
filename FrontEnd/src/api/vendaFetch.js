@@ -38,7 +38,7 @@ const receberPagamentoParcela = (id, dados) =>
   });
 
 const listarVendasFuncionario = (id) =>
-  handleFetch(`${API_URL}/vendas/${encodeURIComponent(id)}`);
+  handleFetch(`${API_URL}/vendas/funcionario/${encodeURIComponent(id)}`);
 
 const listarOrcamentoCliente = (id) =>
   handleFetch(`${API_URL}/vendas/orcamento/cliente/${encodeURIComponent(id)}`);

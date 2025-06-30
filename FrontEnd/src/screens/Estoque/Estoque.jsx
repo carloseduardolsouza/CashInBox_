@@ -69,6 +69,7 @@ function Estoque() {
             type="text"
             className="InputClientes"
             placeholder="Procurar no Estoque..."
+            onChange={(e) => setPesquisa(e.target.value)}
           />
           <button className="Search" type="submit">
             <FaSearch />

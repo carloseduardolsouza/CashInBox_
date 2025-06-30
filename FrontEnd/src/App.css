@@ -33,6 +33,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: 0.3s ease;
+  overflow-x: hidden;
 }
 
 .blurModal {

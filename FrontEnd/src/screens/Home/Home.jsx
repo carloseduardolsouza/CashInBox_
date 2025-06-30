@@ -2,7 +2,8 @@ import "./Home.css";
 import { useState, useContext, useEffect } from "react";
 import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
-import { ShoppingBasket , UserRound  } from "lucide-react";
+import { ShoppingBasket } from "lucide-react";
+import { FaUserAlt } from "react-icons/fa";
 import services from "../../services/services";
 import relatorioFetch from "../../api/relatorioFetch";
 
@@ -234,30 +235,43 @@ function Home() {
 
       <main>
         <div id="InfoHomeDeash">
-          <div>
-            <p>Crediarios Atrasados</p>
-            <span>{relatoriosBasicos.crediariosAtrasados}</span>
+          <div className="card-info">
+            <p>Pagamentos Vencidos</p>
+            <span className="badge">
+              {relatoriosBasicos.crediariosAtrasados}
+            </span>
           </div>
 
-          <div>
+          <div className="card-info">
+            <p>Clientes Ativos</p>
+            <div className="info-bottom">
+              <FaUserAlt className="icon blue" />
+              <strong>{relatoriosBasicos.clientesAtivos}</strong>
+            </div>
+          </div>
+
+          <div className="card-info">
+            <p>Resumo Diário</p>
+            <span>
+              {mostrarInfo
+                ? services.formatarCurrency(
+                    relatoriosBasicos.faturamentoDia || 0
+                  )
+                : "••••••"}
+            </span>
+          </div>
+
+          <div className="card-info">
             <p>Orçamentos</p>
-            <span>{relatoriosBasicos.totalOrcamentos}</span>
+            <span className="badge">{relatoriosBasicos.totalOrcamentos}</span>
           </div>
 
-          <div id="div-sphoping-bottom">
-            <div>
-              <UserRound id="UserRound"/>
-              <p>Clientes ativos</p>
+          <div className="card-info alert">
+            <p style={{ color: "white" }}>Alertas de Estoque</p>
+            <div className="info-bottom">
+              <ShoppingBasket className="icon yellow" />
+              <strong>{relatoriosBasicos.produtosEstoqueMinimo}</strong>
             </div>
-            <span>{relatoriosBasicos.crediariosAtrasados}</span>
-          </div>
-
-          <div id="div-sphoping-bottom">
-            <div>
-              <ShoppingBasket id="ShoppingBasket" />
-              <p>Alerta de estoque</p>
-            </div>
-            <span>{relatoriosBasicos.produtosEstoqueMinimo}</span>
           </div>
         </div>
       </main>

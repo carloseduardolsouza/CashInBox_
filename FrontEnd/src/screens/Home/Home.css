@@ -115,15 +115,15 @@
 }
 
 .green {
-  background-image: linear-gradient(45deg ,#008000 , #00ae00);
+  background-image: linear-gradient(45deg, #008000, #00ae00);
 }
 
 .red {
-  background-image: linear-gradient(45deg ,#de2727 , #c54848);
+  background-image: linear-gradient(45deg, #d20001, #f90101);
 }
 
 .orange {
-  background-image: linear-gradient(45deg ,#ffb11f , #c59234);
+  background-image: linear-gradient(45deg, #feb201, #fffa00);
 }
 
 .cardMétricasBox > h1 {
@@ -200,70 +200,85 @@
 
 #InfoHomeDeash {
   display: flex;
-  justify-content: space-around;
-  margin-top: 15px;
-}
-
-#InfoHomeDeash > div {
-  width: 23%;
-  height: 90px;
-  border-radius: 7px;
-  padding: 10px;
-  display: flex;
   justify-content: space-between;
-  background-color: var(--div-color);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.card-info {
+  background: var(--div-color);
   color: var(--text-color);
-  font-weight: bold;
-}
-
-#ShoppingBasket {
-  border-radius: 50%;
-  height: 25px;
-  width: 25px;
-  background-color: #5f5f00;
-  color: #d3d300;
-  margin-right: 10px;
-  padding: 5px;
-}
-
-#UserRound {
-  border-radius: 50%;
-  height: 25px;
-  width: 25px;
-  background-color: #00055f;
-  color: #5961ff;
-  margin-right: 10px;
-  padding: 5px;
-}
-
-#InfoHomeDeash > #div-sphoping-bottom {
+  border-radius: 12px;
+  padding: 15px;
+  width: 23%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-#InfoHomeDeash > #div-sphoping-bottom > div {
+.card-info.alert {
+  background: linear-gradient(135deg, #332500, #4f3900);
+}
+
+.card-info p {
+  font-size: 14px;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.card-info span {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.info-bottom {
   display: flex;
   align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+  justify-content: end;
 }
 
-#InfoHomeDeash > #div-sphoping-bottom > span {
-  background: none;
-  color: black;
-  font-size: 20px;
-}
-
-#InfoHomeDeash > div > div {
+.icon {
+  width: 22px;
+  height: 22px;
+  padding: 5px;
+  border-radius: 50%;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#InfoHomeDeash span {
-  background-image: linear-gradient(45deg ,#000000b8 , #00000055);
-  width: 30px;
-  height: 30px;
-  border-radius: 10px;
+.icon.blue {
+  background-color: #1e1e5a;
+  color: #6c7fff;
+}
+
+.icon.yellow {
+  background-color: #4f3e00;
+  color: #f5c400;
+}
+
+.badge {
+  background-image: linear-gradient(45deg ,#33333389 , #333333aa);
+  box-shadow: 3px 3px 10px #00000073;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 8px;
+  display: flex;
   justify-content: center;
   align-items: center;
-  display: flex;
-  color: var(--div-color);
-  margin-right: 10px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.alert {
+  color: white;
 }

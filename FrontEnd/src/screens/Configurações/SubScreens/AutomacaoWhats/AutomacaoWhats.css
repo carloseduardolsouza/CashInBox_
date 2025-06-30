@@ -103,7 +103,8 @@
   margin-bottom: 5px;
 }
 
-.CardOptions input , textarea {
+.CardOptions input,
+textarea {
   border-radius: 5px;
   padding: 5px;
   margin-left: 10px;
@@ -130,4 +131,30 @@
   width: 52%;
   background-color: var(--button-color);
   color: white;
+}
+
+#buttonCumprirRotinas {
+  padding: 5px;
+  border-radius: 5px;
+  width: 52%;
+  font-weight: bold;
+  margin-bottom: 10px;
+  background-color: yellow;
+}
+
+#FiRefreshCw {
+  font-weight: bold;
+}
+
+.spinner {
+  animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

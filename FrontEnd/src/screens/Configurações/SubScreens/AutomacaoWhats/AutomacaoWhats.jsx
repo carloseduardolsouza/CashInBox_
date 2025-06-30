@@ -5,11 +5,22 @@ import whatsappFetch from "../../../../api/whatsappFetch";
 import userFetch from "../../../../api/userFetch";
 import { FaRobot } from "react-icons/fa";
 import { FaCheckCircle } from "react-icons/fa";
+import { FiRefreshCw } from "react-icons/fi";
 
 function AutomacaoWhats() {
   const [dadosBot, setDadosBot] = useState({});
   const [dadosAutomacao, setDadosAutomacao] = useState({});
   const [erro, setErro] = useState(false);
+  const [girando, setGirando] = useState(false);
+
+  const handleClick = () => {
+    setGirando(true);
+
+    // Remove a animação depois de 3 segundos
+    setTimeout(() => {
+      setGirando(false);
+    }, 3000); // 3000 ms = 3s
+  };
 
   const { setErroApi, adicionarAviso } = useContext(AppContext);
 
@@ -48,6 +59,13 @@ function AutomacaoWhats() {
     } catch (error) {
       console.error("Erro ao buscar dados da automaçao:", error);
     }
+  };
+
+  const cumprirRotinas = async () => {
+    handleClick();
+    await whatsappFetch.cumprirRotinasManual().then(() => {
+      adicionarAviso("sucesso" , "SUCESSO - Rotinas cumpridas manualmente!")
+    });
   };
 
   const salvarDadosAutomacao = async () => {
@@ -91,6 +109,10 @@ function AutomacaoWhats() {
 
   return (
     <div id="AutomacaoWhats">
+      <button id="buttonCumprirRotinas" onClick={() => cumprirRotinas()}>
+        <FiRefreshCw id="FiRefreshCw" className={girando ? "spinner" : ""} />{" "}
+        Cumprir rotinas
+      </button>
       <div id="divStatusRobo" onClick={() => setClickRobo(!clickRobo)}>
         <div id="divSpanConectado">
           <div

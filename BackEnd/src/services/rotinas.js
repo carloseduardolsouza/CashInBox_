@@ -36,7 +36,13 @@ const {
   getUltimoQRCode,
 } = require("../whatsapp/client");
 
-const statusPath = path.resolve(__dirname, "rotinasStatus.json");
+const statusPath = path.join(
+  os.homedir(),
+  "AppData",
+  "Roaming",
+  "CashInBox",
+  "rotinasStatus.json"
+);
 
 // === Funções auxiliares ===
 function carregarStatusRotinas() {
@@ -251,7 +257,7 @@ async function verificarContasPagar(numeroDestino) {
   console.log("📌 Verificando contas a pagar para:", hoje);
 
   db.all(
-    "SELECT id, categoria, valor_total, data_vencimento FROM contas_a_pagar WHERE data_vencimento <= ? AND status = 'pendente'",
+    "SELECT id, categoria, valor_total, data_vencimento, status FROM contas_a_pagar WHERE data_vencimento <= ? AND status != 'pago'",
     [hoje],
     async (err, rows) => {
       if (err) {
@@ -265,12 +271,12 @@ async function verificarContasPagar(numeroDestino) {
       }
 
       for (const conta of rows) {
-        const { id, categoria, data_vencimento, valor_total } = conta;
+        const { id, categoria, data_vencimento, valor_total, status } = conta;
         const dataFormatada = dayjs(data_vencimento).format("DD/MM/YYYY");
 
         let mensagem = "";
 
-        if (data_vencimento === hoje) {
+        if (data_vencimento === hoje && status !== "vencida") {
           mensagem = `⚠️ *Lembrete de Vencimento* ⚠️
 
 💼 Categoria: *${categoria}*  
@@ -287,25 +293,26 @@ Qualquer dúvida, estamos à disposição! 🤝`;
 📅 Vencimento: *${dataFormatada}*  
 💰 Valor: *R$ ${Number(valor_total).toFixed(2).replace(".", ",")}*
 
-Identificamos que essa conta ainda *não foi paga*. 😕
-
+Identificamos que essa conta ainda *não foi paga*. 😕  
 Pedimos que regularize o quanto antes para evitar multas, restrições ou interrupções no serviço. 💸`;
 
-          // Atualizar status para "vencida"
-          db.run(
-            "UPDATE contas_a_pagar SET status = 'vencida' WHERE id = ?",
-            [id],
-            (updateErr) => {
-              if (updateErr) {
-                console.error(
-                  `❌ Erro ao atualizar status da conta ID ${id}:`,
-                  updateErr.message
-                );
-              } else {
-                console.log(`✔️ Conta ID ${id} marcada como 'vencida'.`);
+          // Atualiza status só se ainda não for "vencida"
+          if (status !== "vencida") {
+            db.run(
+              "UPDATE contas_a_pagar SET status = 'vencida' WHERE id = ?",
+              [id],
+              (updateErr) => {
+                if (updateErr) {
+                  console.error(
+                    `❌ Erro ao atualizar status da conta ID ${id}:`,
+                    updateErr.message
+                  );
+                } else {
+                  console.log(`✔️ Conta ID ${id} marcada como 'vencida'.`);
+                }
               }
-            }
-          );
+            );
+          }
         }
 
         await enviarMensagem(numeroDestino, mensagem);
@@ -317,10 +324,12 @@ Pedimos que regularize o quanto antes para evitar multas, restrições ou interr
 }
 
 // === Execução completa ===
-async function executarRotinasDiarias() {
-  if (jaExecutouHoje()) {
-    console.log("⏩ Rotinas já executadas hoje.");
-    return;
+async function executarRotinasDiarias(dados) {
+  if (!dados || dados != "manualmente") {
+    if (jaExecutouHoje()) {
+      console.log("⏩ Rotinas já executadas hoje.");
+      return;
+    }
   }
 
   const config = carregarUserConfigs();

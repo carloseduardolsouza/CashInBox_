@@ -1,5 +1,6 @@
 import "./GeralCliente.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 //conexão com a api
@@ -29,6 +30,8 @@ function GeralCliente({ infoCliente }) {
     genero,
   } = infoCliente || {};
   const navigate = useNavigate();
+
+  const { adicionarAviso , setErroApi } = useContext(AppContext);
 
   const [editar, setEditar] = useState(false);
 
@@ -60,7 +63,7 @@ function GeralCliente({ infoCliente }) {
   const editarCliente = () => {
     let dados = {
       id: id,
-      nome: nomeEdit,
+      nome: nomeEdit.charAt(0).toUpperCase() + nomeEdit.slice(1).toLowerCase(),
       cpf_cnpj: cpfEdit,
       email: emailEdit,
       genero: generoEdit,
@@ -69,8 +72,12 @@ function GeralCliente({ infoCliente }) {
       endereco: enderecoEdit,
     };
 
-    clientesFetch.atualizarCliente(dados);
-    setEditar(false);
+    clientesFetch.atualizarCliente(dados).then(() => {
+      adicionarAviso("sucesso" , "SUCESSO - Dados do cliente editado com sucesso!")
+      setEditar(false);
+    }).catch(() => {
+      setErroApi(true)
+    });
   };
 
   const deletarCliente = () => {

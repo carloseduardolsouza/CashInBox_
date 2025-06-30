@@ -9,6 +9,12 @@ const infoHome = async () => {
   });
 
   const faturamento = {};
+  let faturamentoDia = 0;
+
+  const hoje = new Date();
+  const diaAtual = hoje.getDate();
+  const mesAtual = hoje.getMonth();
+  const anoAtual = hoje.getFullYear();
 
   vendas.forEach((venda) => {
     const data = new Date(venda.data_venda);
@@ -21,11 +27,30 @@ const infoHome = async () => {
     }
 
     faturamento[chave] += venda.valor_total;
+
+    // Se for do dia atual, soma no faturamentoDia
+    if (
+      data.getDate() === diaAtual &&
+      data.getMonth() === mesAtual &&
+      data.getFullYear() === anoAtual
+    ) {
+      faturamentoDia += venda.valor_total;
+    }
   });
 
   const mesesAbreviados = [
-    "jan", "fev", "mar", "abr", "mai", "jun",
-    "jul", "ago", "set", "out", "nov", "dez"
+    "jan",
+    "fev",
+    "mar",
+    "abr",
+    "mai",
+    "jun",
+    "jul",
+    "ago",
+    "set",
+    "out",
+    "nov",
+    "dez",
   ];
 
   const agora = new Date();
@@ -72,6 +97,13 @@ const infoHome = async () => {
     );
   });
 
+  const clientesAtivos = await new Promise((resolve, reject) => {
+    db.get(`SELECT COUNT(*) as total FROM clientes`, (err, row) => {
+      if (err) reject(err);
+      else resolve(row.total);
+    });
+  });
+
   const totalOrcamentos = await new Promise((resolve, reject) => {
     db.get(
       `SELECT COUNT(*) AS total FROM vendas WHERE status = 'orçamento'`,
@@ -94,6 +126,8 @@ const infoHome = async () => {
 
   return {
     faturamento: faturamentoUltimosMeses.map(({ chave, ...resto }) => resto),
+    faturamentoDia: parseFloat(faturamentoDia.toFixed(2)),
+    clientesAtivos,
     crediariosAtrasados,
     totalOrcamentos,
     produtosEstoqueMinimo,

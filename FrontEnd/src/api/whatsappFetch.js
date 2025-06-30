@@ -32,7 +32,21 @@ const enviarMensagem = async (dados) => {
   }
 };
 
+const cumprirRotinasManual = async (dados) => {
+  try {
+    const res = await fetch(`${API_URL}/whatsapp/cumprirRotinasManual`);
+
+    if (!res.ok) throw new Error("Erro ao executar rotinas");
+
+    return await res.json();
+  } catch (error) {
+    console.error("Erro em executar rotinas:", error);
+    throw error;
+  }
+};
+
 export default {
   pegarQrCode,
   enviarMensagem,
+  cumprirRotinasManual
 };

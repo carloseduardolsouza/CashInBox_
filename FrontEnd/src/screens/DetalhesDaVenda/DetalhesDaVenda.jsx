@@ -52,7 +52,7 @@ function DetalhesDaVenda() {
       const pagamentosResponse = await vendaFetch.procurarPagamentoVenda(id);
       setPagamentos(pagamentosResponse);
 
-      if (vendaResponse[0].status === "Crediario pendente") {
+      if (vendaResponse[0].status != "concluida") {
         const parcelasResponse = await vendaFetch.listarVendasCrediarioVenda(id);
         setParcelas(parcelasResponse);
       }
@@ -343,7 +343,7 @@ function DetalhesDaVenda() {
                 >
                   Nota Grande
                 </p>
-                {venda.status === "Crediario pendente" && (
+                {venda.status != "concluida" && (
                   <p
                     onClick={() => {
                       handleDownload("CarneCrediario");

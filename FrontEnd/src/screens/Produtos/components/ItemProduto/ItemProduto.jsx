@@ -10,31 +10,31 @@ import ModalImages from "../ModalImages/ModalImages";
 
 function ItemProduto({ dado }) {
   const [openDetalhes, setOpenDetalhes] = useState(false);
-  const [modalImages , setModalImages] = useState(false)
+  const [modalImages, setModalImages] = useState(false);
   const [image, setImage] = useState("");
   const [images, setImages] = useState("");
 
   const { nome, id, preco_venda, estoque_atual, descricao } = dado;
 
-  useEffect(() => {
-    async function carregarImagem() {
-      try {
-        const imagens = await produtoFetch.listarImagens(id);
-        if (imagens && imagens.length > 0) {
-          setImage(imagens[0].imagem_path);
-          setImages(imagens)
-        }
-      } catch (error) {
-        console.error("Erro ao carregar imagem do produto:", error);
+  async function carregarImagem() {
+    try {
+      const imagens = await produtoFetch.listarImagens(id);
+      if (imagens && imagens.length > 0) {
+        setImage(imagens[0].imagem_path);
+        setImages(imagens);
       }
+    } catch (error) {
+      console.error("Erro ao carregar imagem do produto:", error);
     }
+  }
 
+  useEffect(() => {
     carregarImagem();
-  }, []);
+  }, [id]);
 
   return (
     <div id="ItensTableProdutos">
-      {modalImages && <ModalImages images={images} fechar={setModalImages}/>}
+      {modalImages && <ModalImages images={images} fechar={setModalImages} />}
       {openDetalhes && (
         <div className="openDetalhes">
           <button

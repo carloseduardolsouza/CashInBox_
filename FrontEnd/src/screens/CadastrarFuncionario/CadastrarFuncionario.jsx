@@ -149,6 +149,7 @@ function CadastrarFuncionario() {
                   value={tipoComissao}
                   onChange={(e) => setTipoComissao(e.target.value)}
                 >
+                  <option value="Não contabilizar comissão">Não contabilizar comissão</option>
                   <option value="fixa">Fixa</option>
                   <option value="percentual">Percentual</option>
                 </select>
