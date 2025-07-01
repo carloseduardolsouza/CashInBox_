@@ -1,5 +1,4 @@
 import "./ModalFaturar.css";
-
 import vendaFetch from "../../../../../../api/vendaFetch";
 import { useState } from "react";
 
@@ -11,65 +10,65 @@ function ModalFaturar({ fechar, dados, atualizarVendas }) {
 
   const faturarVendaCrediario = async (e) => {
     e.preventDefault();
-    let corpoJson = {
+
+    const corpoJson = {
       data: dataPagamento,
       valor_pago: valorPago,
     };
 
-    const pago = vendaFetch
-      .receberPagamentoParcela(dados.id, corpoJson)
-      .then(() => {
-        atualizarVendas();
-        fechar(false);
-      });
+    await vendaFetch.receberPagamentoParcela(dados.id, corpoJson);
+    atualizarVendas();
+    fechar(false);
   };
 
   return (
     <div className="blurModal">
-      <div id="ModalFaturar">
-        <div className="headerModalFaturar">
-          <h2>Receber Debito</h2>
-          <button onClick={() => fechar(false)}>X</button>
+      <div className="modal-content">
+        <div className="modal-header">
+          <h2>Receber Débito</h2>
+          <button className="close-button" onClick={() => fechar(false)}>
+            ✕
+          </button>
         </div>
-        <div>
-          <p id="nomeClienteModalFaturar">
-            <strong>Cliente: </strong>
-            {dados.nome_cliente}
-          </p>
 
-          <form onSubmit={(e) => faturarVendaCrediario(e)}>
-            <label className="labelInputs">
-              <p>Valor:</p>
-              <input
-                type="number"
-                value={valorPago}
-                onChange={(e) => setValorPago(e.target.value)}
-              />
-            </label>
-            <label className="labelInputs">
-              <p>Data Pagamento:</p>
-              <input
-                type="date"
-                value={dataPagamento}
-                onChange={(e) => setDataPagamento(e.target.value)}
-              />
-            </label>
+        <p className="cliente-info">
+          <strong>Cliente:</strong> {dados.nome_cliente}
+        </p>
 
-            <div id="divButtonsModalFaturar">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  fechar(null);
-                }}
-              >
-                Cancelar
-              </button>
-              <button className="buttConfirmarModalFaturar" type="submit">
-                Confirmar
-              </button>
-            </div>
-          </form>
-        </div>
+        <form onSubmit={faturarVendaCrediario}>
+          <label className="input-group">
+            <span>Valor:</span>
+            <input
+              type="number"
+              value={valorPago}
+              onChange={(e) => setValorPago(e.target.value)}
+              required
+            />
+          </label>
+
+          <label className="input-group">
+            <span>Data Pagamento:</span>
+            <input
+              type="date"
+              value={dataPagamento}
+              onChange={(e) => setDataPagamento(e.target.value)}
+              required
+            />
+          </label>
+
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn-cancelar"
+              onClick={() => fechar(false)}
+            >
+              Cancelar
+            </button>
+            <button type="submit" className="btn-confirmar">
+              Confirmar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

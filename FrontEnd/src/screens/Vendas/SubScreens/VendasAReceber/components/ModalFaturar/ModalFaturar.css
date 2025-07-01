@@ -1,74 +1,87 @@
-#ModalFaturar {
-  position: absolute;
+.modal-content {
+  position: fixed;
   top: 50%;
-  right: 50%;
-  width: 500px;
-  z-index: 2;
-  transform: translate(50%, -50%);
-  background: rgba(31, 30, 30, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 999;
 }
 
-.headerModalFaturar {
+.modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.headerModalFaturar button {
-  width: 30px;
-  height: 30px;
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.close-button {
   background: none;
-  border: solid red 1px;
-  color: red;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #dc2626;
   font-weight: bold;
   border-radius: 50%;
-  cursor: pointer;
+  padding: 4px 8px;
+  transition: background 0.2s;
 }
 
-.headerModalFaturar button:hover {
-  background-color: red;
+.close-button:hover {
+  background: #dc2626;
   color: white;
-  transition: 0.5s;
 }
 
-.labelInputs {
+.cliente-info {
+  font-size: 14px;
+  color: #333;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.input-group input {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.modal-footer {
   display: flex;
   justify-content: space-between;
-  width: 90%;
-}
-
-.labelInputs input {
-  padding: 5px;
-  border-radius: 5px;
-  margin-top: 5px;
-}
-
-#divButtonsModalFaturar {
-  display: flex;
-  justify-content: space-around;
   margin-top: 20px;
+  gap: 12px;
 }
 
-#divButtonsModalFaturar button {
-  font-size: 15px;
-  font-weight: bold;
+.btn-cancelar {
+  flex: 1;
+  background: #e5e7eb;
+  border: none;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  width: 45%;
 }
 
-.buttConfirmarModalFaturar {
-  background-color: var(--button-color);
+.btn-confirmar {
+  flex: 1;
+  background: var(--button-color, #2563eb);
   color: white;
-}
-
-#nomeClienteModalFaturar {
-  margin: 10px;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }

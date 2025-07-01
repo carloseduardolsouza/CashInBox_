@@ -1,37 +1,84 @@
-#DetalhesCaixaAnterior {
-  position: absolute;
-  transform: translate(50%, -50%);
-  top: 50%;
-  right: 50%;
-  padding: 10px;
-
-  background: var(--div-color);
-  border-radius: 10px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
-  backdrop-filter: blur(10px); /* Desfoque */
-  -webkit-backdrop-filter: blur(
-    10px
-  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
-  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
-}
-
-#movimentaçãoDetalhes {
-  overflow: auto;
-  height: 300px;
-}
-
-#section2partes {
+.modal-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(4px);
   display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-#buttonDetalhesCaixa {
-  padding: 10px;
-  border-radius: 5px;
+.modal-container {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  width: 420px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.modal-title {
+  font-size: 22px;
   font-weight: bold;
-  width: 100%;
-  font-size: 13px;
+  text-align: center;
+  margin-bottom: 4px;
 }
 
-#divInfoDetalhesCaixa {
+.modal-date {
+  text-align: center;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.no-movements {
+  background: #f1f5f9;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  color: #555;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.movimentacoes-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.info-values {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.fechar-button {
+  margin-top: 20px;
+  background-color: #1f2937;
+  color: white;
+  font-weight: bold;
   padding: 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.fechar-button:hover {
+  background-color: #111827;
 }

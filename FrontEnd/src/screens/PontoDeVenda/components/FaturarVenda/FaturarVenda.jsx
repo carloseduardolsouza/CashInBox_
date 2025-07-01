@@ -284,262 +284,271 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   };
 
   return (
-    <div id="FaturarVenda">
-      {concluindo && <Concluindo />}
-      <button id="ButtonFecharAbaFaturarVenda" onClick={() => fechar(false)}>
-        X
-      </button>
-      <div id="FaturarVendaPart1">
-        <div id="FaturarVendaPreços">
-          <div>
-            <p>Total da venda:</p>
-            <input
-              readOnly
-              type="text"
-              placeholder="00,00"
-              value={services.formatarCurrency(valorCompra)}
-            />
-          </div>
-          <div>
-            <p style={{ marginRight: "50px" }}>Desconto:</p>
-            <input
-              type="number"
-              min={0}
-              placeholder="00,00"
-              className="realDesconto"
-              value={descontoReais}
-              onChange={(e) =>
-                atualizarValores("descontoReais", e.target.value)
-              }
-            />
-            <input
-              type="number"
-              min={0}
-              className="porcentagemDesconto"
-              placeholder="5%"
-              value={descontoPorcentagem}
-              onChange={(e) =>
-                atualizarValores("descontoPorcentagem", e.target.value)
-              }
-            />
-          </div>
-          <div>
-            <p>Acrescimo/Frete:</p>
-            <input
-              type="number"
-              min={0}
-              placeholder="00,00"
-              className="realDesconto"
-              value={acrescimoReais}
-              onChange={(e) =>
-                atualizarValores("acrescimoReais", e.target.value)
-              }
-            />
-            <input
-              type="number"
-              className="porcentagemDesconto"
-              placeholder="5%"
-              value={acrescimoPorcentagem}
-              onChange={(e) =>
-                atualizarValores("acrescimoPorcentagem", e.target.value)
-              }
-            />
-          </div>
-          <div>
-            <p>Total a Pagar:</p>
-            <input
-              type="text"
-              value={services.formatarCurrency(totalPagar)}
-              readOnly
-            />
-          </div>
-        </div>
-        <div id="FaturarVendaDetalhesCliente">
-          <div>
-            <div className="ItenSearch">
-              <p>Cliente:</p>
-              <div style={{ display: "flex" }}>
-                <Select
-                  options={optionsClientes}
-                  styles={customStyles}
-                  onChange={(e) => {
-                    setId_cliente(e.value);
-                    setNome_cliente(e.label);
-                  }}
-                />
-              </div>
-            </div>
-            <div className="ItenSearch">
-              <p>Vendedor:</p>
-              <div style={{ display: "flex" }}>
-                <Select
-                  options={optionsFuncionarios}
-                  styles={customStyles}
-                  onChange={(e) => {
-                    setId_vendedor(e.value);
-                    setNome_vendedor(e.label);
-                  }}
-                />
-              </div>
+    <div className="blurModal">
+      <div id="FaturarVenda">
+        {concluindo && <Concluindo />}
+        <button id="ButtonFecharAbaFaturarVenda" onClick={() => fechar(false)}>
+          X
+        </button>
+        <div id="FaturarVendaPart1">
+          <div id="FaturarVendaPreços">
+            <div>
+              <p>Total da venda:</p>
+              <input
+                readOnly
+                type="text"
+                placeholder="00,00"
+                value={services.formatarCurrency(valorCompra)}
+              />
             </div>
             <div>
-              <form
-                onSubmit={(e) => addFormaPagamento(e)}
-                id="FaturarVendaFormaDePagamento"
-                style={{ position: "relative" }}
-              >
-                <div>
-                  <p>Forma de pagamento:</p>
-                  <select
-                    onChange={(e) => setFormaPagementoAtual(e.target.value)}
-                    value={formaPagementoAtual}
-                  >
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Pix">Pix</option>
-                    <option value="Cartão de credito">Cartão de credito</option>
-                    <option value="Cartão de debito">Cartão de debito</option>
-                    <option value="Crediario Propio">Crediario Propio</option>
-                  </select>
+              <p style={{ marginRight: "50px" }}>Desconto:</p>
+              <input
+                type="number"
+                min={0}
+                placeholder="00,00"
+                className="realDesconto"
+                value={descontoReais}
+                onChange={(e) =>
+                  atualizarValores("descontoReais", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                min={0}
+                className="porcentagemDesconto"
+                placeholder="5%"
+                value={descontoPorcentagem}
+                onChange={(e) =>
+                  atualizarValores("descontoPorcentagem", e.target.value)
+                }
+              />
+            </div>
+            <div>
+              <p>Acrescimo/Frete:</p>
+              <input
+                type="number"
+                min={0}
+                placeholder="00,00"
+                className="realDesconto"
+                value={acrescimoReais}
+                onChange={(e) =>
+                  atualizarValores("acrescimoReais", e.target.value)
+                }
+              />
+              <input
+                type="number"
+                className="porcentagemDesconto"
+                placeholder="5%"
+                value={acrescimoPorcentagem}
+                onChange={(e) =>
+                  atualizarValores("acrescimoPorcentagem", e.target.value)
+                }
+              />
+            </div>
+            <div>
+              <p>Total a Pagar:</p>
+              <input
+                type="text"
+                value={services.formatarCurrency(totalPagar)}
+                readOnly
+              />
+            </div>
+          </div>
+          <div id="FaturarVendaDetalhesCliente">
+            <div>
+              <div className="ItenSearch">
+                <p>Cliente:</p>
+                <div style={{ display: "flex" }}>
+                  <Select
+                    options={optionsClientes}
+                    styles={customStyles}
+                    onChange={(e) => {
+                      setId_cliente(e.value);
+                      setNome_cliente(e.label);
+                    }}
+                  />
                 </div>
-
-                {formaPagementoAtual === "Crediario Propio" ? (
-                  <div id="creadirioPropioDiv">
-                    <div>
-                      <label>N° parcelas:</label>
-                      <input
-                        required
-                        type="number"
-                        min={1}
-                        value={numParcelas}
-                        onChange={(e) => setNumParcelas(e.target.value)}
-                      />
-                    </div>
-
-                    <div>
-                      <label>primeiro vencimento:</label>
-                      <input
-                        required
-                        type="date"
-                        value={dataPrimeiraParcela}
-                        onChange={(e) => setDataPrimeiraParcela(e.target.value)}
-                      />
-                    </div>
-
-                    <button type="button" onClick={gerarParcelas}>
-                      Parcelas
-                    </button>
-                  </div>
-                ) : (
+              </div>
+              <div className="ItenSearch">
+                <p>Vendedor:</p>
+                <div style={{ display: "flex" }}>
+                  <Select
+                    options={optionsFuncionarios}
+                    styles={customStyles}
+                    onChange={(e) => {
+                      setId_vendedor(e.value);
+                      setNome_vendedor(e.label);
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <form
+                  onSubmit={(e) => addFormaPagamento(e)}
+                  id="FaturarVendaFormaDePagamento"
+                  style={{ position: "relative" }}
+                >
                   <div>
-                    <input
-                      type="text"
-                      onChange={(e) => setValorSendoPago(e.target.value)}
-                      value={valorSendoPago}
-                    />
-                    <button type="submit">ok</button>
+                    <p>Forma de pagamento:</p>
+                    <select
+                      onChange={(e) => setFormaPagementoAtual(e.target.value)}
+                      value={formaPagementoAtual}
+                    >
+                      <option value="Dinheiro">Dinheiro</option>
+                      <option value="Pix">Pix</option>
+                      <option value="Cartão de credito">
+                        Cartão de credito
+                      </option>
+                      <option value="Cartão de debito">Cartão de debito</option>
+                      <option value="Crediario Propio">Crediario Propio</option>
+                    </select>
+                  </div>
+
+                  {formaPagementoAtual === "Crediario Propio" ? (
+                    <div id="creadirioPropioDiv">
+                      <div>
+                        <label>N° parcelas:</label>
+                        <input
+                          required
+                          type="number"
+                          min={1}
+                          value={numParcelas}
+                          onChange={(e) => setNumParcelas(e.target.value)}
+                        />
+                      </div>
+
+                      <div>
+                        <label>primeiro vencimento:</label>
+                        <input
+                          required
+                          type="date"
+                          value={dataPrimeiraParcela}
+                          onChange={(e) =>
+                            setDataPrimeiraParcela(e.target.value)
+                          }
+                        />
+                      </div>
+
+                      <button type="button" onClick={gerarParcelas}>
+                        Parcelas
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <input
+                        type="text"
+                        onChange={(e) => setValorSendoPago(e.target.value)}
+                        value={valorSendoPago}
+                      />
+                      <button type="submit">ok</button>
+                    </div>
+                  )}
+                </form>
+                {alertaFormaPagamento && (
+                  <div id="alertEscolhaFormaPagamento">
+                    ⚠️ Escolha pelo menos uma forma de pagamento antes de
+                    concluir.
                   </div>
                 )}
-              </form>
-              {alertaFormaPagamento && (
-                <div id="alertEscolhaFormaPagamento">
-                  ⚠️ Escolha pelo menos uma forma de pagamento antes de
-                  concluir.
-                </div>
-              )}
+              </div>
             </div>
-          </div>
-          {formaPagementoAtual === "Crediario Propio" ? (
-            <div>
-              <table className="Table">
-                <thead>
-                  <tr>
-                    <th>Vencimento</th>
-                    <th>Valor</th>
-                    <th>N° Parcela</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {parcelasGeradas.map((dados, index) => {
-                    return (
-                      <tr>
-                        <td>
-                          {services.formatarDataNascimento(
-                            dados.data_vencimento
-                          )}
-                        </td>
-                        <td>
-                          {services.formatarCurrency(dados.valor_parcela)}
-                        </td>
-                        <td>{dados.numero_parcela}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div>
+            {formaPagementoAtual === "Crediario Propio" ? (
               <div>
                 <table className="Table">
                   <thead>
                     <tr>
-                      <th>Forma de pagamento</th>
+                      <th>Vencimento</th>
                       <th>Valor</th>
-                      <th>Deletar</th>
+                      <th>N° Parcela</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {formaPagemento.map((dados, index) => {
+                    {parcelasGeradas.map((dados, index) => {
                       return (
                         <tr>
-                          <td>{dados.tipo_pagamento}</td>
-                          <td>{services.formatarCurrency(dados.valor)}</td>
                           <td>
-                            <button
-                              className="DeletarFormPagamentoFaturar"
-                              onClick={() =>
-                                deletarEstaFormaPagamento(dados, index)
-                              }
-                            >
-                              <FaTrash />
-                            </button>
+                            {services.formatarDataNascimento(
+                              dados.data_vencimento
+                            )}
                           </td>
+                          <td>
+                            {services.formatarCurrency(dados.valor_parcela)}
+                          </td>
+                          <td>{dados.numero_parcela}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
               </div>
-              <div id="FaturarVendaFaltaPagar">
-                <label>
-                  <p>Falta pagar:</p>
-                  <input
-                    type="text"
-                    value={services.formatarCurrency(faltaPagar)}
-                  />
-                </label>
-                <label>
-                  <p>Troco:</p>
-                  <input type="text" value={services.formatarCurrency(troco)} />
-                </label>
+            ) : (
+              <div>
+                <div>
+                  <table className="Table">
+                    <thead>
+                      <tr>
+                        <th>Forma de pagamento</th>
+                        <th>Valor</th>
+                        <th>Deletar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {formaPagemento.map((dados, index) => {
+                        return (
+                          <tr>
+                            <td>{dados.tipo_pagamento}</td>
+                            <td>{services.formatarCurrency(dados.valor)}</td>
+                            <td>
+                              <button
+                                className="DeletarFormPagamentoFaturar"
+                                onClick={() =>
+                                  deletarEstaFormaPagamento(dados, index)
+                                }
+                              >
+                                <FaTrash />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <div id="FaturarVendaFaltaPagar">
+                  <label>
+                    <p>Falta pagar:</p>
+                    <input
+                      type="text"
+                      value={services.formatarCurrency(faltaPagar)}
+                    />
+                  </label>
+                  <label>
+                    <p>Troco:</p>
+                    <input
+                      type="text"
+                      value={services.formatarCurrency(troco)}
+                    />
+                  </label>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-      <div id="areaButtons">
-        <div>
-          <button onClick={() => fechar(false)}>(ESC) - Sair</button>
-          <button>NFC-e Online</button>
-          <button>NFC-e Off-Line</button>
-        </div>
-        <div>
-          <button onClick={() => faturarVendaEmBloco("concluida")}>
-            Lançamento NF de bloco
-          </button>
-          <button onClick={() => faturarVendaEmBloco("orçamento")}>
-            Orçamento
-          </button>
+        <div id="areaButtons">
+          <div>
+            <button onClick={() => fechar(false)}>(ESC) - Sair</button>
+            <button>NFC-e Online</button>
+            <button>NFC-e Off-Line</button>
+          </div>
+          <div>
+            <button onClick={() => faturarVendaEmBloco("concluida")}>
+              Lançamento NF de bloco
+            </button>
+            <button onClick={() => faturarVendaEmBloco("orçamento")}>
+              Orçamento
+            </button>
+          </div>
         </div>
       </div>
     </div>

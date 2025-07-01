@@ -1,63 +1,62 @@
 import "./DetalhesCaixaAnterior.css";
-
 import { useState, useEffect } from "react";
 import caixaFetch from "../../../../../api/caixaFetch";
-
 import services from "../../../../../services/services";
-
 import ItemCaixaAtual from "../../CaixaAtual/components/ItemCaixaAtual/ItemCaixaAtual";
 
 function DetalhesCaixaAnterior({ dados, fechar }) {
-  console.log(dados);
   const [movimentacoes, setMovimentacoes] = useState([]);
 
   const buscarMovimentações = async () => {
-    await caixaFetch.buscarMovimentacao(dados.id).then((response) => {
-      setMovimentacoes(response);
-      console.log(response);
-    });
+    const response = await caixaFetch.buscarMovimentacao(dados.id);
+    setMovimentacoes(response);
   };
 
   useEffect(() => {
     buscarMovimentações();
   }, []);
+
   return (
-    <div className="blurModal">
-      <div id="DetalhesCaixaAnterior">
-        <div>
-          <h3>
-            {services.formatarData(dados.data_abertura)} -{" "}
-            {services.formatarData(dados.data_fechamento)}
-          </h3>
+    <div className="modal-blur">
+      <div className="modal-container">
+        <h2 className="modal-title">Detalhes do Caixa</h2>
+        <p className="modal-date">
+          📅 {services.formatarData(dados.data_abertura)} até{" "}
+          {services.formatarData(dados.data_fechamento)}
+        </p>
 
-          <div id="section2partes">
-            <div id="movimentaçãoDetalhes">
-              {movimentacoes.length != 0 ? movimentacoes.map((response) => {
-                return <ItemCaixaAtual dados={response} />;
-              }) : "nem uma moviementação encontrada"}
+        <div className="modal-body">
+          {movimentacoes.length ? (
+            <div className="movimentacoes-list">
+              {movimentacoes.map((mov, index) => (
+                <ItemCaixaAtual key={index} dados={mov} />
+              ))}
+            </div>
+          ) : (
+            <div className="no-movements">Nenhuma movimentação encontrada</div>
+          )}
+
+          <div className="info-values">
+            <div className="info-row">
+              <span>Valor da Abertura:</span>
+              <span>{services.formatarCurrency(dados.valor_abertura)}</span>
+            </div>
+            <div className="info-row">
+              <span>Valor Esperado:</span>
+              <span>{services.formatarCurrency(dados.valor_esperado)}</span>
+            </div>
+            <div className="info-row">
+              <span>Valor do Fechamento:</span>
+              <span>{services.formatarCurrency(dados.valor_fechamento)}</span>
+            </div>
+            <div className="info-row">
+              <span>Valor Recebido:</span>
+              <span>{services.formatarCurrency(dados.total_recebido)}</span>
             </div>
 
-            <div id="divInfoDetalhesCaixa">
-              <p>
-                <strong>Valor da abertura: </strong>
-                {services.formatarCurrency(dados.valor_abertura)}
-              </p>
-              <p>
-                <strong>Valor esperado: </strong>
-                {services.formatarCurrency(dados.valor_esperado)}
-              </p>
-              <p>
-                <strong>Valor do fechamento: </strong>
-                {services.formatarCurrency(dados.valor_fechamento)}
-              </p>
-              <p>
-                <strong>Valor Recebido: </strong>
-                {services.formatarCurrency(dados.total_recebido)}
-              </p>
-              <div>
-                <button id="buttonDetalhesCaixa" onClick={() => fechar(null)}>Fechar</button>
-              </div>
-            </div>
+            <button className="fechar-button" onClick={() => fechar(null)}>
+              Fechar
+            </button>
           </div>
         </div>
       </div>

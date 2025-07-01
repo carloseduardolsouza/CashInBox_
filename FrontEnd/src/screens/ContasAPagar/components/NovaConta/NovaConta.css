@@ -1,122 +1,105 @@
+/* MODAL */
 #NovaConta {
-  position: absolute;
-  transform: translate(50%, -50%);
+  position: fixed;
   top: 50%;
-  right: 50%;
-  padding: 10px;
-  width: 500px;
-
-  background: var(--div-color);
-  border-radius: 10px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
-  backdrop-filter: blur(10px); /* Desfoque */
-  -webkit-backdrop-filter: blur(
-    10px
-  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
-  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 999;
 }
 
-#selectTipoDeConta {
-  padding: 5px;
-  border: solid black 1px;
-  border-radius: 10px;
-  margin-top: 10px;
+#NovaConta h3 {
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1f2937;
 }
 
-.divValorNDocumento {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.divValorNDocumento input {
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.divValorNDocumento select {
-  padding: 5px;
-  border-radius: 5px;
-  border: solid black 1px;
-}
-
-.divValorNDocumento label {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
+/* GRID DE INPUTS */
+.divValorNDocumento,
 .divVencimentoPago {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.divVencimentoPago input {
-  padding: 5px;
-  border-radius: 5px;
-  width: 160px;
-}
-
-.divVencimentoPago label {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .DivOsDemais {
-  width: 85%;
-  margin: auto;
-}
-
-.DivOsDemais input {
-  padding: 5px;
-  border-radius: 5px;
   width: 100%;
+  margin-bottom: 1rem;
 }
 
-.DivOsDemais label {
-  flex: 1;
+/* LABELS E INPUTS */
+label {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+input,
+select,
+textarea {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  width: 90%;
+  transition: border 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* BOTÕES */
+#divButoesNovaConta {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .ButtonNovaConta {
-  padding: 10px;
-  border-radius: 10px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
-  font-size: 17px;
-  width: 45%;
+  transition: all 0.2s ease;
 }
 
 .SalvarNovaConta {
-  background-color: #0295ff;
-  color: white;
-  font-weight: bold;
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.SalvarNovaConta:hover {
+  background-color: #1d4ed8;
 }
 
 .CancelarNovaConta {
-  background-color: red;
-  color: white;
-  font-weight: bold;
+  background-color: #e5e7eb;
+  color: #374151;
 }
 
-#divButoesNovaConta {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 10px;
+.CancelarNovaConta:hover {
+  background-color: #d1d5db;
 }
 
-#divBoletoTrue {
-  display: flex;
-  flex-direction: column;
-  margin: 20px;
-}
-
-#divBoletoTrue input {
-  font-size: 17px;
-  padding: 10px;
-  border-radius: 10px;
+/* BACKDROP */
+.blurModal {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 998;
 }

@@ -182,7 +182,7 @@ function PontoDeVenda() {
           </div>
         </div>
         <div className="ProdutosNovaVenda">
-          <table className="Table">
+          <table className="TablePontoDeVenda">
             <thead>
               <tr>
                 <th>Produto</th>

@@ -61,7 +61,7 @@
 .DivisãoNovaVenda {
   display: flex;
   justify-content: space-around;
-  width: 700px;
+  width: 640px;
 }
 
 .PreçoNovaVenda {
@@ -72,11 +72,12 @@
 
 .MainNovaVenda {
   display: flex;
+  justify-content: space-between;
 }
 
 .ProdutosNovaVenda {
   height: 85vh;
-  width: 120%;
+  width: 150%;
   padding: 5px;
   border-radius: 10px;
   margin-left: 15px;
@@ -93,14 +94,8 @@
   font-weight: 600;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 5px;
-  background-color: var(--button-color);
-}
-
-.FaturarNovaVenda:hover {
-  background-color: #0071c2;
-  transition: 0.5s;
+  border-radius: 5px;
+  background-color: #28a745;
 }
 
 #buttonOkPontoDeVenda {
@@ -118,4 +113,19 @@
   cursor: pointer;
   color: red;
   background: none;
+}
+
+.TablePontoDeVenda {
+  width: 100%;
+}
+
+.TablePontoDeVenda > tbody > tr > td {
+  border-bottom: solid 1px #00000073;
+  margin-bottom: 10px;
+  padding: 3px;
+}
+
+.TablePontoDeVenda > thead > tr > th {
+  margin-bottom: 10px;
+  text-align: left;
 }
