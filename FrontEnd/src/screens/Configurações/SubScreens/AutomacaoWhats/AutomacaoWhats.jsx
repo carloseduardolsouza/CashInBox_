@@ -25,8 +25,8 @@ function AutomacaoWhats() {
   const { setErroApi, adicionarAviso } = useContext(AppContext);
 
   const [msg_aniversario, setMsg_aniversario] = useState(false);
-  const [time_msg_aniversario, setTime_msg_aniversario] = useState("");
-  const [msg_msg_aniversario, setMsg_msg_aniversario] = useState("");
+  const [time_msg_aniversario, setTime_msg_aniversario] = useState("09:00");
+  const [msg_msg_aniversario, setMsg_msg_aniversario] = useState("🎉 Olá ${nome} ! Em comemoração a esta data muito especial, a equipe da CashInBox deseja um feliz aniversário! 🎂🎈\n\nPra celebrar com estilo, você ganha 10% de desconto em todos os itens da loja, só hoje! 🛍🎁\n\nAproveite e faça seu dia ainda melhor! 🥳\n");
 
   const [msg_inatividade, setMsg_inatividade] = useState(false);
 
@@ -52,6 +52,8 @@ function AutomacaoWhats() {
     try {
       const response = await userFetch.verConfigAutomacao();
       setMsg_aniversario(response.msg_aniversario);
+      setMsg_msg_aniversario(response.msg_msg_aniversario)
+      setTime_msg_aniversario(response.time_msg_aniversario)
       setMsg_notificacao(response.msg_notificacao);
       setMsg_cobranca(response.msg_cobranca);
       setMumero_msg_notificacao(response.numero_msg_notificacao);

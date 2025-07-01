@@ -5,6 +5,18 @@ const path = require("path");
 const cron = require("node-cron");
 const os = require("os");
 
+function substituirVariaveis(str, contexto) {
+  return str.replace(/\$\{([\w.]+)\}/g, (_, chave) => {
+    const props = chave.split(".");
+    let valor = contexto;
+    for (const prop of props) {
+      valor = valor?.[prop];
+      if (valor === undefined) return ""; // Se não existir, retorna vazio
+    }
+    return valor;
+  });
+}
+
 function carregarUserConfigs() {
   const configPath = path.join(
     os.homedir(),
@@ -35,6 +47,7 @@ const {
   getStatusBot,
   getUltimoQRCode,
 } = require("../whatsapp/client");
+const { config } = require("process");
 
 const statusPath = path.join(
   os.homedir(),
@@ -76,7 +89,7 @@ async function verificarVencimentos() {
     console.log("📅 Verificando vencimentos em:", hoje);
 
     db.all(
-      "SELECT * FROM crediario_parcelas WHERE data_vencimento <= ? AND status = 'pendente'",
+      "SELECT * FROM crediario_parcelas WHERE data_vencimento < ? AND status = 'pendente'",
       [hoje],
       (err, rows) => {
         if (err) {
@@ -178,12 +191,12 @@ async function verificarAniversariantes() {
           console.log("🎉 Nenhum aniversariante hoje.");
         } else {
           console.log("🎂 Aniversariantes do dia:");
+          const configUser = carregarUserConfigs();
           for (const cli of aniversariantes) {
-            const mensagemFormatada = `🎉 Olá ${cli.nome}! Em comemoração a esta data muito especial, a equipe da *CashInBox* deseja um *feliz aniversário*! 🎂🎈
-
-Pra celebrar com estilo, você ganha *10% de desconto em todos os itens da loja*, só hoje! 🛍️🎁
-
-Aproveite e faça seu dia ainda melhor! 🥳`;
+            const mensagemFormatada = substituirVariaveis(
+              configUser.msg_msg_aniversario,
+              cli
+            );
             console.log(`🎈 ${cli.nome} - 📞 ${cli.telefone}`);
             await enviarMensagem(cli.telefone, mensagemFormatada);
           }
@@ -236,10 +249,7 @@ Verificamos que você possui uma pendência em aberto referente ao crediário na
 💰 *Valor da parcela:* R$ ${valorFormatado}
 📅 *Vencimento:* ${vencimentoFormatado}
 
-Pedimos que regularize o pagamento o quanto antes para evitar restrições no seu CPF e manter seu nome limpo. Qualquer dúvida estamos à disposição! 🤝
-
-Atenciosamente,
-Equipe CashInBox 💼`;
+Pedimos que regularize o pagamento o quanto antes para evitar restrições no seu CPF e manter seu nome limpo. Qualquer dúvida estamos à disposição! 🤝`;
 
           console.log(`📞 Enviando cobrança para: ${nome} - ${telefone}`);
           await enviarMensagem(telefone, mensagemFormatada);
@@ -283,9 +293,7 @@ async function verificarContasPagar(numeroDestino) {
 💰 Valor: *R$ ${Number(valor_total).toFixed(2).replace(".", ",")}*  
 📅 *Vencimento: Hoje*
 
-Não se esqueça de realizar o pagamento *ainda hoje* para evitar multas, juros ou possíveis transtornos. 🚫💸
-
-Qualquer dúvida, estamos à disposição! 🤝`;
+Não se esqueça de realizar o pagamento *ainda hoje* para evitar multas, juros ou possíveis transtornos. 🚫💸`;
         } else {
           mensagem = `🚨 *Conta em Atraso* 🚨
 
@@ -370,9 +378,26 @@ async function executarRotinasDiarias(dados) {
 // === Executa na inicialização ===
 executarRotinasDiarias();
 
-// === Agenda para rodar diariamente às 08:00 ===
-cron.schedule("0 8 * * *", () => {
-  console.log("⏰ Agendamento disparado (08:00)");
+const configRotina = carregarUserConfigs();
+
+// Se não tiver horário definido, usa 08:00 como padrão
+const horario = configRotina.time_msg_aniversario || "08:00";
+const [hora, minuto] = horario.split(":");
+
+// Validação leve (só pra garantir)
+if (isNaN(hora) || isNaN(minuto)) {
+  console.warn("⛔ Horário inválido no config! Usando 08:00 como fallback.");
+}
+
+// Monta o cron expression
+const cronExpression = `${minuto} ${hora} * * *`;
+
+console.log(
+  `⏰ Agendamento configurado para ${hora}:${minuto} (${cronExpression})`
+);
+
+cron.schedule(cronExpression, () => {
+  console.log(`⏰ Agendamento disparado (${hora}:${minuto})`);
   executarRotinasDiarias();
 });
 

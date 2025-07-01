@@ -38,9 +38,18 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [troco, setTroco] = useState(0);
 
   const [numParcelas, setNumParcelas] = useState(1);
-  const [dataPrimeiraParcela, setDataPrimeiraParcela] = useState(
-    new Date().toISOString().split("T")[0]
-  );
+  const [dataPrimeiraParcela, setDataPrimeiraParcela] = useState(() => {
+    const hoje = new Date();
+    const proximoMes = new Date(hoje);
+    proximoMes.setMonth(proximoMes.getMonth() + 1);
+
+    // Corrige casos tipo 31/01 -> 03/03 (evita bug de overflow)
+    if (proximoMes.getDate() !== hoje.getDate()) {
+      proximoMes.setDate(0); // Último dia do mês anterior (seguro)
+    }
+
+    return proximoMes.toISOString().split("T")[0];
+  });
 
   const [parcelasGeradas, setParcelasGeradas] = useState([]);
 

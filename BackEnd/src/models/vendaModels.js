@@ -139,7 +139,7 @@ const novaVenda = async (dados) => {
         [produto_id]
       );
 
-      if (produtoInfo.length && produtoInfo[0].ativo === 1) {
+      if (produtoInfo.length && produtoInfo[0].ativo === 1 && status != "orçamento") {
         const estoqueAtual = produtoInfo[0].estoque_atual || 0;
         const novoEstoque = estoqueAtual - quantidade;
 
