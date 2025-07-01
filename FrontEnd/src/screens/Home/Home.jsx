@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ShoppingBasket } from "lucide-react";
 import services from "../../services/services";
 import relatorioFetch from "../../api/relatorioFetch";
+import { MdOutlineBrowserUpdated } from "react-icons/md";
 
 //Biblioteca de Gráficos
 import {
@@ -38,6 +39,7 @@ function Home() {
   const [data, setData] = useState([]);
 
   const [mostrarInfo, setMostrarInfo] = useState(false);
+  const [updateReady, setUpdateReady] = useState(false);
 
   useEffect(() => {
     if (isDark) {
@@ -93,7 +95,20 @@ function Home() {
         setData(newData);
         setErroApi(true);
       });
+
+    window?.electronAPI?.onUpdateAvailable(() => {
+      console.log("🔔 Atualização disponível!");
+    });
+
+    window?.electronAPI?.onUpdateDownloaded(() => {
+      console.log("📦 Atualização baixada!");
+      setUpdateReady(true);
+    });
   }, []);
+
+  const handleAtualizar = () => {
+    window.electronAPI.instalarAtualizacao();
+  };
 
   // Calcular o faturamento atual, anterior e a variação
   const faturamentoArray = relatoriosBasicos.faturamento || [];
@@ -108,15 +123,20 @@ function Home() {
   return (
     <div id="Homescreen">
       <div className="NotificationHomeScreen">
+        <div style={{ position: "relative" }}>
+          {updateReady && <span id="circleAtualizacao" />}
+          <button
+            id="ButtonDarkMode"
+            onClick={() => handleAtualizar()}
+            disabled={!updateReady}
+          >
+            <MdOutlineBrowserUpdated />
+          </button>
+        </div>
+
         <button
           id="ButtonDarkMode"
           onClick={() => setMostrarInfo(!mostrarInfo)}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "20px",
-          }}
           aria-label={
             mostrarInfo ? "Esconder informações" : "Mostrar informações"
           }
@@ -125,12 +145,6 @@ function Home() {
         </button>
         <button id="ButtonDarkMode" onClick={() => setIsDark(!isDark)}>
           {isDark ? "☀️" : "🌙"}
-        </button>
-
-        <button className="button">
-          <svg viewBox="0 0 448 512" className="bell">
-            <path d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
-          </svg>
         </button>
       </div>
 

@@ -49,10 +49,9 @@ function createWindow() {
     alwaysOnTop: false,
     show: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false, // ⚠️ atenção aos riscos!
+      sandbox: false,
       preload: preloadPath,
     },
   });
@@ -60,7 +59,6 @@ function createWindow() {
   mainWindow.setMenu(null);
 
   const frontEndPath = path.join(__dirname, "FrontEnd", "build", "index.html");
-
   mainWindow.loadFile(frontEndPath);
 
   mainWindow.once("ready-to-show", () => {
@@ -94,6 +92,7 @@ function startBackend() {
   console.log("🚀 Backend iniciado:", backendScript);
 }
 
+// Eventos da Janela
 ipcMain.on("window:minimize", () => {
   if (mainWindow) mainWindow.minimize();
 });
@@ -102,12 +101,20 @@ ipcMain.on("window:close", () => {
   if (mainWindow) mainWindow.close();
 });
 
+// Evento para reiniciar manualmente (caso queira usar no botão também)
+ipcMain.on("reiniciar-app", () => {
+  app.relaunch();
+  app.exit();
+});
+
+// === AUTO-UPDATER ===
 function setupAutoUpdater() {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = false;
 
   autoUpdater.checkForUpdatesAndNotify();
 
+  // Checagem periódica a cada 1 hora
   setInterval(() => {
     console.log("🔄 Verificando atualizações...");
     autoUpdater.checkForUpdatesAndNotify();
@@ -115,28 +122,35 @@ function setupAutoUpdater() {
 
   autoUpdater.on("update-available", () => {
     console.log("🚀 Atualização disponível! Baixando...");
+    if (mainWindow) {
+      mainWindow.webContents.send("update_available");
+    }
   });
 
   autoUpdater.on("update-downloaded", () => {
     console.log("✅ Atualização baixada.");
+    if (mainWindow) {
+      mainWindow.webContents.send("update_downloaded");
 
-    const options = {
-      type: "question",
-      buttons: ["Sim", "Agora não"],
-      defaultId: 1, // Mais conservador: "Agora não" é default
-      title: "Atualização disponível",
-      message: "Uma nova versão foi baixada.",
-      detail: "Deseja reiniciar agora para aplicar a atualização?",
-    };
+      // Caixa de diálogo (opcional — você pode tirar se quiser só o botão)
+      const options = {
+        type: "question",
+        buttons: ["Sim", "Agora não"],
+        defaultId: 1,
+        title: "Atualização disponível",
+        message: "Uma nova versão foi baixada.",
+        detail: "Deseja reiniciar agora para aplicar a atualização?",
+      };
 
-    dialog.showMessageBox(mainWindow, options).then((response) => {
-      if (response.response === 0) {
-        console.log("🔁 Reiniciando para atualizar...");
-        autoUpdater.quitAndInstall();
-      } else {
-        console.log("🕒 Usuário escolheu atualizar depois.");
-      }
-    });
+      dialog.showMessageBox(mainWindow, options).then((response) => {
+        if (response.response === 0) {
+          console.log("🔁 Reiniciando para atualizar...");
+          autoUpdater.quitAndInstall();
+        } else {
+          console.log("🕒 Usuário escolheu atualizar depois.");
+        }
+      });
+    }
   });
 
   autoUpdater.on("error", (err) => {
@@ -144,6 +158,13 @@ function setupAutoUpdater() {
   });
 }
 
+// Evento do botão "Atualizar agora" vindo do frontend
+ipcMain.on("instalar-atualizacao", () => {
+  console.log("🖱️ Usuário clicou para instalar atualização.");
+  autoUpdater.quitAndInstall();
+});
+
+// App lifecycle
 app.whenReady().then(() => {
   startBackend();
   createWindow();
@@ -154,11 +175,6 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
-});
-
-ipcMain.on("reiniciar-app", () => {
-  app.relaunch();
-  app.exit();
 });
 
 app.on("window-all-closed", () => {
