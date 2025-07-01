@@ -2,20 +2,28 @@ const connection = require("./db");
 
 // Listar produtos com filtro opcional
 const listarProdutos = async (p) => {
-  const query = p === "all"
-    ? `SELECT * FROM produtos`
-    : `SELECT * FROM produtos WHERE nome LIKE ?`;
+  const query =
+    p === "all"
+      ? `SELECT *, (estoque_atual <= estoque_minimo) AS estoque_min_atingido FROM produtos ORDER BY nome COLLATE NOCASE ASC`
+      : `SELECT *, (estoque_atual <= estoque_minimo) AS estoque_min_atingido FROM produtos WHERE nome LIKE ? ORDER BY nome COLLATE NOCASE ASC`;
 
   const values = p === "all" ? [] : [`%${p}%`];
 
   const produtos = await new Promise((resolve, reject) => {
     connection.all(query, values, (err, rows) => {
       if (err) reject(err);
-      else resolve(rows);
+      else {
+        // Garantir que vem como booleano (SQLite retorna 0 ou 1)
+        const produtosFormatados = rows.map((produto) => ({
+          ...produto,
+          estoque_min_atingido: !!produto.estoque_min_atingido, // converte 0/1 pra true/false
+        }));
+        resolve(produtosFormatados);
+      }
     });
   });
 
-  return produtos.reverse(); // último produto aparece primeiro
+  return produtos;
 };
 
 // Criar novo produto e variações (se houver)
@@ -104,7 +112,7 @@ const editarProduto = async (id, dados) => {
     categoria,
     categoria_id,
     unidade_medida,
-    ativo = true,
+    ativo,
   } = dados;
 
   const updated_at = new Date().toISOString();
@@ -181,10 +189,14 @@ const criarVariacao = async ({ produto_id, cor, tamanho, imagem_path }) => {
   `;
 
   return new Promise((resolve, reject) => {
-    connection.run(query, [produto_id, cor, tamanho, imagem_path], function (err) {
-      if (err) reject(err);
-      else resolve(this.lastID);
-    });
+    connection.run(
+      query,
+      [produto_id, cor, tamanho, imagem_path],
+      function (err) {
+        if (err) reject(err);
+        else resolve(this.lastID);
+      }
+    );
   });
 };
 

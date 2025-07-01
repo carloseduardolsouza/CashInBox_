@@ -9,16 +9,16 @@ const listarCliente = async (p) => {
   let values = [];
 
   if (p === "all") {
-    query = `SELECT * FROM clientes`;
+    query = `SELECT * FROM clientes ORDER BY nome COLLATE NOCASE ASC`;
   } else {
-    query = `SELECT * FROM clientes WHERE nome LIKE ?`;
+    query = `SELECT * FROM clientes WHERE nome LIKE ? COLLATE NOCASE ORDER BY nome ASC`;
     values.push(`%${p}%`); // Protege contra SQL injection
   }
 
   return new Promise((resolve, reject) => {
     connection.all(query, values, (err, rows) => {
       if (err) return reject(err);
-      resolve(rows.reverse()); // Retorna os mais recentes no topo
+      resolve(rows); // Retorna os mais recentes no topo
     });
   });
 };
@@ -27,15 +27,8 @@ const listarCliente = async (p) => {
  * 🆕 Cria um novo cliente no banco de dados
  */
 const novoCliente = async (dados) => {
-  const {
-    nome,
-    cpf_cnpj,
-    email,
-    telefone,
-    data_nascimento,
-    endereco,
-    genero,
-  } = dados;
+  const { nome, cpf_cnpj, email, telefone, data_nascimento, endereco, genero } =
+    dados;
 
   const created_at = new Date().toISOString();
 
@@ -82,15 +75,8 @@ const deletarCliente = async (id) => {
  * ✏️ Edita os dados de um cliente existente
  */
 const editarCliente = async (id, dados) => {
-  const {
-    nome,
-    cpf_cnpj,
-    email,
-    genero,
-    telefone,
-    data_nascimento,
-    endereco,
-  } = dados;
+  const { nome, cpf_cnpj, email, genero, telefone, data_nascimento, endereco } =
+    dados;
 
   const updatedAt = new Date().toISOString();
 

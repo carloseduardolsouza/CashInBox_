@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./PagarConta.css";
+import AppContext from "../../../../context/AppContext";
 
 import contasPagarFetch from "../../../../api/contasPagarFetch";
 
-function PagarConta({atualizar , fecharAba , dadosConta }) {
-  const [valor , setValor] = useState(dadosConta.valor_total)
-  const [pagamentoDate , setPagamentoDate] = useState(new Date().toISOString().split("T")[0])
+function PagarConta({ atualizar, fecharAba, dadosConta }) {
+  const [valor, setValor] = useState(dadosConta.valor_total);
+  const [pagamentoDate, setPagamentoDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+
+  const { adicionarAviso } = useContext(AppContext);
 
   const pagarConta = async (e) => {
     e.preventDefault();
 
-    await contasPagarFetch.pagarConta(dadosConta.id , pagamentoDate).then(() => {
-      atualizar()
-      fecharAba(null)
-    })
+    await contasPagarFetch.pagarConta(dadosConta.id, pagamentoDate).then(() => {
+      adicionarAviso("sucesso" , "SUCESSO - Conta paga com sucesso")
+      atualizar();
+      fecharAba(null);
+    });
   };
-  
+
   return (
     <div className="blurModal">
       <form id="PagarConta" onSubmit={(e) => pagarConta(e)}>
@@ -27,12 +33,12 @@ function PagarConta({atualizar , fecharAba , dadosConta }) {
         <div>
           <div className="labelPagarConta">
             <p>Valor pago:</p>
-            <input type="number" value={valor}/>
+            <input type="number" value={valor} />
           </div>
 
           <div className="labelPagarConta">
             <p>Data pagamento:</p>
-            <input type="date" value={pagamentoDate}/>
+            <input type="date" value={pagamentoDate} />
           </div>
         </div>
 
@@ -40,7 +46,9 @@ function PagarConta({atualizar , fecharAba , dadosConta }) {
           <button type="button" onClick={() => fecharAba(null)}>
             Cancelar
           </button>
-          <button type="submit" id="buttonPagar">Pagar</button>
+          <button type="submit" id="buttonPagar">
+            Pagar
+          </button>
         </div>
       </form>
     </div>

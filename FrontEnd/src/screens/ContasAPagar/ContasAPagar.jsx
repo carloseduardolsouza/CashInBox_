@@ -39,7 +39,7 @@ function ContasAPagar() {
       case "NovaConta":
         return <NovaConta fecharAba={setAbaSopreposta} atualizar={buscarContas} />;
       case "EditarConta":
-        return <EditarConta fecharAba={setAbaSopreposta} dadosConta={dadosConta}/>;
+        return <EditarConta fecharAba={setAbaSopreposta} dadosConta={dadosConta} atualizar={buscarContas}/>;
       case "PagarConta":
         return <PagarConta fecharAba={setAbaSopreposta} dadosConta={dadosConta} atualizar={buscarContas}/>;
       case null:
@@ -88,7 +88,6 @@ function ContasAPagar() {
 
         <tbody>
           {contasPagar.map((dados) => {
-            console.log(dados);
             return (
               <tr>
                 <td>

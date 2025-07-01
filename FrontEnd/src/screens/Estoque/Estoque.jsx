@@ -91,7 +91,7 @@ function Estoque() {
         <tbody>
           {resultProdutos.map((dado) => {
             return (
-              <tr>
+              <tr className={dado.estoque_min_atingido && dado.ativo === 1 ? "estoque_min" : ""}>
                 <td>
                   <Link to={`/detalhesDoProduto/${dado.id}`} id="aTDEstoque">
                     {dado.nome}

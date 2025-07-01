@@ -95,6 +95,7 @@ const novaVenda = async (dados) => {
     }
 
     // Insere os produtos da venda
+    // Dentro do for (const produto of produtos)
     for (const produto of produtos) {
       const {
         produto_id,
@@ -115,10 +116,10 @@ const novaVenda = async (dados) => {
       }
 
       const insertProdutoQuery = `
-        INSERT INTO vendas_itens 
-        (venda_id, produto_id, produto_nome, quantidade, preco_unitario, valor_total, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `;
+    INSERT INTO vendas_itens 
+    (venda_id, produto_id, produto_nome, quantidade, preco_unitario, valor_total, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
 
       const produtoValues = [
         vendaId,
@@ -131,6 +132,22 @@ const novaVenda = async (dados) => {
       ];
 
       await runAsync(insertProdutoQuery, produtoValues);
+
+      // 💡 NOVA LÓGICA: Atualiza o estoque se o produto estiver ativo
+      const produtoInfo = await allAsync(
+        "SELECT estoque_atual, ativo FROM produtos WHERE id = ?",
+        [produto_id]
+      );
+
+      if (produtoInfo.length && produtoInfo[0].ativo === 1) {
+        const estoqueAtual = produtoInfo[0].estoque_atual || 0;
+        const novoEstoque = estoqueAtual - quantidade;
+
+        await runAsync("UPDATE produtos SET estoque_atual = ? WHERE id = ?", [
+          novoEstoque,
+          produto_id,
+        ]);
+      }
     }
 
     // Insere os pagamentos

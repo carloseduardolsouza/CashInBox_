@@ -319,6 +319,11 @@
   align-items: center;
 }
 
+.ControleDeEstoqueInputs input:disabled {
+  border: solid var(--text-color) 1px;
+  color: var(--text-color);
+}
+
 .ControleDeEstoqueInputs strong {
   font-size: 15px;
   margin-left: 10px;

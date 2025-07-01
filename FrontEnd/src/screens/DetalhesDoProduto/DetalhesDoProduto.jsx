@@ -12,7 +12,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 function DetalhesDoProduto() {
   const { id } = useParams();
-  const { setErroApi , adicionarAviso } = useContext(AppContext);
+  const { setErroApi, adicionarAviso } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [categoriaEdit, setCategoriaEdit] = useState("");
@@ -27,6 +27,8 @@ function DetalhesDoProduto() {
   const [preco_custoEdit, setPreco_custoEdit] = useState("");
   const [markupEdit, setMarkupEdit] = useState("");
   const [preco_vendaEdit, setPreco_vendaEdit] = useState("");
+
+  const [controlarEstoqueEdit, setControlarEstoqueEdit] = useState();
   const fileInputRef = useRef(null);
 
   const buscarCategorias = async () => {
@@ -64,6 +66,7 @@ function DetalhesDoProduto() {
     setPreco_vendaEdit(dadosProduto.preco_venda);
     setcodBarrasEdit(dadosProduto.codigo_barras);
     setCategoriaEdit(dadosProduto.categoria);
+    setControlarEstoqueEdit(!!dadosProduto.ativo);
   };
 
   useEffect(() => {
@@ -119,19 +122,22 @@ function DetalhesDoProduto() {
       codigo_barras: codBarrasEdit,
       preco_venda: preco_vendaEdit,
       preco_custo: preco_custoEdit,
-      estoque_atual: estoque_atualEdit,
-      estoque_minimo: estoque_minimoEdit,
+      estoque_atual: controlarEstoqueEdit ? estoque_atualEdit : 0,
+      estoque_minimo: controlarEstoqueEdit ? estoque_minimoEdit : 0,
       markup: markupEdit.toFixed(2) || 0,
       categoria: categoriaEdit,
       categoria_id: categoria_idEdit,
       unidade_medida: "",
-      ativo: "",
+      ativo: controlarEstoqueEdit ? 1 : 0,
     };
 
     produtoFetch
       .atualizarProduto(dados)
       .then((resposta) => {
-        adicionarAviso("sucesso" , "SUCESSO - Dados do produto editado com sucesso !")
+        adicionarAviso(
+          "sucesso",
+          "SUCESSO - Dados do produto editado com sucesso !"
+        );
       })
       .catch((erro) => {
         setErroApi(true);
@@ -221,7 +227,13 @@ function DetalhesDoProduto() {
 
           <div>
             <div class="checkbox-wrapper-4">
-              <input class="inp-cbx" id="morning" type="checkbox" />
+              <input
+                class="inp-cbx"
+                id="morning"
+                type="checkbox"
+                checked={controlarEstoqueEdit}
+                onChange={() => setControlarEstoqueEdit(!controlarEstoqueEdit)}
+              />
               <label class="cbx" for="morning">
                 <span>
                   <svg width="12px" height="10px"></svg>
@@ -240,6 +252,7 @@ function DetalhesDoProduto() {
                 <input
                   type="number"
                   value={estoque_atualEdit}
+                  disabled={!controlarEstoqueEdit}
                   onChange={(e) => setEstoque_atualEdit(e.target.value)}
                 />
               </div>
@@ -249,6 +262,7 @@ function DetalhesDoProduto() {
                 <input
                   type="number"
                   value={estoque_minimoEdit}
+                  disabled={!controlarEstoqueEdit}
                   onChange={(e) => setEstoque_minimoEdit(e.target.value)}
                 />
               </div>

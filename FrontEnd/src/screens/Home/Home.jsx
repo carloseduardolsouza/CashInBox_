@@ -3,7 +3,6 @@ import { useState, useContext, useEffect } from "react";
 import AppContext from "../../context/AppContext";
 import { Link } from "react-router-dom";
 import { ShoppingBasket } from "lucide-react";
-import { FaUserAlt } from "react-icons/fa";
 import services from "../../services/services";
 import relatorioFetch from "../../api/relatorioFetch";
 
@@ -244,10 +243,12 @@ function Home() {
 
           <div className="card-info">
             <p>Clientes Ativos</p>
-            <div className="info-bottom">
-              <FaUserAlt className="icon blue" />
-              <strong>{relatoriosBasicos.clientesAtivos}</strong>
-            </div>
+            <span className="badge">{relatoriosBasicos.clientesAtivos}</span>
+          </div>
+
+          <div className="card-info">
+            <p>Orçamentos</p>
+            <span className="badge">{relatoriosBasicos.totalOrcamentos}</span>
           </div>
 
           <div className="card-info">
@@ -259,11 +260,6 @@ function Home() {
                   )
                 : "••••••"}
             </span>
-          </div>
-
-          <div className="card-info">
-            <p>Orçamentos</p>
-            <span className="badge">{relatoriosBasicos.totalOrcamentos}</span>
           </div>
 
           <div className="card-info alert">

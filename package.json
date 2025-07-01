@@ -29,7 +29,9 @@
       "main.js",
       "preload.js",
       "FrontEnd/build/**/*",
-      "BackEnd/**/*"
+      "BackEnd/**/*",
+      "!BackEnd/.wwebjs_auth/**/*",
+      "!BackEnd/.wwebjs_cache/**/*"
     ],
     "asar": true,
     "icon": "assets/IconCashInBox",

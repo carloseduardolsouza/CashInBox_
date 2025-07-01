@@ -56,11 +56,20 @@ const temConexaoInternet = () => {
 
 // Função utilitária para sanitizar número
 const sanitizarNumero = (numero) => {
-  let limpo = numero.replace(/\D/g, "");
-  if (!limpo.startsWith("55")) {
-    limpo = `55${limpo}`;
+  let limpo = numero.replace(/\D/g, ""); // Remove tudo que não for número
+
+  // Se começar com DDI (55), removemos pra tratar o número sem ele
+  let temDDI = limpo.startsWith("55");
+  if (temDDI) limpo = limpo.slice(2);
+
+  // Se o número tiver pelo menos 11 dígitos (ex: 62993362090)
+  // e o segundo dígito for 9 (depois do DDD), remove o 9
+  if (limpo.length >= 11 && limpo[2] === "9") {
+    limpo = limpo.slice(0, 2) + limpo.slice(3);
   }
-  return limpo;
+
+  // Adiciona o DDI 55 de volta
+  return `55${limpo}`;
 };
 
 module.exports = {

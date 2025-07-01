@@ -116,7 +116,7 @@ const infoHome = async () => {
 
   const produtosEstoqueMinimo = await new Promise((resolve, reject) => {
     db.get(
-      `SELECT COUNT(*) AS total FROM produtos WHERE estoque_atual <= estoque_minimo`,
+      `SELECT COUNT(*) AS total FROM produtos WHERE estoque_atual <= estoque_minimo AND ativo = 1`,
       (err, row) => {
         if (err) reject(err);
         else resolve(row.total);

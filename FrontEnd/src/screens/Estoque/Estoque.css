@@ -14,6 +14,10 @@
   display: block;
 }
 
+.estoque_min {
+  background-color: #ff660040;
+}
+
 .TableEstoque {
   border: #363636 solid 2px;
   width: 100%;
