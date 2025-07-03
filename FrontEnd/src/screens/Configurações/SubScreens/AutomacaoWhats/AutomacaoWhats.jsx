@@ -52,8 +52,20 @@ function AutomacaoWhats() {
     try {
       const response = await userFetch.verConfigAutomacao();
       setMsg_aniversario(response.msg_aniversario);
-      setMsg_msg_aniversario(response.msg_msg_aniversario)
-      setTime_msg_aniversario(response.time_msg_aniversario)
+      setMsg_msg_aniversario(() => {
+        if (response.msg_msg_aniversario === "" || !response.msg_msg_aniversario) {
+          return msg_msg_aniversario
+        } else {
+          return response.msg_msg_aniversario
+        }
+      })
+      setTime_msg_aniversario(() => {
+        if (response.time_msg_aniversario === "" || !response.time_msg_aniversario) {
+          return time_msg_aniversario
+        } else {
+          return response.time_msg_aniversario
+        }
+      })
       setMsg_notificacao(response.msg_notificacao);
       setMsg_cobranca(response.msg_cobranca);
       setMumero_msg_notificacao(response.numero_msg_notificacao);

@@ -35,6 +35,7 @@ function Home() {
     setErroApi,
     setVencido,
     setFazerLogin,
+    tratarErroApi,
   } = useContext(AppContext);
   const [data, setData] = useState([]);
 
@@ -53,25 +54,13 @@ function Home() {
     relatorioFetch
       .buscarRelatoriosBasicos()
       .then((response) => {
-        if (
-          response.message ===
-          "Assinatura vencida. Por favor, renove sua assinatura."
-        ) {
-          setVencido(true);
-          return;
-        }
-
-        if (response.message === "Erro ao ler credenciais.") {
-          setFazerLogin(true);
-          return;
-        }
-
         if (Array.isArray(response)) {
           setRelatoriosBasicos(response);
         } else {
           setRelatoriosBasicos([]); // Evita o erro
           console.warn("Resposta inesperada:", response);
         }
+        tratarErroApi(response)
 
         setRelatoriosBasicos(response);
 
@@ -83,7 +72,7 @@ function Home() {
 
         setData(newData);
       })
-      .catch(() => {
+      .catch((error) => {
         const newData = [];
         for (let i = 0; i < 7; i++) {
           newData.push({
@@ -93,7 +82,6 @@ function Home() {
           });
         }
         setData(newData);
-        setErroApi(true);
       });
 
     window?.electronAPI?.onUpdateAvailable(() => {
@@ -143,7 +131,7 @@ function Home() {
         >
           {mostrarInfo ? <FaEye /> : <FaEyeSlash />}
         </button>
-        <button id="ButtonDarkMode" onClick={() => setIsDark(!isDark)}>
+        <button id="ButtonDarkMode" onClick={() => setIsDark(!isDark)} disabled={true}>
           {isDark ? "☀️" : "🌙"}
         </button>
       </div>

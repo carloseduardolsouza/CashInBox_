@@ -31,7 +31,8 @@
       "FrontEnd/build/**/*",
       "BackEnd/**/*",
       "!BackEnd/.wwebjs_auth/**/*",
-      "!BackEnd/.wwebjs_cache/**/*"
+      "!BackEnd/.wwebjs_cache/**/*",
+      "!.wwebjs_auth/**/*"
     ],
     "asar": true,
     "icon": "assets/IconCashInBox",

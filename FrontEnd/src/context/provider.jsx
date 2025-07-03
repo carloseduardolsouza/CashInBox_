@@ -33,6 +33,20 @@ export function AppProvider({ children }) {
     }, 5000);
   };
 
+  // Função de tratamento de erro
+  const tratarErroApi = (response) => {
+    console.log(response)
+    if (response.message === "Último login expirado. Refaça a autenticação.") {
+      setVencido(true);
+      return
+    }
+
+    if (response.message === "Erro ao ler credenciais.") {
+      setFazerLogin(true);
+      return;
+    }
+  };
+
   const fetchStatus = async () => {
     try {
       const response = await whatsappFetch.pegarQrCode().then((response) => {
@@ -69,6 +83,8 @@ export function AppProvider({ children }) {
   const valores = {
     adicionarAviso,
     avisos,
+
+    tratarErroApi,
 
     erroApi,
     setErroApi,

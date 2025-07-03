@@ -1,5 +1,5 @@
 import "./Produtos.css";
-import { useState, useEffect , useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import AppContext from "../../context/AppContext";
 
 //componentes
@@ -18,7 +18,7 @@ function Produtos() {
     Data.getUTCMonth() + 1
   }/${Data.getUTCFullYear()}`;
 
-  const {setVencido , setErroApi} = useContext(AppContext)
+  const { tratarErroApi, setErroApi } = useContext(AppContext);
 
   const [resultProdutos, setResultProdutos] = useState([]);
   const [loadingProdutos, setloadingProdutos] = useState(true);
@@ -28,24 +28,15 @@ function Produtos() {
     try {
       const resultado = await produtoFetch.procurarProdutos(pesquisar);
 
-      if (
-        resultado.message ===
-        "Assinatura vencida. Por favor, renove sua assinatura."
-      ) {
-        setVencido(true);
-        return;
-      }
-
       if (Array.isArray(resultado)) {
         setResultProdutos(resultado);
       } else {
-        setResultProdutos([]); // Evita o erro
+        setResultProdutos([]); // Evita quebrar a UI
         console.warn("Resposta inesperada:", resultado);
+        tratarErroApi(resultado);
       }
-
-      setResultProdutos(resultado);
-    } catch (err) {
-      console.error("Erro ao buscar produtos:", err);
+    } catch (error) {
+      setErroApi(true);
     }
   };
 
@@ -56,7 +47,7 @@ function Produtos() {
   const renderProdutos = async (e) => {
     e.preventDefault();
     setloadingProdutos(true);
-    buscarProdutos()
+    buscarProdutos();
     setloadingProdutos(false);
   };
 

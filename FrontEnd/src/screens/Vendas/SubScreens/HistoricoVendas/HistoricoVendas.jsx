@@ -12,32 +12,28 @@ import { FaFilter } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 
 function HistoricoVendas() {
-  const { setErroApi , setVencido } = useContext(AppContext);
+  const { setErroApi, tratarErroApi } = useContext(AppContext);
   const [resultadosVendas, setResultadosVendas] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
-
   const [filtroData, setFiltroData] = useState("");
+
+  // Paginação
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const itensPorPagina = 20;
 
   const carregarVendas = async () => {
     try {
       const response = await vendaFetch.listarVendas(filtroData);
 
-      if (
-        response.message ===
-        "Assinatura vencida. Por favor, renove sua assinatura."
-      ) {
-        setVencido(true);
-        return;
-      }
-
       if (Array.isArray(response)) {
         setResultadosVendas(response);
+        setPaginaAtual(1); // Sempre volta pra página 1 quando pesquisa
       } else {
-        setResultadosVendas([]); // Evita o erro
+        setResultadosVendas([]);
         console.warn("Resposta inesperada:", response);
       }
 
-      setResultadosVendas(response);
+      tratarErroApi(response);
     } catch (error) {
       setErroApi(true);
     }
@@ -56,14 +52,19 @@ function HistoricoVendas() {
   };
 
   const excluirVendasSelecionadas = async () => {
-    if (arraySelect.length === 0) {
-      return;
-    }
+    if (arraySelect.length === 0) return;
 
     await Promise.all(arraySelect.map((id) => vendaFetch.deletarVenda(id)));
     await carregarVendas();
     setArraySelect([]);
   };
+
+  // Paginação: calcular o que mostrar
+  const totalPaginas = Math.ceil(resultadosVendas.length / itensPorPagina);
+  const vendasPaginadas = resultadosVendas.slice(
+    (paginaAtual - 1) * itensPorPagina,
+    paginaAtual * itensPorPagina
+  );
 
   return (
     <div>
@@ -72,17 +73,17 @@ function HistoricoVendas() {
           <input
             type="date"
             className="FilterDateVendas"
-            value={filtroData} // mantém controlado
+            value={filtroData}
             onChange={(e) => setFiltroData(e.target.value)}
           />
           <button
             className="FilterICONDateVendas"
             onClick={(e) => {
               e.preventDefault();
-              carregarVendas(); // agora sim: valor atualizado
+              carregarVendas();
             }}
           >
-            <FaFilter  id="FaFilter"/>
+            <FaFilter id="FaFilter" />
           </button>
         </div>
 
@@ -98,6 +99,7 @@ function HistoricoVendas() {
           <FaTrash />
         </button>
       </div>
+
       <table className="Table">
         <thead>
           <tr>
@@ -107,42 +109,56 @@ function HistoricoVendas() {
             <th>Desconto</th>
             <th>Acrescimos</th>
             <th>Total</th>
-            <th>status</th>
+            <th>Status</th>
             <th>Data</th>
           </tr>
         </thead>
 
         <tbody>
-          {resultadosVendas.map((dados) => {
-            return (
-              <tr className={arraySelect.includes(dados.id) ? "ativo" : ""}>
-                <td>
-                  <input
-                    type="checkbox"
-                    onChange={() => toggleArraySelect(dados.id)}
-                  />
-                </td>
-                <td>
-                  <Link
-                    to={`/detalhesDaVenda/${dados.id}`}
-                    className="aTdTabelaHistoricoVendas"
-                  >
-                    <button className="DetalhesHistoricoVendas">
-                      Detalhes
-                    </button>
-                  </Link>
-                </td>
-                <td>{dados.nome_cliente}</td>
-                <td>{dados.descontos}</td>
-                <td>{dados.acrescimos}</td>
-                <td>{services.formatarCurrency(dados.valor_total)}</td>
-                <td>{dados.status}</td>
-                <td>{services.formatarData(dados.data_venda)}</td>
-              </tr>
-            );
-          })}
+          {vendasPaginadas.map((dados) => (
+            <tr
+              key={dados.id}
+              className={arraySelect.includes(dados.id) ? "ativo" : ""}
+            >
+              <td>
+                <input
+                  type="checkbox"
+                  onChange={() => toggleArraySelect(dados.id)}
+                />
+              </td>
+              <td>
+                <Link
+                  to={`/detalhesDaVenda/${dados.id}`}
+                  className="aTdTabelaHistoricoVendas"
+                >
+                  <button className="DetalhesHistoricoVendas">Detalhes</button>
+                </Link>
+              </td>
+              <td>{dados.nome_cliente}</td>
+              <td>{dados.descontos}</td>
+              <td>{dados.acrescimos}</td>
+              <td>{services.formatarCurrency(dados.valor_total)}</td>
+              <td>{dados.status}</td>
+              <td>{services.formatarData(dados.data_venda)}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
+
+      {/* Paginação */}
+      {totalPaginas > 1 && (
+        <div className="paginacao">
+          {Array.from({ length: totalPaginas }, (_, index) => (
+            <button
+              key={index}
+              className={paginaAtual === index + 1 ? "paginaAtiva" : ""}
+              onClick={() => setPaginaAtual(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

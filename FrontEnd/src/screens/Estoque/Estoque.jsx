@@ -9,38 +9,29 @@ import { FaSearch } from "react-icons/fa";
 import produtoFetch from "../../api/produtoFetch";
 
 function Estoque() {
-  const { setErroApi , setVencido } = useContext(AppContext);
+  const { setErroApi, tratarErroApi } = useContext(AppContext);
   const navigate = useNavigate();
-  const [modalEstoque, setModalEstoque] = useState(null);
 
   const [pesquisa, setPesquisa] = useState("all");
   const [resultProdutos, setResultProdutos] = useState([]);
 
-  useEffect(() => {
-    const buscarProdutos = async () => {
-      try {
-        const resultado = await produtoFetch.procurarProdutos(pesquisa);
-        if (
-          resultado.message ===
-          "Assinatura vencida. Por favor, renove sua assinatura."
-        ) {
-          setVencido(true);
-          return;
-        }
+  const buscarProdutos = async () => {
+    try {
+      const resultado = await produtoFetch.procurarProdutos(pesquisa);
 
-        if (Array.isArray(resultado)) {
-          setResultProdutos(resultado);
-        } else {
-          setResultProdutos([]); // Evita o erro
-          console.warn("Resposta inesperada:", resultado);
-        }
-
+      if (Array.isArray(resultado)) {
         setResultProdutos(resultado);
-      } catch {
-        setErroApi(true);
+      } else {
+        setResultProdutos([]); // Evita quebrar a UI
+        console.warn("Resposta inesperada:", resultado);
+        tratarErroApi(resultado);
       }
-    };
+    } catch (error) {
+      setErroApi(true);
+    }
+  };
 
+  useEffect(() => {
     buscarProdutos();
   }, []);
 
@@ -91,7 +82,13 @@ function Estoque() {
         <tbody>
           {resultProdutos.map((dado) => {
             return (
-              <tr className={dado.estoque_min_atingido && dado.ativo === 1 ? "estoque_min" : ""}>
+              <tr
+                className={
+                  dado.estoque_min_atingido && dado.ativo === 1
+                    ? "estoque_min"
+                    : ""
+                }
+              >
                 <td>
                   <Link to={`/detalhesDoProduto/${dado.id}`} id="aTDEstoque">
                     {dado.nome}

@@ -26,6 +26,7 @@
   margin-bottom: 15px;
   width: 530px;
   margin-left: 30px;
+  color: #333;
 }
 
 .NovaVendaLabel {
@@ -47,6 +48,7 @@
 
 .NovaVendaLabel > label > p {
   font-size: 20px;
+  color: var(--sub-text-color);
 }
 
 #checkBoxNovaVenda {
@@ -56,6 +58,7 @@
 .NovanVendaStrong {
   font-size: 19px;
   margin-right: 8px;
+  color: var(--sub-text-color);
 }
 
 .DivisãoNovaVenda {
@@ -95,7 +98,7 @@
   color: white;
   border: none;
   border-radius: 5px;
-  background-color: #28a745;
+  background-color: var(--button-green);
 }
 
 #buttonOkPontoDeVenda {
@@ -128,4 +131,5 @@
 .TablePontoDeVenda > thead > tr > th {
   margin-bottom: 10px;
   text-align: left;
+  color: var(--sub-text-color);
 }

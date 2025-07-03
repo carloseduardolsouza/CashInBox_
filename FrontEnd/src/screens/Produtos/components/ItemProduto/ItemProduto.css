@@ -49,6 +49,8 @@
     10px
   ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
   border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+
+  color: #333;
 }
 
 @keyframes EntradaDetalhesProdutos {

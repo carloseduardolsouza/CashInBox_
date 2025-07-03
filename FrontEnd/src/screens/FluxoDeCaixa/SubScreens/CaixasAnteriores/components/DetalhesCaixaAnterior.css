@@ -37,7 +37,9 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
+
 
 .no-movements {
   background: #f1f5f9;

@@ -4,6 +4,8 @@
   --bg-color: #ffffff;
   --text-color: #000000;
   --button-color: #0295ff;
+  --button-green: #28a745;
+  --sub-text-color: #333;
   --div-color: #c8c8c8cb;
 }
 
@@ -11,6 +13,8 @@
   --bg-color: #121212;
   --text-color: #ffffff;
   --button-color: #00528d;
+  --button-green: #1f8637;
+  --sub-text-color: #a2a2a2;
   --div-color: #484848ec;
 }
 

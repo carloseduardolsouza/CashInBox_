@@ -381,7 +381,7 @@ executarRotinasDiarias();
 const configRotina = carregarUserConfigs();
 
 // Se não tiver horário definido, usa 08:00 como padrão
-const horario = configRotina.time_msg_aniversario || "08:00";
+const horario = configRotina?.time_msg_aniversario || "08:00";
 const [hora, minuto] = horario.split(":");
 
 // Validação leve (só pra garantir)
