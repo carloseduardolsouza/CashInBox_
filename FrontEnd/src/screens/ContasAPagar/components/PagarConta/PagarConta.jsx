@@ -26,7 +26,7 @@ function PagarConta({ atualizar, fecharAba, dadosConta }) {
     <div className="blurModal">
       <form id="PagarConta" onSubmit={(e) => pagarConta(e)}>
         <h2>Pagar conta</h2>
-        <p>
+        <p className="ReferenciaPagarConta">
           <strong>Referente a: </strong>
           {dadosConta.categoria}
         </p>

@@ -3,7 +3,7 @@ import caixaFetch from "../../../../../../api/caixaFetch";
 import { useState, useContext } from "react";
 import AppContext from "../../../../../../context/AppContext";
 
-function FecharCaixa({ atualizar, fecharAba, statusCaixa , id}) {
+function FecharCaixa({ atualizar, fecharAba, statusCaixa, id }) {
   const { setErroApi } = useContext(AppContext);
   const [valorFinal, setValorFinal] = useState(0);
 
@@ -14,7 +14,7 @@ function FecharCaixa({ atualizar, fecharAba, statusCaixa , id}) {
     };
 
     await caixaFetch
-      .fecharCaixa(dataCaixa , id)
+      .fecharCaixa(dataCaixa, id)
       .then(() => {
         statusCaixa("Fechado");
         atualizar();
@@ -35,6 +35,7 @@ function FecharCaixa({ atualizar, fecharAba, statusCaixa , id}) {
         <label>
           <span>Saldo Final</span>
           <input
+            step="any"
             type="number"
             placeholder="R$ 100,00"
             value={valorFinal}

@@ -26,3 +26,23 @@
     font-weight: bold;
     background-color: #00ff0042;
 }
+
+.vencidaStatusConta {
+    background-color: #ff00002c;
+    color: red;
+    font-weight: 500;
+    padding: 2px;
+    width: 70%;
+    margin: auto;
+    border-radius: 20px;
+}
+
+.pendenteStatusConta {
+    background-color: #eaff0055;
+    color: #929204;
+    font-weight: 500;
+    padding: 2px;
+    width: 70%;
+    margin: auto;
+    border-radius: 20px;
+}

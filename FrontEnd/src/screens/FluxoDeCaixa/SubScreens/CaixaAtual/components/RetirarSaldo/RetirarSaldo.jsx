@@ -4,6 +4,7 @@ import { useState } from "react";
 
 //icones
 import { FaMoneyBill1 } from "react-icons/fa6";
+import { FaWallet } from "react-icons/fa";
 
 function RetirarSaldo({ fecharAba }) {
   const [value, setValue] = useState("");
@@ -27,9 +28,28 @@ function RetirarSaldo({ fecharAba }) {
           <tbody>
             <tr>
               <td>
-                <FaMoneyBill1 />
+                <FaMoneyBill1 style={{margin: 10}}/>
               </td>
               <td>Dinheiro</td>
+              <td>R$ 500,00</td>
+              <td>
+                <input
+                  type="text"
+                  id="valorRetirada"
+                  value={value}
+                  onChange={(e) => {
+                    setValue(services.mascaraDeDinheroInput(e));
+                  }}
+                  placeholder="Digite o valor"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <FaWallet style={{margin: 10}}/>
+              </td>
+              <td>Em conta</td>
               <td>R$ 500,00</td>
               <td>
                 <input

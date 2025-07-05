@@ -9,15 +9,18 @@ import AppContext from "../../context/AppContext";
 function PlanosEBoletos() {
   const [infoPlanos, setInfoPlanos] = useState({});
 
-  const { dadosLoja , setErroApi } = useContext(AppContext);
+  const { dadosLoja, setErroApi } = useContext(AppContext);
 
   useEffect(() => {
-    userFetch.informacoesPlanos().then((response) => {
-      console.log(response)
-      setInfoPlanos(response);
-    }).catch(() => {
-      setErroApi(true)
-    });
+    userFetch
+      .informacoesPlanos()
+      .then((response) => {
+        console.log(response);
+        setInfoPlanos(response);
+      })
+      .catch(() => {
+        setErroApi(true);
+      });
   }, []);
 
   const pegarBoleto = () => {
@@ -78,10 +81,23 @@ function PlanosEBoletos() {
             <a id="mudarPlanoPlanosBoletos">Mudar Plano</a>
 
             <div id="areaStatusPagamento">
-              <button id="ButtonDowloadBoleto" onClick={() => pegarBoleto()}>
+              <button
+                id="ButtonDowloadBoleto"
+                onClick={() => pegarBoleto()}
+                disabled={infoPlanos.status_pagamento === "Pagamento recebido" || !infoPlanos.status_pagamento}
+              >
                 Dowload Boleto
               </button>
-              <strong>Pagamento recebido</strong>
+              <strong
+                style={{
+                  backgroundColor:
+                    infoPlanos.status_pagamento === "Assinatura vencida"
+                      ? "red"
+                      : "#4CAF50",
+                }}
+              >
+                {infoPlanos.status_pagamento || "Sem status"}
+              </strong>
             </div>
           </div>
         </div>
@@ -89,10 +105,14 @@ function PlanosEBoletos() {
         <div id="cardDadosDoEstabelecimentoPlanosEBoletos">
           <h2>Dados da conta</h2>
           <p>
-            <strong>Nome do estabelecimento: </strong> {dadosLoja.nomeEstabelecimento}
+            <strong>Nome do estabelecimento: </strong>{" "}
+            {dadosLoja.nomeEstabelecimento}
           </p>
           <p>
-            <strong>Cnpj: </strong> {services.formatarCNPJ(dadosLoja.cnpj)}
+            <strong>CNPJ: </strong>{" "}
+            {dadosLoja?.cnpj
+              ? services.formatarCNPJ(dadosLoja.cnpj)
+              : "Não informado"}
           </p>
 
           <Link to={`/configurações`} id="EditarDadosPlanosEBoletos">

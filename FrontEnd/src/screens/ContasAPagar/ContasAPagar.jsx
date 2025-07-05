@@ -16,7 +16,7 @@ function ContasAPagar() {
   const [abaSobreposta, setAbaSopreposta] = useState(null);
   const [contasPagar, setContasPagar] = useState([]);
 
-  const [dadosConta , setDadosConta] = useState({})
+  const [dadosConta, setDadosConta] = useState({});
 
   const buscarContas = async () => {
     await contasPagarFetch.contasAll().then((response) => {
@@ -25,23 +25,37 @@ function ContasAPagar() {
   };
 
   const abrirPagarContaDados = (dados) => {
-    setDadosConta(dados)
-    setAbaSopreposta("PagarConta")
-  }
+    setDadosConta(dados);
+    setAbaSopreposta("PagarConta");
+  };
 
   const abrirEditarContaDados = (dados) => {
-    setDadosConta(dados)
-    setAbaSopreposta("EditarConta")
-  }
+    setDadosConta(dados);
+    setAbaSopreposta("EditarConta");
+  };
 
   const renderAbaSobrePosta = () => {
     switch (abaSobreposta) {
       case "NovaConta":
-        return <NovaConta fecharAba={setAbaSopreposta} atualizar={buscarContas} />;
+        return (
+          <NovaConta fecharAba={setAbaSopreposta} atualizar={buscarContas} />
+        );
       case "EditarConta":
-        return <EditarConta fecharAba={setAbaSopreposta} dadosConta={dadosConta} atualizar={buscarContas}/>;
+        return (
+          <EditarConta
+            fecharAba={setAbaSopreposta}
+            dadosConta={dadosConta}
+            atualizar={buscarContas}
+          />
+        );
       case "PagarConta":
-        return <PagarConta fecharAba={setAbaSopreposta} dadosConta={dadosConta} atualizar={buscarContas}/>;
+        return (
+          <PagarConta
+            fecharAba={setAbaSopreposta}
+            dadosConta={dadosConta}
+            atualizar={buscarContas}
+          />
+        );
       case null:
         return null;
     }
@@ -98,14 +112,29 @@ function ContasAPagar() {
                     <FaEdit /> Editar
                   </button>
                 </td>
-                <td>{dados.status}</td>
+                <td>
+                  <p
+                    className={
+                      dados.status === "vencida"
+                        ? "vencidaStatusConta"
+                        : "pendenteStatusConta"
+                    }
+                  >
+                    {dados.status}
+                  </p>
+                </td>
                 <td>
                   {services.formatarDataNascimento(dados.data_vencimento)}
                 </td>
                 <td>{services.formatarCurrency(dados.valor_total)}</td>
                 <td>{dados.categoria}</td>
                 <td>
-                  <button className="buttonPagarContasPagar" onClick={() => abrirPagarContaDados(dados)}>Pagar</button>
+                  <button
+                    className="buttonPagarContasPagar"
+                    onClick={() => abrirPagarContaDados(dados)}
+                  >
+                    Pagar
+                  </button>
                 </td>
               </tr>
             );

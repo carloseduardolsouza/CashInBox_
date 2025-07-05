@@ -4,9 +4,9 @@
   top: 50%;
   right: 50%;
   padding: 10px;
-  height: 400px;
+  width: 400px;
 
-  background: var(--div-color);
+  background: white;
   border-radius: 10px;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
   backdrop-filter: blur(10px); /* Desfoque */
@@ -17,27 +17,28 @@
 }
 
 .labelAdicionarSaldo {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.labelAdicionarSaldo input,textarea {
-    border-radius: 10px;
-    padding: 5px;
-    font-size: 15px;
-    border: solid black 1px;
+.labelAdicionarSaldo input,
+textarea {
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 15px;
+  border: solid #333 1px;
 }
 
 #ButtonSalvarAdicionarSaldo {
-    width: 100%;
-    color: white;
-    background-color: #0295ff;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 10px;
-    padding: 10px;
-    cursor: pointer;
+  width: 100%;
+  color: white;
+  background-color: #0295ff;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+  padding: 10px;
+  cursor: pointer;
 }

@@ -35,6 +35,8 @@ function AutomacaoWhats() {
 
   const [msg_cobranca, setMsg_cobranca] = useState(false);
 
+  const [msg_orcamento , setMsg_orcamento] = useState(false)
+
   const [clickRobo, setClickRobo] = useState(false);
 
   const fetchQrCode = async () => {
@@ -249,6 +251,20 @@ function AutomacaoWhats() {
                 type="checkbox"
                 checked={msg_cobranca}
                 onChange={() => setMsg_cobranca(!msg_cobranca)}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div className="CardOptions">
+          <div className="inputCardOptions">
+            <p>Lembrete de orçamento 📝</p>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={msg_orcamento}
+                onChange={() => setMsg_orcamento(msg_orcamento)}
               />
               <span className="slider"></span>
             </label>

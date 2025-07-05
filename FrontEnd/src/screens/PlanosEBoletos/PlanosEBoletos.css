@@ -88,6 +88,11 @@
   transition: 0.2s;
 }
 
+#ButtonDowloadBoleto:disabled {
+  cursor: not-allowed;
+  color: #00000068;
+}
+
 #ButtonDowloadBoleto:hover {
   background-color: #f2f2f2;
 }

@@ -80,7 +80,17 @@ function VendasAReceber() {
                   {services.formatarDataNascimento(dados.data_vencimento)}
                 </td>
                 <td>{services.formatarCurrency(dados.valor_parcela)}</td>
-                <td>{dados.status}</td>
+                <td>
+                  <p
+                    className={
+                      dados.status === "vencida"
+                        ? "vencidaStatusConta"
+                        : "pendenteStatusConta"
+                    }
+                  >
+                    {dados.status}
+                  </p>
+                </td>
               </tr>
             );
           })}

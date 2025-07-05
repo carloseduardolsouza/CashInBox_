@@ -1,11 +1,11 @@
 import "./AdicionarSaldo.css";
-import { useState , useContext } from "react";
+import { useState, useContext } from "react";
 import AppContext from "../../../../../../context/AppContext";
 
 import caixaFetch from "../../../../../../api/caixaFetch";
 
 function AdicionarSaldo({ fecharAba, idCaixa, atualizar }) {
-  const {setErroApi} = useContext(AppContext)
+  const { setErroApi } = useContext(AppContext);
   const [value, setValue] = useState("");
   const [descricao, setDescricao] = useState("");
 
@@ -17,12 +17,15 @@ function AdicionarSaldo({ fecharAba, idCaixa, atualizar }) {
       valor: value,
     };
 
-    await caixaFetch.novaMovimentacao(idCaixa, dados).then(() => {
-      atualizar();
-      fecharAba(null);
-    }).catch(() => {
-      setErroApi(true)
-    });
+    await caixaFetch
+      .novaMovimentacao(idCaixa, dados)
+      .then(() => {
+        atualizar();
+        fecharAba(null);
+      })
+      .catch(() => {
+        setErroApi(true);
+      });
   };
 
   return (
@@ -36,7 +39,8 @@ function AdicionarSaldo({ fecharAba, idCaixa, atualizar }) {
           <label className="labelAdicionarSaldo">
             <span>Valor:</span>
             <input
-              type="text"
+              type="number"
+              step="any"
               id="valor"
               value={value}
               required
