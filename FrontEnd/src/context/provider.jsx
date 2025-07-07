@@ -11,6 +11,7 @@ export function AppProvider({ children }) {
   const [erroApi, setErroApi] = useState(false);
 
   const [fazerLogin, setFazerLogin] = useState(false);
+  const [ultimoLoginExpirado, setUltimoLoginExpirado] = useState(false);
 
   const [vencido, setVencido] = useState(false);
 
@@ -35,15 +36,22 @@ export function AppProvider({ children }) {
 
   // Função de tratamento de erro
   const tratarErroApi = (response) => {
-    console.log(response)
+    console.log(response);
     if (response.message === "Último login expirado. Refaça a autenticação.") {
-      setVencido(true);
-      return
+      setUltimoLoginExpirado(true);
+      return;
     }
 
     if (response.message === "Erro ao ler credenciais.") {
       setFazerLogin(true);
       return;
+    }
+
+    if (
+      response.message ===
+      "Assinatura vencida. Por favor, renove sua assinatura."
+    ) {
+      setVencido(true);
     }
   };
 
@@ -98,6 +106,7 @@ export function AppProvider({ children }) {
     setVencido,
     fazerLogin,
     setFazerLogin,
+    ultimoLoginExpirado
   };
 
   return <AppContext.Provider value={valores}>{children}</AppContext.Provider>;

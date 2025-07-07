@@ -12,7 +12,6 @@ const novaConta = async (dados) => {
 
 const contasAll = async () => {
   const res = await fetch(`${API_URL}/`, { method: "GET" });
-  if (!res.ok) throw new Error("Erro ao listar contas");
   return res.json();
 };
 

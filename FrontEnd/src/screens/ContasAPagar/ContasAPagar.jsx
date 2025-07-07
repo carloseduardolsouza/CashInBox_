@@ -1,5 +1,5 @@
 import "./ContasAPagar.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import contasPagarFetch from "../../api/contasPagarFetch";
 import services from "../../services/services";
 
@@ -11,17 +11,33 @@ import { FaEdit } from "react-icons/fa";
 import NovaConta from "./components/NovaConta/NovaConta";
 import EditarConta from "./components/EditarConta/EditarConta";
 import PagarConta from "./components/PagarConta/PagarConta";
+import AppContext from "../../context/AppContext";
 
 function ContasAPagar() {
   const [abaSobreposta, setAbaSopreposta] = useState(null);
   const [contasPagar, setContasPagar] = useState([]);
 
+  const { tratarErroApi, setErroApi } = useContext(AppContext);
+
   const [dadosConta, setDadosConta] = useState({});
 
   const buscarContas = async () => {
-    await contasPagarFetch.contasAll().then((response) => {
-      setContasPagar(response);
-    });
+    try {
+      const response = await contasPagarFetch.contasAll();
+
+      if (Array.isArray(response)) {
+        setContasPagar(response);
+      } else {
+        setContasPagar([]);
+        console.warn("Resposta inesperada:", response);
+      }
+
+      tratarErroApi(response);
+    } catch (error) {
+      tratarErroApi(error);
+      console.error("Erro ao buscar contas:", error);
+      setErroApi(true);
+    }
   };
 
   const abrirPagarContaDados = (dados) => {

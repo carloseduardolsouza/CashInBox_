@@ -176,7 +176,7 @@ const buscarMovimentacoes = async (id) => {
   return new Promise((resolve, reject) => {
     connection.all(query, [id], (err, rows) => {
       if (err) return reject(err);
-      resolve(rows);
+      resolve(rows.reverse());
     });
   });
 };

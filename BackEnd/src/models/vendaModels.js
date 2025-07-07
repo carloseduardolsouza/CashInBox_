@@ -317,6 +317,23 @@ const novaVendaCrediario = async (dados) => {
 };
 
 /**
+ * Lista orçamentos com filtro por nome do cliente (LIKE)
+ */
+const listarOrcamentos = async (filtro) => {
+  let query = `SELECT * FROM vendas WHERE LOWER(status) = 'orçamento'`;
+  const values = []
+
+  if (filtro) {
+    const filtroFormatado = `${filtro}T00:00:00.000Z`;
+    query += ` AND data_venda >= ?`;
+    values.push(filtroFormatado);
+  }
+
+  const vendas = await allAsync(query, values);
+  return vendas.reverse();
+};
+
+/**
  * Lista vendas filtrando por data mínima e status != orçamento
  */
 const listarVendas = async (filtro) => {
@@ -467,15 +484,6 @@ const receberVendaCrediario = async (id, dados) => {
     console.error("Erro ao receber venda crediário:", err);
     throw err;
   }
-};
-
-/**
- * Lista orçamentos com filtro por nome do cliente (LIKE)
- */
-const listarOrcamentos = async () => {
-  const query = `SELECT * FROM vendas WHERE LOWER(status) = 'orçamento'`;
-  const vendas = await allAsync(query);
-  return vendas.reverse();
 };
 
 /**

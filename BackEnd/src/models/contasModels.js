@@ -1,5 +1,10 @@
 const connection = require("./db");
 
+const { promisify } = require("util");
+const caixaControlles = require("../controllers/caixaController");
+
+const allAsync = promisify(connection.all.bind(connection));
+
 // 🆕 Criar nova conta
 const novaConta = async (dados) => {
   const {
@@ -105,7 +110,6 @@ const editarConta = async (id, dados) => {
   });
 };
 
-// ✅ Marcar conta como paga
 const pagarConta = async (id, data_pagamento) => {
   const query = `
     UPDATE contas_a_pagar 
@@ -113,12 +117,53 @@ const pagarConta = async (id, data_pagamento) => {
     WHERE id = ?
   `;
 
-  return new Promise((resolve, reject) => {
-    connection.run(query, [data_pagamento, id], function (err) {
-      if (err) return reject(err);
-      resolve(this.changes);
+  try {
+    const changes = await new Promise((resolve, reject) => {
+      connection.run(query, [data_pagamento, id], function (err) {
+        if (err) return reject(err);
+        resolve(this.changes);
+      });
     });
-  });
+
+    if (changes === 0) {
+      throw new Error("Conta não encontrada ou já está paga.");
+    }
+
+    const conta = await allAsync(
+      "SELECT categoria, valor_total FROM contas_a_pagar WHERE id = ?",
+      [id]
+    );
+
+    if (!conta.length) {
+      throw new Error("Conta não encontrada após atualização.");
+    }
+
+    const { categoria, valor_total } = conta[0];
+
+    const caixaAberto = await caixaControlles.buscarCaixasAbertos();
+
+    if (caixaAberto && caixaAberto.id) {
+      const movimentacao = {
+        id: caixaAberto.id,
+        descricao: `Pagamento de Conta #${categoria}`,
+        tipo: "saida",
+        valor: valor_total,
+        tipo_pagamento: "outros",
+      };
+
+      await caixaControlles.adicionarMovimentacaoHandler(
+        caixaAberto.id,
+        movimentacao
+      );
+    } else {
+      console.warn("Nenhum caixa aberto encontrado. Saída não registrada.");
+    }
+
+    return changes;
+  } catch (error) {
+    console.error("Erro ao pagar conta:", error);
+    throw error;
+  }
 };
 
 // 🗑️ Deletar uma conta

@@ -104,7 +104,8 @@ const listarVendasFuncionario = async (req, res) => {
  */
 const listarOrcamentos = async (req, res) => {
   try {
-    const orcamentos = await vendaModels.listarOrcamentos();
+    const { filtro } = req.params;
+    const orcamentos = await vendaModels.listarOrcamentos(filtro);
     return res.status(200).json(orcamentos);
   } catch (err) {
     console.error("Erro ao listar orçamentos:", err);

@@ -47,7 +47,7 @@ router.get("/funcionario/:id", vendaControllers.listarVendasFuncionario);
 router.get("/orcamento/cliente/:id", vendaControllers.listarOrcamentoCliente);
 
 // 🔍 Listar orçamentos
-router.post("/orcamentos", vendaControllers.listarOrcamentos);
+router.post("/orcamentos/:filtro?", vendaControllers.listarOrcamentos);
 
 /** ============================
  * 💳 VENDAS CREDIÁRIO

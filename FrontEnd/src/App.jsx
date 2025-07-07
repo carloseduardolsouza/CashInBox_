@@ -8,6 +8,7 @@ import Aviso from "./components/Aviso/Aviso";
 import ApiDesconectada from "./components/ApiDesconectada/ApiDesconectada";
 import AssinaturaVencida from "./components/AssinaturaVencida/AssinaturaVencida";
 import CardLogin from "./components/CardLogin/CardLogin";
+import UltimoLoginExpirado from "./components/UltimoLoginExpirado/UltimoLoginExpirado";
 
 //Telas
 import Home from "./screens/Home/Home";
@@ -73,7 +74,7 @@ import { MdInsertChart } from "react-icons/md";
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 function App() {
-  const { erroApi, vencido , fazerLogin } = useContext(AppContext);
+  const { erroApi, vencido , fazerLogin , ultimoLoginExpirado} = useContext(AppContext);
   //Status do menu
   const [statusMenu, setStatusMenu] = useState("home");
 
@@ -113,6 +114,7 @@ function App() {
       {erroApi && <ApiDesconectada />}
       {vencido && <AssinaturaVencida />}
       {fazerLogin && <CardLogin/>}
+      {ultimoLoginExpirado  && <UltimoLoginExpirado/>}
       {<Aviso/>}
       <Router>
         <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>

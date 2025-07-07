@@ -24,26 +24,37 @@ function FecharCaixa({ atualizar, fecharAba, statusCaixa, id }) {
   };
 
   return (
-    <div id="SaldoInicial">
-      <h2>Saldo Final do caixa</h2>
-      <form
-        id="formSaldoInicialFluxoCaixa"
-        onSubmit={(e) => {
-          fecharCaixa(e);
-        }}
-      >
-        <label>
-          <span>Saldo Final</span>
-          <input
-            step="any"
-            type="number"
-            placeholder="R$ 100,00"
-            value={valorFinal}
-            onChange={(e) => setValorFinal(e.target.value)}
-          />
-        </label>
-        <button type="submit">Concluir</button>
-      </form>
+    <div className="blurModal">
+      <div id="SaldoInicial">
+        <h2>Saldo Final do caixa</h2>
+        <form
+          id="formSaldoInicialFluxoCaixa"
+          onSubmit={(e) => {
+            fecharCaixa(e);
+          }}
+        >
+          <label>
+            <span>Saldo Final</span>
+            <input
+              step="any"
+              type="number"
+              placeholder="R$ 100,00"
+              value={valorFinal}
+              onChange={(e) => setValorFinal(e.target.value)}
+            />
+          </label>
+          <div>
+            <button type="submit">Concluir</button>
+            <button
+              type="button"
+              onClick={() => fecharAba(null)}
+              style={{ backgroundColor: "#333" }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

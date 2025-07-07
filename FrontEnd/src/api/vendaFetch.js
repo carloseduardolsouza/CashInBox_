@@ -43,8 +43,8 @@ const listarVendasFuncionario = (id) =>
 const listarOrcamentoCliente = (id) =>
   handleFetch(`${API_URL}/vendas/orcamento/cliente/${encodeURIComponent(id)}`);
 
-const listarOrcamentos = () =>
-  handleFetch(`${API_URL}/vendas/orcamentos`, {
+const listarOrcamentos = (filtro) =>
+  handleFetch(`${API_URL}/vendas/orcamentos/${encodeURIComponent(filtro)}`, {
     method: "POST",
   });
 

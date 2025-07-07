@@ -7,15 +7,19 @@ import services from "../../../../services/services";
 
 import vendaFetch from "../../../../api/vendaFetch";
 
+import { FaFilter } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 function Orçamentos() {
   const { setErroApi } = useContext(AppContext);
   const [resultadosOrçamentos, setResultadosOrçamentos] = useState([]);
   const [arraySelect, setArraySelect] = useState([]);
 
+  const [filtroData, setFiltroData] = useState("");
+
   const carregarOrçamentos = async () => {
     try {
-      const response = await vendaFetch.listarOrcamentos();
+      const response = await vendaFetch.listarOrcamentos(filtroData);
       setResultadosOrçamentos(response);
     } catch (error) {
       setErroApi(true);
@@ -46,6 +50,38 @@ function Orçamentos() {
 
   return (
     <div>
+      <div id="AreaFIltroHistoricoVendas">
+        <div id="filterHistoricoVendas">
+          <input
+            type="date"
+            className="FilterDateVendas"
+            value={filtroData}
+            onChange={(e) => setFiltroData(e.target.value)}
+          />
+          <button
+            className="FilterICONDateVendas"
+            onClick={(e) => {
+              e.preventDefault();
+              carregarOrçamentos();
+            }}
+          >
+            <FaFilter id="FaFilter" />
+          </button>
+        </div>
+
+        <button
+          disabled={arraySelect.length === 0}
+          className={
+            arraySelect.length >= 1
+              ? "buttonExcluirItensSelecionadosAtivado"
+              : "buttonExcluirItensSelecionadosDesativado"
+          }
+          onClick={() => excluirVendasSelecionadas()}
+        >
+          <FaTrash />
+        </button>
+      </div>
+
       <table className="Table">
         <thead>
           <tr>
