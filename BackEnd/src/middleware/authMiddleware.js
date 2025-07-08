@@ -4,7 +4,7 @@ const os = require("os");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: f }) => f(...args));
 
-const url = `http://localhost:7777`;
+const url = `https://cashinbox.shop`;
 
 const platform = os.platform();
 const baseAppDataDir =
