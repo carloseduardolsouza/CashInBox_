@@ -1,5 +1,77 @@
-#areaButtonInfoFuncionarios {
-    display: flex;
-    width: 60%;
-    justify-content: space-between;
+.info-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.info-icon {
+  font-size: 32px;
+  color: #555;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.field-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-title {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.field-input {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.info-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-action {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.btn-action:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

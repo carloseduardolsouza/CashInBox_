@@ -2,80 +2,65 @@ import "./InformaçõesGerais.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Ícones
 import { MdDeleteOutline } from "react-icons/md";
 import { FaEdit, FaCheckCircle, FaUserAlt } from "react-icons/fa";
 
-//serviços
 import services from "../../../../services/services";
-
-// Conexão com a API
 import funcionarioFetch from "../../../../api/funcionarioFetch";
-
-// Componentes
 import Loading from "../../../../components/Loading/Loading";
 
-function InformaçõesGerais({ infoFuncionario }) {
-  const {
-    id,
-    nome,
-    cpf,
-    email,
-    endereco,
-    data_nascimento,
-    telefone,
-    funcao,
-    genero,
-    data_admissao,
-    salario_base,
-    tipo_comissao,
-    valor_comissao,
-    status,
-    regime_contrato,
-  } = infoFuncionario || {};
-
+function InformacoesGerais({ infoFuncionario }) {
   const navigate = useNavigate();
   const [editar, setEditar] = useState(false);
-
-  // Estados para edição
-  const [nomeEdit, setNomeEdit] = useState("");
-  const [cpfEdit, setCpfEdit] = useState("");
-  const [emailEdit, setEmailEdit] = useState("");
-  const [enderecoEdit, setEnderecoEdit] = useState("");
-  const [telefoneEdit, setTelefoneEdit] = useState("");
-  const [dataNascimentoEdit, setDataNascimentoEdit] = useState("");
-  const [generoEdit, setGeneroEdit] = useState("");
-  const [funcaoEdit, setFuncaoEdit] = useState("");
-  const [regimeContratoEdit, setRegimeContratoEdit] = useState("");
+  const [formData, setFormData] = useState({
+    nome: "",
+    cpf: "",
+    email: "",
+    endereco: "",
+    telefone: "",
+    data_nascimento: "",
+    genero: "",
+    funcao: "",
+    regime_contrato: "",
+    salario_base: "",
+    tipo_comissao: "",
+    valor_comissao: "",
+    status: "ativo"
+  });
 
   useEffect(() => {
     if (infoFuncionario) {
-      setNomeEdit(nome || "");
-      setCpfEdit(cpf || "");
-      setEmailEdit(email || "");
-      setEnderecoEdit(endereco || "");
-      setTelefoneEdit(telefone || "");
-      setDataNascimentoEdit(data_nascimento || "");
-      setGeneroEdit(genero || "");
-      setFuncaoEdit(funcao || "");
-      setRegimeContratoEdit(regime_contrato || "");
+      setFormData({
+        nome: infoFuncionario.nome || "",
+        cpf: infoFuncionario.cpf || "",
+        email: infoFuncionario.email || "",
+        endereco: infoFuncionario.endereco || "",
+        telefone: infoFuncionario.telefone || "",
+        data_nascimento: infoFuncionario.data_nascimento || "",
+        genero: infoFuncionario.genero || "",
+        funcao: infoFuncionario.funcao || "",
+        regime_contrato: infoFuncionario.regime_contrato || "",
+        salario_base: infoFuncionario.salario_base || "",
+        tipo_comissao: infoFuncionario.tipo_comissao || "",
+        valor_comissao: infoFuncionario.valor_comissao || "",
+        status: infoFuncionario.status || "ativo"
+      });
     }
   }, [infoFuncionario]);
 
   if (!infoFuncionario) return <Loading />;
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const editarFuncionario = async () => {
     const dados = {
-      id,
-      nome: nomeEdit,
-      cpf: cpfEdit,
-      email: emailEdit,
-      telefone: telefoneEdit,
-      data_nascimento: dataNascimentoEdit,
-      endereco: enderecoEdit,
-      genero: generoEdit,
-      funcao: funcaoEdit,
-      regime_contrato: regimeContratoEdit,
+      id: infoFuncionario.id,
+      ...formData,
+      salario_base: Number(formData.salario_base),
+      valor_comissao: Number(formData.valor_comissao)
     };
 
     try {
@@ -88,196 +73,84 @@ function InformaçõesGerais({ infoFuncionario }) {
 
   const deletarFuncionario = async () => {
     try {
-      await funcionarioFetch.deletarFuncionario(id);
+      await funcionarioFetch.deletarFuncionario(infoFuncionario.id);
       navigate("/funcionarios");
     } catch (error) {
       console.error("Erro ao deletar funcionário:", error);
     }
   };
 
+  const renderField = (label, value, name, type = "text", isSelect = false, options = []) => (
+    <label className="field-label">
+      <p className="field-title">
+        <strong>{label}</strong>
+      </p>
+      {isSelect ? (
+        <select name={name} value={value} onChange={handleChange} className="field-input">
+          {options.map((opt) => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      ) : (
+        <input type={type} name={name} value={value} onChange={handleChange} className="field-input" />
+      )}
+    </label>
+  );
+
   return (
-    <div id="DetalhesClienteINFORMAÇÃO">
-      <div className="DivisãoDetalhesCliente">
-        <div id="divIconeGeralCliente">
+    <div className="info-container">
+      <div className="info-header">
+        <div className="info-icon">
           <FaUserAlt />
         </div>
-        <h2>{nome}</h2>
+        <h2>{infoFuncionario.nome}</h2>
       </div>
 
       {editar ? (
-        <div className="alinhar">
-          <p className="DetalhesClientesP">
-            <strong>Código: </strong>0{id}
+        <div className="info-content">
+          <p className="field-title">
+            <strong>Código: </strong>0{infoFuncionario.id}
           </p>
 
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Nome:</strong>
-            </p>
-            <input
-              type="text"
-              value={nomeEdit}
-              onChange={(e) => setNomeEdit(e.target.value)}
-            />
-          </label>
+          {renderField("Nome:", formData.nome, "nome")}
+          {renderField("Nascimento:", formData.data_nascimento, "data_nascimento", "date")}
+          {renderField("Gênero:", formData.genero, "genero", "text", true, ["Masculino", "Feminino", "Outro"])}
+          {renderField("Cargo:", formData.funcao, "funcao", "text", true, ["Vendedor", "Gerente", "Entregador", "Caixa"])}
+          {renderField("Regime de Contrato:", formData.regime_contrato, "regime_contrato", "text", true, ["CLT", "Contrato", "Temporário"])}
+          {renderField("Telefone:", formData.telefone, "telefone")}
+          {renderField("CPF:", formData.cpf, "cpf")}
+          {renderField("Endereço:", formData.endereco, "endereco")}
+          {renderField("Email:", formData.email, "email", "email")}
+          {renderField("Salário Base:", formData.salario_base, "salario_base", "number")}
+          {renderField("Tipo de Comissão:", formData.tipo_comissao, "tipo_comissao", "text", true, ["Não contabilizar comissão", "fixa", "percentual"])}
+          {renderField("Valor da Comissão:", formData.valor_comissao, "valor_comissao", "number")}
+          {renderField("Status:", formData.status, "status", "text", true, ["ativo", "inativo"])}
 
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Nascimento:</strong>
-            </p>
-            <input
-              type="date"
-              value={dataNascimentoEdit}
-              onChange={(e) => setDataNascimentoEdit(e.target.value)}
-            />
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Gênero:</strong>
-            </p>
-            <select
-              value={generoEdit}
-              onChange={(e) => setGeneroEdit(e.target.value)}
-            >
-              <option value="Masculino">Masculino</option>
-              <option value="Feminino">Feminino</option>
-              <option value="Outro">Outro</option>
-            </select>
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Cargo:</strong>
-            </p>
-            <select
-              value={funcaoEdit}
-              onChange={(e) => setFuncaoEdit(e.target.value)}
-            >
-              <option value="Vendedor">Vendedor</option>
-              <option value="Gerente">Gerente</option>
-              <option value="Entregador">Entregador</option>
-              <option value="Caixa">Caixa</option>
-            </select>
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Regime de Contrato:</strong>
-            </p>
-            <select
-              value={regimeContratoEdit}
-              onChange={(e) => setRegimeContratoEdit(e.target.value)}
-            >
-              <option value="CLT">CLT</option>
-              <option value="Contrato">Contrato</option>
-              <option value="Temporário">Temporário</option>
-            </select>
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Telefone:</strong>
-            </p>
-            <input
-              type="text"
-              value={telefoneEdit}
-              onChange={(e) => setTelefoneEdit(e.target.value)}
-            />
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>CPF:</strong>
-            </p>
-            <input
-              type="text"
-              value={cpfEdit}
-              onChange={(e) => setCpfEdit(e.target.value)}
-            />
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Endereço:</strong>
-            </p>
-            <input
-              type="text"
-              value={enderecoEdit}
-              onChange={(e) => setEnderecoEdit(e.target.value)}
-            />
-          </label>
-
-          <label>
-            <p className="DetalhesClientesP">
-              <strong>Email:</strong>
-            </p>
-            <input
-              type="email"
-              value={emailEdit}
-              onChange={(e) => setEmailEdit(e.target.value)}
-            />
-          </label>
-
-          <button className="bttEditarClienteInfo" onClick={editarFuncionario}>
+          <button className="btn-action" onClick={editarFuncionario}>
             <FaCheckCircle /> Concluir
           </button>
         </div>
       ) : (
-        <div className="alinhar">
-          <p className="DetalhesClientesP">
-            <strong>Código:</strong> 0{id}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Nome:</strong> {nome}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Nascimento:</strong>{" "}
-            {services.formatarDataNascimento(data_nascimento)}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Gênero:</strong> {genero}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Cargo:</strong> {funcao}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Regime de Contrato:</strong> {regime_contrato}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Telefone:</strong>
-            {services.formatarNumeroCelular(telefone)}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>CPF:</strong> {services.formatarCPF(cpf)}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Salario Base:</strong> {services.formatarCurrency(salario_base)}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Tipo de comissão:</strong> {tipo_comissao}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Valor da comissão:</strong> {valor_comissao}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Endereço:</strong> {endereco}
-          </p>
-          <p className="DetalhesClientesP">
-            <strong>Email:</strong> {email}
-          </p>
+        <div className="info-content">
+          <p className="field-title"><strong>Código:</strong> 0{infoFuncionario.id}</p>
+          <p className="field-title"><strong>Nome:</strong> {infoFuncionario.nome}</p>
+          <p className="field-title"><strong>Nascimento:</strong> {services.formatarDataNascimento(infoFuncionario.data_nascimento)}</p>
+          <p className="field-title"><strong>Gênero:</strong> {infoFuncionario.genero}</p>
+          <p className="field-title"><strong>Cargo:</strong> {infoFuncionario.funcao}</p>
+          <p className="field-title"><strong>Regime de Contrato:</strong> {infoFuncionario.regime_contrato}</p>
+          <p className="field-title"><strong>Telefone:</strong> {services.formatarNumeroCelular(infoFuncionario.telefone)}</p>
+          <p className="field-title"><strong>CPF:</strong> {services.formatarCPF(infoFuncionario.cpf)}</p>
+          <p className="field-title"><strong>Salario Base:</strong> {services.formatarCurrency(infoFuncionario.salario_base)}</p>
+          <p className="field-title"><strong>Tipo de comissão:</strong> {infoFuncionario.tipo_comissao}</p>
+          <p className="field-title"><strong>Valor da comissão:</strong> {infoFuncionario.valor_comissao}</p>
+          <p className="field-title"><strong>Endereço:</strong> {infoFuncionario.endereco}</p>
+          <p className="field-title"><strong>Email:</strong> {infoFuncionario.email}</p>
 
-          <div id="areaButtonInfoFuncionarios">
-            <button
-              className="bttEditarClienteInfo"
-              onClick={() => setEditar(true)}
-            >
+          <div className="info-actions">
+            <button className="btn-action" onClick={() => setEditar(true)}>
               <FaEdit /> Editar
             </button>
-            <button
-              className="bttEditarClienteInfo"
-              onClick={deletarFuncionario}
-            >
+            <button className="btn-action" onClick={deletarFuncionario}>
               <MdDeleteOutline /> Deletar
             </button>
           </div>
@@ -287,4 +160,4 @@ function InformaçõesGerais({ infoFuncionario }) {
   );
 }
 
-export default InformaçõesGerais;
+export default InformacoesGerais;

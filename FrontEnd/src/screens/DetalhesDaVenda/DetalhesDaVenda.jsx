@@ -22,7 +22,8 @@ function DetalhesDaVenda() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { setErroApi, dadosLoja, Whastsapp } = useContext(AppContext);
+  const { setErroApi, dadosLoja, Whastsapp, adicionarAviso } =
+    useContext(AppContext);
 
   const [escolherNotas, setEscolherNotas] = useState(false);
   const [tipoNota, setTipoNota] = useState(null);
@@ -53,7 +54,9 @@ function DetalhesDaVenda() {
       setPagamentos(pagamentosResponse);
 
       if (vendaResponse[0].status != "concluida") {
-        const parcelasResponse = await vendaFetch.listarVendasCrediarioVenda(id);
+        const parcelasResponse = await vendaFetch.listarVendasCrediarioVenda(
+          id
+        );
         setParcelas(parcelasResponse);
       }
     } catch (error) {
@@ -138,12 +141,15 @@ function DetalhesDaVenda() {
 
   const enviarDetalhesWhatsApp = async () => {
     if (!cliente?.telefone) {
-      window.alert("Este cliente não tem número de WhatsApp cadastrado.");
+      adicionarAviso(
+        "aviso",
+        "Este cliente não tem número de WhatsApp cadastrado."
+      );
       return;
     }
 
     if (Whastsapp !== true) {
-      window.alert("Conecte seu WhatsApp primeiro.");
+      adicionarAviso("aviso", "Conecte seu WhatsApp primeiro.");
       return;
     }
 

@@ -5,7 +5,7 @@ import { FaUserAlt } from "react-icons/fa";
 import funcionarioFetch from "../../api/funcionarioFetch";
 
 function CadastrarFuncionario() {
-  const { setErroApi , adicionarAviso } = useContext(AppContext);
+  const { setErroApi, adicionarAviso } = useContext(AppContext);
   const [nome, setNome] = useState("");
   const [numero, setNumero] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -25,13 +25,13 @@ function CadastrarFuncionario() {
     e.preventDefault();
 
     const dados = {
-      nome : nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase(),
+      nome: nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase(),
       cpf,
       telefone: numero,
       email,
       salario_base: Number(salario),
       data_nascimento: nascimento,
-      genero,
+      genero: genero,
       funcao: cargo,
       endereco,
       tipo_comissao: tipoComissao,
@@ -53,7 +53,10 @@ function CadastrarFuncionario() {
       setNome("");
       setNumero("");
       setNascimento("");
-      adicionarAviso("sucesso" , "SUCESSO - Funcionário cadastrado com sucesso !")
+      adicionarAviso(
+        "sucesso",
+        "SUCESSO - Funcionário cadastrado com sucesso !"
+      );
     } catch {
       setErroApi(true);
     }
@@ -149,7 +152,9 @@ function CadastrarFuncionario() {
                   value={tipoComissao}
                   onChange={(e) => setTipoComissao(e.target.value)}
                 >
-                  <option value="Não contabilizar comissão">Não contabilizar comissão</option>
+                  <option value="Não contabilizar comissão">
+                    Não contabilizar comissão
+                  </option>
                   <option value="fixa">Fixa</option>
                   <option value="percentual">Percentual</option>
                 </select>

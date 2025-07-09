@@ -24,7 +24,7 @@ function Funcionarios() {
         const resultado = await funcionarioFetch.procurarFuncionario(
           pesquisaFuncionario
         );
-        setResultFuncionario(resultado); 
+        setResultFuncionario(resultado);
       } catch (err) {
         setErroApi(true);
       }
@@ -35,7 +35,13 @@ function Funcionarios() {
 
   const renderFuncionario = async (e) => {
     e.preventDefault();
-    const resultado = await funcionarioFetch.procurarFuncionario(pesquisaFuncionario).then((response) => setResultFuncionario(response)).catch((erro) => setErroApi(true));
+    const resultado = await funcionarioFetch
+      .procurarFuncionario(pesquisaFuncionario)
+      .then((response) => {
+        setResultFuncionario(response);
+        console.log(response);
+      })
+      .catch((erro) => setErroApi(true));
   };
 
   const navigate = useNavigate();

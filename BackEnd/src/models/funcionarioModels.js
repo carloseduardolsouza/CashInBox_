@@ -73,8 +73,7 @@ const novoFuncionario = async (dados) => {
         if (err.code === "SQLITE_CONSTRAINT") {
           return reject({
             code: 400,
-            message:
-              "Erro de restrição: CPF duplicado ou campos inválidos.",
+            message: "Erro de restrição: CPF duplicado ou campos inválidos.",
           });
         }
         return reject(err);
@@ -103,6 +102,8 @@ const editarFuncionario = async (id, dados) => {
     telefone,
     email,
     data_admissao,
+    genero,
+    funcao,
     salario_base,
     tipo_comissao,
     valor_comissao,
@@ -113,7 +114,7 @@ const editarFuncionario = async (id, dados) => {
 
   const query = `
     UPDATE funcionarios
-    SET nome = ?, cpf = ?, telefone = ?, email = ?, data_admissao = ?, salario_base = ?, 
+    SET nome = ?, cpf = ?, genero = ? , funcao = ? , telefone = ?, email = ?, data_admissao = ?, salario_base = ?, 
         tipo_comissao = ?, valor_comissao = ?, status = ?, updated_at = ?
     WHERE id = ?
   `;
@@ -121,6 +122,8 @@ const editarFuncionario = async (id, dados) => {
   const values = [
     nome,
     cpf,
+    genero,
+    funcao,
     telefone,
     email,
     data_admissao,

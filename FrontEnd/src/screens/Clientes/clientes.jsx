@@ -37,7 +37,7 @@ function Clientes() {
         console.warn("Resposta inesperada:", resultado);
       }
 
-      tratarErroApi(resultado)
+      tratarErroApi(resultado);
     } catch (err) {
       setErroApi(true);
     }
@@ -105,7 +105,9 @@ function Clientes() {
                 </td>
                 <td>{services.formatarNumeroCelular(dado.telefone)}</td>
                 <td>
-                  {dado.endereco.length > 30
+                  {!dado.endereco || dado.endereco.trim() === ""
+                    ? "Desconhecido"
+                    : dado.endereco.length > 30
                     ? dado.endereco.slice(0, 30) + "..."
                     : dado.endereco}
                 </td>

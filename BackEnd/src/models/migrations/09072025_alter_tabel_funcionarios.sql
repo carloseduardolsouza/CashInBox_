@@ -1,0 +1,1 @@
+ALTER TABLE funcionarios ADD COLUMN salario_base TEXT;
