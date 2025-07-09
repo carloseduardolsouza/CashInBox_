@@ -15,7 +15,7 @@ const baseAppDataDir =
 
 const secureDir = path.join(baseAppDataDir, "CashInBox");
 const tokenFilePath = path.join(secureDir, "token.txt");
-const urlCloud = "http://localhost:7777"; // ou a URL real da sua API
+const urlCloud = `https://cashinbox.shop`; // ou a URL real da sua API
 
 // Pasta segura do app para dados do usuário (Windows)
 const userDataPath = path.join(os.homedir(), "AppData", "Roaming", "CashInBox");
@@ -121,7 +121,7 @@ const informacoesPlano = async (req, res) => {
   }
 };
 
-const gerarBoleto = async (req , res) => {
+const gerarBoleto = async (req, res) => {
   // Caminho do arquivo de credenciais
   const credPath = path.join(secureDir, "credenciais.json");
 
@@ -167,12 +167,12 @@ const gerarBoleto = async (req , res) => {
       .status(500)
       .json({ message: "Erro ao buscar informações do plano." });
   }
-}
+};
 
 module.exports = {
   restart,
   deletarImagem,
   login,
   informacoesPlano,
-  gerarBoleto
+  gerarBoleto,
 };
