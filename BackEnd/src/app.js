@@ -3,15 +3,16 @@ const path = require("path");
 const os = require("os");
 
 const caixaRoute = require("./routers/caixaRoute");
-const clientesRoute = require("./routers/clientesRoute")
-const funcionarioRoute = require("./routers/funcionarioRoute")
-const vendaRoute = require("./routers/vendaRoute")
-const categoriaRoute = require("./routers/categoriaRoute")
-const produtoRoute = require("./routers/produtoRoute")
-const relatorioRoute = require("./routers/relatorioRoute")
-const whatsappRoute = require("./routers/whatsappRoute")
-const userEditRoute = require("./routers/userEditRoute")
-const contasRoute = require("./routers/contasRoute")
+const clientesRoute = require("./routers/clientesRoute");
+const funcionarioRoute = require("./routers/funcionarioRoute");
+const vendaRoute = require("./routers/vendaRoute");
+const categoriaRoute = require("./routers/categoriaRoute");
+const produtoRoute = require("./routers/produtoRoute");
+const relatorioRoute = require("./routers/relatorioRoute");
+const whatsappRoute = require("./routers/whatsappRoute");
+const userEditRoute = require("./routers/userEditRoute");
+const contasRoute = require("./routers/contasRoute");
+const nfeRoute = require("./routers/nfeRoutes");
 
 const app = express();
 
@@ -57,5 +58,6 @@ app.use("/relatorios", relatorioRoute);
 app.use("/whatsapp", whatsappRoute);
 app.use("/user", userEditRoute);
 app.use("/contas", contasRoute);
+app.use("/nfe", nfeRoute);
 
 module.exports = app;
