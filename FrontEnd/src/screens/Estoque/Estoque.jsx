@@ -3,6 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 import services from "../../services/services";
+import Loading from "../../components/Loading/Loading";
 
 //Icones
 import { FaSearch } from "react-icons/fa";
@@ -14,6 +15,7 @@ function Estoque() {
 
   const [pesquisa, setPesquisa] = useState("all");
   const [resultProdutos, setResultProdutos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const buscarProdutos = async () => {
     try {
@@ -26,6 +28,7 @@ function Estoque() {
         console.warn("Resposta inesperada:", resultado);
         tratarErroApi(resultado);
       }
+      setLoading(false);
     } catch (error) {
       setErroApi(true);
     }
@@ -43,6 +46,7 @@ function Estoque() {
 
   return (
     <div id="ESTOQUE">
+      {loading && <Loading />}
       <h2>Estoque</h2>
       <div>
         <form onSubmit={(e) => renderProdutos(e)}>

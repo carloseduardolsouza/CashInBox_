@@ -331,6 +331,150 @@ Pedimos que regularize o quanto antes para evitar multas, restrições ou interr
   );
 }
 
+// === ROTINA 5 - Verificar Orçamentos Pendentes ===
+async function verificarOrcamentosPendentes() {
+  return new Promise((resolve) => {
+    const config = carregarUserConfigs();
+    if (!config || !config.msg_lembrete_orcamento_intervalo) {
+      console.log("🔕 Lembrete de orçamento desativado ou sem configuração.");
+      return resolve();
+    }
+
+    const intervaloDias = parseInt(config.msg_lembrete_orcamento_intervalo);
+    const hoje = dayjs();
+
+    const query = `
+      SELECT v.id, v.cliente_id, v.ultimo_lembrete, c.nome AS cliente_nome, c.telefone
+      FROM vendas v
+      JOIN clientes c ON v.cliente_id = c.id
+      WHERE v.status = 'orçamento'
+    `;
+
+    db.all(query, [], async (err, rows) => {
+      if (err) {
+        console.error("❌ Erro ao buscar orçamentos:", err.message);
+        return resolve();
+      }
+
+      if (rows.length === 0) {
+        console.log("✅ Nenhum orçamento pendente encontrado.");
+        return resolve();
+      }
+
+      for (const row of rows) {
+        const { id, cliente_id, ultimo_lembrete, cliente_nome, telefone } = row;
+
+        if (!telefone) {
+          console.log(
+            `⚠️ Cliente ${cliente_nome} (ID ${cliente_id}) sem telefone cadastrado.`
+          );
+          continue;
+        }
+
+        const dataUltimoLembrete = ultimo_lembrete
+          ? dayjs(ultimo_lembrete)
+          : null;
+        const diasDesdeUltimoLembrete = dataUltimoLembrete
+          ? hoje.diff(dataUltimoLembrete, "day")
+          : Infinity;
+
+        if (diasDesdeUltimoLembrete >= intervaloDias) {
+          // Buscar itens do orçamento
+          const itens = await new Promise((res) => {
+            db.all(
+              `SELECT produto_nome, quantidade, preco_unitario, valor_total
+               FROM vendas_itens
+               WHERE venda_id = ?`,
+              [id],
+              (erroItens, itensRows) => {
+                if (erroItens) {
+                  console.error(
+                    `❌ Erro ao buscar itens do orçamento ID ${id}:`,
+                    erroItens.message
+                  );
+                  res([]);
+                } else {
+                  res(itensRows);
+                }
+              }
+            );
+          });
+
+          let listaProdutos = "";
+          let valorTotal = 0;
+
+          if (itens.length > 0) {
+            listaProdutos = itens
+              .map((item) => {
+                const nomeProduto = item.produto_nome;
+                const quantidade = item.quantidade;
+                const precoUnitario = Number(item.preco_unitario)
+                  .toFixed(2)
+                  .replace(".", ",");
+                const subtotal = Number(item.valor_total)
+                  .toFixed(2)
+                  .replace(".", ",");
+                valorTotal += Number(item.valor_total);
+                return `🔹 ${nomeProduto} - ${quantidade}x R$ ${precoUnitario} = R$ ${subtotal}`;
+              })
+              .join("\n");
+          } else {
+            listaProdutos = "Nenhum item encontrado no orçamento.";
+          }
+
+          const mensagem = `👋 Olá, ${cliente_nome}!
+
+Tudo bem? Percebemos que você fez um orçamento conosco, mas ainda não concluiu a compra.
+
+Queremos te ajudar a fechar esse pedido com as melhores condições! Se ficou alguma dúvida ou se precisar de algo, estamos aqui pra facilitar. 💪😉
+
+🧾 *Resumo do seu Orçamento*:
+
+📄 Orçamento nº: ${id}  
+👤 Cliente: ${cliente_nome}  
+
+📦 *Produtos:*  
+${listaProdutos}
+
+💰 *Total:* R$ ${valorTotal.toFixed(2).replace(".", ",")}
+
+Fale com a gente e garanta seu pedido! 🚀 Estamos prontos pra te atender.
+
+Abraços! ✨`;
+
+          console.log(
+            `📞 Enviando lembrete de orçamento para: ${cliente_nome} - ${telefone}`
+          );
+          await enviarMensagem(telefone, mensagem);
+
+          db.run(
+            "UPDATE vendas SET ultimo_lembrete = ? WHERE id = ?",
+            [hoje.format("YYYY-MM-DD"), id],
+            (updateErr) => {
+              if (updateErr) {
+                console.error(
+                  `❌ Erro ao atualizar ultimo_lembrete da venda ID ${id}:`,
+                  updateErr.message
+                );
+              } else {
+                console.log(
+                  `✔️ Último lembrete da venda ID ${id} atualizado para hoje.`
+                );
+              }
+            }
+          );
+        } else {
+          console.log(
+            `⏳ Orçamento ID ${id} ainda dentro do intervalo. Dias desde último lembrete: ${diasDesdeUltimoLembrete}`
+          );
+        }
+      }
+
+      resolve();
+    });
+  });
+}
+
 // === Execução completa ===
 async function executarRotinasDiarias(dados) {
   if (!dados || dados != "manualmente") {
@@ -351,6 +495,12 @@ async function executarRotinasDiarias(dados) {
   console.log("🟡 Executando rotinas diárias com config:", config);
 
   await verificarVencimentos();
+
+  if (config.msg_lembrete_orcamento) {
+    await verificarOrcamentosPendentes();
+  } else {
+    console.log("🔕 Lembrete de orçamento desativado por config.");
+  }
 
   if (config.msg_aniversario) {
     await verificarAniversariantes();

@@ -4,7 +4,7 @@ import AppContext from "../../context/AppContext";
 
 //componentes
 import ItemProduto from "./components/ItemProduto/ItemProduto";
-//import Loading from "../../components/AçãoRealizada/AçãoRealizada";
+import Loading from "../../components/Loading/Loading";
 
 //Controlador da api
 import produtoFetch from "../../api/produtoFetch";
@@ -21,7 +21,7 @@ function Produtos() {
   const { tratarErroApi, setErroApi } = useContext(AppContext);
 
   const [resultProdutos, setResultProdutos] = useState([]);
-  const [loadingProdutos, setloadingProdutos] = useState(true);
+  const [loading, setloading] = useState(true);
   const [pesquisar, setPesquisar] = useState("all");
 
   const buscarProdutos = async () => {
@@ -35,6 +35,7 @@ function Produtos() {
         console.warn("Resposta inesperada:", resultado);
         tratarErroApi(resultado);
       }
+      setloading(false)
     } catch (error) {
       setErroApi(true);
     }
@@ -46,13 +47,14 @@ function Produtos() {
 
   const renderProdutos = async (e) => {
     e.preventDefault();
-    setloadingProdutos(true);
+    setloading(true);
     buscarProdutos();
-    setloadingProdutos(false);
+    setloading(false);
   };
 
   return (
     <div id="PRODUTOS">
+      {loading && <Loading />}
       <header id="HeaderProduto">
         <h2>Produtos ({resultProdutos.length})</h2>
         <p>{log}</p>

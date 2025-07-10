@@ -114,21 +114,35 @@
 }
 
 .paginacao button {
-  background: none;
-  border: none;
-  color: #ffffff;
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s ease;
+  font-weight: bold;
+  color: #4285f4;
+  border: 2px solid #4285f4;
+  background: none;
+  box-sizing: border-box;
 }
 
 .paginacao button:hover {
-  color: #4285f4;
+  border: none;
+  color: #ffffff;
+  background-color: #4285f4;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-sizing: border-box;
 }
 
 .paginacao .paginaAtiva {
-  font-weight: bold;
-  color: #4285f4;
-  border-bottom: 2px solid #4285f4;
+  border: none;
+  color: #ffffff;
+  background-color: #4285f4;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
 }

@@ -4,6 +4,7 @@ import AppContext from "../../../../context/AppContext";
 import { Link } from "react-router-dom";
 
 import services from "../../../../services/services";
+import Loading from "../../../../components/Loading/Loading";
 
 //conexão com a api
 import vendaFetch from "../../../../api/vendaFetch";
@@ -17,6 +18,8 @@ function HistoricoVendas() {
   const [arraySelect, setArraySelect] = useState([]);
   const [filtroData, setFiltroData] = useState("");
 
+  const [loading, setLoading] = useState(true);
+
   // Paginação
   const [paginaAtual, setPaginaAtual] = useState(1);
   const itensPorPagina = 20;
@@ -27,12 +30,12 @@ function HistoricoVendas() {
 
       if (Array.isArray(response)) {
         setResultadosVendas(response);
-        setPaginaAtual(1); // Sempre volta pra página 1 quando pesquisa
+        setPaginaAtual(1);
       } else {
         setResultadosVendas([]);
         console.warn("Resposta inesperada:", response);
       }
-
+      setLoading(false);
       tratarErroApi(response);
     } catch (error) {
       setErroApi(true);
@@ -68,6 +71,7 @@ function HistoricoVendas() {
 
   return (
     <div>
+      {loading && <Loading />}
       <div id="AreaFIltroHistoricoVendas">
         <div id="filterHistoricoVendas">
           <input

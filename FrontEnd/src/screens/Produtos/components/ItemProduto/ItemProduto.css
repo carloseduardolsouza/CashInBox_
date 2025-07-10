@@ -88,3 +88,21 @@
   border: white;
   transition: 0.3s;
 }
+
+.loading-placeholder {
+  min-width: 200px;
+  min-height: 200px;
+  border-radius: 12px;
+  background: linear-gradient(270deg, #f0f0f0, #e0e0e0, #f0f0f0);
+  background-size: 400% 400%;
+  animation: shimmer 1.2s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}

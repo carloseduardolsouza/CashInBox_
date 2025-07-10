@@ -3,6 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../context/AppContext";
 
+import Loading from "../../components/Loading/Loading";
+
 //Icones
 import { FaSearch } from "react-icons/fa";
 
@@ -26,6 +28,8 @@ function Clientes() {
   const [resultClientes, setResultClientes] = useState([]);
   const [pesquisar, setPesquisar] = useState("all");
 
+  const [loading, setLoading] = useState(true);
+
   const buscarClientes = async () => {
     try {
       const resultado = await clientesFetch.procurarCliente(pesquisar);
@@ -36,7 +40,7 @@ function Clientes() {
         setResultClientes([]); // Evita o erro
         console.warn("Resposta inesperada:", resultado);
       }
-
+      setLoading(false)
       tratarErroApi(resultado);
     } catch (err) {
       setErroApi(true);
@@ -54,6 +58,7 @@ function Clientes() {
 
   return (
     <div id="CLIENTE">
+      {loading && <Loading />}
       <header id="HeaderClientes">
         <h2>Clientes ({resultClientes.length})</h2>
         <p>{log}</p>

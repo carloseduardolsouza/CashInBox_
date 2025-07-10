@@ -26,7 +26,9 @@ function AutomacaoWhats() {
 
   const [msg_aniversario, setMsg_aniversario] = useState(false);
   const [time_msg_aniversario, setTime_msg_aniversario] = useState("09:00");
-  const [msg_msg_aniversario, setMsg_msg_aniversario] = useState("🎉 Olá ${nome} ! Em comemoração a esta data muito especial, a equipe da CashInBox deseja um feliz aniversário! 🎂🎈\n\nPra celebrar com estilo, você ganha 10% de desconto em todos os itens da loja, só hoje! 🛍🎁\n\nAproveite e faça seu dia ainda melhor! 🥳\n");
+  const [msg_msg_aniversario, setMsg_msg_aniversario] = useState(
+    "🎉 Olá ${nome} ! Em comemoração a esta data muito especial, a equipe da CashInBox deseja um feliz aniversário! 🎂🎈\n\nPra celebrar com estilo, você ganha 10% de desconto em todos os itens da loja, só hoje! 🛍🎁\n\nAproveite e faça seu dia ainda melhor! 🥳\n"
+  );
 
   const [msg_inatividade, setMsg_inatividade] = useState(false);
 
@@ -35,9 +37,15 @@ function AutomacaoWhats() {
 
   const [msg_cobranca, setMsg_cobranca] = useState(false);
 
-  const [msg_orcamento , setMsg_orcamento] = useState(false)
+  const [msg_orcamento, setMsg_orcamento] = useState(false);
 
   const [clickRobo, setClickRobo] = useState(false);
+
+  const [msg_lembrete_orcamento, setMsg_lembrete_orcamento] = useState(false);
+  const [
+    msg_lembrete_orcamento_intervalo,
+    setMsg_lembrete_orcamento_intervalo,
+  ] = useState(30);
 
   const fetchQrCode = async () => {
     try {
@@ -55,23 +63,33 @@ function AutomacaoWhats() {
       const response = await userFetch.verConfigAutomacao();
       setMsg_aniversario(response.msg_aniversario);
       setMsg_msg_aniversario(() => {
-        if (response.msg_msg_aniversario === "" || !response.msg_msg_aniversario) {
-          return msg_msg_aniversario
+        if (
+          response.msg_msg_aniversario === "" ||
+          !response.msg_msg_aniversario
+        ) {
+          return msg_msg_aniversario;
         } else {
-          return response.msg_msg_aniversario
+          return response.msg_msg_aniversario;
         }
-      })
+      });
       setTime_msg_aniversario(() => {
-        if (response.time_msg_aniversario === "" || !response.time_msg_aniversario) {
-          return time_msg_aniversario
+        if (
+          response.time_msg_aniversario === "" ||
+          !response.time_msg_aniversario
+        ) {
+          return time_msg_aniversario;
         } else {
-          return response.time_msg_aniversario
+          return response.time_msg_aniversario;
         }
-      })
+      });
       setMsg_notificacao(response.msg_notificacao);
       setMsg_cobranca(response.msg_cobranca);
       setMumero_msg_notificacao(response.numero_msg_notificacao);
       setDadosAutomacao(response);
+      setMsg_lembrete_orcamento(response.msg_lembrete_orcamento);
+      setMsg_lembrete_orcamento_intervalo(
+        response.msg_lembrete_orcamento_intervalo
+      );
     } catch (error) {
       console.error("Erro ao buscar dados da automaçao:", error);
     }
@@ -80,7 +98,7 @@ function AutomacaoWhats() {
   const cumprirRotinas = async () => {
     handleClick();
     await whatsappFetch.cumprirRotinasManual().then(() => {
-      adicionarAviso("sucesso" , "SUCESSO - Rotinas cumpridas manualmente!")
+      adicionarAviso("sucesso", "SUCESSO - Rotinas cumpridas manualmente!");
     });
   };
 
@@ -96,6 +114,9 @@ function AutomacaoWhats() {
       numero_msg_notificacao: numero_msg_notificacao,
 
       msg_cobranca: msg_cobranca,
+
+      msg_lembrete_orcamento: msg_lembrete_orcamento,
+      msg_lembrete_orcamento_intervalo: msg_lembrete_orcamento_intervalo,
     };
 
     await userFetch
@@ -263,12 +284,26 @@ function AutomacaoWhats() {
             <label className="switch">
               <input
                 type="checkbox"
-                checked={msg_orcamento}
-                onChange={() => setMsg_orcamento(msg_orcamento)}
+                checked={msg_lembrete_orcamento}
+                onChange={() => setMsg_lembrete_orcamento(!msg_lembrete_orcamento)}
               />
               <span className="slider"></span>
             </label>
           </div>
+          {msg_lembrete_orcamento && (
+            <div>
+              <label>
+                <p>Intervalo de dias: (em dias)</p>
+                <input
+                  type="number"
+                  value={msg_lembrete_orcamento_intervalo}
+                  onChange={(e) =>
+                    setMsg_lembrete_orcamento_intervalo(e.target.value)
+                  }
+                />
+              </label>
+            </div>
+          )}
         </div>
         <button onClick={() => salvarDadosAutomacao()} id="buttonSalvarConfigs">
           <FaCheckCircle /> Salvar

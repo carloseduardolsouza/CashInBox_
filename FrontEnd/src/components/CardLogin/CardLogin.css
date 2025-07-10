@@ -111,13 +111,24 @@
 }
 
 .sign-in_btn {
-  width: 100%;
+  width: 45%;
   height: 40px;
   border: 0;
   background: #115dfc;
   border-radius: 7px;
   outline: none;
   color: #ffffff;
+  cursor: pointer;
+}
+
+.cancel_btn {
+  width: 45%;
+  height: 40px;
+  border: solid #333 1px;
+  color: black;
+  background: none;
+  border-radius: 7px;
+  outline: none;
   cursor: pointer;
 }
 
@@ -176,4 +187,10 @@
   font-size: 0.75rem;
   color: #8b8e98;
   text-decoration: underline;
+}
+
+#div-buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }

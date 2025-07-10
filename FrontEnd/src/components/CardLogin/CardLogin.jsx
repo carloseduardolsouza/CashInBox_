@@ -112,9 +112,21 @@ function CardLogin() {
               onChange={(e) => setSenha(e.target.value)}
             />
           </div>
-          <button title="Sign In" type="submit" className="sign-in_btn">
-            Log In
-          </button>
+
+          <div id="div-buttons">
+            <button
+              className="cancel_btn"
+              type="button"
+              title="cancelar"
+              onClick={() => setFazerLogin(false)}
+            >
+              Cancelar
+            </button>
+
+            <button title="Sign In" type="submit" className="sign-in_btn">
+              Log In
+            </button>
+          </div>
         </form>
       </div>
     </div>
