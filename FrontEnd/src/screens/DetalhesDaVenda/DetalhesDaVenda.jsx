@@ -186,11 +186,18 @@ function DetalhesDaVenda() {
     };
 
     try {
-      await whatsappFetch.enviarMensagem(dados);
-    } catch (error) {
-      console.error("Erro ao enviar mensagem no WhatsApp:", error);
-      setErroApi(true);
-      window.alert("Erro ao enviar mensagem no WhatsApp.");
+      await whatsappFetch
+        .enviarMensagem(dados)
+        .then((response) => {
+          if (response.error === "Número não está registrado no WhatsApp") {
+            adicionarAviso("erro", "ERRO - Número não está registrado no WhatsApp");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao enviar mensagem no WhatsApp:", error);
+          setErroApi(true);
+          window.alert("Erro ao enviar mensagem no WhatsApp.");
+        });
     } finally {
       setTimeout(() => setConcluindo(false), 1500);
     }

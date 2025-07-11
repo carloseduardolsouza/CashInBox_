@@ -41,7 +41,7 @@
   word-break: break-word; /* Força a quebra de palavras longas */
   animation: EntradaDetalhesProdutos 0.2s linear;
 
-  background: rgba(255, 255, 255, 0.3); /* Cor com transparência */
+  background: #ffffff94; /* Cor com transparência */
   border-radius: 10px;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
   backdrop-filter: blur(10px); /* Desfoque */
@@ -90,10 +90,10 @@
 }
 
 .loading-placeholder {
-  min-width: 200px;
-  min-height: 200px;
+  width: 100%;
+  min-height: 100%;
   border-radius: 12px;
-  background: linear-gradient(270deg, #f0f0f0, #e0e0e0, #f0f0f0);
+  background: linear-gradient(270deg, #ffffff, #a8a8a8, #ffffff);
   background-size: 400% 400%;
   animation: shimmer 1.2s infinite ease-in-out;
 }
@@ -102,7 +102,10 @@
   0% {
     background-position: 0% 50%;
   }
-  100% {
+  50% {
     background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

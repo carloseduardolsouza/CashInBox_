@@ -1,5 +1,6 @@
 import "./ItemProduto.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "../../../../context/AppContext";
 
 // Conexão com a API
 import produtoFetch from "../../../../api/produtoFetch";
@@ -14,6 +15,8 @@ function ItemProduto({ dado }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const { nome, id, preco_venda, estoque_atual, descricao } = dado;
+
+  const { adicionarAviso } = useContext(AppContext);
 
   async function carregarImagem() {
     try {
@@ -40,6 +43,17 @@ function ItemProduto({ dado }) {
     carregarImagem();
   }, [id]);
 
+  const chamarModal = () => {
+    const imagemValida =
+      images?.[0]?.imagem_path && !images[0].imagem_path.includes("blob");
+
+    if (imagemValida) {
+      setModalImages(true);
+    } else {
+      adicionarAviso("aviso", "AVISO - Este produto não contém imagens");
+    }
+  };
+
   return (
     <div id="ItensTableProdutos">
       {modalImages && <ModalImages images={images} fechar={setModalImages} />}
@@ -59,14 +73,16 @@ function ItemProduto({ dado }) {
 
       <div
         className="ImageProduto"
-        onClick={() => setModalImages(true)}
+        onClick={() => chamarModal()}
         style={{
           backgroundImage: imageLoaded
             ? `url(http://localhost:3322/uploads/${image})`
             : "none",
         }}
       >
-        {!imageLoaded && <div className="loading-placeholder"></div>}
+        {(!imageLoaded || images?.length === 0) && (
+          <div className="loading-placeholder"></div>
+        )}
       </div>
 
       <div>

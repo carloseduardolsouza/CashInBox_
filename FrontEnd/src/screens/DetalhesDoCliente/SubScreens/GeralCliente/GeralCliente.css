@@ -99,3 +99,9 @@
   color: var(--bg-color);
   transition: 0.5s;
 }
+
+#DetalhesClienteINFORMAÇÃO input , select {
+  border-radius: 5px;
+  padding: 3px;
+  border: solid black 1px;
+}

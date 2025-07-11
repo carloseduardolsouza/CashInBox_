@@ -22,9 +22,6 @@ const enviarMensagem = async (dados) => {
       },
       body: JSON.stringify(dados),
     });
-
-    if (!res.ok) throw new Error("Erro ao enviar mensagem");
-
     return await res.json();
   } catch (error) {
     console.error("Erro em enviarMensagem:", error);
