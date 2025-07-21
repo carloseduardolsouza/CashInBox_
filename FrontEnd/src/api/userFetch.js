@@ -81,9 +81,12 @@ const cadastrarCredenciais = async (dados) => {
 };
 
 const informacoesPlanos = async () => {
-  const informacoesPlanos = await fetch(`${API_URL}/user/informacoesPlano`);
-  const dados = await informacoesPlanos.json();
-  return dados;
+  const response = await fetch(`${API_URL}/user/informacoesPlano`);
+  const dados = await response.json().catch(() => null); // Evita erro se não houver JSON válido
+  return {
+    status: response.status,
+    data: dados,
+  };
 };
 
 const gerarBoleto = async () => {

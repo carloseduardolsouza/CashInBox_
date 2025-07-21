@@ -107,6 +107,15 @@ const informacoesPlano = async (req, res) => {
       headers: { Authorization: `Bearer ${token}` },
     });
 
+    // Se for 502, tratamos direto
+    if (authRes.status === 502) {
+      return res
+        .status(502)
+        .json({
+          message: "Servidor temporariamente indisponível (502 Bad Gateway).",
+        });
+    }
+
     if (!authRes.ok) {
       const msg = await authRes.text();
       return res.status(authRes.status).json({ message: msg });
@@ -115,9 +124,10 @@ const informacoesPlano = async (req, res) => {
     const json = await authRes.json();
     return res.json(json);
   } catch (err) {
+    console.error("Erro na requisição:", err);
     return res
       .status(500)
-      .json({ message: "Erro ao buscar informações do plano." });
+      .json({ message: "Erro interno ao buscar informações do plano." });
   }
 };
 

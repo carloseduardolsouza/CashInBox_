@@ -9,16 +9,20 @@ import AppContext from "../../context/AppContext";
 function PlanosEBoletos() {
   const [infoPlanos, setInfoPlanos] = useState({});
 
-  const { dadosLoja, setErroApi } = useContext(AppContext);
+  const { dadosLoja, setErroApi, adicionarAviso } = useContext(AppContext);
 
   useEffect(() => {
     userFetch
       .informacoesPlanos()
       .then((response) => {
-        console.log(response);
-        setInfoPlanos(response);
+        if (response.status && response.status === 502) {
+          adicionarAviso("erro", "ERRO - Verifique sua conexão com a internet");
+        } else {
+          setInfoPlanos(response.data);
+        }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Erro ao buscar planos:", error);
         setErroApi(true);
       });
   }, []);
@@ -84,7 +88,10 @@ function PlanosEBoletos() {
               <button
                 id="ButtonDowloadBoleto"
                 onClick={() => pegarBoleto()}
-                disabled={infoPlanos.status_pagamento === "Pagamento recebido" || !infoPlanos.status_pagamento}
+                disabled={
+                  infoPlanos.status_pagamento === "Pagamento recebido" ||
+                  !infoPlanos.status_pagamento
+                }
               >
                 Dowload Boleto
               </button>
