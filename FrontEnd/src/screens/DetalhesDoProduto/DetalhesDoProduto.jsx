@@ -57,6 +57,7 @@ function DetalhesDoProduto() {
 
   const buscarProduto = async () => {
     const dadosProduto = await produtoFetch.procurarProdutoId(id);
+    console.log(dadosProduto)
     setNomeProdutoEdit(dadosProduto.nome);
     setDescricaoEdit(dadosProduto.descricao);
     setEstoque_atualEdit(dadosProduto.estoque_atual);
@@ -66,6 +67,7 @@ function DetalhesDoProduto() {
     setPreco_vendaEdit(dadosProduto.preco_venda);
     setcodBarrasEdit(dadosProduto.codigo_barras);
     setCategoriaEdit(dadosProduto.categoria);
+    setCategoria_idEdit(dadosProduto.categoria_id)
     setControlarEstoqueEdit(!!dadosProduto.ativo);
   };
 

@@ -26,7 +26,7 @@ function UltimoLoginExpirado() {
               </svg>
             </div>
             <div class="content">
-              <span class="title">🚫 Ultimo login a mais de 3 dias</span>
+              <span class="title">🚫 Ultimo login a mais de 7 dias</span>
               <p class="message">
                 Oops! Detectamos que seu ultimo acesso a internet foi a mais de
                 3 dias <strong>Cash In Box</strong> não consegue validar sua

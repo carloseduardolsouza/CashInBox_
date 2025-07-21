@@ -1,25 +1,50 @@
 const connection = require("./db");
 
 // Listar produtos com filtro opcional
-const listarProdutos = async (p) => {
-  const query =
-    p === "all"
-      ? `SELECT *, (estoque_atual <= estoque_minimo) AS estoque_min_atingido FROM produtos ORDER BY nome COLLATE NOCASE ASC`
-      : `SELECT *, (estoque_atual <= estoque_minimo) AS estoque_min_atingido FROM produtos WHERE nome LIKE ? ORDER BY nome COLLATE NOCASE ASC`;
+const listarProdutos = async (p = "all", filtro = null) => {
+  const where = [];
+  const params = [];
 
-  const values = p === "all" ? [] : [`%${p}%`];
+  // Filtro por nome (se não for "all" e não for string vazia)
+  if (p !== "all" && typeof p === "string" && p.trim() !== "") {
+    where.push("nome LIKE ?");
+    params.push(`%${p.trim()}%`);
+  }
+
+  // Filtro por categoria_id (se veio algo e for número)
+  if (
+    filtro !== null &&
+    filtro !== undefined &&
+    filtro !== "" &&
+    filtro !== "todos"
+  ) {
+    const catId = Number(filtro);
+    if (!Number.isNaN(catId)) {
+      where.push("categoria_id = ?");
+      params.push(catId);
+    }
+  }
+
+  const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
+
+  const query = `
+    SELECT *,
+           (estoque_atual <= estoque_minimo) AS estoque_min_atingido
+    FROM produtos
+    ${whereSql}
+    ORDER BY nome COLLATE NOCASE ASC;
+  `;
 
   const produtos = await new Promise((resolve, reject) => {
-    connection.all(query, values, (err, rows) => {
-      if (err) reject(err);
-      else {
-        // Garantir que vem como booleano (SQLite retorna 0 ou 1)
-        const produtosFormatados = rows.map((produto) => ({
-          ...produto,
-          estoque_min_atingido: !!produto.estoque_min_atingido, // converte 0/1 pra true/false
-        }));
-        resolve(produtosFormatados);
-      }
+    connection.all(query, params, (err, rows) => {
+      if (err) return reject(err);
+
+      const produtosFormatados = rows.map((produto) => ({
+        ...produto,
+        estoque_min_atingido: !!produto.estoque_min_atingido,
+      }));
+
+      resolve(produtosFormatados);
     });
   });
 

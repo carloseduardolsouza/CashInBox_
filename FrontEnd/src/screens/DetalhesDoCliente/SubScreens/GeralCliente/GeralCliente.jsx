@@ -39,13 +39,15 @@ function GeralCliente({ infoCliente }) {
   if (!infoCliente) return <Loading />;
 
   const handleChange = (field, value) => {
-    setCliente(prev => ({ ...prev, [field]: value }));
+    setCliente((prev) => ({ ...prev, [field]: value }));
   };
 
   const editarCliente = () => {
     const dados = {
       id: infoCliente.id,
-      nome: cliente.nome.charAt(0).toUpperCase() + cliente.nome.slice(1).toLowerCase(),
+      nome:
+        cliente.nome.charAt(0).toUpperCase() +
+        cliente.nome.slice(1).toLowerCase(),
       cpf_cnpj: cliente.cpf_cnpj,
       email: cliente.email,
       genero: cliente.genero,
@@ -54,9 +56,13 @@ function GeralCliente({ infoCliente }) {
       endereco: cliente.endereco,
     };
 
-    clientesFetch.atualizarCliente(dados)
+    clientesFetch
+      .atualizarCliente(dados)
       .then(() => {
-        adicionarAviso("sucesso", "SUCESSO - Dados do cliente editado com sucesso!");
+        adicionarAviso(
+          "sucesso",
+          "SUCESSO - Dados do cliente editado com sucesso!"
+        );
         setEditar(false);
       })
       .catch(() => setErroApi(true));
@@ -67,11 +73,22 @@ function GeralCliente({ infoCliente }) {
     navigate("/clientes");
   };
 
-  const renderCampo = (label, value, field, type = "text", isSelect = false) => (
+  const renderCampo = (
+    label,
+    value,
+    field,
+    type = "text",
+    isSelect = false
+  ) => (
     <label>
-      <p className="DetalhesClientesP"><strong>{label}: </strong></p>
+      <p className="DetalhesClientesP">
+        <strong>{label}: </strong>
+      </p>
       {isSelect ? (
-        <select value={value} onChange={e => handleChange(field, e.target.value)}>
+        <select
+          value={value}
+          onChange={(e) => handleChange(field, e.target.value)}
+        >
           <option value="Masculino">Masculino</option>
           <option value="Feminino">Feminino</option>
         </select>
@@ -79,21 +96,42 @@ function GeralCliente({ infoCliente }) {
         <input
           type={type}
           value={value}
-          onChange={e => handleChange(field, e.target.value)}
+          onChange={(e) => handleChange(field, e.target.value)}
         />
       )}
     </label>
   );
 
   const renderTexto = (label, value) => (
-    <p className="DetalhesClientesP"><strong>{label}: </strong>{value}</p>
+    <p className="DetalhesClientesP">
+      <strong>{label}: </strong>
+      {value}
+    </p>
   );
+
+  const gerarCategoria = () => {
+    switch (Number(infoCliente.categoria)) {
+      case 1:
+        return "Super Cliente 🦾";
+      case 2:
+        return "Cliente Frequente 🔁";
+      case 3:
+        return "Cliente Ativo ✅";
+      case 4:
+        return "Cliente Inativo 🛑";
+      default:
+        return "Não Classificado ❓";
+    }
+  };
 
   return (
     <div id="DetalhesClienteINFORMAÇÃO">
       <div className="DivisãoDetalhesCliente">
-        <div id="divIconeGeralCliente"><FaUserAlt /></div>
+        <div id="divIconeGeralCliente">
+          <FaUserAlt />
+        </div>
         <h2>{infoCliente.nome}</h2>
+        <p>{gerarCategoria()}</p>
       </div>
 
       <div className="alinhar">
@@ -102,7 +140,12 @@ function GeralCliente({ infoCliente }) {
         {editar ? (
           <>
             {renderCampo("Nome", cliente.nome, "nome")}
-            {renderCampo("Nascimento", cliente.data_nascimento, "data_nascimento", "date")}
+            {renderCampo(
+              "Nascimento",
+              cliente.data_nascimento,
+              "data_nascimento",
+              "date"
+            )}
             {renderCampo("Genero", cliente.genero, "genero", "text", true)}
             {renderCampo("Telefone", cliente.telefone, "telefone", "number")}
             {renderCampo("CPF", cliente.cpf_cnpj, "cpf_cnpj", "number")}
@@ -116,15 +159,24 @@ function GeralCliente({ infoCliente }) {
         ) : (
           <>
             {renderTexto("Nome", cliente.nome)}
-            {renderTexto("Nascimento", services.formatarDataNascimento(cliente.data_nascimento))}
+            {renderTexto(
+              "Nascimento",
+              services.formatarDataNascimento(cliente.data_nascimento)
+            )}
             {renderTexto("Genero", cliente.genero)}
-            {renderTexto("Telefone", services.formatarNumeroCelular(cliente.telefone))}
+            {renderTexto(
+              "Telefone",
+              services.formatarNumeroCelular(cliente.telefone)
+            )}
             {renderTexto("CPF", services.formatarCPF(cliente.cpf_cnpj))}
             {renderTexto("Endereço", cliente.endereco)}
             {renderTexto("Email", cliente.email)}
 
             <div id="areaButtonInfoClientes">
-              <button className="bttEditarClienteInfo" onClick={() => setEditar(true)}>
+              <button
+                className="bttEditarClienteInfo"
+                onClick={() => setEditar(true)}
+              >
                 <FaEdit /> Editar
               </button>
               <button className="bttDeleteClienteInfo" onClick={deletarCliente}>

@@ -5,6 +5,189 @@ const path = require("path");
 const cron = require("node-cron");
 const os = require("os");
 
+// ===== Ajustes rápidos =====
+const DIAS_LOOKBACK = 90; // janela principal p/ frequência
+const SUPER_MIN_RECENT = 5;
+const SUPER_MIN_TOTAL = 20;
+const SUPER_MAX_ULTIMA = 30; // dias
+
+const FREQUENTE_MIN_RECENT = 2;
+const FREQUENTE_MIN_TOTAL = 5;
+const FREQUENTE_MAX_ULTIMA = 60; // dias
+
+const ATIVO_MAX_ULTIMA = 90; // dias
+
+// status que NÃO contam como venda real
+const STATUS_EXCLUIR = ["orçamento", "orcamento", "cancelada", "cancelado"];
+
+// ===== Helpers =====
+function diasDesde(dataStr) {
+  if (!dataStr) return Infinity;
+  return dayjs().diff(dayjs(dataStr), "day");
+}
+
+function classificarCliente(stats) {
+  const { vendasRecentes, vendasTotal, diasUltimaVenda } = stats;
+
+  // Super
+  if (
+    vendasRecentes >= SUPER_MIN_RECENT ||
+    (vendasTotal >= SUPER_MIN_TOTAL && diasUltimaVenda <= SUPER_MAX_ULTIMA)
+  ) {
+    return 1;
+  }
+
+  // Frequente
+  if (
+    vendasRecentes >= FREQUENTE_MIN_RECENT ||
+    (vendasTotal >= FREQUENTE_MIN_TOTAL &&
+      diasUltimaVenda <= FREQUENTE_MAX_ULTIMA)
+  ) {
+    return 2;
+  }
+
+  // Ativo
+  if (diasUltimaVenda <= ATIVO_MAX_ULTIMA) {
+    return 3;
+  }
+
+  // Inativo
+  return 4;
+}
+
+// Puxa stats de venda p/ um cliente
+function getStatsCliente(clienteId) {
+  return new Promise((resolve) => {
+    const hoje = dayjs();
+    const dataLookback = hoje
+      .subtract(DIAS_LOOKBACK, "day")
+      .format("YYYY-MM-DD");
+
+    // Monta placeholders de status a excluir
+    const exclPlaceholders = STATUS_EXCLUIR.map(() => "?").join(",");
+    const params = [
+      clienteId,
+      ...STATUS_EXCLUIR,
+      clienteId,
+      dataLookback,
+      ...STATUS_EXCLUIR,
+    ];
+
+    const sql = `
+      SELECT
+        -- total de vendas válidas
+        (SELECT COUNT(*) FROM vendas v1 
+         WHERE v1.cliente_id = ? 
+           AND (${
+             exclPlaceholders.length
+               ? "LOWER(v1.status) NOT IN (" + exclPlaceholders + ")"
+               : "1=1"
+           })) AS vendas_total,
+
+        -- vendas válidas na janela recente
+        (SELECT COUNT(*) FROM vendas v2 
+         WHERE v2.cliente_id = ? 
+           AND v2.data_venda >= ? 
+           AND (${
+             exclPlaceholders.length
+               ? "LOWER(v2.status) NOT IN (" + exclPlaceholders + ")"
+               : "1=1"
+           })) AS vendas_recentes,
+
+        -- última venda válida
+        (SELECT MAX(v3.data_venda) FROM vendas v3 
+         WHERE v3.cliente_id = ? 
+           AND (${
+             exclPlaceholders.length
+               ? "LOWER(v3.status) NOT IN (" + exclPlaceholders + ")"
+               : "1=1"
+           })) AS ultima_venda
+    `;
+
+    // Pequena ginástica: temos STATUS_EXCLUIR 3x (v1,v2,v3)
+    const paramsFinal = [
+      clienteId,
+      ...STATUS_EXCLUIR, // v1
+      clienteId,
+      dataLookback,
+      ...STATUS_EXCLUIR, // v2
+      clienteId,
+      ...STATUS_EXCLUIR, // v3
+    ];
+
+    db.get(sql, paramsFinal, (err, row) => {
+      if (err) {
+        console.error(
+          `❌ Erro ao buscar stats do cliente ${clienteId}:`,
+          err.message
+        );
+        return resolve({
+          vendasTotal: 0,
+          vendasRecentes: 0,
+          diasUltimaVenda: Infinity,
+        });
+      }
+
+      const vendasTotal = Number(row?.vendas_total ?? 0);
+      const vendasRecentes = Number(row?.vendas_recentes ?? 0);
+      const diasUltimaVenda = diasDesde(row?.ultima_venda);
+
+      resolve({ vendasTotal, vendasRecentes, diasUltimaVenda });
+    });
+  });
+}
+
+// Atualiza categoria do cliente
+function atualizarCategoriaCliente(clienteId, categoriaCodigo) {
+  return new Promise((resolve) => {
+    db.run(
+      "UPDATE clientes SET categoria = ? WHERE id = ?",
+      [categoriaCodigo, clienteId],
+      (err) => {
+        if (err) {
+          console.error(`❌ Erro ao atualizar categoria do cliente ${clienteId}:`, err.message);
+        } else {
+          console.log(`✔️ Cliente ${clienteId} classificado como categoria ${categoriaCodigo}.`);
+        }
+        resolve();
+      }
+    );
+  });
+}
+
+// Processa todos os clientes
+async function classificarTodosClientes() {
+  console.log("🔍 Buscando clientes p/ classificação...");
+  return new Promise((resolve) => {
+    db.all("SELECT id, nome FROM clientes", [], async (err, rows) => {
+      if (err) {
+        console.error("❌ Erro ao buscar clientes:", err.message);
+        return resolve();
+      }
+
+      if (!rows || rows.length === 0) {
+        console.log("⚠️ Nenhum cliente encontrado.");
+        return resolve();
+      }
+
+      console.log(`👥 ${rows.length} clientes encontrados. Classificando...`);
+
+      for (const cli of rows) {
+        const stats = await getStatsCliente(cli.id);
+        const categoria = classificarCliente(stats);
+        await atualizarCategoriaCliente(cli.id, categoria);
+
+        console.log(
+          `📊 ${cli.nome || "(sem nome)"} | Total:${stats.vendasTotal} | Recente:${stats.vendasRecentes} | Última:${stats.diasUltimaVenda}d => Cat ${categoria}`
+        );
+      }
+
+      console.log("✅ Classificação concluída.");
+      resolve();
+    });
+  });
+}
+
 function substituirVariaveis(str, contexto) {
   return str.replace(/\$\{([\w.]+)\}/g, (_, chave) => {
     const props = chave.split(".");
@@ -495,6 +678,7 @@ async function executarRotinasDiarias(dados) {
   console.log("🟡 Executando rotinas diárias com config:", config);
 
   await verificarVencimentos();
+  await classificarTodosClientes();
 
   if (config.msg_lembrete_orcamento) {
     await verificarOrcamentosPendentes();
@@ -559,4 +743,5 @@ module.exports = {
   verificarAniversariantes,
   cobrarPendencias,
   enviarMensagem,
+  classificarTodosClientes
 };

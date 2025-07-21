@@ -83,7 +83,7 @@ function VendasAReceber() {
                 <td>
                   <p
                     className={
-                      dados.status === "vencida"
+                      dados.status === "vencido"
                         ? "vencidaStatusConta"
                         : "pendenteStatusConta"
                     }

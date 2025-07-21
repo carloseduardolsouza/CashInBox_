@@ -33,7 +33,7 @@ function isLoginExpirado(ultimoLogin) {
   const hoje = new Date();
   const loginDate = new Date(ultimoLogin);
   const diffDias = Math.floor((hoje - loginDate) / (1000 * 60 * 60 * 24));
-  return diffDias > 3;
+  return diffDias > 7;
 }
 
 function verificarCamusq(res, next) {

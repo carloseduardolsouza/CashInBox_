@@ -1,78 +1,123 @@
+/* Estilo principal */
 #AutomacaoWhats {
   background-color: var(--div-color);
-  padding: 10px;
-  border-radius: 10px;
+  padding: 16px;
+  border-radius: 12px;
   min-height: 500px;
-}
-
-#divSpanConectado {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-#spanConectadoOrNo {
-  margin-right: 10px;
-  height: 15px;
-  width: 15px;
-  border-radius: 50%;
+#area1AutomacaoWpp {
+  width: 50%;
 }
 
-#divStatusRobo {
-  position: absolute;
-  right: 20px;
-  background-color: var(--bg-color);
+#buttonCumprirRotinas, #buttonSalvarConfigs {
+  width: 100%;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 15px;
   cursor: pointer;
 }
 
-#divStatusRobo p {
-  font-size: 18px;
+#buttonCumprirRotinas {
+  margin-bottom: 12px;
+  background-color: #ffc107;
+}
+
+#FiRefreshCw {
+  margin-right: 6px;
+}
+
+#buttonSalvarConfigs {
+  background-color: var(--button-color);
+  color: #fff;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.CardOptions {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.inputCardOptions {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
-/* From Uiverse.io by RaspberryBee */
-/* The switch - the box around the slider */
-.switch {
-  font-size: 17px;
-  position: relative;
-  display: inline-block;
-  width: 3em;
-  height: 1.5em;
+.inputCardOptions p {
+  font-weight: 600;
+  margin: 0;
 }
 
-/* Hide default HTML checkbox */
+.CardOptions label {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.CardOptions input,
+.CardOptions textarea {
+  border-radius: 6px;
+  padding: 6px;
+  margin-left: 10px;
+  flex: 1;
+}
+
+.CardOptions textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+/* Switch estilizado */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
+}
+
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* The slider */
 .slider {
   position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgb(182, 182, 182);
+  background-color: #b6b6b6;
+  border-radius: 22px;
   transition: 0.4s;
-  border-radius: 10px;
 }
 
 .slider:before {
-  position: absolute;
   content: "";
-  height: 1em;
-  width: 1em;
-  border-radius: 8px;
-  left: 0.3em;
-  bottom: 0.3em;
-  transform: rotate(270deg);
-  background-color: rgb(255, 255, 255);
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 4px;
+  bottom: 3px;
+  background-color: #fff;
   transition: 0.4s;
 }
 
@@ -80,81 +125,73 @@
   background-color: #21cc4c;
 }
 
-.switch input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
-}
-
 .switch input:checked + .slider:before {
-  transform: translateX(1.5em);
+  transform: translateX(22px);
 }
 
-.CardOptions {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+.automacao-container {
+  width: 45%;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.qr-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px;
   padding: 10px;
-  border-radius: 5px;
-  width: 50%;
-  margin-bottom: 10px;
 }
 
-.CardOptions label {
+.qr-code {
+  max-width: 200px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+}
+
+.status-section {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  gap: 10px;
 }
 
-.CardOptions input,
-textarea {
-  border-radius: 5px;
-  padding: 5px;
-  margin-left: 10px;
+.status-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
 }
 
-.CardOptions textarea {
-  width: 70%;
-}
-
-.inputCardOptions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.inputCardOptions p {
-  font-weight: bold;
-}
-
-#buttonSalvarConfigs {
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
+.status-text {
   font-size: 15px;
-  width: 52%;
-  background-color: var(--button-color);
-  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #333;
 }
 
-#buttonCumprirRotinas {
-  padding: 5px;
-  border-radius: 5px;
-  width: 52%;
-  font-weight: bold;
-  margin-bottom: 10px;
-  background-color: yellow;
-}
-
-#FiRefreshCw {
+.status-text.online {
+  color: #28a745;
   font-weight: bold;
 }
 
-.spinner {
-  animation: loading 1s linear infinite;
+.status-text.loading {
+  color: #ff9900;
+  font-style: italic;
 }
 
-@keyframes loading {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.error-text {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 5px;
 }
+
+.icon {
+  font-size: 18px;
+} 

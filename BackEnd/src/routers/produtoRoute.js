@@ -28,14 +28,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Rotas Produtos
-router.get("/:id", authMiddleware , produtosControllers.procurarProduto);
 router.get("/id/:id", produtosControllers.procurarProdutoId);
 router.post("/", upload.array("imagens"), produtosControllers.novoProduto);
 router.post("/:id/imagens", upload.array("imagens"), produtosControllers.novaImagemProduto);
 router.put("/:id", produtosControllers.editarProduto);
 router.delete("/:id", produtosControllers.deletarProduto);
+router.get("/:id/:filtro?", authMiddleware, produtosControllers.procurarProduto);
 
-// Rotas Variações (padronizei plural/singular, só clareza)
+// Rotas Variações
 router.get("/produtos/:id/variacoes", produtosControllers.procurarVariacoesProduto);
 router.delete("/variacoes/:id", produtosControllers.deletarVariacaoProduto);
 
