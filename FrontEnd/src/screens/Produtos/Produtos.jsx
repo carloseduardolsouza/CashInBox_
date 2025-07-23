@@ -10,7 +10,9 @@ import Select from "react-select";
 
 function Produtos() {
   const Data = new Date();
-  const log = `${Data.getUTCDate()}/${Data.getUTCMonth() + 1}/${Data.getUTCFullYear()}`;
+  const log = `${Data.getUTCDate()}/${
+    Data.getUTCMonth() + 1
+  }/${Data.getUTCFullYear()}`;
 
   const { tratarErroApi, setErroApi } = useContext(AppContext);
 
@@ -21,10 +23,13 @@ function Produtos() {
   const [filtroSelecionado, setFiltroSelecionado] = useState(null);
   const [categorias, setCategorias] = useState([]);
 
-  const opcoesFiltro = categorias.map((dados) => ({
-    value: dados.id,
-    label: dados.nome,
-  }));
+  const opcoesFiltro = [
+    { value: "todos", label: "todos" },
+    ...categorias.map((dados) => ({
+      value: dados.id,
+      label: dados.nome,
+    })),
+  ];
 
   const buscarProdutos = async () => {
     try {

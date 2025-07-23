@@ -79,7 +79,6 @@
 }
 
 .filtroSelectContainer {
-  position: absolute;
   top: 0; /* abaixo do botão */
   right: 700px;  /* encosta na direita do botão */
   margin-top: 5px;

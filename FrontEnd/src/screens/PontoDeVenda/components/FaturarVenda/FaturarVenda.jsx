@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext, useCallback, useMemo } from "react";
+import AppContext from "../../../../context/AppContext";
 import services from "../../../../services/services";
 import "./FaturarVenda.css";
 import Select from "react-select";
@@ -6,14 +7,16 @@ import Select from "react-select";
 import clientesFetch from "../../../../api/clientesFetch";
 import funcionarioFetch from "../../../../api/funcionarioFetch";
 import vendaFetch from "../../../../api/vendaFetch";
+import userFetch from "../../../../api/userFetch";
 
 import Concluindo from "../../../../components/Concluindo/Concluindo";
-
-//icones
 import { FaTrash } from "react-icons/fa6";
 
 function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
+  const { adicionarAviso } = useContext(AppContext);
+
   const [concluindo, setConcluindo] = useState(false);
+  const [configCaixa, setConfigCaixa] = useState({ formas_pagamentos: [] });
 
   const [valorCompra, setValorCompra] = useState(0);
   const [descontoReais, setDescontoReais] = useState(0);
@@ -21,205 +24,213 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
   const [acrescimoReais, setAcrescimoReais] = useState(0);
   const [acrescimoPorcentagem, setAcrescimoPorcentagem] = useState(0);
   const [totalPagar, setTotalPagar] = useState(0);
+
   const [formaPagementoAtual, setFormaPagementoAtual] = useState("Dinheiro");
   const [valorSendoPago, setValorSendoPago] = useState(0);
+  const [formaPagemento, setFormaPagamento] = useState([]);
+  const [faltaPagar, setFaltaPagar] = useState(0);
+  const [troco, setTroco] = useState(0);
 
   const [resultadoClientes, setResultadoClientes] = useState([]);
   const [resultadoFuncionarios, setResultadoFuncionarios] = useState([]);
 
   const [id_cliente, setId_cliente] = useState(0);
   const [nome_cliente, setNome_cliente] = useState("");
-
   const [id_vendedor, setId_vendedor] = useState(0);
   const [nome_vendedor, setNome_vendedor] = useState("");
-
-  const [formaPagemento, setFormaPagamento] = useState([]);
-  const [faltaPagar, setFaltaPagar] = useState(0);
-  const [troco, setTroco] = useState(0);
 
   const [numParcelas, setNumParcelas] = useState(1);
   const [dataPrimeiraParcela, setDataPrimeiraParcela] = useState(() => {
     const hoje = new Date();
-    const proximoMes = new Date(hoje);
-    proximoMes.setMonth(proximoMes.getMonth() + 1);
-
-    // Corrige casos tipo 31/01 -> 03/03 (evita bug de overflow)
-    if (proximoMes.getDate() !== hoje.getDate()) {
-      proximoMes.setDate(0); // Último dia do mês anterior (seguro)
-    }
-
-    return proximoMes.toISOString().split("T")[0];
+    hoje.setMonth(hoje.getMonth() + 1);
+    if (hoje.getDate() !== new Date().getDate()) hoje.setDate(0);
+    return hoje.toISOString().split("T")[0];
   });
-
   const [parcelasGeradas, setParcelasGeradas] = useState([]);
-
-  const gerarParcelas = () => {
-    // Validações básicas
-    if (!totalPagar || !numParcelas || !dataPrimeiraParcela) {
-      window.warn(
-        "Verifique os valores: totalPagar, numParcelas ou dataPrimeiraParcela estão faltando."
-      );
-      return;
-    }
-
-    const parcelas = [];
-    const valorParcela = +(
-      parseFloat(totalPagar) / parseInt(numParcelas)
-    ).toFixed(2);
-    const dataBase = new Date(dataPrimeiraParcela);
-
-    for (let i = 0; i < parseInt(numParcelas); i++) {
-      const vencimento = new Date(dataBase);
-      vencimento.setMonth(vencimento.getMonth() + i);
-
-      parcelas.push({
-        numero_parcela: i + 1,
-        valor_parcela: valorParcela,
-        data_vencimento: vencimento.toISOString().split("T")[0], // formato YYYY-MM-DD
-      });
-    }
-
-    setParcelasGeradas(parcelas);
-  };
 
   const [alertaFormaPagamento, setAlertaFormaPagamento] = useState(false);
 
-  useEffect(() => {
-    clientesFetch
-      .procurarCliente("")
-      .then((data) => {
-        setResultadoClientes(data);
-      })
-      .catch(() => {});
+  const optionsClientes = useMemo(
+    () =>
+      resultadoClientes.map((cliente) => ({
+        value: cliente.id,
+        label: cliente.nome,
+      })),
+    [resultadoClientes]
+  );
 
-    funcionarioFetch
-      .procurarFuncionario("")
-      .then((data) => {
-        setResultadoFuncionarios(data);
-      })
-      .catch(() => {});
+  const optionsFuncionarios = useMemo(
+    () =>
+      resultadoFuncionarios.map((funcionario) => ({
+        value: funcionario.id,
+        label: funcionario.nome,
+      })),
+    [resultadoFuncionarios]
+  );
 
-    const total = venda.reduce((acc, item) => acc + item.valor_total, 0);
-    setValorCompra(total);
-    setTotalPagar(total);
-    setFaltaPagar(total);
-    setValorSendoPago(total);
-  }, []);
+  const customStyles = useMemo(
+    () => ({
+      control: (base, state) => ({
+        ...base,
+        width: 340,
+        borderColor: state.isFocused ? "black" : "#ccc",
+        boxShadow: state.isFocused ? "0 0 0 1px black" : "none",
+        "&:hover": { borderColor: "black" },
+      }),
+      menu: (base) => ({ ...base, zIndex: 9999 }),
+    }),
+    []
+  );
+
+  const calcularTotais = useCallback(
+    (novoDesconto = descontoReais, novoAcrescimo = acrescimoReais) => {
+      const total = valorCompra - novoDesconto + novoAcrescimo;
+      setTotalPagar(total);
+      setFaltaPagar(total);
+      setValorSendoPago(total);
+    },
+    [valorCompra, descontoReais, acrescimoReais]
+  );
 
   const atualizarValores = (campo, valor) => {
-    const valorNumerico = parseFloat(valor) || 0;
-
-    if (campo === "descontoReais") {
-      setDescontoReais(valorNumerico);
-      setDescontoPorcentagem(
-        valorCompra > 0 ? (valorNumerico / valorCompra) * 100 : 0
-      );
-      setTotalPagar(valorCompra - valorNumerico + acrescimoReais);
-      setFaltaPagar(valorCompra - valorNumerico + acrescimoReais);
-      setValorSendoPago(valorCompra - valorNumerico + acrescimoReais);
-    } else if (campo === "descontoPorcentagem") {
-      setDescontoPorcentagem(valorNumerico);
-      const descontoCalculado = (valorCompra * valorNumerico) / 100;
-      setDescontoReais(descontoCalculado);
-      setTotalPagar(valorCompra - descontoCalculado + acrescimoReais);
-      setFaltaPagar(valorCompra - descontoCalculado + acrescimoReais);
-      setValorSendoPago(valorCompra - descontoCalculado + acrescimoReais);
-    } else if (campo === "acrescimoReais") {
-      setAcrescimoReais(valorNumerico);
-      setAcrescimoPorcentagem(
-        valorCompra > 0 ? (valorNumerico / valorCompra) * 100 : 0
-      );
-      setTotalPagar(valorCompra - descontoReais + valorNumerico);
-      setFaltaPagar(valorCompra - descontoReais + valorNumerico);
-      setValorSendoPago(valorCompra - descontoReais + valorNumerico);
-    } else if (campo === "acrescimoPorcentagem") {
-      setAcrescimoPorcentagem(valorNumerico);
-      const acrescimoCalculado = (valorCompra * valorNumerico) / 100;
-      setAcrescimoReais(acrescimoCalculado);
-      setTotalPagar(valorCompra - descontoReais + acrescimoCalculado);
-      setFaltaPagar(valorCompra - descontoReais + acrescimoCalculado);
-      setValorSendoPago(valorCompra - descontoReais + acrescimoCalculado);
+    const v = parseFloat(valor) || 0;
+    switch (campo) {
+      case "descontoReais":
+        setDescontoReais(v);
+        setDescontoPorcentagem(valorCompra > 0 ? (v / valorCompra) * 100 : 0);
+        calcularTotais(v, acrescimoReais);
+        break;
+      case "descontoPorcentagem":
+        const desc = (valorCompra * v) / 100;
+        setDescontoPorcentagem(v);
+        setDescontoReais(desc);
+        calcularTotais(desc, acrescimoReais);
+        break;
+      case "acrescimoReais":
+        setAcrescimoReais(v);
+        setAcrescimoPorcentagem(valorCompra > 0 ? (v / valorCompra) * 100 : 0);
+        calcularTotais(descontoReais, v);
+        break;
+      case "acrescimoPorcentagem":
+        const acre = (valorCompra * v) / 100;
+        setAcrescimoPorcentagem(v);
+        setAcrescimoReais(acre);
+        calcularTotais(descontoReais, acre);
+        break;
+      default:
+        break;
     }
+  };
+
+  const buscarTodosDados = useCallback(async () => {
+    try {
+      const [clientes, funcionarios, config] = await Promise.all([
+        clientesFetch.procurarCliente(""),
+        funcionarioFetch.procurarFuncionario(""),
+        userFetch.verConfigVendas(),
+      ]);
+
+      setResultadoClientes(clientes);
+      setResultadoFuncionarios(funcionarios);
+      setConfigCaixa(config);
+
+      const total = venda.reduce((acc, item) => acc + item.valor_total, 0);
+      setValorCompra(total);
+      setTotalPagar(total);
+      setFaltaPagar(total);
+      setValorSendoPago(total);
+    } catch {
+      adicionarAviso("erro", "Erro ao carregar dados.");
+    }
+  }, [venda, adicionarAviso]);
+
+  useEffect(() => {
+    buscarTodosDados();
+  }, [buscarTodosDados]);
+
+  const gerarParcelas = () => {
+    if (!totalPagar || !numParcelas || !dataPrimeiraParcela) return;
+
+    const valorParcela = +(totalPagar / numParcelas).toFixed(2);
+    const base = new Date(dataPrimeiraParcela);
+
+    const parcelas = Array.from({ length: numParcelas }, (_, i) => {
+      const vencimento = new Date(base);
+      vencimento.setMonth(base.getMonth() + i);
+      return {
+        numero_parcela: i + 1,
+        valor_parcela: valorParcela,
+        data_vencimento: vencimento.toISOString().split("T")[0],
+      };
+    });
+    setParcelasGeradas(parcelas);
   };
 
   const addFormaPagamento = (e) => {
     e.preventDefault();
+    if (faltaPagar <= 0) return;
     setAlertaFormaPagamento(false);
-    if (faltaPagar <= 0) {
-      return;
-    }
-    let formaPagementoObject = {
+
+    const novaForma = {
       tipo_pagamento: formaPagementoAtual,
       valor: valorSendoPago,
     };
-    setFormaPagamento([...formaPagemento, formaPagementoObject]);
-    if (faltaPagar - valorSendoPago < 0) {
+    setFormaPagamento((prev) => [...prev, novaForma]);
+
+    const novoFalta = faltaPagar - valorSendoPago;
+    if (novoFalta < 0) {
       setFaltaPagar(0);
       setValorSendoPago(0);
-      setTroco((faltaPagar - valorSendoPago) * -1);
+      setTroco(-novoFalta);
     } else {
-      setFaltaPagar(faltaPagar - valorSendoPago);
-      setValorSendoPago(faltaPagar - valorSendoPago);
+      setFaltaPagar(novoFalta);
+      setValorSendoPago(novoFalta);
     }
   };
 
-  const optionsClientes = resultadoClientes.map((cliente) => ({
-    value: cliente.id,
-    label: cliente.nome,
-  }));
-
-  const optionsFuncionarios = resultadoFuncionarios.map((funcionario) => ({
-    value: funcionario.id,
-    label: funcionario.nome,
-  }));
-
-  const customStyles = {
-    control: (base, state) => ({
-      ...base,
-      width: 340,
-      borderColor: state.isFocused ? "black" : "#ccc",
-      boxShadow: state.isFocused ? "0 0 0 1px black" : "none",
-      "&:hover": {
-        borderColor: "black",
-      },
-    }),
-    menu: (base) => ({
-      ...base,
-      zIndex: 9999,
-    }),
+  const deletarEstaFormaPagamento = (dados, index) => {
+    setFormaPagamento((prev) => prev.filter((_, i) => i !== index));
+    setValorSendoPago((prev) => prev + Number(dados.valor));
   };
 
   const faturarVendaEmBloco = (status) => {
-    // Verifica se a forma de pagamento está vazia E não é crediário próprio
-    if (
-      formaPagemento.length <= 0 &&
-      status === "concluida" &&
-      formaPagementoAtual !== "Crediario Propio"
-    ) {
-      setAlertaFormaPagamento(true); // mostra o alerta dentro do form
+    if (descontoPorcentagem > configCaixa.limite_desconto) {
+      adicionarAviso(
+        "erro",
+        "ERRO - O desconto que voce deu é maior que o permitido"
+      );
       return;
     }
-
-    if (formaPagementoAtual === "Crediario Propio" && id_cliente == 0) {
-      window.alert(
-        "Para vender no crediario e nescessario escolher um cliente"
+    if (
+      !formaPagemento.length &&
+      status === "concluida" &&
+      formaPagementoAtual !== "Crediário Próprio"
+    ) {
+      setAlertaFormaPagamento(true);
+      return;
+    }
+    if (formaPagementoAtual === "Crediário Próprio" && !id_cliente) {
+      adicionarAviso(
+        "aviso",
+        "AVISO - Escolha um cliente para vender no crediário"
+      );
+      return;
+    }
+    if (
+      formaPagementoAtual === "Crediário Próprio" &&
+      parcelasGeradas.length === 0
+    ) {
+      adicionarAviso(
+        "aviso",
+        "AVISO - Gere pelo menos 1 parcela para vender no crediário"
       );
       return;
     }
 
-    if (
-      formaPagementoAtual === "Crediario Propio" &&
-      parcelasGeradas.length === 0
-    ) {
-      window.alert("Gere pelo menos 1 parcela para vender no crediario");
-      return;
-    }
-    setAlertaFormaPagamento(false); // limpa o alerta se passou
     setConcluindo(true);
-
     const dadosComuns = {
       cliente_id: id_cliente,
-      nome_cliente: nome_cliente,
+      nome_cliente,
       funcionario_id: id_vendedor,
       nome_funcionario: nome_vendedor,
       descontos: `R$ ${descontoReais.toFixed(
@@ -234,53 +245,29 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
       produtos: venda,
     };
 
-    if (formaPagementoAtual === "Crediario Propio" && status === "concluida") {
-      const dados = {
-        ...dadosComuns,
-        status: "Crediario pendente",
-        parcelas: parcelasGeradas,
-      };
+    const apiCall =
+      formaPagementoAtual === "Crediário Próprio" && status === "concluida"
+        ? vendaFetch.novaVendaCrediario({
+            ...dadosComuns,
+            status: "Crediario pendente",
+            parcelas: parcelasGeradas,
+          })
+        : vendaFetch.novaVendaEmBloco({
+            ...dadosComuns,
+            status,
+            pagamentos: formaPagemento,
+          });
 
-      vendaFetch
-        .novaVendaCrediario(dados)
-        .then(() => {
-          setTimeout(() => {
-            setConcluindo(false);
-            limparVenda([]);
-            limparValor(0);
-            fechar(false);
-          }, 1500);
-        })
-        .catch(() => {
-          //carregar erro
-        });
-    } else {
-      const dados = {
-        ...dadosComuns,
-        status: status,
-        pagamentos: formaPagemento,
-      };
-
-      vendaFetch
-        .novaVendaEmBloco(dados)
-        .then(() => {
-          setTimeout(() => {
-            setConcluindo(false);
-            fechar(false);
-            limparVenda([]);
-            limparValor(0);
-          }, 1500);
-        })
-        .catch(() => {
-          // tratar erro aqui
-        });
-    }
-  };
-
-  const deletarEstaFormaPagamento = (dados, index) => {
-    const novoArray = formaPagemento.filter((_, i) => i !== index);
-    setValorSendoPago((prev) => prev + Number(dados.valor)); // ✅ MELHOR PRÁTICA
-    setFormaPagamento(novoArray);
+    apiCall
+      .then(() => {
+        setTimeout(() => {
+          setConcluindo(false);
+          limparVenda([]);
+          limparValor(0);
+          fechar(false);
+        }, 1500);
+      })
+      .catch(() => adicionarAviso("erro", "Erro ao concluir venda."));
   };
 
   return (
@@ -395,17 +382,13 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                       onChange={(e) => setFormaPagementoAtual(e.target.value)}
                       value={formaPagementoAtual}
                     >
-                      <option value="Dinheiro">Dinheiro</option>
-                      <option value="Pix">Pix</option>
-                      <option value="Cartão de credito">
-                        Cartão de credito
-                      </option>
-                      <option value="Cartão de debito">Cartão de debito</option>
-                      <option value="Crediario Propio">Crediario Propio</option>
+                      {configCaixa.formas_pagamentos.map((dados) => {
+                        return <option value={dados}>{dados}</option>;
+                      })}
                     </select>
                   </div>
 
-                  {formaPagementoAtual === "Crediario Propio" ? (
+                  {formaPagementoAtual === "Crediário Próprio" ? (
                     <div id="creadirioPropioDiv">
                       <div>
                         <label>N° parcelas:</label>
@@ -453,7 +436,7 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
                 )}
               </div>
             </div>
-            {formaPagementoAtual === "Crediario Propio" ? (
+            {formaPagementoAtual === "Crediário Próprio" ? (
               <div>
                 <table className="Table">
                   <thead>

@@ -75,7 +75,7 @@ const procurarProdutos = async (p = "", filtro = "") => {
   }
 
   // Se filtro existir, adiciona como query param
-  if (filtro) {
+  if (filtro && filtro != "todos") {
     endpoint += `/${encodeURIComponent(filtro)}`;
   }
 

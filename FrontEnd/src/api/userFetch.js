@@ -95,7 +95,44 @@ const gerarBoleto = async () => {
   return dados;
 };
 
+const verConfigVendas = async () => {
+  const config = await fetch(`${API_URL}/user/config/vendas`)
+    .then((response) => {
+      return response;
+    })
+    .catch((erro) => {
+      return erro;
+    });
+
+  const dados = await config.json();
+  return dados;
+};
+
+const editarConfigVendas = async (dados) => {
+  try {
+    const response = await fetch(`${API_URL}/user/config/vendas`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dados),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Erro ao salvar config: ${response.status}`);
+    }
+
+    const resultado = await response.json();
+    return resultado;
+  } catch (erro) {
+    console.error("Erro em editarConfigVendas:", erro);
+    return { error: true, message: erro.message };
+  }
+};
+
 export default {
+  verConfigVendas,
+  editarConfigVendas,
   informacoesPlanos,
   gerarBoleto,
   editarDadosEmpresa,
