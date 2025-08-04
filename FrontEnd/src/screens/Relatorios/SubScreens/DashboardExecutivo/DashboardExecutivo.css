@@ -1,0 +1,37 @@
+.dashboard-executivo {
+  width: 100%;
+}
+
+.dashboard-executivo h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.dashboard-content {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.coming-soon {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  margin-top: 30px;
+}
+
+.coming-soon h4 {
+  color: #0295ff;
+  margin-bottom: 20px;
+}
+
+.coming-soon ul {
+  list-style: none;
+  padding: 0;
+}
+
+.coming-soon li {
+  padding: 8px 0;
+  color: #666;
+}

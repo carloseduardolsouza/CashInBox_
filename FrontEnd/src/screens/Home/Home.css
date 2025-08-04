@@ -111,43 +111,127 @@
 }
 
 .cardMétricasBox {
-  width: 48%;
+  width: 45%;
+  padding: 10px;
   height: 140px;
   margin-bottom: 5px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 10px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .linha {
   height: 1px;
-  width: 90%;
-  background-color: black;
-  margin: auto;
+  width: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.3) 20%, 
+    rgba(255, 255, 255, 0.6) 50%, 
+    rgba(255, 255, 255, 0.3) 80%, 
+    transparent 100%);
+  margin: 12px 0 8px 0;
+  position: relative;
 }
 
 .displayFlex {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.displayFlex > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.displayFlex > div:last-child {
+  align-items: flex-end;
+}
+
+.displayFlex p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 4px 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.displayFlex strong {
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.displayFlex p svg {
+  font-size: 16px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .green {
-  background-image: linear-gradient(45deg, #008000, #00ae00);
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.8) 0%, 
+    rgba(5, 150, 105, 0.9) 50%,
+    rgba(4, 120, 87, 0.95) 100%);
+}
+
+.green::before {
+  background: linear-gradient(135deg, 
+    rgba(34, 197, 94, 0.1) 0%, 
+    rgba(22, 163, 74, 0.05) 100%);
 }
 
 .red {
-  background-image: linear-gradient(45deg, #d20001, #f90101);
+  background: linear-gradient(135deg, 
+    rgba(239, 68, 68, 0.8) 0%, 
+    rgba(220, 38, 38, 0.9) 50%,
+    rgba(185, 28, 28, 0.95) 100%);
+}
+
+.red::before {
+  background: linear-gradient(135deg, 
+    rgba(248, 113, 113, 0.1) 0%, 
+    rgba(239, 68, 68, 0.05) 100%);
 }
 
 .orange {
-  background-image: linear-gradient(45deg, #feb201, #fffa00);
+  background: linear-gradient(135deg, 
+    rgba(251, 146, 60, 0.8) 0%, 
+    rgba(249, 115, 22, 0.9) 50%,
+    rgba(234, 88, 12, 0.95) 100%);
 }
 
-.cardMétricasBox > h1 {
-  font-size: 33px;
+.orange::before {
+  background: linear-gradient(135deg, 
+    rgba(253, 186, 116, 0.1) 0%, 
+    rgba(251, 146, 60, 0.05) 100%);
 }
 
-.cardMétricasBox > h2,
-.cardMétricasBox > h1 {
-  text-align: center;
+.cardMétricasBox h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.cardMétricasBox h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  line-height: 1.1;
 }
 
 #InfoHomeDeash {

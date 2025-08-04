@@ -60,7 +60,7 @@ function Home() {
           setRelatoriosBasicos([]); // Evita o erro
           console.warn("Resposta inesperada:", response);
         }
-        tratarErroApi(response)
+        tratarErroApi(response);
 
         setRelatoriosBasicos(response);
 
@@ -131,7 +131,11 @@ function Home() {
         >
           {mostrarInfo ? <FaEye /> : <FaEyeSlash />}
         </button>
-        <button id="ButtonDarkMode" onClick={() => setIsDark(!isDark)} disabled={true}>
+        <button
+          id="ButtonDarkMode"
+          onClick={() => setIsDark(!isDark)}
+          disabled={true}
+        >
           {isDark ? "☀️" : "🌙"}
         </button>
       </div>
@@ -171,63 +175,78 @@ function Home() {
 
         <div className="LoyautCardMétricasBox">
           <article className="cardMétricasBox green">
-            <h2>Receitas</h2>
-            <h1>{"R$ 00,00"}</h1>
-            <div className="linha" />
-            <div className="displayFlex">
-              <div>
-                <p>Último mês</p>
-                <strong>{"R$ 00,00"}</strong>
-              </div>
-              <div>
-                <p>
-                  <IoMdArrowDropup />
-                </p>
-                <strong>{"0%"}</strong>
+            <div>
+              <h2>Receitas</h2>
+              <h1>{"R$ 00,00"}</h1>
+            </div>
+            <div>
+              <div className="linha" />
+              <div className="displayFlex">
+                <div>
+                  <p>Último mês</p>
+                  <strong>{"R$ 00,00"}</strong>
+                </div>
+                <div>
+                  <p>
+                    <IoMdArrowDropup />
+                    Variação
+                  </p>
+                  <strong>{"0%"}</strong>
+                </div>
               </div>
             </div>
           </article>
 
           <article className="cardMétricasBox red">
-            <h2>Despesas</h2>
-            <h1>{"R$ 00,00"}</h1>
-            <div className="linha" />
-            <div className="displayFlex">
-              <div>
-                <p>Último mês</p>
-                <strong>{"R$ 00,00"}</strong>
-              </div>
-              <div>
-                <p>
-                  <IoMdArrowDropup />
-                </p>
-                <strong>{"0%"}</strong>
+            <div>
+              <h2>Despesas</h2>
+              <h1>{"R$ 00,00"}</h1>
+            </div>
+            <div>
+              <div className="linha" />
+              <div className="displayFlex">
+                <div>
+                  <p>Último mês</p>
+                  <strong>{"R$ 00,00"}</strong>
+                </div>
+                <div>
+                  <p>
+                    <IoMdArrowDropup />
+                    Variação
+                  </p>
+                  <strong>{"0%"}</strong>
+                </div>
               </div>
             </div>
           </article>
 
           <article className="cardMétricasBox orange">
-            <h2>Faturamento Mês</h2>
-            <h1>
-              {mostrarInfo
-                ? services.formatarCurrency(faturamentoAtual || 0)
-                : "••••••"}
-            </h1>
-            <div className="linha" />
-            <div className="displayFlex">
-              <div>
-                <p>Último mês</p>
-                <strong>
-                  {mostrarInfo
-                    ? services.formatarCurrency(faturamentoAnterior || 0)
-                    : "••••••"}
-                </strong>
-              </div>
-              <div>
-                <p>
-                  <IoMdArrowDropup />
-                </p>
-                <strong>{variacao}%</strong>
+            <div>
+              <h2>Faturamento Mensal</h2>
+              <h1>
+                {mostrarInfo
+                  ? services.formatarCurrency(faturamentoAtual || 0)
+                  : "••••••"}
+              </h1>
+            </div>
+            <div>
+              <div className="linha" />
+              <div className="displayFlex">
+                <div>
+                  <p>Último mês</p>
+                  <strong>
+                    {mostrarInfo
+                      ? services.formatarCurrency(faturamentoAnterior || 0)
+                      : "••••••"}
+                  </strong>
+                </div>
+                <div>
+                  <p>
+                    <IoMdArrowDropup />
+                    Crescimento
+                  </p>
+                  <strong>{variacao}%</strong>
+                </div>
               </div>
             </div>
           </article>
