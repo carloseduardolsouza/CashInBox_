@@ -6,7 +6,6 @@ const path = require("path");
 const os = require("os");
 
 const produtosControllers = require("../controllers/produtosController");
-const authMiddleware = require("../middleware/authMiddleware");
 
 // Define pasta de upload persistente no perfil do usuário
 const uploadDir = path.join(os.homedir(), "AppData", "Roaming", "CashInBox", "uploads");
@@ -33,7 +32,7 @@ router.post("/", upload.array("imagens"), produtosControllers.novoProduto);
 router.post("/:id/imagens", upload.array("imagens"), produtosControllers.novaImagemProduto);
 router.put("/:id", produtosControllers.editarProduto);
 router.delete("/:id", produtosControllers.deletarProduto);
-router.get("/:id/:filtro?", authMiddleware, produtosControllers.procurarProduto);
+router.get("/:id/:filtro?", produtosControllers.procurarProduto);
 
 // Rotas Variações
 router.get("/produtos/:id/variacoes", produtosControllers.procurarVariacoesProduto);

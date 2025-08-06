@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const vendaControllers = require("../controllers/vendaControllers");
-const authMiddleware = require("../middleware/authMiddleware");
 
 /** ============================
  * 📦 ROTAS DE VENDAS
@@ -15,7 +14,7 @@ router.post("/", vendaControllers.novaVenda);
 router.post("/crediario", vendaControllers.novaVendaCrediario);
 
 // 🔍 Listar todas as vendas (com ou sem filtro)
-router.get("/:filtro?", authMiddleware, vendaControllers.listarVendas);
+router.get("/:filtro?",vendaControllers.listarVendas);
 
 // 🔍 Buscar uma venda pelo ID
 router.get("/id/:id", vendaControllers.procurarVendaId);

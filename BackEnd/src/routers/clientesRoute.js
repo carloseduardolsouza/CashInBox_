@@ -2,12 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const clientesControllers = require("../controllers/clientesControllers");
-const authMiddleware = require("../middleware/authMiddleware"); // Certifique-se que esse middleware existe
 
 // Base: /clientes
 
 // === 🔒 Buscar cliente específico (com autenticação) ===
-router.get("/:id", authMiddleware, clientesControllers.procurarCliente);
+router.get("/:id",clientesControllers.procurarCliente);
 
 // === 🆕 Criar novo cliente ===
 router.post("/", clientesControllers.novoCliente);
