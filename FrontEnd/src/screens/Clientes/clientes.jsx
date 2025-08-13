@@ -40,7 +40,7 @@ function Clientes() {
         setResultClientes([]); // Evita o erro
         console.warn("Resposta inesperada:", resultado);
       }
-      setLoading(false)
+      setLoading(false);
       tratarErroApi(resultado);
     } catch (err) {
       setErroApi(true);
@@ -108,7 +108,15 @@ function Clientes() {
                     {dado.nome}
                   </Link>
                 </td>
-                <td>{services.formatarNumeroCelular(dado.telefone)}</td>
+                <td>
+                  <a
+                    href={`https://wa.me/55${dado.telefone.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {services.formatarNumeroCelular(dado.telefone)}
+                  </a>
+                </td>
                 <td>
                   {!dado.endereco || dado.endereco.trim() === ""
                     ? "Desconhecido"

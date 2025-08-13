@@ -299,7 +299,7 @@ const novaVendaCrediario = async (dados) => {
     // Inserir pagamento inicial (0) como crediário
     await runAsync(
       `INSERT INTO pagamentos (venda_id, tipo_pagamento, valor) VALUES (?, ?, ?)`,
-      [vendaId, "crediario propio", 0]
+      [vendaId, "crediário próprio", 0]
     );
 
     await runAsync("COMMIT");
@@ -467,7 +467,7 @@ const receberVendaCrediario = async (id, dados) => {
     const pagas = parcelasPagas[0].pagas;
 
     const statusAtualizado =
-      pagas === total ? "concluida" : `${pagas}/${total}`;
+      pagas === total ? "Crediário pago" : `${pagas}/${total}`;
 
     await runAsync(`UPDATE vendas SET status = ? WHERE id = ?`, [
       statusAtualizado,

@@ -4,8 +4,8 @@ const router = express.Router();
 const services = require("../services/services");
 const userController = require("../controllers/userController");
 
-router.get("/informacoesPlano", services.informacoesPlano);
-router.get("/gerarBoleto", services.gerarBoleto);
+router.get("/informacoesPlano",services.informacoesPlano);
+router.get("/gerarBoleto",services.gerarBoleto);
 
 router.get("/dadosEmpresa", userController.getDados);
 router.post("/editar/dadosEmpresa",userController.salvarDados);

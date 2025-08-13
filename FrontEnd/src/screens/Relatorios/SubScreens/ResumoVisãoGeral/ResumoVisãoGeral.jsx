@@ -1,5 +1,8 @@
 import "./ResumoVisãoGeral.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+//api
+import relatorioFetch from "../../../../api/relatorioFetch";
 
 // Componentes
 import MetricCard from "../../components/MetricCard/MetricCard";
@@ -9,75 +12,96 @@ import DateFilter from "../../components/DateFilter/DateFilter";
 
 function ResumoVisãoGeral() {
   const [metricaAtiva, setMetricaAtiva] = useState("Faturamento");
+  const [formData, setFormData] = useState({
+    faturamentoMes: null,
+    ticketMedio: null,
+    variacaoFaturamento: null,
+    variacaoTicketMedio: null,
+    variacaoVendas: null,
+    vendasMes: null,
+  });
   const [dataInicial, setDataInicial] = useState(() => {
     const hoje = new Date();
     const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    return primeiroDia.toISOString().split('T')[0];
+    return primeiroDia.toISOString().split("T")[0];
   });
   const [dataFinal, setDataFinal] = useState(() => {
     const hoje = new Date();
-    return hoje.toISOString().split('T')[0];
+    return hoje.toISOString().split("T")[0];
   });
 
   // Dados mock - em um app real, viriam de uma API
   const dadosResumo = {
     faturamento: { valor: 125000, trend: 12.5, meta: 150000 },
     quantVendas: { valor: 342, trend: -5.2, meta: 400 },
-    ticketMedio: { valor: 365.50, trend: 18.3, meta: 300 },
-    lucroBruto: { valor: 45000, trend: 8.7, meta: 50000 }
+    ticketMedio: { valor: 365.5, trend: 18.3, meta: 300 },
+    lucroBruto: { valor: 45000, trend: 8.7, meta: 50000 },
   };
 
   const dadosGrafico = {
     Faturamento: [
-      { nome: 'Jan', valor: 65000 },
-      { nome: 'Fev', valor: 78000 },
-      { nome: 'Mar', valor: 52000 },
-      { nome: 'Abr', valor: 89000 },
-      { nome: 'Mai', valor: 95000 },
-      { nome: 'Jun', valor: 125000 }
+      { nome: "Jan", valor: 65000 },
+      { nome: "Fev", valor: 78000 },
+      { nome: "Mar", valor: 52000 },
+      { nome: "Abr", valor: 89000 },
+      { nome: "Mai", valor: 95000 },
+      { nome: "Jun", valor: 125000 },
     ],
     QuantVendas: [
-      { nome: 'Jan', valor: 285 },
-      { nome: 'Fev', valor: 312 },
-      { nome: 'Mar', valor: 198 },
-      { nome: 'Abr', valor: 356 },
-      { nome: 'Mai', valor: 398 },
-      { nome: 'Jun', valor: 342 }
+      { nome: "Jan", valor: 285 },
+      { nome: "Fev", valor: 312 },
+      { nome: "Mar", valor: 198 },
+      { nome: "Abr", valor: 356 },
+      { nome: "Mai", valor: 398 },
+      { nome: "Jun", valor: 342 },
     ],
     TicketMedio: [
-      { nome: 'Jan', valor: 228 },
-      { nome: 'Fev', valor: 250 },
-      { nome: 'Mar', valor: 262 },
-      { nome: 'Abr', valor: 250 },
-      { nome: 'Mai', valor: 239 },
-      { nome: 'Jun', valor: 365 }
+      { nome: "Jan", valor: 228 },
+      { nome: "Fev", valor: 250 },
+      { nome: "Mar", valor: 262 },
+      { nome: "Abr", valor: 250 },
+      { nome: "Mai", valor: 239 },
+      { nome: "Jun", valor: 365 },
     ],
     LucroBruto: [
-      { nome: 'Jan', valor: 32500 },
-      { nome: 'Fev', valor: 39000 },
-      { nome: 'Mar', valor: 26000 },
-      { nome: 'Abr', valor: 44500 },
-      { nome: 'Mai', valor: 47500 },
-      { nome: 'Jun', valor: 45000 }
-    ]
+      { nome: "Jan", valor: 32500 },
+      { nome: "Fev", valor: 39000 },
+      { nome: "Mar", valor: 26000 },
+      { nome: "Abr", valor: 44500 },
+      { nome: "Mai", valor: 47500 },
+      { nome: "Jun", valor: 45000 },
+    ],
   };
 
   const formatCurrency = (value) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
     }).format(value);
   };
 
   const handleFilterApply = () => {
     // Aqui você implementaria a lógica para aplicar os filtros
-    console.log('Aplicando filtros:', { dataInicial, dataFinal });
+    console.log("Aplicando filtros:", { dataInicial, dataFinal });
   };
+
+  useEffect(() => {
+    relatorioFetch.buscarResumoRelatorios().then((response) => {
+      setFormData({
+        faturamentoMes: response.faturamentoMes,
+        ticketMedio: response.ticketMedio,
+        variacaoFaturamento: response.variacaoFaturamento,
+        variacaoTicketMedio: response.variacaoTicketMedio,
+        variacaoVendas: response.variacaoVendas,
+        vendasMes: response.vendasMes,
+      });
+    });
+  }, []);
 
   return (
     <div className="resumo-container">
       <h3>Resumo</h3>
-      
+
       <DateFilter
         dataInicial={dataInicial}
         dataFinal={dataFinal}
@@ -89,24 +113,24 @@ function ResumoVisãoGeral() {
       <div className="metrics-grid">
         <MetricCard
           title="Faturamento"
-          value={formatCurrency(dadosResumo.faturamento.valor)}
-          trend={dadosResumo.faturamento.trend}
+          value={formatCurrency(formData.faturamentoMes)}
+          trend={formData.variacaoFaturamento}
           isActive={metricaAtiva === "Faturamento"}
           onClick={() => setMetricaAtiva("Faturamento")}
           icon="💰"
         />
         <MetricCard
           title="Quant. de Vendas"
-          value={dadosResumo.quantVendas.valor.toLocaleString()}
-          trend={dadosResumo.quantVendas.trend}
+          value={formData.vendasMes}
+          trend={formData.variacaoVendas}
           isActive={metricaAtiva === "QuantVendas"}
           onClick={() => setMetricaAtiva("QuantVendas")}
           icon="📊"
         />
         <MetricCard
           title="Ticket Médio"
-          value={formatCurrency(dadosResumo.ticketMedio.valor)}
-          trend={dadosResumo.ticketMedio.trend}
+          value={formatCurrency(formData.ticketMedio)}
+          trend={formData.variacaoTicketMedio}
           isActive={metricaAtiva === "TicketMedio"}
           onClick={() => setMetricaAtiva("TicketMedio")}
           icon="🎯"
@@ -124,10 +148,16 @@ function ResumoVisãoGeral() {
       <div className="charts-section">
         <div className="chart-container">
           <LineChart
-            title={`Evolução - ${metricaAtiva.replace(/([A-Z])/g, ' $1').trim()}`}
+            title={`Evolução - ${metricaAtiva
+              .replace(/([A-Z])/g, " $1")
+              .trim()}`}
             data={dadosGrafico[metricaAtiva]}
             dataKey="valor"
-            isMonetary={metricaAtiva.includes('amento') || metricaAtiva.includes('Lucro') || metricaAtiva.includes('Ticket')}
+            isMonetary={
+              metricaAtiva.includes("amento") ||
+              metricaAtiva.includes("Lucro") ||
+              metricaAtiva.includes("Ticket")
+            }
           />
         </div>
 

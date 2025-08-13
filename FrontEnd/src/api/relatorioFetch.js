@@ -12,6 +12,19 @@ const buscarRelatoriosBasicos = async () => {
   }
 };
 
+const buscarResumoRelatorios = async () => {
+  try {
+    const res = await fetch(`${API_URL}/relatorios/resumoRelatorios`);
+
+    const dados = await res.json();
+    return dados;
+  } catch (error) {
+    console.error("Erro em resumoRelatorios:", error);
+    throw error;
+  }
+}
+
 export default {
   buscarRelatoriosBasicos,
+  buscarResumoRelatorios
 };
