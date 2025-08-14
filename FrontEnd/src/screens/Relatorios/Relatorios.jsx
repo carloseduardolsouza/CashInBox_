@@ -18,36 +18,54 @@ function Relatorios() {
   const menuItems = [
     {
       categoria: "Visão Geral",
-      items: ["Resumo", "Dashboard Executivo"]
+      items: ["Resumo", "Dashboard Executivo"],
     },
     {
-      categoria: "Lucratividade", 
-      items: ["Receita/Despesas", "Por produto vendido", "Margem por categoria"]
+      categoria: "Lucratividade",
+      items: [
+        "Receita/Despesas",
+        "Por produto vendido",
+        "Margem por categoria",
+      ],
     },
     {
       categoria: "Fornecedores",
-      items: ["Por produto", "Vendas analítico", "Performance de entrega"]
+      items: ["Por produto", "Vendas analítico", "Performance de entrega"],
     },
     {
       categoria: "Vendas",
-      items: ["Meios de pagamento", "Comissão por vendedor", "Horário de pico", "Categoria de produto", "Vendedor", "Produto", "Cliente e categoria", "Vendas e retenção", "Produtos monofásico"]
+      items: [
+        "Meios de pagamento",
+        "Comissão por vendedor",
+        "Horário de pico",
+        "Categoria de produto",
+        "Vendedor",
+        "Produto",
+        "Cliente e categoria",
+        "Vendas e retenção",
+        "Produtos monofásico",
+      ],
     },
     {
       categoria: "Estoque",
-      items: ["Uso e consumo interno", "Recomendação de estoque", "Giro de estoque"]
+      items: [
+        "Uso e consumo interno",
+        "Recomendação de estoque",
+        "Giro de estoque",
+      ],
     },
     {
       categoria: "Clientes",
-      items: ["Ranking de vendas", "Análise de comportamento", "Retenção"]
+      items: ["Ranking de vendas", "Análise de comportamento", "Retenção"],
     },
     {
       categoria: "Contas a pagar",
-      items: ["A vencer", "A pagar", "Histórico de pagamentos"]
+      items: ["A vencer", "A pagar", "Histórico de pagamentos"],
     },
     {
       categoria: "Entregas",
-      items: ["Por entregador", "Por transportadora", "Tempo médio"]
-    }
+      items: ["Por entregador", "Por transportadora", "Tempo médio"],
+    },
   ];
 
   const renderMenuItem = (label) => (
@@ -70,7 +88,10 @@ function Relatorios() {
         return (
           <div className="content-placeholder">
             <h3>{abaAtiva}</h3>
-            <p>Este relatório será desenvolvido em breve. Funcionalidade específica para análise de {abaAtiva.toLowerCase()}.</p>
+            <p>
+              Este relatório será desenvolvido em breve. Funcionalidade
+              específica para análise de {abaAtiva.toLowerCase()}.
+            </p>
           </div>
         );
     }
@@ -78,11 +99,12 @@ function Relatorios() {
 
   return (
     <div id="Relatorios">
+      <EmBreve />
       <header className="relatorios-header">
         <h2>📊 Relatórios</h2>
         <p>Análise completa dos dados do seu negócio</p>
       </header>
-      
+
       <div id="divLadoladoRelatorios">
         <nav id="menuRelatorios">
           {menuItems.map((section) => (
@@ -94,10 +116,8 @@ function Relatorios() {
             </div>
           ))}
         </nav>
-        
-        <main className="relatorios-content">
-          {renderAba()}
-        </main>
+
+        <main className="relatorios-content">{renderAba()}</main>
       </div>
     </div>
   );

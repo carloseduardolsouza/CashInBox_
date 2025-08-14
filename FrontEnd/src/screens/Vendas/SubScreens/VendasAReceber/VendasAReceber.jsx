@@ -17,13 +17,15 @@ function VendasAReceber() {
   const [dadosParaModal, setDadosParaModal] = useState(null);
 
   const carregarVendasCrediario = async () => {
-    try {
-      const response = await vendaFetch.listarVendasCrediario();
-      setResultadosVendas(response);
-    } catch (error) {
-      setErroApi(true);
-    }
-  };
+  try {
+    const response = await vendaFetch.listarVendasCrediario();
+    const vendasNaoPagas = response.filter(venda => venda.status !== "pago");
+    setResultadosVendas(vendasNaoPagas);
+  } catch (error) {
+    setErroApi(true);
+  }
+};
+
 
   const abrirModalFaturar = (dadosDaVenda) => {
     setDadosParaModal(dadosDaVenda);

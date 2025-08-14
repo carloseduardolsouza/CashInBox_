@@ -1,21 +1,237 @@
-#EmBreve {
-  width: 100vw;
-  height: 100vh;
+/* EmBreve.css */
+.embreve-overlay {
   position: fixed;
-  z-index: 4;
-  backdrop-filter: blur(2px);
   top: 0;
   left: 0;
-  background-color: #0000002d;
+  width: 100vw;
+  height: 100vh;
+  background: #00000052;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  animation: embreve-fade-in 0.3s ease-out;
 }
 
-#divCentralEmBreve {
-  position: absolute;
-  top: 50%;
-  right: 50%;
-  transform: translate(50%, -50%);
+.embreve-modal {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  max-width: 480px;
+  width: 90%;
   text-align: center;
-  background-color: #ffffffac;
-  padding: 10px;
-  border-radius: 10px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: embreve-slide-up 0.4s ease-out;
+}
+
+.embreve-icon {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.embreve-icon-svg {
+  color: #3b82f6;
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  padding: 12px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.embreve-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.embreve-description {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.embreve-description strong {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.embreve-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.embreve-button-primary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  min-width: 100px;
+}
+
+.embreve-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.embreve-button-primary:active {
+  transform: translateY(0);
+}
+
+.embreve-button-secondary {
+  background: transparent;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.embreve-button-secondary:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.embreve-progress {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+  opacity: 0.8;
+}
+
+.embreve-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.embreve-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  width: 65%;
+  border-radius: 3px;
+  animation: embreve-progress-pulse 2s ease-in-out infinite;
+}
+
+.embreve-progress-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Animações */
+@keyframes embreve-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes embreve-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes embreve-progress-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .embreve-modal {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+  
+  .embreve-title {
+    font-size: 1.25rem;
+  }
+  
+  .embreve-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .embreve-button-primary,
+  .embreve-button-secondary {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+/* Modo escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+  .embreve-modal {
+    background: linear-gradient(145deg, #1e293b, #334155);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .embreve-title {
+    color: #f1f5f9;
+  }
+  
+  .embreve-description {
+    color: #cbd5e1;
+  }
+  
+  .embreve-button-secondary {
+    border-color: #475569;
+    color: #cbd5e1;
+  }
+  
+  .embreve-button-secondary:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+  }
+  
+  .embreve-progress {
+    border-color: #475569;
+  }
+  
+  .embreve-progress-bar {
+    background: #475569;
+  }
+  
+  .embreve-progress-text {
+    color: #94a3b8;
+  }
 }

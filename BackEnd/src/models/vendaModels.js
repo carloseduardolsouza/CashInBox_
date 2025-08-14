@@ -356,8 +356,7 @@ const listarVendas = async (filtro) => {
 const listarVendasCrediario = async () => {
   const query = `
     SELECT * 
-    FROM crediario_parcelas 
-    WHERE status != 'pago' 
+    FROM crediario_parcelas
     ORDER BY data_vencimento ASC
   `;
 
