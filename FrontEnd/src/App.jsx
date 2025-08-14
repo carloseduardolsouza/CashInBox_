@@ -31,6 +31,7 @@ import DetalhesDoFuncionario from "./screens/DetahesDoFuncionario/DetahesDoFunci
 import CadastrarFuncionario from "./screens/CadastrarFuncionario/CadastrarFuncionario";
 import DetalhesDoProduto from "./screens/DetalhesDoProduto/DetalhesDoProduto";
 import ContasAPagar from "./screens/ContasAPagar/ContasAPagar";
+import Arquivos from "./screens/Arquivos/Arquivos"
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -70,6 +71,10 @@ import { PiCashRegisterLight } from "react-icons/pi";
 //Relatorios
 import { MdInsertChartOutlined } from "react-icons/md";
 import { MdInsertChart } from "react-icons/md";
+
+//arquivos
+import { GoFileDirectory } from "react-icons/go";
+import { GoFileDirectoryFill } from "react-icons/go";
 
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 
@@ -204,6 +209,17 @@ function App() {
           </Link>
 
           <Link
+            to="/arquivos"
+            className="MenuLateralBox"
+            onClick={() => setStatusMenu("arquivos")}
+          >
+            {(statusMenu === "arquivos" && (
+              <GoFileDirectoryFill className="iconsMenuLateral" />
+            )) || <GoFileDirectory className="iconsMenuLateral" />}
+            <p style={style}>Arquivos</p>
+          </Link>
+
+          <Link
             to="/configurações"
             className="MenuLateralBox Preferencias"
             onClick={() => setStatusMenu("configurações")}
@@ -224,6 +240,7 @@ function App() {
           <Route path="/estoque" Component={Estoque} />
           <Route path="/fluxoDeCaixa" Component={FluxoDeCaixa} />
           <Route path="/relatorios" Component={Relatorios} />
+          <Route path="/arquivos" Component={Arquivos} />
 
           <Route path="/cadastrarProduto" Component={CadastrarProduto} />
           <Route path="/cadastrarCliente" Component={CadastrarCliente} />
