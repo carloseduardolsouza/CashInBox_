@@ -1,3 +1,29 @@
+:root {
+  --primary-color: #4285f4;
+  --primary-hover: #357ae8;
+  --danger-color: #dc3545;
+  --danger-hover: #c82333;
+  --danger-light: #ff5353;
+  --success-color: #28a745;
+  --border-color: #363636;
+  --border-light: #ddd;
+  --hover-bg: rgba(9, 68, 163, 0.32);
+  --active-bg: rgba(2, 150, 255, 0.16);
+  --transition: all 0.3s ease;
+  --border-radius: 8px;
+  --border-radius-sm: 4px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --font-size-sm: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
 .FilterDateVendas {
   font-size: 15px;
   height: 30px;
@@ -19,18 +45,57 @@
 }
 
 .Table {
-  border: #363636 solid 2px;
+  border: 2px solid var(--border-color);
   width: 100%;
+  border-radius: var(--border-radius);
   text-align: center;
-  margin-top: 10px;
+  margin-top: var(--spacing-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background-color: white;
+
 }
 
 .Table thead {
-  background-color: var(--div-color);
+  background-color: var(--div-color, #f8f9fa);
 }
 
-.Table tr td {
-  border-bottom: 1px solid var(--text-color);
+.Table thead th {
+  padding: var(--spacing-md) var(--spacing-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.5px;
+  color: var(--text-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.Table tbody tr {
+  transition: var(--transition);
+}
+
+.Table tbody tr:hover {
+  background-color: var(--hover-bg);
+  transform: translateX(2px);
+}
+
+.Table tbody tr.ativo {
+  background-color: var(--active-bg);
+}
+
+.Table tbody tr.ativo:hover {
+  background-color: rgba(2, 150, 255, 0.25);
+}
+
+.Table tbody td {
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-color);
+  vertical-align: middle;
+}
+
+.Table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .Table .ativo {

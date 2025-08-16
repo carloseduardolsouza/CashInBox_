@@ -16,6 +16,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
 } from "recharts";
 
 // Ícones Usados
@@ -23,21 +26,33 @@ import { FaTools } from "react-icons/fa";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { MdAttachMoney } from "react-icons/md";
 import { FaComputer } from "react-icons/fa6";
-import { IoMdArrowDropup } from "react-icons/io";
+import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { 
+  TrendingUp, 
+  Users, 
+  Receipt, 
+  AlertTriangle, 
+  Calendar,
+  CreditCard,
+  Package,
+  Target,
+  DollarSign,
+  Activity
+} from "lucide-react";
 
 // Dados mockados para fallback
-const MOCK_DATA = Array.from({ length: 7 }, () => ({
-  name: "Mês",
-  Despesas: 10,
-  Receitas: 40,
+const MOCK_DATA = Array.from({ length: 6 }, (_, i) => ({
+  name: `M${i + 1}`,
+  Despesas: Math.floor(Math.random() * 20) + 10,
+  Receitas: Math.floor(Math.random() * 30) + 20,
 }));
 
 // Links de navegação configuráveis
 const NAVIGATION_LINKS = [
   { to: "/funcionarios", icon: GiTakeMyMoney, label: "Funcionários" },
-  { to: "/planosEBoletos", icon: FaTools, label: "Planos e Boletos" },
-  { to: "/fluxoDeCaixa", icon: MdAttachMoney, label: "Fluxo de Caixa" },
+  { to: "/planosEBoletos", icon: FaTools, label: "Planos" },
+  { to: "/fluxoDeCaixa", icon: MdAttachMoney, label: "Fluxo" },
   { to: "/pontoDeVenda", icon: FaComputer, label: "PDV" },
 ];
 
@@ -46,6 +61,7 @@ function Home() {
   const [data, setData] = useState([]);
   const [mostrarInfo, setMostrarInfo] = useState(false);
   const [updateReady, setUpdateReady] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     isDark,
@@ -78,8 +94,6 @@ function Home() {
 
     electronAPI.onUpdateAvailable(handleUpdateAvailable);
     electronAPI.onUpdateDownloaded(handleUpdateDownloaded);
-
-    // Cleanup não é necessário pois são listeners do Electron
   }, []);
 
   // Buscar dados dos relatórios
@@ -101,8 +115,8 @@ function Home() {
 
         // Mapear dados do faturamento para o gráfico
         const chartData = response?.faturamento?.map((dados) => ({
-          name: dados.mes,
-          Despesas: 0,
+          name: dados.mes?.substring(0, 3) || "Mês",
+          Despesas: dados.despesas || 0,
           Receitas: dados.faturamento,
         })) || MOCK_DATA;
 
@@ -130,206 +144,310 @@ function Home() {
   }, [setIsDark]);
 
   // Cálculos memoizados
-  const faturamentoData = useMemo(() => {
+  const metricas = useMemo(() => {
     const faturamentoArray = relatoriosBasicos.faturamento || [];
     const len = faturamentoArray.length;
 
     return {
-      atual: len >= 1 ? faturamentoArray[len - 1].faturamento : 0,
-      anterior: len >= 2 ? faturamentoArray[len - 2].faturamento : 0,
-      variacao: len >= 1 ? faturamentoArray[len - 1].variacao : 0,
+      faturamento: {
+        atual: len >= 1 ? faturamentoArray[len - 1].faturamento : 0,
+        anterior: len >= 2 ? faturamentoArray[len - 2].faturamento : 0,
+        variacao: len >= 1 ? faturamentoArray[len - 1].variacao : 0,
+      },
+      clientes: {
+        ativos: relatoriosBasicos.clientesAtivos || 0,
+        novos: Math.floor((relatoriosBasicos.clientesAtivos || 0) * 0.15), // 15% estimado
+        inativos: Math.floor((relatoriosBasicos.clientesAtivos || 0) * 0.25), // 25% estimado
+      },
+      vendas: {
+        hoje: relatoriosBasicos.vendasHoje || 0,
+        meta: relatoriosBasicos.metaVendas || 50,
+        ticket: relatoriosBasicos.ticketMedio || 0,
+      },
+      estoque: {
+        total: relatoriosBasicos.totalProdutos || 0,
+        baixo: relatoriosBasicos.produtosEstoqueMinimo || 0,
+        valor: relatoriosBasicos.valorEstoque || 0,
+      }
     };
-  }, [relatoriosBasicos.faturamento]);
+  }, [relatoriosBasicos]);
 
-  // Componente dos botões de navegação
+  // Componente dos botões de navegação compactos
   const NavigationButtons = useMemo(() => (
-    <div className="ButtonHeaderDeashBoard">
+    <div className="nav-compact">
       {NAVIGATION_LINKS.map(({ to, icon: Icon, label }) => (
-        <Link key={to} to={to} className="bttButtonHeaderDeashBoard">
-          <Icon /> {label}
+        <Link key={to} to={to} className="nav-btn">
+          <Icon />
+          <span>{label}</span>
         </Link>
       ))}
     </div>
   ), []);
 
-  // Componente das métricas
-  const MetricsCards = useMemo(() => (
-    <div className="LoyautCardMétricasBox">
-      <article className="cardMétricasBox green">
-        <div>
-          <h2>Receitas</h2>
-          <h1>R$ 00,00</h1>
+  // Cards de métricas principais (mais compactos)
+  const MetricCards = useMemo(() => (
+    <div className="metrics-grid">
+      {/* Faturamento Principal */}
+      <div className="metric-card primary">
+        <div className="metric-icon">
+          <TrendingUp />
         </div>
-        <div>
-          <div className="linha" />
-          <div className="displayFlex">
-            <div>
-              <p>Último mês</p>
-              <strong>R$ 00,00</strong>
-            </div>
-            <div>
-              <p>
-                <IoMdArrowDropup />
-                Variação
-              </p>
-              <strong>0%</strong>
-            </div>
+        <div className="metric-content">
+          <div className="metric-value">
+            {mostrarInfo ? services.formatarCurrency(metricas.faturamento.atual) : "••••••"}
+          </div>
+          <div className="metric-label">Faturamento Mensal</div>
+          <div className="metric-change positive">
+            <IoMdArrowDropup />
+            {metricas.faturamento.variacao}%
           </div>
         </div>
-      </article>
+      </div>
 
-      <article className="cardMétricasBox red">
-        <div>
-          <h2>Despesas</h2>
-          <h1>R$ 00,00</h1>
+      {/* Vendas do Dia */}
+      <div className="metric-card success">
+        <div className="metric-icon">
+          <DollarSign />
         </div>
-        <div>
-          <div className="linha" />
-          <div className="displayFlex">
-            <div>
-              <p>Último mês</p>
-              <strong>R$ 00,00</strong>
-            </div>
-            <div>
-              <p>
-                <IoMdArrowDropup />
-                Variação
-              </p>
-              <strong>0%</strong>
-            </div>
+        <div className="metric-content">
+          <div className="metric-value">
+            {mostrarInfo ? services.formatarCurrency(relatoriosBasicos.faturamentoDia || 0) : "••••••"}
+          </div>
+          <div className="metric-label">Vendas Hoje</div>
+          <div className="metric-subtitle">
+            {metricas.vendas.hoje} vendas realizadas
           </div>
         </div>
-      </article>
+      </div>
 
-      <article className="cardMétricasBox orange">
-        <div>
-          <h2>Faturamento Mensal</h2>
-          <h1>
-            {mostrarInfo
-              ? services.formatarCurrency(faturamentoData.atual)
-              : "••••••"}
-          </h1>
+      {/* Clientes Ativos */}
+      <div className="metric-card info">
+        <div className="metric-icon">
+          <Users />
         </div>
-        <div>
-          <div className="linha" />
-          <div className="displayFlex">
-            <div>
-              <p>Último mês</p>
-              <strong>
-                {mostrarInfo
-                  ? services.formatarCurrency(faturamentoData.anterior)
-                  : "••••••"}
-              </strong>
-            </div>
-            <div>
-              <p>
-                <IoMdArrowDropup />
-                Crescimento
-              </p>
-              <strong>{faturamentoData.variacao}%</strong>
-            </div>
+        <div className="metric-content">
+          <div className="metric-value">{metricas.clientes.ativos}</div>
+          <div className="metric-label">Clientes Ativos</div>
+          <div className="metric-subtitle">
+            +{metricas.clientes.novos} novos este mês
           </div>
         </div>
-      </article>
-    </div>
-  ), [mostrarInfo, faturamentoData]);
-
-  // Componente das informações principais
-  const InfoCards = useMemo(() => (
-    <div id="InfoHomeDeash">
-      <div className="card-info">
-        <p>Pagamentos Vencidos</p>
-        <span className="badge">{relatoriosBasicos.crediariosAtrasados}</span>
       </div>
 
-      <div className="card-info">
-        <p>Clientes Ativos</p>
-        <span className="badge">{relatoriosBasicos.clientesAtivos}</span>
+      {/* Ticket Médio */}
+      <div className="metric-card warning">
+        <div className="metric-icon">
+          <Target />
+        </div>
+        <div className="metric-content">
+          <div className="metric-value">
+            {mostrarInfo ? services.formatarCurrency(metricas.vendas.ticket) : "••••"}
+          </div>
+          <div className="metric-label">Ticket Médio</div>
+          <div className="metric-subtitle">
+            Meta: {services.formatarCurrency(metricas.vendas.meta * 1000)}
+          </div>
+        </div>
       </div>
 
-      <div className="card-info">
-        <p>Orçamentos</p>
-        <span className="badge">{relatoriosBasicos.totalOrcamentos}</span>
+      {/* Orçamentos */}
+      <div className="metric-card secondary">
+        <div className="metric-icon">
+          <Receipt />
+        </div>
+        <div className="metric-content">
+          <div className="metric-value">{relatoriosBasicos.totalOrcamentos || 0}</div>
+          <div className="metric-label">Orçamentos</div>
+          <div className="metric-subtitle">Aguardando aprovação</div>
+        </div>
       </div>
 
-      <div className="card-info">
-        <p>Resumo Diário</p>
-        <span>
-          {mostrarInfo
-            ? services.formatarCurrency(relatoriosBasicos.faturamentoDia || 0)
-            : "••••••"}
-        </span>
-      </div>
-
-      <div className="card-info alert">
-        <p style={{ color: "white" }}>Alertas de Estoque</p>
-        <div className="info-bottom">
-          <ShoppingBasket className="icon yellow" />
-          <strong>{relatoriosBasicos.produtosEstoqueMinimo}</strong>
+      {/* Estoque Crítico */}
+      <div className="metric-card danger">
+        <div className="metric-icon">
+          <AlertTriangle />
+        </div>
+        <div className="metric-content">
+          <div className="metric-value">{metricas.estoque.baixo}</div>
+          <div className="metric-label">Estoque Baixo</div>
+          <div className="metric-subtitle">
+            Produtos em falta
+          </div>
         </div>
       </div>
     </div>
-  ), [relatoriosBasicos, mostrarInfo]);
+  ), [mostrarInfo, metricas, relatoriosBasicos]);
+
+  // Informações adicionais compactas
+  const InfoPanels = useMemo(() => (
+    <div className="info-panels">
+      {/* Painel de Alertas */}
+      <div className="info-panel alerts">
+        <h4>
+          <AlertTriangle size={16} />
+          Alertas
+        </h4>
+        <div className="alert-items">
+          <div className="alert-item">
+            <span className="alert-count danger">{relatoriosBasicos.crediariosAtrasados || 0}</span>
+            <span className="alert-text">Pagamentos vencidos</span>
+          </div>
+          <div className="alert-item">
+            <span className="alert-count warning">{metricas.estoque.baixo}</span>
+            <span className="alert-text">Produtos com estoque baixo</span>
+          </div>
+          <div className="alert-item">
+            <span className="alert-count info">{metricas.clientes.inativos}</span>
+            <span className="alert-text">Clientes inativos</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Painel de Performance */}
+      <div className="info-panel performance">
+        <h4>
+          <Activity size={16} />
+          Performance
+        </h4>
+        <div className="performance-items">
+          <div className="performance-item">
+            <span className="performance-label">Taxa de Conversão</span>
+            <span className="performance-value">3.2%</span>
+          </div>
+          <div className="performance-item">
+            <span className="performance-label">Produtos Vendidos</span>
+            <span className="performance-value">{metricas.vendas.hoje * 2}</span>
+          </div>
+          <div className="performance-item">
+            <span className="performance-label">Valor em Estoque</span>
+            <span className="performance-value">
+              {mostrarInfo ? services.formatarCurrency(metricas.estoque.valor) : "••••••"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  ), [relatoriosBasicos, metricas, mostrarInfo]);
 
   return (
-    <div id="Homescreen">
-      <div className="NotificationHomeScreen">
-        <div style={{ position: "relative" }}>
-          {updateReady && <span id="circleAtualizacao" />}
+    <div className="dashboard">
+      {/* Header compacto */}
+      <header className="dashboard-header">
+        <div className="header-left">
+          <h1>{dadosLoja.nomeEstabelecimento || "Dashboard"}</h1>
+          <span className="header-subtitle">Visão geral • {new Date().toLocaleDateString('pt-BR')}</span>
+        </div>
+        
+        <div className="header-controls">
           <button
-            id="ButtonDarkMode"
+            className={`control-btn ${updateReady ? 'update' : ''}`}
             onClick={handleAtualizar}
             disabled={!updateReady}
-            title="Instalar Atualização"
+            title="Atualizar"
           >
             <MdOutlineBrowserUpdated />
+            {updateReady && <span className="update-dot" />}
+          </button>
+
+          <button
+            className="control-btn"
+            onClick={toggleMostrarInfo}
+            title={mostrarInfo ? "Ocultar valores" : "Mostrar valores"}
+          >
+            {mostrarInfo ? <FaEye /> : <FaEyeSlash />}
+          </button>
+
+          <button
+            className="control-btn"
+            onClick={toggleDarkMode}
+            title="Tema"
+          >
+            {isDark ? "☀️" : "🌙"}
           </button>
         </div>
-
-        <button
-          id="ButtonDarkMode"
-          onClick={toggleMostrarInfo}
-          aria-label={mostrarInfo ? "Esconder informações" : "Mostrar informações"}
-          title={mostrarInfo ? "Esconder informações" : "Mostrar informações"}
-        >
-          {mostrarInfo ? <FaEye /> : <FaEyeSlash />}
-        </button>
-
-        <button
-          id="ButtonDarkMode"
-          onClick={toggleDarkMode}
-          disabled={true}
-          title="Alternar tema"
-        >
-          {isDark ? "☀️" : "🌙"}
-        </button>
-      </div>
-
-      <h1>{dadosLoja.nomeEstabelecimento || "CashInBox..."}</h1>
-
-      <header className="HeaderHomeDeashBoard">
-        <LineChart
-          width={550}
-          height={300}
-          data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="Receitas" stroke="#31c331" />
-          <Line type="monotone" dataKey="Despesas" stroke="#de2727" />
-        </LineChart>
-
-        {NavigationButtons}
-        {MetricsCards}
       </header>
 
-      <main>
-        {InfoCards}
-      </main>
+      {/* Layout principal em grid */}
+      <div className="dashboard-grid">
+        {/* Coluna da esquerda - Navegação */}
+        <div className="grid-left">
+          {NavigationButtons}
+        </div>
+
+        {/* Coluna central - Gráfico */}
+        <div className="grid-center">
+          <div className="chart-panel">
+            <div className="chart-header">
+              <h3>Tendência Financeira</h3>
+              <div className="chart-legend">
+                <span className="legend-item">
+                  <div className="legend-color success"></div>
+                  Receitas
+                </span>
+                <span className="legend-item">
+                  <div className="legend-color danger"></div>
+                  Despesas
+                </span>
+              </div>
+            </div>
+            <div className="chart-content">
+              <ResponsiveContainer width="100%" height={240}>
+                <LineChart data={data} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                  <XAxis 
+                    dataKey="name" 
+                    stroke="#64748b"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis 
+                    stroke="#64748b"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    width={40}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '6px',
+                      fontSize: '12px',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                    }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="Receitas" 
+                    stroke="#10b981" 
+                    strokeWidth={2}
+                    dot={{ fill: '#10b981', strokeWidth: 1, r: 3 }}
+                    activeDot={{ r: 4 }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="Despesas" 
+                    stroke="#ef4444" 
+                    strokeWidth={2}
+                    dot={{ fill: '#ef4444', strokeWidth: 1, r: 3 }}
+                    activeDot={{ r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        {/* Coluna da direita - Informações adicionais */}
+        <div className="grid-right">
+          {InfoPanels}
+        </div>
+      </div>
+      {/* Métricas na parte inferior */}
+      <div className="dashboard-bottom">
+        {MetricCards}
+      </div>
     </div>
   );
 }
