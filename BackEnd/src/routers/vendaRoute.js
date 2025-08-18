@@ -67,4 +67,6 @@ router.get("/crediario/venda/:id", vendaControllers.listarVendasCrediarioVenda);
 // ✅ Receber valor de uma venda a prazo
 router.put("/crediario/receber/:id", vendaControllers.receberVendaCrediario);
 
+router.put("/crediario/amortizar/:id", vendaControllers.amortizarParcela);
+
 module.exports = router;

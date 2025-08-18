@@ -1,6 +1,7 @@
 import "./VendasAReceber.css";
 import { useState, useContext, useEffect } from "react";
 import AppContext from "../../../../context/AppContext";
+import { useNavigate } from 'react-router-dom'
 
 import services from "../../../../services/services";
 
@@ -10,6 +11,7 @@ import ModalFaturar from "./components/ModalFaturar/ModalFaturar";
 import vendaFetch from "../../../../api/vendaFetch";
 
 function VendasAReceber() {
+  const navigate = useNavigate()
   const { setErroApi } = useContext(AppContext);
   const [resultadosVendas, setResultadosVendas] = useState([]);
 
@@ -68,7 +70,7 @@ function VendasAReceber() {
         <tbody>
           {resultadosVendas.map((dados) => {
             return (
-              <tr>
+              <tr className="trVendasReceber">
                 <td>
                   <button
                     className="DetalhesHistoricoVendas"
@@ -77,7 +79,7 @@ function VendasAReceber() {
                     Faturar
                   </button>
                 </td>
-                <td>{dados.nome_cliente}</td>
+                <td onClick={() => {navigate(`/detalhesDaVenda/${dados.id_venda}`)}}>{dados.nome_cliente}</td>
                 <td>
                   {services.formatarDataNascimento(dados.data_vencimento)}
                 </td>

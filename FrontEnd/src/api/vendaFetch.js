@@ -92,7 +92,15 @@ const deletarVenda = async (id) => {
   }
 };
 
+const amortizarParcela = async (id, json) =>
+  handleFetch(`${API_URL}/vendas/crediario/amortizar/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(json),
+  });
+
 export default {
+  amortizarParcela,
   listarVendas,
   listarVendasCrediario,
   listarVendasCrediarioCliente,

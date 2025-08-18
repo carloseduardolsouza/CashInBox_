@@ -210,7 +210,19 @@ const deletarVenda = async (req, res) => {
   }
 };
 
+const amortizarParcela = async (req , res) => {
+  try {
+    const { id } = req.params;
+    const parcela = await vendaModels.amortizarParcela(id , req.body);
+    return res.status(200).json(parcela);
+  } catch (err) {
+    console.error("Erro ao deletar venda:", err);
+    return res.status(500).json({ erro: "Erro ao deletar venda" });
+  }
+}
+
 module.exports = {
+  amortizarParcela,
   novaVenda,
   novaVendaCrediario,
   listarVendas,

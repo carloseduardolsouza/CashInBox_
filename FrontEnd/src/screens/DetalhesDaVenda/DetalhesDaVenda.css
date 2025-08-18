@@ -152,3 +152,14 @@
   color: var(--button-color);
   transition: all 0.3s ease;
 }
+
+#EscolherAmortizarArticle {
+  position: absolute;
+  right: 10px;
+  background: var(--div-color);
+}
+
+#EscolherAmortizarArticle p:hover {
+  color: var(--button-color);
+  transition: all 0.3s ease;
+}

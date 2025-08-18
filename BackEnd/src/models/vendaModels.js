@@ -139,7 +139,11 @@ const novaVenda = async (dados) => {
         [produto_id]
       );
 
-      if (produtoInfo.length && produtoInfo[0].ativo === 1 && status != "orçamento") {
+      if (
+        produtoInfo.length &&
+        produtoInfo[0].ativo === 1 &&
+        status != "orçamento"
+      ) {
         const estoqueAtual = produtoInfo[0].estoque_atual || 0;
         const novoEstoque = estoqueAtual - quantidade;
 
@@ -321,7 +325,7 @@ const novaVendaCrediario = async (dados) => {
  */
 const listarOrcamentos = async (filtro) => {
   let query = `SELECT * FROM vendas WHERE LOWER(status) = 'orçamento'`;
-  const values = []
+  const values = [];
 
   if (filtro) {
     const filtroFormatado = `${filtro}T00:00:00.000Z`;
@@ -607,8 +611,41 @@ const deletarVenda = async (id) => {
   }
 };
 
+const amortizarParcela = async (id, dados) => {
+  const { valorProxParcelas } = dados;
+  try {
+    // Busca todas as parcelas pendentes da venda
+    const parcelasPendentes = await allAsync(
+      `SELECT * FROM crediario_parcelas WHERE id_venda = ? AND status = 'pendente'`,
+      [id]
+    );
+
+    if (!parcelasPendentes.length) {
+      throw new Error("Nenhuma parcela pendente encontrada para esta venda.");
+    }
+
+    // Atualiza o valor_parcela de cada uma
+    for (const parcela of parcelasPendentes) {
+      await runAsync(
+        `UPDATE crediario_parcelas SET valor_parcela = ? WHERE id = ?`,
+        [valorProxParcelas, parcela.id]
+      );
+    }
+
+    return {
+      success: true,
+      mensagem: `Parcelas pendentes da venda #${id} atualizadas com sucesso.`,
+      novasParcelas: parcelasPendentes.length,
+    };
+  } catch (err) {
+    console.error("Erro ao amortizar parcelas:", err);
+    throw err;
+  }
+};
+
 module.exports = {
   novaVenda,
+  amortizarParcela,
   novaVendaCrediario,
   listarVendasCrediario,
   listarVendas,
