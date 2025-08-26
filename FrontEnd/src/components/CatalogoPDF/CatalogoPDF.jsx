@@ -10,6 +10,9 @@ import {
 } from "@react-pdf/renderer";
 import services from "../../services/services";
 
+// Configuração da URL base
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3322";
+
 // Estilos no formato JS (não CSS)
 const styles = StyleSheet.create({
   page: {
@@ -35,7 +38,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 60,
     marginBottom: 10,
-    objectFit: "contain",
   },
   logoPlaceholder: {
     width: 80,
@@ -45,6 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10,
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   companyInfo: {
     alignItems: "flex-end",
@@ -94,21 +98,21 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 12,
     backgroundColor: "#fefefe",
-    position: "relative",
+    minHeight: 240,
   },
   productImageContainer: {
     width: "100%",
     height: 120,
     marginBottom: 8,
-    alignItems: "center",
-    justifyContent: "center",
     borderRadius: 4,
     overflow: "hidden",
+    backgroundColor: "#f8f9fa",
+    alignItems: "center",
+    justifyContent: "center",
   },
   productImage: {
     width: "100%",
-    height: "100%",
-    objectFit: "cover",
+    height: 120,
   },
   productName: {
     fontSize: 12,
@@ -116,6 +120,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: "#333",
     lineHeight: 1.3,
+    minHeight: 15,
   },
   productInfo: {
     fontSize: 9,
@@ -123,18 +128,30 @@ const styles = StyleSheet.create({
     color: "#666",
     lineHeight: 1.2,
   },
+  productInfoSection: {
+    marginTop: "auto",
+  },
+  priceContainer: {
+    marginTop: 8,
+    marginBottom: 4,
+  },
   productPrice: {
     fontSize: 13,
     fontWeight: "bold",
     color: "#2c5530",
-    marginTop: 6,
     marginBottom: 2,
   },
   productCostPrice: {
-    fontSize: 9,
+    fontSize: 10,
     color: "#999",
     textDecoration: "line-through",
     marginBottom: 2,
+  },
+  productPromotionalPrice: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#dc3545",
+    marginTop: 2,
   },
   productMarkup: {
     fontSize: 8,
@@ -182,7 +199,7 @@ const styles = StyleSheet.create({
   productDescription: {
     fontSize: 8,
     color: "#666",
-    marginTop: 4,
+    marginTop: 6,
     fontStyle: "italic",
     lineHeight: 1.2,
   },
@@ -190,7 +207,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 2,
+    marginTop: 4,
   },
   stockText: {
     fontSize: 9,
@@ -199,6 +216,9 @@ const styles = StyleSheet.create({
   stockLow: {
     color: "#dc3545",
     fontWeight: "bold",
+  },
+  stockGood: {
+    color: "#28a745",
   },
   footer: {
     position: "absolute",
@@ -219,25 +239,98 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: "#999",
   },
+  emptyState: {
+    textAlign: "center",
+    marginTop: 100,
+    color: "#666",
+  },
+  emptyStateTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  emptyStateText: {
+    fontSize: 12,
+    color: "#999",
+  },
 });
 
 const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
+  // Validação inicial
   if (!produtos || produtos.length === 0) {
     return (
       <Document>
         <Page size="A4" style={styles.page}>
           <Text style={styles.title}>CATÁLOGO DE PRODUTOS</Text>
-          <Text style={{ textAlign: "center", marginTop: 50, fontSize: 14 }}>
-            Nenhum produto selecionado para o catálogo.
-          </Text>
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyStateTitle}>
+              Nenhum produto encontrado
+            </Text>
+            <Text style={styles.emptyStateText}>
+              Selecione alguns produtos para gerar o catálogo.
+            </Text>
+          </View>
         </Page>
       </Document>
     );
   }
 
-  const produtosParaCatalogo = produtos;
-  const produtosPorPagina = 8;
-  const totalPaginas = Math.ceil(produtosParaCatalogo.length / produtosPorPagina);
+  const produtosParaCatalogo = produtos.filter(
+    (produto) => produto && produto.nome
+  );
+  const produtosPorPagina = 4;
+  const totalPaginas = Math.ceil(
+    produtosParaCatalogo.length / produtosPorPagina
+  );
+
+  // Função para formatar data atual
+  const dataAtual = new Date();
+  const formatarData = (data) => {
+    return services?.formatarDataCurta
+      ? services.formatarDataCurta(data)
+      : data.toLocaleDateString("pt-BR");
+  };
+
+  // Função para formatar moeda
+  const formatarMoeda = (valor) => {
+    return services?.formatarCurrency
+      ? services.formatarCurrency(valor)
+      : `R$ ${Number(valor).toFixed(2).replace(".", ",")}`;
+  };
+
+  // Função para formatar CNPJ
+  const formatarCNPJ = (cnpj) => {
+    if (!cnpj) return "00.000.000/0000-00";
+    return services?.formatarCNPJ
+      ? services.formatarCNPJ(cnpj)
+      : cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+  };
+
+  // Função para formatar telefone
+  const formatarTelefone = (telefone) => {
+    if (!telefone) return "(00) 00000-0000";
+    return services?.formatarNumeroCelular
+      ? services.formatarNumeroCelular(telefone)
+      : telefone.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+  };
+
+  // Função para determinar status do estoque
+  const getStatusEstoque = (produto) => {
+    if (produto.estoque === undefined || produto.estoque === null) return null;
+    if (produto.estoque === 0) return "Sem estoque";
+    if (produto.estoque < 5) return "Estoque baixo";
+    return "Em estoque";
+  };
+
+  // Função para obter estilo do estoque
+  const getEstiloEstoque = (produto) => {
+    if (produto.estoque === undefined || produto.estoque === null)
+      return styles.stockText;
+
+    if (produto.estoque === 0 || produto.estoque < 5)
+      return [styles.stockText, styles.stockLow];
+    return [styles.stockText, styles.stockGood];
+  };
 
   const gerarPaginas = () => {
     const paginas = [];
@@ -248,7 +341,7 @@ const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
       const produtosPagina = produtosParaCatalogo.slice(inicio, fim);
 
       paginas.push(
-        <Page key={i} size="A4" style={styles.page}>
+        <Page key={`page-${i}`} size="A4" style={styles.page}>
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.logoSection}>
@@ -260,26 +353,29 @@ const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
                 </View>
               )}
               <Text style={styles.companyName}>
-                {dadosLoja.nome || "Nome da Empresa"}
+                {dadosLoja.nomeEstabelecimento || "Nome da Empresa"}
               </Text>
             </View>
 
             <View style={styles.companyInfo}>
               <Text style={styles.companyDetails}>
-                CNPJ: {services.formatarCNPJ(dadosLoja.cnpj || "00000000000000")}
+                CNPJ: {formatarCNPJ(dadosLoja.cnpj)}
               </Text>
               <Text style={styles.companyDetails}>
                 {dadosLoja.endereco || "Endereço não cadastrado"}
               </Text>
               <Text style={styles.companyDetails}>
-                Tel:{" "}
-                {services.formatarNumeroCelular(dadosLoja.telefone || "00000000000")}
+                Tel: {formatarTelefone(dadosLoja.telefone)}
               </Text>
               {dadosLoja.email && (
-                <Text style={styles.companyDetails}>E-mail: {dadosLoja.email}</Text>
+                <Text style={styles.companyDetails}>
+                  E-mail: {dadosLoja.email}
+                </Text>
               )}
               {dadosLoja.site && (
-                <Text style={styles.companyDetails}>Site: {dadosLoja.site}</Text>
+                <Text style={styles.companyDetails}>
+                  Site: {dadosLoja.site}
+                </Text>
               )}
             </View>
           </View>
@@ -290,7 +386,7 @@ const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
           {/* Informações do catálogo */}
           <View style={styles.catalogInfo}>
             <Text style={styles.catalogInfoText}>
-              Data: {services.formatarDataCurta(new Date())}
+              Data: {formatarData(dataAtual)}
             </Text>
             <Text style={styles.catalogInfoText}>
               Total de produtos: {produtosParaCatalogo.length}
@@ -303,38 +399,27 @@ const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
           {/* Grid de produtos */}
           <View style={styles.productsGrid}>
             {produtosPagina.map((produto, index) => {
-              const estoqueAtual = produto.estoque_atual || 0;
-              const estoqueMinimo = produto.estoque_minimo || 0;
-              const estoqueBaixo = estoqueAtual <= estoqueMinimo && estoqueMinimo > 0;
+              const imagemBase64 = produto.imagem;
+
+              const getImagemSrc = (img) => {
+                if (!img) return null;
+
+                // já é data URI válido
+                if (img.startsWith("data:image")) return img;
+
+                // senão, for só base64 cru
+                return `data:image/png;base64,${img}`;
+              };
 
               return (
-                <View key={produto.id || index} style={styles.productCard}>
-                  {/* Badge de status */}
-                  {produto.ativo !== undefined && (
-                    <View
-                      style={[
-                        styles.statusBadge,
-                        estoqueBaixo
-                          ? styles.stockWarning
-                          : produto.ativo
-                          ? styles.activeStatus
-                          : styles.inactiveStatus,
-                      ]}
-                    >
-                      <Text>
-                        {estoqueBaixo
-                          ? "ESTOQUE BAIXO"
-                          : produto.ativo
-                          ? "ATIVO"
-                          : "INATIVO"}
-                      </Text>
-                    </View>
-                  )}
-
+                <View
+                  key={produto.id || `produto-${i}-${index}`}
+                  style={styles.productCard}
+                >
                   {/* Imagem */}
                   <View style={styles.productImageContainer}>
-                    {produto.imagem && produto.imagem !== "" ? (
-                      <Image src={produto.imagem} style={styles.productImage} />
+                    {produto.imagem ? (
+                      <Image src={getImagemSrc(produto.imagem)} style={styles.productImage} />
                     ) : (
                       <View style={styles.noImage}>
                         <Text style={styles.noImageText}>SEM{"\n"}IMAGEM</Text>
@@ -347,54 +432,51 @@ const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
                     {produto.nome || "Produto sem nome"}
                   </Text>
 
-                  {/* Informações */}
-                  {produto.codigo_barras && (
-                    <Text style={styles.productInfo}>
-                      Código: {produto.codigo_barras}
-                    </Text>
-                  )}
-                  {produto.referencia && (
-                    <Text style={styles.productInfo}>
-                      Referência: {produto.referencia}
-                    </Text>
-                  )}
-                  {produto.categoria && (
-                    <Text style={styles.productInfo}>
-                      Categoria: {produto.categoria}
-                    </Text>
-                  )}
-                  {produto.marca && (
-                    <Text style={styles.productInfo}>Marca: {produto.marca}</Text>
-                  )}
-                  <Text style={styles.productInfo}>
-                    Estoque: {estoqueAtual} {produto.unidade_medida || "un"}
-                  </Text>
-                  {produto.estoque_minimo > 0 && (
-                    <Text style={styles.productInfo}>
-                      Est. mín: {produto.estoque_minimo}
-                    </Text>
-                  )}
+                  {/* Informações do produto */}
+                  <View>
+                    {produto.codigo_barras && (
+                      <Text style={styles.productInfo}>
+                        Código: {produto.codigo_barras}
+                      </Text>
+                    )}
+                    {produto.categoria && (
+                      <Text style={styles.productInfo}>
+                        Categoria: {produto.categoria}
+                      </Text>
+                    )}
+                    {produto.marca && (
+                      <Text style={styles.productInfo}>
+                        Marca: {produto.marca}
+                      </Text>
+                    )}
+                  </View>
 
-                  {/* Preços */}
-                  {produto.preco_custo > 0 && (
-                    <Text style={styles.productCostPrice}>
-                      Custo: {services.formatarCurrency(produto.preco_custo)}
-                    </Text>
-                  )}
-                  <Text style={styles.productPrice}>
-                    {services.formatarCurrency(produto.preco_venda || 0)}
-                  </Text>
-                  {produto.markup > 0 && (
-                    <Text style={styles.productMarkup}>
-                      Markup: {produto.markup}%
-                    </Text>
-                  )}
+                  {/* Seção de preços */}
+                  <View
+                    style={[styles.productInfoSection, styles.priceContainer]}
+                  >
+                    {produto.preco_promocional &&
+                    produto.preco_promocional < produto.preco_venda ? (
+                      <View>
+                        <Text style={styles.productCostPrice}>
+                          De: {formatarMoeda(produto.preco_venda || 0)}
+                        </Text>
+                        <Text style={styles.productPromotionalPrice}>
+                          Por: {formatarMoeda(produto.preco_promocional)}
+                        </Text>
+                      </View>
+                    ) : (
+                      <Text style={styles.productPrice}>
+                        {formatarMoeda(produto.preco_venda || 0)}
+                      </Text>
+                    )}
+                  </View>
 
                   {/* Descrição */}
                   {produto.descricao && (
                     <Text style={styles.productDescription}>
-                      {produto.descricao.length > 60
-                        ? produto.descricao.substring(0, 60) + "..."
+                      {produto.descricao.length > 80
+                        ? produto.descricao.substring(0, 80) + "..."
                         : produto.descricao}
                     </Text>
                   )}
@@ -405,8 +487,11 @@ const CatalogoProdutosPdf = ({ produtos = [], dadosLoja = {} }) => {
 
           {/* Footer */}
           <Text style={styles.footer}>
-            Catálogo gerado em {services.formatarDataCurta(new Date())} -{" "}
-            {dadosLoja.nome || "Nome da Loja"}
+            Catálogo gerado em {formatarData(dataAtual)} -{" "}
+            {dadosLoja.nomeEstabelecimento || "Nome da Loja"}
+            {dadosLoja.telefone &&
+              ` - Tel: ${formatarTelefone(dadosLoja.telefone)}`}
+            {dadosLoja.email && ` - ${dadosLoja.email}`}
           </Text>
 
           {/* Número da página */}

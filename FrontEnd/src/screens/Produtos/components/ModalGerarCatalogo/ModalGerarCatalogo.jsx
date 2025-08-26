@@ -30,6 +30,37 @@ function ModalGerarCatalogo({ fechar, produtos }) {
     }
   }, [setErroApi, adicionarAviso]);
 
+  async function convertToBase64(url, quality = 0.9) {
+    try {
+      // 1️⃣ Pega a imagem do URL
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      // 2️⃣ Cria um elemento Image para manipular
+      const img = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.crossOrigin = "Anonymous"; // importante para evitar problemas de CORS
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = URL.createObjectURL(blob);
+      });
+
+      // 3️⃣ Cria um canvas e desenha a imagem nele
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      // 4️⃣ Converte o canvas para base64 em JPEG
+      const base64 = canvas.toDataURL("image/jpeg", quality); // qualidade entre 0 e 1
+      return base64;
+    } catch (err) {
+      console.error("Erro ao converter imagem para JPEG:", err);
+      return null;
+    }
+  }
+
   const customStyles = useMemo(
     () => ({
       control: (base, state) => ({
@@ -141,6 +172,7 @@ function ModalGerarCatalogo({ fechar, produtos }) {
 
       console.log("Produtos selecionados:", produtosSelecionadosArray);
       console.log("Dados da loja:", dadosLoja);
+      console.log(produtosSelecionadosArray);
 
       // Validar se há produtos
       if (produtosSelecionadosArray.length === 0) {
@@ -236,7 +268,9 @@ function ModalGerarCatalogo({ fechar, produtos }) {
 
             if (imagens && imagens.length > 0) {
               const imgPath = imagens[0].imagem_path;
-              imgUrl = `http://localhost:3322/uploads/${imgPath}`;
+              imgUrl = await convertToBase64(
+                `http://localhost:3322/uploads/${imgPath}`
+              );
             }
 
             return {
@@ -480,14 +514,14 @@ function ModalGerarCatalogo({ fechar, produtos }) {
             </table>
           )}
         </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "14px", color: "#666" }}>
+            {produtosSelecionados.size} de {produtosTratados.length} produtos
+            selecionados
+          </span>
+        </div>
 
         <div id="areaButtons">
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "14px", color: "#666" }}>
-              {produtosSelecionados.size} de {produtosTratados.length} produtos
-              selecionados
-            </span>
-          </div>
           <div>
             <button onClick={() => fechar(null)} disabled={concluindo}>
               Cancelar
