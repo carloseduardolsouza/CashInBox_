@@ -1,0 +1,28 @@
+.imgGerarCatalogo {
+  width: 60px;
+  height: 60px;
+  background-size: cover;
+  background-position: center;
+}
+
+#ModalGerarCatalogo {
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 500px;
+}
+
+#rowGerarCatalogo {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#listaDeProdutos {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#areaButtons {
+    display: flex;
+    justify-content: space-around;
+}

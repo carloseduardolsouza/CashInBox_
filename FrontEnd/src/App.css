@@ -25,6 +25,10 @@
   padding: 0px;
 }
 
+textarea {
+  border: solid black 1px;
+}
+
 a {
   color: black;
 }

@@ -104,6 +104,7 @@ function Home() {
         
         if (Array.isArray(response)) {
           setRelatoriosBasicos(response);
+          console.log(response)
         } else {
           setRelatoriosBasicos(response || {});
           if (!response) {
@@ -156,7 +157,7 @@ function Home() {
       },
       clientes: {
         ativos: relatoriosBasicos.clientesAtivos || 0,
-        novos: Math.floor((relatoriosBasicos.clientesAtivos || 0) * 0.15), // 15% estimado
+        novos: Math.floor((relatoriosBasicos.clientesNovosMes || 0) * 0.15), // 15% estimado
         inativos: Math.floor((relatoriosBasicos.clientesAtivos || 0) * 0.25), // 25% estimado
       },
       vendas: {

@@ -15,6 +15,18 @@ const infoHome = async () => {
     });
   });
 
+  const clientesNovosMes = await new Promise((resolve, reject) => {
+  db.all(
+    `SELECT * 
+     FROM clientes 
+     WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')`,
+    (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    }
+  );
+});
+
   const faturamento = {};
   let faturamentoDia = 0;
 
@@ -136,6 +148,7 @@ const infoHome = async () => {
     faturamento: faturamentoUltimosMeses.map(({ chave, ...resto }) => resto),
     faturamentoDia: parseFloat(faturamentoDia.toFixed(2)),
     clientesAtivos,
+    clientesNovosMes : clientesNovosMes.length,
     crediariosAtrasados,
     totalOrcamentos,
     produtosEstoqueMinimo,

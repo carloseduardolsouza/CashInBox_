@@ -624,7 +624,7 @@ function Arquivos() {
 
   return (
     <div id="Arquivos">
-      <EmBreve />
+      
       <nav className="arquivos-sidebar">
         <div className="headerArquivosNavigation">
           <div className="header-icon">📁</div>

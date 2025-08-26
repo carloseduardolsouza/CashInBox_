@@ -31,7 +31,7 @@ import DetalhesDoFuncionario from "./screens/DetahesDoFuncionario/DetahesDoFunci
 import CadastrarFuncionario from "./screens/CadastrarFuncionario/CadastrarFuncionario";
 import DetalhesDoProduto from "./screens/DetalhesDoProduto/DetalhesDoProduto";
 import ContasAPagar from "./screens/ContasAPagar/ContasAPagar";
-import Arquivos from "./screens/Arquivos/Arquivos"
+import Arquivos from "./screens/Arquivos/Arquivos";
 
 //Home
 import { GoHome } from "react-icons/go";
@@ -79,7 +79,8 @@ import { GoFileDirectoryFill } from "react-icons/go";
 import { HashRouter as Router, Link, Route, Routes } from "react-router-dom";
 
 function App() {
-  const { erroApi, vencido , fazerLogin , ultimoLoginExpirado} = useContext(AppContext);
+  const { erroApi, vencido, fazerLogin, ultimoLoginExpirado } =
+    useContext(AppContext);
   //Status do menu
   const [statusMenu, setStatusMenu] = useState("home");
 
@@ -118,9 +119,9 @@ function App() {
     <div className="App">
       {erroApi && <ApiDesconectada />}
       {vencido && <AssinaturaVencida />}
-      {fazerLogin && <CardLogin/>}
-      {ultimoLoginExpirado  && <UltimoLoginExpirado/>}
-      {<Aviso/>}
+      {fazerLogin && <CardLogin />}
+      {ultimoLoginExpirado && <UltimoLoginExpirado />}
+      {<Aviso />}
       <Router>
         <div className="MenuLateralBoxArea" style={{ width: windowWidth }}>
           <div className="MenuLateralBox Outline" onClick={VerificarStatusMenu}>

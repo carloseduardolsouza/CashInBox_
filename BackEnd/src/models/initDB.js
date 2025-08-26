@@ -124,6 +124,7 @@ async function criarTabelasPrincipais() {
     data_ultima_compra TEXT,
     total_compras REAL DEFAULT 0,
     pontuacao_fidelidade INTEGER DEFAULT 0,
+    categoria INTEGER,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now'))
   )`);
@@ -149,6 +150,11 @@ async function criarTabelasPrincipais() {
     updated_at TEXT DEFAULT (datetime('now'))
   )`);
 
+  await runAsync(`CREATE TABLE IF NOT EXISTS categorias (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL
+  )`);
+
   await runAsync(`CREATE TABLE IF NOT EXISTS produtos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nome TEXT NOT NULL,
@@ -166,7 +172,8 @@ async function criarTabelasPrincipais() {
     unidade_medida TEXT,
     ativo INTEGER DEFAULT 1,
     created_at TEXT DEFAULT (datetime('now')),
-    updated_at TEXT DEFAULT (datetime('now'))
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
   )`);
 
   await runAsync(`CREATE TABLE IF NOT EXISTS variacoes (
@@ -176,14 +183,6 @@ async function criarTabelasPrincipais() {
     tamanho TEXT,
     imagem_path TEXT,
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
-  )`);
-
-  await runAsync(`CREATE TABLE IF NOT EXISTS pagamentos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    venda_id INTEGER,
-    tipo_pagamento TEXT,
-    valor REAL DEFAULT 0,
-    FOREIGN KEY (venda_id) REFERENCES vendas(id)
   )`);
 
   await runAsync(`CREATE TABLE IF NOT EXISTS vendas (
@@ -199,6 +198,7 @@ async function criarTabelasPrincipais() {
     total_bruto REAL,
     status TEXT NOT NULL,
     observacoes TEXT,
+    ultimo_lembrete TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id),
@@ -218,9 +218,27 @@ async function criarTabelasPrincipais() {
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
   )`);
 
-  await runAsync(`CREATE TABLE IF NOT EXISTS categorias (
+  await runAsync(`CREATE TABLE IF NOT EXISTS pagamentos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL
+    venda_id INTEGER,
+    tipo_pagamento TEXT,
+    valor REAL DEFAULT 0,
+    FOREIGN KEY (venda_id) REFERENCES vendas(id)
+  )`);
+
+  await runAsync(`CREATE TABLE IF NOT EXISTS crediario_parcelas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_cliente INTEGER NOT NULL,
+    nome_cliente TEXT NOT NULL,
+    id_venda INTEGER NOT NULL,
+    numero_parcela INTEGER NOT NULL,
+    data_vencimento DATE NOT NULL,
+    valor_parcela REAL NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pendente',
+    data_pagamento DATE,
+    valor_pago REAL,
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id),
+    FOREIGN KEY (id_venda) REFERENCES vendas(id)
   )`);
 
   await runAsync(`CREATE TABLE IF NOT EXISTS caixas (
@@ -243,15 +261,37 @@ async function criarTabelasPrincipais() {
     descricao TEXT,
     tipo TEXT CHECK(tipo IN ('entrada', 'saida')) NOT NULL,
     valor REAL NOT NULL,
+    tipo_pagamento TEXT,
     FOREIGN KEY (caixa_id) REFERENCES caixas(id)
+  )`);
+
+  await runAsync(`CREATE TABLE IF NOT EXISTS contas_a_pagar (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    descricao TEXT NOT NULL,
+    fornecedor TEXT NOT NULL,
+    categoria TEXT NOT NULL,
+    valor_total REAL NOT NULL,
+    data_emissao TEXT NOT NULL,
+    data_vencimento TEXT NOT NULL,
+    forma_pagamento TEXT NOT NULL,
+    parcelado INTEGER NOT NULL DEFAULT 0,
+    observacoes TEXT,
+    status TEXT NOT NULL DEFAULT 'pendente',
+    data_pagamento TEXT
+  )`);
+
+  await runAsync(`CREATE TABLE IF NOT EXISTS migrations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    applied_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 }
 
 async function initDB() {
   try {
     await criarTabelasPrincipais();
-    await applyMigrations();
     console.log("🎉 Banco inicializado com sucesso!");
+    console.log("📋 Todas as tabelas foram criadas com a estrutura mais atual");
   } catch (err) {
     console.error("❌ Erro na inicialização do banco:", err);
   }

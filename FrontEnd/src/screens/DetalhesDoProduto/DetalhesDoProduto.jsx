@@ -2,7 +2,7 @@ import "./DetalhesDoProduto.css";
 
 import Select from "react-select";
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import AppContext from "../../context/AppContext";
 
 import produtoFetch from "../../api/produtoFetch";
@@ -10,149 +10,318 @@ import categoriaFetch from "../../api/categoriaFetch";
 //icones
 import { FaRegTrashAlt } from "react-icons/fa";
 
+// Hook customizado para gerenciar dados do produto
+const useProdutoData = (id) => {
+  const [produto, setProduto] = useState({
+    codBarras: "",
+    nomeProduto: "",
+    descricao: "",
+    estoque_atual: "",
+    estoque_minimo: "",
+    preco_custo: "",
+    markup: "",
+    preco_venda: "",
+    categoria: "",
+    categoria_id: "",
+    controlarEstoque: false,
+  });
+  
+  const [imagensProdutos, setImagensProdutos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  return {
+    produto,
+    setProduto,
+    imagensProdutos,
+    setImagensProdutos,
+    loading,
+    setLoading,
+    error,
+    setError
+  };
+};
+
+// Utilitário para formatação de valores monetários
+const formatarValorMonetario = (valor) => {
+  return typeof valor === 'number' ? valor.toFixed(2) : parseFloat(valor || 0).toFixed(2);
+};
+
+// Utilitário para validação de dados
+const validarDadosProduto = (dados) => {
+  const erros = [];
+  
+  if (!dados.nome?.trim()) erros.push("Nome é obrigatório");
+  if (!dados.preco_custo || dados.preco_custo <= 0) erros.push("Preço de custo deve ser maior que zero");
+  if (!dados.preco_venda || dados.preco_venda <= 0) erros.push("Preço de venda deve ser maior que zero");
+  
+  return erros;
+};
+
 function DetalhesDoProduto() {
   const { id } = useParams();
   const { setErroApi, adicionarAviso } = useContext(AppContext);
   const navigate = useNavigate();
 
-  const [categoriaEdit, setCategoriaEdit] = useState("");
-  const [categoria_idEdit, setCategoria_idEdit] = useState("");
-  const [resultCategorias, setResultCategorias] = useState([]);
-  const [imagensProdutosEdit, setImagensProdutosEdit] = useState([]);
-  const [codBarrasEdit, setcodBarrasEdit] = useState("");
-  const [nomeProdutoEdit, setNomeProdutoEdit] = useState("");
-  const [descricaoEdit, setDescricaoEdit] = useState("");
-  const [estoque_atualEdit, setEstoque_atualEdit] = useState("");
-  const [estoque_minimoEdit, setEstoque_minimoEdit] = useState("");
-  const [preco_custoEdit, setPreco_custoEdit] = useState("");
-  const [markupEdit, setMarkupEdit] = useState("");
-  const [preco_vendaEdit, setPreco_vendaEdit] = useState("");
+  const {
+    produto,
+    setProduto,
+    imagensProdutos,
+    setImagensProdutos,
+    loading,
+    setLoading,
+    error,
+    setError
+  } = useProdutoData(id);
 
-  const [controlarEstoqueEdit, setControlarEstoqueEdit] = useState();
+  const [resultCategorias, setResultCategorias] = useState([]);
+  const [salvando, setSalvando] = useState(false);
   const fileInputRef = useRef(null);
 
-  const buscarCategorias = async () => {
+  // Memoizar opções de categorias
+  const categorias = useMemo(() => 
+    resultCategorias.map((categoria) => ({
+      value: categoria.id,
+      label: categoria.nome,
+    })), [resultCategorias]
+  );
+
+  // Função para buscar categorias com cache
+  const buscarCategorias = useCallback(async () => {
     try {
-      const resultado = await categoriaFetch.listarCategorias();
-      setResultCategorias(resultado);
+      if (resultCategorias.length === 0) {
+        const resultado = await categoriaFetch.listarCategorias();
+        setResultCategorias(resultado);
+      }
     } catch (err) {
+      console.error("Erro ao buscar categorias:", err);
       setErroApi(true);
     }
-  };
+  }, [resultCategorias.length, setErroApi]);
 
+  // Função para buscar imagens
+  const buscarImagens = useCallback(async () => {
+    try {
+      const response = await produtoFetch.listarImagens(id);
+      setImagensProdutos(response || []);
+    } catch (err) {
+      console.error("Erro ao buscar imagens:", err);
+      setError("Erro ao carregar imagens");
+    }
+  }, [id, setImagensProdutos, setError]);
+
+  // Função para buscar produto
+  const buscarProduto = useCallback(async () => {
+    try {
+      setLoading(true);
+      const dadosProduto = await produtoFetch.procurarProdutoId(id);
+      
+      if (!dadosProduto) {
+        throw new Error("Produto não encontrado");
+      }
+
+      setProduto({
+        codBarras: dadosProduto.codigo_barras || "",
+        nomeProduto: dadosProduto.nome || "",
+        descricao: dadosProduto.descricao || "",
+        estoque_atual: dadosProduto.estoque_atual || "",
+        estoque_minimo: dadosProduto.estoque_minimo || "",
+        preco_custo: dadosProduto.preco_custo || "",
+        markup: dadosProduto.markup || "",
+        preco_venda: dadosProduto.preco_venda || "",
+        categoria: dadosProduto.categoria || "",
+        categoria_id: dadosProduto.categoria_id || "",
+        controlarEstoque: Boolean(dadosProduto.ativo),
+      });
+    } catch (err) {
+      console.error("Erro ao buscar produto:", err);
+      setError("Erro ao carregar produto");
+      setErroApi(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [id, setProduto, setLoading, setError, setErroApi]);
+
+  // Effects
   useEffect(() => {
     buscarCategorias();
-  }, []);
-
-  const categorias = resultCategorias.map((categoria) => ({
-    value: categoria.id,
-    label: categoria.nome,
-  }));
-
-  const buscarImagens = async () => {
-    const dadosImage = await produtoFetch.listarImagens(id).then((response) => {
-      setImagensProdutosEdit(response);
-    });
-  };
-
-  const buscarProduto = async () => {
-    const dadosProduto = await produtoFetch.procurarProdutoId(id);
-    console.log(dadosProduto)
-    setNomeProdutoEdit(dadosProduto.nome);
-    setDescricaoEdit(dadosProduto.descricao);
-    setEstoque_atualEdit(dadosProduto.estoque_atual);
-    setEstoque_minimoEdit(dadosProduto.estoque_minimo);
-    setPreco_custoEdit(dadosProduto.preco_custo);
-    setMarkupEdit(dadosProduto.markup);
-    setPreco_vendaEdit(dadosProduto.preco_venda);
-    setcodBarrasEdit(dadosProduto.codigo_barras);
-    setCategoriaEdit(dadosProduto.categoria);
-    setCategoria_idEdit(dadosProduto.categoria_id)
-    setControlarEstoqueEdit(!!dadosProduto.ativo);
-  };
+  }, [buscarCategorias]);
 
   useEffect(() => {
-    buscarProduto();
-    buscarImagens();
-  }, [id]);
+    if (id) {
+      Promise.all([buscarProduto(), buscarImagens()]);
+    }
+  }, [id, buscarProduto, buscarImagens]);
 
-  const deletarVariacao = async (id) => {
+  // Função para deletar imagem
+  const deletarVariacao = useCallback(async (imagemId) => {
     try {
-      await produtoFetch.deletarVariacaoProduto(id);
-
-      const dadosImage = await produtoFetch.listarImagens(id);
-      setImagensProdutosEdit(dadosImage);
+      await produtoFetch.deletarVariacaoProduto(imagemId);
+      await buscarImagens(); // Recarrega as imagens
+      adicionarAviso("sucesso", "Imagem deletada com sucesso!");
     } catch (error) {
       console.error("Erro ao deletar variação:", error);
+      adicionarAviso("erro", "Erro ao deletar imagem");
     }
-  };
+  }, [buscarImagens, adicionarAviso]);
 
-  const DeletarProduto = async (id) => {
+  // Função para deletar produto
+  const DeletarProduto = useCallback(async (produtoId) => {
+    if (!window.confirm("Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.")) {
+      return;
+    }
+
     try {
-      await produtoFetch.deletarProduto(id).then(() => {
-        navigate("/estoque");
-      });
-    } catch {}
-  };
-
-  const calculeValor = (campo, valor) => {
-    valor = parseFloat(valor) || 0;
-
-    if (campo === "precoCompra") {
-      setPreco_custoEdit(valor);
-      const novoPrecoVenda = valor + (valor * markupEdit) / 100;
-      setPreco_vendaEdit(novoPrecoVenda);
-    } else if (campo === "margem") {
-      setMarkupEdit(valor);
-      const novoPrecoVenda = preco_custoEdit + (preco_custoEdit * valor) / 100;
-      setPreco_vendaEdit(novoPrecoVenda);
-    } else if (campo === "precoVenda") {
-      setPreco_vendaEdit(valor);
-      const novaMargem = ((valor - preco_custoEdit) / preco_custoEdit) * 100;
-      setMarkupEdit(novaMargem);
+      await produtoFetch.deletarProduto(produtoId);
+      adicionarAviso("sucesso", "Produto excluído com sucesso!");
+      navigate(-1);
+    } catch (error) {
+      console.error("Erro ao deletar produto:", error);
+      adicionarAviso("erro", "Erro ao excluir produto");
     }
-  };
+  }, [navigate, adicionarAviso]);
 
-  const SalvarAlteracoesProduto = (e) => {
+  // Função para calcular valores
+  const calculeValor = useCallback((campo, valor) => {
+    const valorNumerico = parseFloat(valor) || 0;
+    
+    setProduto(prev => {
+      const novoProduto = { ...prev };
+      
+      if (campo === "precoCompra") {
+        novoProduto.preco_custo = valorNumerico;
+        const novoPrecoVenda = valorNumerico + (valorNumerico * parseFloat(prev.markup || 0)) / 100;
+        novoProduto.preco_venda = parseFloat(formatarValorMonetario(novoPrecoVenda));
+      } else if (campo === "margem") {
+        novoProduto.markup = valorNumerico;
+        const precoCusto = parseFloat(prev.preco_custo || 0);
+        const novoPrecoVenda = precoCusto + (precoCusto * valorNumerico) / 100;
+        novoProduto.preco_venda = parseFloat(formatarValorMonetario(novoPrecoVenda));
+      } else if (campo === "precoVenda") {
+        novoProduto.preco_venda = valorNumerico;
+        const precoCusto = parseFloat(prev.preco_custo || 0);
+        if (precoCusto > 0) {
+          const novaMargem = ((valorNumerico - precoCusto) / precoCusto) * 100;
+          novoProduto.markup = parseFloat(formatarValorMonetario(novaMargem));
+        }
+      }
+      
+      return novoProduto;
+    });
+  }, [setProduto]);
+
+  // Função para atualizar campo do produto
+  const atualizarCampo = useCallback((campo, valor) => {
+    setProduto(prev => ({
+      ...prev,
+      [campo]: valor
+    }));
+  }, [setProduto]);
+
+  // Função para salvar alterações
+  const SalvarAlteracoesProduto = useCallback(async (e) => {
     e.preventDefault();
-    let dados = {
+    
+    const dados = {
       id: id,
-      nome:
-        nomeProdutoEdit.charAt(0).toUpperCase() +
-        nomeProdutoEdit.slice(1).toLowerCase(),
-      descricao: descricaoEdit,
-      codigo_barras: codBarrasEdit,
-      preco_venda: preco_vendaEdit,
-      preco_custo: preco_custoEdit,
-      estoque_atual: controlarEstoqueEdit ? estoque_atualEdit : 0,
-      estoque_minimo: controlarEstoqueEdit ? estoque_minimoEdit : 0,
-      markup: markupEdit.toFixed(2) || 0,
-      categoria: categoriaEdit,
-      categoria_id: categoria_idEdit,
+      nome: produto.nomeProduto.charAt(0).toUpperCase() + produto.nomeProduto.slice(1).toLowerCase(),
+      descricao: produto.descricao,
+      codigo_barras: produto.codBarras,
+      preco_venda: parseFloat(produto.preco_venda) || 0,
+      preco_custo: parseFloat(produto.preco_custo) || 0,
+      estoque_atual: produto.controlarEstoque ? parseInt(produto.estoque_atual) || 0 : 0,
+      estoque_minimo: produto.controlarEstoque ? parseInt(produto.estoque_minimo) || 0 : 0,
+      markup: parseFloat(formatarValorMonetario(produto.markup)) || 0,
+      categoria: produto.categoria,
+      categoria_id: produto.categoria_id,
       unidade_medida: "",
-      ativo: controlarEstoqueEdit ? 1 : 0,
+      ativo: produto.controlarEstoque ? 1 : 0,
     };
 
-    produtoFetch
-      .atualizarProduto(dados)
-      .then((resposta) => {
-        adicionarAviso(
-          "sucesso",
-          "SUCESSO - Dados do produto editado com sucesso !"
-        );
-      })
-      .catch((erro) => {
-        setErroApi(true);
-      });
-  };
+    // Validar dados
+    const erros = validarDadosProduto(dados);
+    if (erros.length > 0) {
+      adicionarAviso("erro", `Erros de validação: ${erros.join(", ")}`);
+      return;
+    }
 
-  const HandleImageChange = (e) => {
+    try {
+      setSalvando(true);
+      await produtoFetch.atualizarProduto(dados);
+      adicionarAviso("sucesso", "SUCESSO - Dados do produto editado com sucesso!");
+    } catch (erro) {
+      console.error("Erro ao salvar produto:", erro);
+      setErroApi(true);
+      adicionarAviso("erro", "Erro ao salvar alterações");
+    } finally {
+      setSalvando(false);
+    }
+  }, [id, produto, adicionarAviso, setErroApi]);
+
+  // Função para upload de imagens
+  const HandleImageChange = useCallback(async (e) => {
     const files = Array.from(e.target.files);
+    
+    if (files.length === 0) return;
+    
+    // Validar tipos de arquivo
+    const tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const arquivosInvalidos = files.filter(file => !tiposPermitidos.includes(file.type));
+    
+    if (arquivosInvalidos.length > 0) {
+      adicionarAviso("erro", "Apenas arquivos de imagem são permitidos (JPEG, PNG, GIF, WebP)");
+      return;
+    }
 
-    produtoFetch.novaImagemProduto(id, files).then(() => {
-      buscarImagens();
-    });
-  };
+    // Validar tamanho dos arquivos (máximo 5MB por arquivo)
+    const maxTamanho = 5 * 1024 * 1024; // 5MB
+    const arquivosGrandes = files.filter(file => file.size > maxTamanho);
+    
+    if (arquivosGrandes.length > 0) {
+      adicionarAviso("erro", "Arquivos muito grandes. Máximo 5MB por imagem");
+      return;
+    }
+
+    try {
+      await produtoFetch.novaImagemProduto(id, files);
+      await buscarImagens();
+      adicionarAviso("sucesso", "Imagens adicionadas com sucesso!");
+      
+      // Limpar input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      console.error("Erro ao fazer upload:", error);
+      adicionarAviso("erro", "Erro ao fazer upload das imagens");
+    }
+  }, [id, buscarImagens, adicionarAviso]);
+
+  // Mostrar loading
+  if (loading) {
+    return (
+      <div id="DetalhesDoProduto">
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          Carregando dados do produto...
+        </div>
+      </div>
+    );
+  }
+
+  // Mostrar erro
+  if (error) {
+    return (
+      <div id="DetalhesDoProduto">
+        <div style={{ textAlign: 'center', padding: '2rem', color: 'red' }}>
+          {error}
+          <br />
+          <button onClick={() => navigate("/estoque")} style={{ marginTop: '1rem' }}>
+            Voltar ao Estoque
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id="DetalhesDoProduto">
@@ -163,16 +332,20 @@ function DetalhesDoProduto() {
             <strong>Codigo de barras</strong>
             <input
               type="number"
-              value={codBarrasEdit}
-              onChange={(e) => setcodBarrasEdit(e.target.value)}
+              value={produto.codBarras}
+              onChange={(e) => atualizarCampo('codBarras', e.target.value)}
+              placeholder="Digite o código de barras"
             />
           </div>
+          
           <div className="divInputsContentInfoProdutos">
             <strong>Nome</strong>
             <input
               type="text"
-              value={nomeProdutoEdit}
-              onChange={(e) => setNomeProdutoEdit(e.target.value)}
+              value={produto.nomeProduto}
+              onChange={(e) => atualizarCampo('nomeProduto', e.target.value)}
+              placeholder="Nome do produto"
+              required
             />
           </div>
 
@@ -182,99 +355,129 @@ function DetalhesDoProduto() {
               <Select
                 className="selectInputsContentInfoProdutos"
                 options={categorias}
-                value={categorias.find(
-                  (option) => option.label === categoriaEdit
-                )}
-                onChange={(e) => {
-                  setCategoria_idEdit(e.value);
-                  setCategoriaEdit(e.label);
+                value={categorias.find(option => option.label === produto.categoria) || null}
+                onChange={(selectedOption) => {
+                  if (selectedOption) {
+                    atualizarCampo('categoria_id', selectedOption.value);
+                    atualizarCampo('categoria', selectedOption.label);
+                  } else {
+                    atualizarCampo('categoria_id', '');
+                    atualizarCampo('categoria', '');
+                  }
                 }}
+                placeholder="Selecione uma categoria"
+                isClearable
+                noOptionsMessage={() => "Nenhuma categoria encontrada"}
               />
             </div>
+            
             <div className="divInputsContentInfoProdutos">
               <strong>Descrição</strong>
               <textarea
-                type="text"
-                value={descricaoEdit}
-                onChange={(e) => setDescricaoEdit(e.target.value)}
+                value={produto.descricao}
+                onChange={(e) => atualizarCampo('descricao', e.target.value)}
+                placeholder="Descrição do produto"
+                rows={3}
               />
             </div>
           </div>
+          
           <div>
             <div className="divInputsContentInfoProdutos">
               <strong>Preço de custo:</strong>
               <input
-                type="text"
-                value={preco_custoEdit}
+                type="number"
+                step="0.01"
+                min="0"
+                value={produto.preco_custo}
                 onChange={(e) => calculeValor("precoCompra", e.target.value)}
+                placeholder="0.00"
+                required
               />
             </div>
+            
             <div className="divInputsContentInfoProdutos">
-              <strong>Markup:</strong>
+              <strong>Markup (%):</strong>
               <input
-                type="text"
-                value={markupEdit}
+                type="number"
+                step="0.01"
+                min="0"
+                value={produto.markup}
                 onChange={(e) => calculeValor("margem", e.target.value)}
+                placeholder="0.00"
               />
             </div>
+            
             <div className="divInputsContentInfoProdutos">
               <strong>Preço de Venda:</strong>
               <input
-                type="text"
-                value={preco_vendaEdit}
+                type="number"
+                step="0.01"
+                min="0"
+                value={produto.preco_venda}
                 onChange={(e) => calculeValor("precoVenda", e.target.value)}
+                placeholder="0.00"
+                required
               />
             </div>
           </div>
 
           <div>
-            <div class="checkbox-wrapper-4">
+            <div className="checkbox-wrapper-4">
               <input
-                class="inp-cbx"
+                className="inp-cbx"
                 id="morning"
                 type="checkbox"
-                checked={controlarEstoqueEdit}
-                onChange={() => setControlarEstoqueEdit(!controlarEstoqueEdit)}
+                checked={produto.controlarEstoque}
+                onChange={() => atualizarCampo('controlarEstoque', !produto.controlarEstoque)}
               />
-              <label class="cbx" for="morning">
+              <label className="cbx" htmlFor="morning">
                 <span>
-                  <svg width="12px" height="10px"></svg>
+                  <svg width="12px" height="10px">
+                    <use href="#check-4"></use>
+                  </svg>
                 </span>
                 <span>Controlar Estoque</span>
               </label>
-              <svg class="inline-svg">
+              <svg className="inline-svg">
                 <symbol id="check-4" viewBox="0 0 12 10">
                   <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                 </symbol>
               </svg>
             </div>
+            
             <div id="ControleDeEstoque">
               <div className="ControleDeEstoqueInputs">
                 <strong>Estoque Atual</strong>
                 <input
                   type="number"
-                  value={estoque_atualEdit}
-                  disabled={!controlarEstoqueEdit}
-                  onChange={(e) => setEstoque_atualEdit(e.target.value)}
+                  min="0"
+                  value={produto.estoque_atual}
+                  disabled={!produto.controlarEstoque}
+                  onChange={(e) => atualizarCampo('estoque_atual', e.target.value)}
+                  placeholder="0"
                 />
               </div>
 
               <div className="ControleDeEstoqueInputs">
-                <strong>Estoque Minimo</strong>
+                <strong>Estoque Mínimo</strong>
                 <input
                   type="number"
-                  value={estoque_minimoEdit}
-                  disabled={!controlarEstoqueEdit}
-                  onChange={(e) => setEstoque_minimoEdit(e.target.value)}
+                  min="0"
+                  value={produto.estoque_minimo}
+                  disabled={!produto.controlarEstoque}
+                  onChange={(e) => atualizarCampo('estoque_minimo', e.target.value)}
+                  placeholder="0"
                 />
               </div>
             </div>
           </div>
         </div>
+        
         <div>
-          {imagensProdutosEdit.map((dados) => {
-            return (
-              <div className="itemDeImagemInfoProduto">
+          {imagensProdutos.length > 0 ? (
+            imagensProdutos.map((dados) => (
+              <div key={dados.id} className="itemDeImagemInfoProduto">
                 <div
                   className="ImageItemDeImagemInfoProduto"
                   style={{
@@ -282,19 +485,27 @@ function DetalhesDoProduto() {
                   }}
                 />
                 <div>
-                  <p>{nomeProdutoEdit}</p>
+                  <p>{produto.nomeProduto || 'Produto sem nome'}</p>
                 </div>
-
-                <button onClick={() => deletarVariacao(dados.id)}>
+                <button 
+                  onClick={() => deletarVariacao(dados.id)}
+                  title="Excluir imagem"
+                  type="button"
+                >
                   <FaRegTrashAlt />
                 </button>
               </div>
-            );
-          })}
+            ))
+          ) : (
+            <div style={{ textAlign: 'center', padding: '1rem', opacity: 0.7 }}>
+              Nenhuma imagem adicionada
+            </div>
+          )}
 
           <input
             type="file"
             multiple
+            accept="image/*"
             className="imageProduto"
             id="InputFileInfoProdutos"
             ref={fileInputRef}
@@ -306,11 +517,17 @@ function DetalhesDoProduto() {
           <div>
             <button
               className="salvar"
-              onClick={(e) => SalvarAlteracoesProduto(e)}
+              onClick={SalvarAlteracoesProduto}
+              disabled={salvando}
+              type="button"
             >
-              Salvar
+              {salvando ? 'Salvando...' : 'Salvar'}
             </button>
-            <button className="cancelar" onClick={() => navigate("/estoque")}>
+            <button 
+              className="cancelar" 
+              onClick={() => navigate(-1)}
+              type="button"
+            >
               Cancelar
             </button>
           </div>
@@ -318,6 +535,7 @@ function DetalhesDoProduto() {
           <button
             id="buttonExcluirInfoProduto"
             onClick={() => DeletarProduto(id)}
+            type="button"
           >
             <FaRegTrashAlt /> Excluir Produto
           </button>

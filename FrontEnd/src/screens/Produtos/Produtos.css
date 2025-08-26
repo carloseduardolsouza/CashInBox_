@@ -2,6 +2,16 @@
   margin-left: 55px;
 }
 
+#GerarCatalogoProduct {
+  background-color: var(--button-color);
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 200px;
+  color: white;
+}
+
 #HeaderProduto {
   display: flex;
   justify-content: space-between;

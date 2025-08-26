@@ -519,19 +519,13 @@ function FaturarVenda({ fechar, venda, limparVenda, limparValor }) {
           </div>
         </div>
         <div id="areaButtons">
-          <div>
             <button onClick={() => fechar(false)}>(ESC) - Sair</button>
-            <button>NFC-e Online</button>
-            <button>NFC-e Off-Line</button>
-          </div>
-          <div>
             <button onClick={() => faturarVendaEmBloco("concluida")}>
               Lançamento NF de bloco
             </button>
             <button onClick={() => faturarVendaEmBloco("orçamento")}>
               Orçamento
             </button>
-          </div>
         </div>
       </div>
     </div>

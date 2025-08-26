@@ -7,6 +7,7 @@ import produtoFetch from "../../api/produtoFetch";
 import categoriaFetch from "../../api/categoriaFetch";
 import { FaSearch, FaFilter } from "react-icons/fa";
 import Select from "react-select";
+import ModalGerarCatalogo from "./components/ModalGerarCatalogo/ModalGerarCatalogo";
 
 function Produtos() {
   const Data = new Date();
@@ -22,6 +23,7 @@ function Produtos() {
   const [filtroAberto, setFiltroAberto] = useState(false);
   const [filtroSelecionado, setFiltroSelecionado] = useState(null);
   const [categorias, setCategorias] = useState([]);
+  const [modalAtiva , setModalAtiva] = useState(null)
 
   const opcoesFiltro = [
     { value: "todos", label: "todos" },
@@ -30,6 +32,15 @@ function Produtos() {
       label: dados.nome,
     })),
   ];
+
+  const renderModal = () => {
+    switch (modalAtiva) {
+      case "GerarCatalogo":
+        return <ModalGerarCatalogo fechar={setModalAtiva} produtos={resultProdutos}/>
+      case null:
+        return null
+    }
+  }
 
   const buscarProdutos = async () => {
     try {
@@ -87,6 +98,7 @@ function Produtos() {
 
   return (
     <div id="PRODUTOS">
+      {renderModal()}
       {loading && <Loading />}
       <header id="HeaderProduto">
         <h2>Produtos ({resultProdutos.length})</h2>
@@ -122,6 +134,8 @@ function Produtos() {
               />
             </div>
           )}
+
+          <button type="button" onClick={() => setModalAtiva("GerarCatalogo")} id="GerarCatalogoProduct">Gerar Catálogo</button>
         </form>
       </article>
       <table className="tableProdutos">
