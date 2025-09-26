@@ -68,7 +68,7 @@ const CarnePagamento = ({ dados }) => {
     return grupos;
   };
 
-  const gruposParcelas = agruparParcelas(dados.parcelas);
+  const gruposParcelas = agruparParcelas(dados.parcelas.reverse());
 
   return (
     <Document>
@@ -79,7 +79,9 @@ const CarnePagamento = ({ dados }) => {
               {/* BLOCO ESQUERDO */}
               <View style={styles.blocoEsquerdo}>
                 <Text style={styles.sectionTitle}>Documento</Text>
-                <Text style={styles.fieldText}>0001 - {index + 1}</Text>
+                <Text style={styles.fieldText}>
+                  {String(pageIndex * 3 + index + 1).padStart(3, "0")} - {dados.parcelas.length}
+                </Text>
 
                 <Text style={styles.sectionTitle}>Pagador</Text>
                 <Text style={styles.fieldText}>{dados.cliente.nome}</Text>
