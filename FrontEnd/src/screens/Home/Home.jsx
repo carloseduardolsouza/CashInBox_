@@ -197,7 +197,7 @@ function Home() {
           <div className="metric-value">
             {mostrarInfo ? services.formatarCurrency(metricas.faturamento.atual) : "••••••"}
           </div>
-          <div className="metric-label">Faturamento Mensal</div>
+          <div className="metric-label">Faturamento</div>
           <div className="metric-change positive">
             <IoMdArrowDropup />
             {metricas.faturamento.variacao}%
@@ -221,20 +221,6 @@ function Home() {
         </div>
       </div>
 
-      {/* Clientes Ativos */}
-      <div className="metric-card info">
-        <div className="metric-icon">
-          <Users />
-        </div>
-        <div className="metric-content">
-          <div className="metric-value">{metricas.clientes.ativos}</div>
-          <div className="metric-label">Clientes Ativos</div>
-          <div className="metric-subtitle">
-            +{metricas.clientes.novos} novos este mês
-          </div>
-        </div>
-      </div>
-
       {/* Ticket Médio */}
       <div className="metric-card warning">
         <div className="metric-icon">
@@ -251,28 +237,18 @@ function Home() {
         </div>
       </div>
 
-      {/* Orçamentos */}
-      <div className="metric-card secondary">
-        <div className="metric-icon">
-          <Receipt />
-        </div>
-        <div className="metric-content">
-          <div className="metric-value">{relatoriosBasicos.totalOrcamentos || 0}</div>
-          <div className="metric-label">Orçamentos</div>
-          <div className="metric-subtitle">Aguardando aprovação</div>
-        </div>
-      </div>
-
       {/* Estoque Crítico */}
       <div className="metric-card danger">
         <div className="metric-icon">
           <AlertTriangle />
         </div>
         <div className="metric-content">
-          <div className="metric-value">{metricas.estoque.baixo}</div>
-          <div className="metric-label">Estoque Baixo</div>
+          <div className="metric-value">
+            {mostrarInfo ? services.formatarCurrency(metricas.vendas.ticket) : "••••"}
+          </div>
+          <div className="metric-label">Dividas ativa</div>
           <div className="metric-subtitle">
-            Produtos em falta
+            Valor de dividas
           </div>
         </div>
       </div>
@@ -312,7 +288,7 @@ function Home() {
         </h4>
         <div className="performance-items">
           <div className="performance-item">
-            <span className="performance-label">Taxa de Conversão</span>
+            <span className="performance-label">orçamentos convertidos</span>
             <span className="performance-value">3.2%</span>
           </div>
           <div className="performance-item">
@@ -362,6 +338,7 @@ function Home() {
             className="control-btn"
             onClick={toggleDarkMode}
             title="Tema"
+            disabled
           >
             {isDark ? "☀️" : "🌙"}
           </button>

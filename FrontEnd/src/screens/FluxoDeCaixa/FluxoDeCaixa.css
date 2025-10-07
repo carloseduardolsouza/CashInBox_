@@ -1,62 +1,409 @@
-#caixa {
+/* Container Principal */
+#FluxoDeCaixa {
   margin-left: 55px;
 }
 
-.MenuCaixa {
+/* Header */
+#HeaderFluxoDeCaixa {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.MenuCaixa p {
-  cursor: pointer;
-  margin-right: 15px;
+#HeaderFluxoDeCaixa > div > p {
+  color: #6b7280;
+  font-size: 0.95rem;
 }
 
-.ButãoCaixaAbas {
-  background: none;
+/* Botões do Header */
+#headerButtonsFluxoDeCaixa {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+#headerButtonsFluxoDeCaixa .btnPrimary {
+  padding: 0.75rem 1.5rem;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.3s ease;
-  font-weight: 300;
-  color: var(--text-color);
-  position: relative;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  color: white;
 }
 
-/* Hover sobre qualquer botão */
-.ButãoCaixaAbas:hover {
+#headerButtonsFluxoDeCaixa .btnEntrada {
+  background-color: #10b981;
+}
+
+#headerButtonsFluxoDeCaixa .btnEntrada:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+#headerButtonsFluxoDeCaixa .btnSecondary {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  background-color: white;
+  color: #1a1a1a;
+}
+
+#headerButtonsFluxoDeCaixa .btnSecondary:hover {
+  background-color: #f9fafb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Grid de Cards */
+#cardsGridFluxoDeCaixa {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.cardFluxoDeCaixa {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.cardFluxoDeCaixa:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.cardHeaderFluxoDeCaixa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cardTitleFluxoDeCaixa {
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardIconFluxoDeCaixa {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.iconBlue {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.iconGreen {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.iconRed {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.iconPurple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.cardValueFluxoDeCaixa {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.cardValueFluxoDeCaixa.valueGreen {
+  color: #10b981;
+}
+
+.cardValueFluxoDeCaixa.valueRed {
+  color: #ef4444;
+}
+
+.cardSubtextFluxoDeCaixa {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* Seção da Tabela */
+#tableSectionFluxoDeCaixa {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+}
+
+#tableHeaderFluxoDeCaixa {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+#tableHeaderFluxoDeCaixa h2 {
+  font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-color);
+  color: #1a1a1a;
+  margin: 0;
 }
 
-/* Botão ativo */
-.ButãoCaixaAbas.ativo {
-  font-weight: bold;
+#filtersFluxoDeCaixa {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-/* Linha animada do botão ativo */
-.ButãoCaixaAbas.ativo::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 20%; /* Começo da linha */
-  width: 60%; /* Largura da linha */
-  height: 3px;
-  background-color: var(--button-color);
-  transition: all 0.3s ease;
-  border-radius: 5px;
+.selectFluxoDeCaixa {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  color: #1a1a1a;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
 }
 
-/* Linha normal ao passar o mouse */
-.ButãoCaixaAbas:hover::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 20%;
-  width: 60%;
-  height: 3px;
-  background-color: var(--button-color);
-  transition: all 0.3s ease;
-  border-radius: 5px;
+.selectFluxoDeCaixa:hover {
+  border-color: #3b82f6;
+}
+
+.selectFluxoDeCaixa:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Tabela */
+#tableWrapperFluxoDeCaixa {
+  overflow-x: auto;
+}
+
+#tableFluxoDeCaixa {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#tableFluxoDeCaixa thead {
+  background-color: #f9fafb;
+}
+
+#tableFluxoDeCaixa th {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+#tableFluxoDeCaixa td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+#tableFluxoDeCaixa tbody tr {
+  transition: all 0.2s;
+}
+
+#tableFluxoDeCaixa tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Badges */
+.badgeFluxoDeCaixa {
+  display: inline-block;
+  padding: 0.375rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badgeEntrada {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.badgeSaida {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badgeCategoria {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* Valores */
+.valorPositivo {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.valorNegativo {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Status Badge */
+.statusBadgeFluxoDeCaixa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.statusPago {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.statusPendente {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.statusDotFluxoDeCaixa {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+/* Botões de Ação */
+.actionButtonsFluxoDeCaixa {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnActionFluxoDeCaixa {
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnActionFluxoDeCaixa:hover {
+  background-color: #f3f4f6;
+  color: #1a1a1a;
+  transform: scale(1.1);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  #FluxoDeCaixa {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  #HeaderFluxoDeCaixa {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #headerButtonsFluxoDeCaixa {
+    width: 100%;
+  }
+
+  #headerButtonsFluxoDeCaixa .btnPrimary,
+  #headerButtonsFluxoDeCaixa .btnSecondary {
+    flex: 1;
+  }
+
+  #cardsGridFluxoDeCaixa {
+    grid-template-columns: 1fr;
+  }
+
+  #tableHeaderFluxoDeCaixa {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #filtersFluxoDeCaixa {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .selectFluxoDeCaixa {
+    width: 100%;
+  }
+
+  #tableFluxoDeCaixa {
+    font-size: 0.85rem;
+  }
+
+  #tableFluxoDeCaixa th,
+  #tableFluxoDeCaixa td {
+    padding: 0.5rem;
+  }
+
+  .cardValueFluxoDeCaixa {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #HeaderFluxoDeCaixa > div > h2 {
+    font-size: 1.5rem;
+  }
+
+  .cardFluxoDeCaixa {
+    padding: 1rem;
+  }
+
+  #tableSectionFluxoDeCaixa {
+    padding: 1rem;
+  }
+
+  #tableFluxoDeCaixa th,
+  #tableFluxoDeCaixa td {
+    padding: 0.375rem;
+    font-size: 0.8rem;
+  }
+
+  .badgeFluxoDeCaixa {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
 }

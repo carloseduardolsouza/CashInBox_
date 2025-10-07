@@ -99,11 +99,11 @@ function Relatorios() {
 
   return (
     <div id="Relatorios">
-      <EmBreve/>
       <header className="relatorios-header">
         <h2>📊 Relatórios</h2>
         <p>Análise completa dos dados do seu negócio</p>
       </header>
+      <EmBreve/>
 
       <div id="divLadoladoRelatorios">
         <nav id="menuRelatorios">

@@ -14,23 +14,6 @@ async function handleFetch(url, options) {
   }
 }
 
-const abrirCaixa = (data) =>
-  handleFetch(`${API_URL}/caixa`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-const fecharCaixa = (data, id) =>
-  handleFetch(`${API_URL}/caixa/${encodeURIComponent(id)}/fechar`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-const buscarCaixasAbertos = () => handleFetch(`${API_URL}/caixa/abertos`);
-
-const buscarCaixas = () => handleFetch(`${API_URL}/caixa`);
 
 const novaMovimentacao = (id, data) =>
   handleFetch(`${API_URL}/caixa/${encodeURIComponent(id)}/movimentacoes`, {
@@ -39,14 +22,10 @@ const novaMovimentacao = (id, data) =>
     body: JSON.stringify(data),
   });
 
-const buscarMovimentacao = (id) =>
-  handleFetch(`${API_URL}/caixa/${encodeURIComponent(id)}/movimentacoes`);
+const buscarMovimentacao = () =>
+  handleFetch(`${API_URL}/caixa/movimentacoes`);
 
 export default {
-  abrirCaixa,
-  fecharCaixa,
-  buscarCaixasAbertos,
-  buscarCaixas,
   novaMovimentacao,
   buscarMovimentacao,
 };
