@@ -1,31 +1,87 @@
 const db = require("./db");
 
-const infoHome = async () => {
-  const vendas = await new Promise((resolve, reject) => {
-    db.all(`SELECT * FROM vendas WHERE status == 'concluida'`, (err, rows) => {
+const estoqueConvertido = async () => {
+  let quantidadeDeProdutosEmEstoque = 0;
+  let quantidadeDeProdutosVendidos = 0;
+  const produtos = await new Promise((resolve, reject) => {
+    db.all(
+      `SELECT estoque_atual FROM produtos WHERE ativo == 1`,
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
+  });
+
+  produtos.map((dados) => {
+    quantidadeDeProdutosEmEstoque =
+      quantidadeDeProdutosEmEstoque + dados.estoque_atual;
+  });
+
+  const vendasQuantidade = await new Promise((resolve, reject) => {
+    db.all(`SELECT quantidade FROM vendas_itens`, (err, rows) => {
       if (err) reject(err);
       else resolve(rows);
     });
+  });
+
+  vendasQuantidade.map((dados) => {
+    quantidadeDeProdutosVendidos =
+      quantidadeDeProdutosVendidos + dados.quantidade;
+  });
+
+  return quantidadeDeProdutosEmEstoque / quantidadeDeProdutosVendidos;
+};
+
+const dividaAtiva = async () => {
+  let valorDasDividas = 0;
+
+  const contas = await new Promise((resolve, reject) => {
+    db.all(`SELECT * FROM contas_a_pagar WHERE status == "pendente"`, (err, rows) => {
+      if (err) reject(err);
+      else resolve(rows);
+    });
+  });
+
+  contas.map((dados) => {
+    valorDasDividas += dados.valor_total;
+  });
+
+  return valorDasDividas;
+};
+
+const infoHome = async () => {
+  const vendas = await new Promise((resolve, reject) => {
+    db.all(
+      `SELECT * FROM vendas WHERE strftime('%Y', data_venda) = strftime('%Y', 'now')`,
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
   });
 
   const crediarioPago = await new Promise((resolve, reject) => {
-    db.all(`SELECT * FROM crediario_parcelas WHERE status = 'pago'`, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
+    db.all(
+      `SELECT * FROM crediario_parcelas WHERE status = 'pago'`,
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
   });
 
   const clientesNovosMes = await new Promise((resolve, reject) => {
-  db.all(
-    `SELECT * 
-     FROM clientes 
-     WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')`,
-    (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    }
-  );
-});
+    db.all(
+      `SELECT * 
+      FROM clientes 
+      WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')`,
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
+  });
 
   const faturamento = {};
   let faturamentoDia = 0;
@@ -46,7 +102,11 @@ const infoHome = async () => {
 
     faturamento[chave] += venda.valor_total;
 
-    if (data.getDate() === diaAtual && data.getMonth() === mesAtual && data.getFullYear() === anoAtual) {
+    if (
+      data.getDate() === diaAtual &&
+      data.getMonth() === mesAtual &&
+      data.getFullYear() === anoAtual
+    ) {
       faturamentoDia += venda.valor_total;
     }
   });
@@ -63,14 +123,28 @@ const infoHome = async () => {
 
     faturamento[chave] += parcela.valor_pago;
 
-    if (data.getDate() === diaAtual && data.getMonth() === mesAtual && data.getFullYear() === anoAtual) {
+    if (
+      data.getDate() === diaAtual &&
+      data.getMonth() === mesAtual &&
+      data.getFullYear() === anoAtual
+    ) {
       faturamentoDia += parcela.valor_pago;
     }
   });
 
   const mesesAbreviados = [
-    "jan", "fev", "mar", "abr", "mai", "jun",
-    "jul", "ago", "set", "out", "nov", "dez",
+    "jan",
+    "fev",
+    "mar",
+    "abr",
+    "mai",
+    "jun",
+    "jul",
+    "ago",
+    "set",
+    "out",
+    "nov",
+    "dez",
   ];
 
   const agora = new Date();
@@ -144,17 +218,37 @@ const infoHome = async () => {
     );
   });
 
+  let valorEmEstoque = 0;
+  const produtos = await new Promise((resolve, reject) => {
+    db.all(
+      `SELECT estoque_atual , preco_venda FROM produtos WHERE ativo == 1`,
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      }
+    );
+  });
+
+  produtos.map((dados) => {
+    let precoPorProduto = 0;
+    precoPorProduto = dados.estoque_atual * dados.preco_venda;
+
+    valorEmEstoque = valorEmEstoque + precoPorProduto;
+  });
+
   return {
-    faturamento: faturamentoUltimosMeses.map(({ chave, ...resto }) => resto),
+    faturamento: vendas,
+    valorEmEstoque: valorEmEstoque,
+    estoqueConvertido: estoqueConvertido(),
     faturamentoDia: parseFloat(faturamentoDia.toFixed(2)),
     clientesAtivos,
-    clientesNovosMes : clientesNovosMes.length,
+    clientesNovosMes: clientesNovosMes.length,
     crediariosAtrasados,
     totalOrcamentos,
     produtosEstoqueMinimo,
+    dividasAtivas: await dividaAtiva(),
   };
 };
-
 
 const resumoRelatorios = async () => {
   const hoje = new Date();
@@ -197,23 +291,29 @@ const resumoRelatorios = async () => {
 
   // Função auxiliar para calcular variação percentual
   const variacao = (atual, anterior) => {
-    if (anterior > 0) return parseFloat((((atual - anterior) / anterior) * 100).toFixed(2));
+    if (anterior > 0)
+      return parseFloat((((atual - anterior) / anterior) * 100).toFixed(2));
     if (atual > 0) return 100;
     return 0;
   };
 
   return {
     faturamentoMes: parseFloat(dadosAtual.faturamento.toFixed(2)),
-    variacaoFaturamento: variacao(dadosAtual.faturamento, dadosAnterior.faturamento),
+    variacaoFaturamento: variacao(
+      dadosAtual.faturamento,
+      dadosAnterior.faturamento
+    ),
     vendasMes: dadosAtual.qtdVendas,
     variacaoVendas: variacao(dadosAtual.qtdVendas, dadosAnterior.qtdVendas),
     ticketMedio: parseFloat(dadosAtual.ticketMedio.toFixed(2)),
-    variacaoTicketMedio: variacao(dadosAtual.ticketMedio, dadosAnterior.ticketMedio)
+    variacaoTicketMedio: variacao(
+      dadosAtual.ticketMedio,
+      dadosAnterior.ticketMedio
+    ),
   };
 };
 
-
 module.exports = {
   infoHome,
-  resumoRelatorios
+  resumoRelatorios,
 };

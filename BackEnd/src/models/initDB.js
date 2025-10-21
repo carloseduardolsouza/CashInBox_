@@ -262,6 +262,7 @@ async function criarTabelasPrincipais() {
     tipo TEXT CHECK(tipo IN ('entrada', 'saida')) NOT NULL,
     valor REAL NOT NULL,
     tipo_pagamento TEXT,
+    categoria TEXT,
     FOREIGN KEY (caixa_id) REFERENCES caixas(id)
   )`);
 
@@ -290,6 +291,7 @@ async function criarTabelasPrincipais() {
 async function initDB() {
   try {
     await criarTabelasPrincipais();
+    await applyMigrations();
     console.log("🎉 Banco inicializado com sucesso!");
     console.log("📋 Todas as tabelas foram criadas com a estrutura mais atual");
   } catch (err) {

@@ -15,8 +15,8 @@ async function handleFetch(url, options) {
 }
 
 
-const novaMovimentacao = (id, data) =>
-  handleFetch(`${API_URL}/caixa/${encodeURIComponent(id)}/movimentacoes`, {
+const novaMovimentacao = (data) =>
+  handleFetch(`${API_URL}/caixa/movimentacoes`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),

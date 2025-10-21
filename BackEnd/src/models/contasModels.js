@@ -139,25 +139,15 @@ const pagarConta = async (id, data_pagamento) => {
     }
 
     const { categoria, valor_total } = conta[0];
-
-    const caixaAberto = await caixaControlles.buscarCaixasAbertos();
-
-    if (caixaAberto && caixaAberto.id) {
       const movimentacao = {
-        id: caixaAberto.id,
-        descricao: `Pagamento de Conta #${categoria}`,
+        descricao: categoria,
+        categoria: "Conta",
         tipo: "saida",
         valor: valor_total,
         tipo_pagamento: "outros",
       };
 
-      await caixaControlles.adicionarMovimentacaoHandler(
-        caixaAberto.id,
-        movimentacao
-      );
-    } else {
-      console.warn("Nenhum caixa aberto encontrado. Saída não registrada.");
-    }
+      await caixaControlles.adicionarMovimentacaoHandler(movimentacao);
 
     return changes;
   } catch (error) {

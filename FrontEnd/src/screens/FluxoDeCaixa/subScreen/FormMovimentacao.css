@@ -1,0 +1,158 @@
+/* FormMovimentacao.css */
+
+#FormMovimentacao {
+  position: absolute;
+  transform: translate(50%, -50%);
+  top: 50%;
+  right: 50%;
+  width: 800px;
+
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra */
+  backdrop-filter: blur(10px); /* Desfoque */
+  -webkit-backdrop-filter: blur(
+    10px
+  ); /* Desfoque para navegadores Webkit (Safari, Chrome, etc.) */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Borda */
+}
+
+#HeaderFormMovimentacao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+#HeaderFormMovimentacao h2 {
+  margin: 0;
+  color: #333;
+}
+
+#HeaderFormMovimentacao p {
+  margin: 5px 0 0;
+  color: #777;
+}
+
+.formMovimentacao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.formGroup input[type="text"],
+.formGroup input[type="number"],
+.formGroup input[type="date"],
+.formGroup select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #007bff; /* Cor de foco */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.formActions {
+  grid-column: 1 / -1; /* Ocupa todas as colunas */
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btnPrimary,
+.btnSecondary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.btnPrimary {
+  background-color: #007bff; /* Cor principal, pode ser alterada */
+  color: white;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Cor específica para botão de Entrada */
+.btnEntrada {
+  background-color: #28a745; /* Verde */
+}
+
+.btnEntrada:hover:not(:disabled) {
+  background-color: #1e7e34;
+}
+
+.btnSecondary {
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background-color: #e2e6ea;
+}
+
+.btnPrimary:disabled,
+.btnSecondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  grid-column: 1 / -1;
+  color: #dc3545;
+  padding: 10px;
+  border: 1px solid #dc3545;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .formMovimentacao {
+    grid-template-columns: 1fr; /* Coluna única em telas pequenas */
+  }
+
+  .formActions {
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -45,8 +45,8 @@ const buscarCaixasAbertos = async (req, res) => {
 /**
  * Handler auxiliar para adicionar movimentações em um caixa (pode ser usado internamente)
  */
-const adicionarMovimentacaoHandler = async (id, dados) => {
-  return await caixaModels.adicionarMovimentacoes(id, dados);
+const adicionarMovimentacaoHandler = async (dados) => {
+  return await caixaModels.adicionarMovimentacoes(dados);
 };
 
 /**
@@ -54,9 +54,8 @@ const adicionarMovimentacaoHandler = async (id, dados) => {
  */
 const adicionarMovimentacoes = async (req, res) => {
   try {
-    const { id } = req.params;
     const dados = req.body;
-    const movimentacoes = await adicionarMovimentacaoHandler(id, dados);
+    const movimentacoes = await adicionarMovimentacaoHandler(dados);
     return res.status(201).json(movimentacoes);
   } catch (error) {
     console.error("Erro ao adicionar movimentações:", error);

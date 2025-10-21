@@ -7,6 +7,6 @@ const caixaController = require("../controllers/caixaController");
 router.get("/movimentacoes", caixaController.buscarMovimentacoes);
 
 // === Rotas POST ===
-router.post("/:id/movimentacoes", caixaController.adicionarMovimentacoes);
+router.post("/movimentacoes", caixaController.adicionarMovimentacoes);
 
 module.exports = router;

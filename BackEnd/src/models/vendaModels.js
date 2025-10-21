@@ -74,24 +74,16 @@ const novaVenda = async (dados) => {
       }
     }
 
-    // Busca caixa aberto para registrar movimentação
-    const caixaAberto = await caixaControlles.buscarCaixasAbertos();
+    for (const pagamento of pagamentos) {
+      const movimentacao = {
+        descricao: `Venda #${vendaId}`,
+        tipo: "entrada",
+        valor: pagamento.valor,
+        tipo_pagamento: pagamento.tipo_pagamento.toLowerCase(),
+        categoria: "venda",
+      };
 
-    if (caixaAberto && caixaAberto.id) {
-      for (const pagamento of pagamentos) {
-        const movimentacao = {
-          id: caixaAberto.id,
-          descricao: `Venda #${vendaId}`,
-          tipo: "entrada",
-          valor: pagamento.valor,
-          tipo_pagamento: pagamento.tipo_pagamento.toLowerCase(),
-        };
-
-        await caixaControlles.adicionarMovimentacaoHandler(
-          caixaAberto.id,
-          movimentacao
-        );
-      }
+      await caixaControlles.adicionarMovimentacaoHandler(movimentacao);
     }
 
     // Insere os produtos da venda
@@ -437,22 +429,14 @@ const receberVendaCrediario = async (id, dados) => {
     const valorParcela = parcela[0].valor_parcela;
     const idVenda = parcela[0].id_venda;
 
-    // Atualiza caixa com a entrada do pagamento
-    const caixaAberto = await caixaControlles.buscarCaixasAbertos();
+    const movimentacao = {
+      descricao: `Pagamento crediário, venda #${idVenda}`,
+      tipo: "entrada",
+      categoria: "Crediario",
+      valor: valorParcela,
+    };
 
-    if (caixaAberto.length > 0) {
-      const movimentacao = {
-        id: caixaAberto[0].id,
-        descricao: `Pagamento crediário, venda #${idVenda}`,
-        tipo: "entrada",
-        valor: valorParcela,
-      };
-
-      await caixaControlles.adicionarMovimentacaoHandler(
-        caixaAberto[0].id,
-        movimentacao
-      );
-    }
+    await caixaControlles.adicionarMovimentacaoHandler(movimentacao);
 
     // Atualiza status da venda com formato "parcelasPagas/parcelasTotal" ou "concluida"
     const [totalParcelas, parcelasPagas] = await Promise.all([
